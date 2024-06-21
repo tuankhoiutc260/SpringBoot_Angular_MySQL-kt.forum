@@ -41,6 +41,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new EntityNotFoundException("Role Not Found With ID " + id));
     }
 
+    @Override
     public UserDTO create(UserDTO userDTO) {
         try {
             Role role = roleRepository.findById(userDTO.getRole_id())
@@ -56,27 +57,17 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-
+    @Override
     public UserDTO update(UUID id, UserDTO userDTO) {
         try {
-            // Fetch the existing user from the database
             User existingUser = userRepository.findById(id)
                     .orElseThrow(() -> new IllegalArgumentException("User not found"));
-
-            // Fetch the role from the database
             Role role = roleRepository.findById(userDTO.getRole_id())
                     .orElseThrow(() -> new IllegalArgumentException("Role not found"));
-
-            // Update the existing user with new values from DTO
+            existingUser.setRole(role);
             UserMapper.INSTANCE.updateUserFromDTO(userDTO, existingUser);
 
-            // Set the fetched role to the user
-            existingUser.setRole(role);
-
-            // Save the updated user entity
             User updatedUser = userRepository.save(existingUser);
-
-            // Map the updated User entity to UserDTO
             return UserMapper.INSTANCE.mapToDTO(updatedUser);
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
             throw new IllegalArgumentException("Failed to update user due to database constraint: " + e.getMessage(), e);
