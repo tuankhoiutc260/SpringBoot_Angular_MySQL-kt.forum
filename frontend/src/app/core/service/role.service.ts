@@ -16,8 +16,8 @@ export class RoleService {
    * Get all role from backend
    * @returns array of roles
    * @example
-   *    this.roleService.getRoles().subscribe({
-   *      next: (roles) =>{
+   *    this.roleService.getAllRoles().subscribe({
+   *      next: (roles: Role[]) => {
    *        this.roles = roles;
    *    },
    *    error:(error)=>{
@@ -26,7 +26,7 @@ export class RoleService {
    *    })
    */
 
-  getRoles(): Observable<Role[]>{
+  getAllRoles(): Observable<Role[]>{
     return this.http.get<Role[]>(this.apiURL)
   }
 }

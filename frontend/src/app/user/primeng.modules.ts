@@ -7,6 +7,15 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { DialogModule } from 'primeng/dialog';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { ToastModule } from 'primeng/toast';
+import { DataViewModule } from 'primeng/dataview';
+import { ChipsModule } from 'primeng/chips';
+import { EditorModule } from 'primeng/editor';
+import { TagModule } from 'primeng/tag';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+
 
 
 @NgModule({
@@ -19,10 +28,18 @@ import { DialogModule } from 'primeng/dialog';
         IconFieldModule,
         InputIconModule,
         InputTextModule,
-        DialogModule
+        DialogModule,
+        SelectButtonModule,
+        ToastModule,
+        DataViewModule,
+        ChipsModule,
+        EditorModule,
+        TagModule,
+        InputTextareaModule,
+        ConfirmDialogModule,
     ]
 })
 
-export class PrimengModule{
+export class PrimengModule {
 
 }

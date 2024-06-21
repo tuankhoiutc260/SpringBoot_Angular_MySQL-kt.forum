@@ -3,7 +3,7 @@
         [tableStyle]="{ 'min-width': '75rem' }">
         <ng-template pTemplate="caption">
             <div class="flex">
-                <p-button label="New" severity="success" icon="pi pi-plus"></p-button>
+                <p-button (click)="openDialogNew()" label="New" severity="success" icon="pi pi-plus"></p-button>
                 <p-iconField iconPosition="left" class="ml-auto">
                     <p-inputIcon>
                         <i class="pi pi-search"></i>
@@ -15,12 +15,14 @@
         </ng-template>
         <ng-template pTemplate="header">
             <tr>
+                <th>#</th> <!-- New column for row numbers -->
                 <th>Email</th>
                 <th>FullName</th>
                 <th>Role</th>
                 <th>Status</th>
             </tr>
             <tr>
+                <th></th>
                 <th></th>
                 <th></th>
                 <th>
@@ -37,11 +39,12 @@
                 </th>
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-user>
-            <tr class="cursor-pointer" (click)="openDialog(user)" >
+        <ng-template pTemplate="body" let-user let-index="rowIndex"> <!-- Added let-i="rowIndex" -->
+            <tr class="cursor-pointer" (click)="openDialogEdit(user)">
+                <td>{{ index + 1 }}</td> <!-- Display row number -->
                 <td>{{ user.email }}</td>
-                <td>{{ user.fullname }}</td>
-                <td>{{ getRole(user.role_id) }}</td>
+                <td>{{ user.fullName }}</td>
+                <td *ngIf="user.role_id !== undefined">{{ getRoleByID(user.role_id) }}</td>
                 <td>
                     <i class="pi"
                         [ngClass]="{ 'text-green-500 pi-check-circle': user.active, 'text-red-500 pi-times-circle': !user.active }"></i>
@@ -49,16 +52,72 @@
             </tr>
         </ng-template>
     </p-table>
+
 </div>
 
 <div class="card flex justify-content-center">
-    <p-dialog 
-        header="Header" 
-        [modal]="true" 
-        [(visible)]="isVisible" 
-        [style]="{ width: '50rem' }" 
-        [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" 
-        [maximizable]="true">
-            <ng-template></ng-template>
+    <p-dialog header="User details" [modal]="true" [(visible)]="isVisible" [style]="{ width: '50rem' }"
+        [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [maximizable]="true">
+        <ng-template pTemplate="content">
+            <div *ngIf="isEdit" class="flex flex-column gap-2 mb-4">
+                <label for="id">ID</label>
+                <input pInputText id="id" [(ngModel)]="user.id" readonly>
+            </div>
+            <div class="flex justify-content-space-between">
+                <div class="flex flex-column gap-2 mb-4 flex-grow-1">
+                    <label for="role">Role</label>
+                    <div class="card flex">
+                        <p-dropdown [options]="roles" [(ngModel)]="user.role_id" optionValue="id" optionLabel="name" />
+                    </div>
+                </div>
+                <div class="flex flex-column gap-2 mb-4 flex-grow-1">
+                    <label for="email">Status</label>
+                    <div class="card flex">
+                        <p-selectButton [options]="[{label: 'Active', value: true}, {label: 'Disable', value: false}]"
+                            [(ngModel)]="user.active" optionLabel="label" optionValue="value" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-column gap-2 mb-4">
+                <label for="email">Email</label>
+                <input pInputText id="id" [(ngModel)]="user.email">
+            </div>
+            <div *ngIf="!isEdit" class="flex flex-column gap-2 mb-4">
+                <label for="password">Password</label>
+                <input pInputText id="id" [(ngModel)]="user.password">
+            </div>
+            <div class="flex flex-column gap-2 mb-4">
+                <label for="fullName">Full Name</label>
+                <input pInputText id="id" [(ngModel)]="user.fullName">
+            </div>
+
+            <ng-container *ngIf="isEdit">
+                <div class="flex flex-column gap-2 mb-4">
+                    <label for="createdDate">Created Date</label>
+                    <input pInputText id="id" [ngModel]="user.createdDate | date:'HH:mm:ss - dd/MM/yyyy'" readonly>
+                </div>
+                <div class="flex flex-column gap-2 mb-4">
+                    <label for="createdBy">Created By</label>
+                    <input pInputText id="id" [(ngModel)]="user.createdBy" readonly>
+                </div>
+                <div class="flex flex-column gap-2 mb-4">
+                    <label for="lastModifiedDate">Last Modified Date</label>
+                    <input pInputText id="id" [ngModel]="user.lastModifiedDate  | date:'HH:mm:ss - dd/MM/yyyy'"
+                        readonly>
+                </div>
+                <div class="flex flex-column gap-2 mb-4">
+                    <label for="lastModifiedBy">Last Modified By</label>
+                    <input pInputText id="id" [(ngModel)]="user.lastModifiedBy" readonly>
+                </div>
+            </ng-container>
+
+            <div class="flex gap-2 justify-content-center">
+                <p-button (click)="isVisible = false" label="Cancel" severity="danger"></p-button>
+                <p-button (click)="saveUser()" label="Save" severity="success"></p-button>
+
+            </div>
+        </ng-template>
     </p-dialog>
 </div>
+<p-toast />

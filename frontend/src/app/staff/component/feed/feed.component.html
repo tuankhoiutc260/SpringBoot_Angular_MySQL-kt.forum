@@ -1,1 +1,67 @@
-<p>feed works!</p>
+<p-dataView #dv [value]="posts" [layout]="'grid'" [rows]="5" [paginator]="true">
+    <ng-template pTemplate="header">
+        <div class="flex justify-content-end">
+            <p-button (click)="openDialogNew()" label="Write" severity="success"></p-button>
+        </div>
+    </ng-template>
+
+    <ng-template let-product pTemplate="grid" let-posts>
+        <div class="grid grid-nogutter">
+            <div class="col-12 sm:col-12 md:col-6 lg:col-6 xl:col-4 p-2" *ngFor="let post of posts">
+                <app-post class="cursor-pointer" [canEdit]="true" [post]="post"
+                    (isEditing)="openDialogEdit(post)"></app-post>
+            </div>
+        </div>
+    </ng-template>
+</p-dataView>
+
+<p-dialog header="Post details" [modal]="true" [(visible)]="isVisible" [style]="{ width: '50rem' }"
+    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [maximizable]="true">
+    <ng-template pTemplate="content">
+        <div *ngIf="isEdit" class="flex flex-column gap-2 mb-4">
+            <label for="id">ID</label>
+            <input pInputText id="id" [(ngModel)]="post.id" readonly>
+        </div>
+
+        <div class="flex flex-column gap-2 mb-4">
+            <label for="title">Title</label>
+            <input pInputText id="id" [(ngModel)]="post.title">
+        </div>
+        <div class="flex flex-column gap-2 mb-4">
+            <label for="tags">Tags</label>
+            <p-chips [(ngModel)]="post.tags" />
+        </div>
+        <div class="flex flex-column gap-2 mb-4">
+            <label for="content">Content</label>
+            <!-- <p-editor [(ngModel)]="post.content" [style]="{ height: '320px' }" /> -->
+            <textarea rows="5" cols="30" pInputTextarea [(ngModel)]="post.content">
+        </textarea>
+        </div>
+
+
+        <ng-container *ngIf="isEdit">
+            <div class="flex flex-column gap-2 mb-4">
+                <label for="createdDate">Created Date</label>
+                <input pInputText id="id" [ngModel]="post.createdDate | date:'HH:mm:ss - dd/MM/yyyy'" readonly>
+            </div>
+            <div class="flex flex-column gap-2 mb-4">
+                <label for="createdBy">Created By</label>
+                <input pInputText id="id" [(ngModel)]="post.createdBy" readonly>
+            </div>
+            <div class="flex flex-column gap-2 mb-4">
+                <label for="lastModifiedDate">Last Modified Date</label>
+                <input pInputText id="id" [ngModel]="post.lastModifiedDate  | date:'HH:mm:ss - dd/MM/yyyy'" readonly>
+            </div>
+            <div class="flex flex-column gap-2 mb-4">
+                <label for="lastModifiedBy">Last Modified By</label>
+                <input pInputText id="id" [(ngModel)]="post.lastModifiedBy" readonly>
+            </div>
+        </ng-container>
+        <div class="flex gap-2 justify-content-center">
+            <p-button (click)="deletePost($event)" label="Delete" severity="danger"></p-button>
+            <p-button (click)="savePost()" label="Save" severity="success"></p-button>
+        </div>
+    </ng-template>
+</p-dialog>
+<p-toast />
+<p-confirmDialog />
