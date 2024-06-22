@@ -43,8 +43,9 @@ const routes: Routes = [
     CommonModule,
     PrimengModule,
     FormsModule,
+    SharedModule,
     RouterModule.forChild(routes),
-    SharedModule
+
   ]
 })
 export class StaffModule { }

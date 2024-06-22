@@ -5,6 +5,8 @@ import { CoreModule } from '../core/core.module';
 import { PrimengModule } from '../user/primeng.modules';
 import { RouterModule } from '@angular/router';
 import { PostDetailsComponent } from './component/post-details/post-details.component';
+import { LoginComponent } from './component/login/login.component';
+import { FormsModule } from '@angular/forms';
 
 
 
@@ -12,13 +14,15 @@ import { PostDetailsComponent } from './component/post-details/post-details.comp
   declarations: [
     PostComponent,
     PostDetailsComponent,
+    LoginComponent,
 
   ],
   imports: [
     CommonModule,
     CoreModule,
     PrimengModule,
-    RouterModule
+    RouterModule,
+    FormsModule
 
   ],
   exports: [

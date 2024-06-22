@@ -10,7 +10,6 @@ import { PostService } from '../../../core/service/post.service';
   providers: [MessageService, ConfirmationService]
 })
 export class FeedComponent {
-
   posts: Post[] = [];
   isVisible: boolean = false
   post: Post = {}
@@ -76,7 +75,6 @@ export class FeedComponent {
           this.posts.push({ ...this.post, id: id, createdDate: new Date().toJSON() });
           this.posts = [...this.posts]
           this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Post is created' });
-          // window.location.reload();
 
         },
         error: (error) => {
