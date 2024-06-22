@@ -42,6 +42,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDTO findByEmail(String username) {
+        return userRepository.findByEmail(username)
+                .map(UserMapper.INSTANCE::mapToDTO)
+                .orElseThrow(() -> new EntityNotFoundException("Role Not Found With ID " + username));    }
+
+    @Override
     public UserDTO create(UserDTO userDTO) {
         try {
             Role role = roleRepository.findById(userDTO.getRole_id())

@@ -15,4 +15,6 @@ public interface UserService {
     UserDTO update(final UUID id, final UserDTO userDTO);
 
     void deleteByID(final UUID id);
+
+    UserDTO findByEmail(String username);
 }

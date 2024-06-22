@@ -14,6 +14,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -67,4 +68,5 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private Set<Like> likes = new HashSet<>();
+
 }
