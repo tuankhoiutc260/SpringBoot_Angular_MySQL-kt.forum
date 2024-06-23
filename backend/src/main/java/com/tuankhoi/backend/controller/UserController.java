@@ -2,6 +2,7 @@ package com.tuankhoi.backend.controller;
 
 import com.tuankhoi.backend.dto.UserDTO;
 import com.tuankhoi.backend.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,9 +30,9 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDTO> create(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserDTO> create(@RequestBody @Valid UserDTO userDTO) {
         return new ResponseEntity<>(userService.create(userDTO), HttpStatus.CREATED);
-        }
+    }
 
     @PutMapping("/{id}")
     public ResponseEntity<UserDTO> updateUser(@PathVariable UUID id, @RequestBody UserDTO userDTO) {

@@ -1,6 +1,8 @@
 package com.tuankhoi.backend.service.Impl;
 
 import com.tuankhoi.backend.dto.UserDTO;
+import com.tuankhoi.backend.exception.AppException;
+import com.tuankhoi.backend.exception.ErrorCode;
 import com.tuankhoi.backend.mapper.UserMapper;
 import com.tuankhoi.backend.model.Role;
 import com.tuankhoi.backend.model.User;
@@ -38,28 +40,29 @@ public class UserServiceImpl implements UserService {
     public UserDTO findByID(UUID id) {
         return userRepository.findById(id)
                 .map(UserMapper.INSTANCE::mapToDTO)
-                .orElseThrow(() -> new EntityNotFoundException("Role Not Found With ID " + id));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
     }
 
     @Override
     public UserDTO findByEmail(String username) {
         return userRepository.findByEmail(username)
                 .map(UserMapper.INSTANCE::mapToDTO)
-                .orElseThrow(() -> new EntityNotFoundException("Role Not Found With ID " + username));    }
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
+        }
 
     @Override
     public UserDTO create(UserDTO userDTO) {
         try {
+            if(userRepository.findByEmail(userDTO.getEmail()).isPresent())
+                throw new AppException(ErrorCode.USER_EXISTED);
             Role role = roleRepository.findById(userDTO.getRole_id())
-                    .orElseThrow(() -> new IllegalArgumentException("Role not found"));
+                    .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND));
             User user = UserMapper.INSTANCE.mapToEntity(userDTO);
             user.setRole(role);
             User savedUser = userRepository.save(user);
             return UserMapper.INSTANCE.mapToDTO(savedUser);
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
             throw new IllegalArgumentException("Failed to create user due to database constraint: " + e.getMessage(), e);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to create user: " + e.getMessage(), e);
         }
     }
 
@@ -67,9 +70,9 @@ public class UserServiceImpl implements UserService {
     public UserDTO update(UUID id, UserDTO userDTO) {
         try {
             User existingUser = userRepository.findById(id)
-                    .orElseThrow(() -> new IllegalArgumentException("User not found"));
+                    .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
             Role role = roleRepository.findById(userDTO.getRole_id())
-                    .orElseThrow(() -> new IllegalArgumentException("Role not found"));
+                    .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND));
             existingUser.setRole(role);
             UserMapper.INSTANCE.updateUserFromDTO(userDTO, existingUser);
 
@@ -86,7 +89,7 @@ public class UserServiceImpl implements UserService {
     public void deleteByID(UUID userID) {
         try {
             User userToDelete = userRepository.findById(userID)
-                    .orElseThrow(() -> new EntityNotFoundException("User Not Found With ID " + userID));
+                    .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
             userRepository.delete(userToDelete);
         } catch (EntityNotFoundException e) {
             throw e;

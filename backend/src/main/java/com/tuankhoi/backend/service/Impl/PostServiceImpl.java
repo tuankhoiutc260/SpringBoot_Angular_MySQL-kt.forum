@@ -1,6 +1,8 @@
 package com.tuankhoi.backend.service.Impl;
 
 import com.tuankhoi.backend.dto.PostDTO;
+import com.tuankhoi.backend.exception.AppException;
+import com.tuankhoi.backend.exception.ErrorCode;
 import com.tuankhoi.backend.mapper.PostMapper;
 import com.tuankhoi.backend.model.Post;
 import com.tuankhoi.backend.repository.PostRepository;
@@ -34,7 +36,7 @@ public class PostServiceImpl implements PostService {
     public PostDTO findByID(UUID id) {
         return postRepository.findById(id)
                 .map(PostMapper.INSTANCE::mapToDTO)
-                .orElseThrow(() -> new EntityNotFoundException("Role Not Found With ID " + id));
+                .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND));
     }
 
     @Override
@@ -54,7 +56,7 @@ public class PostServiceImpl implements PostService {
     public PostDTO update(UUID id, PostDTO postDTO) {
         try {
             Post existingPost = postRepository.findById(id)
-                    .orElseThrow(() -> new IllegalArgumentException("Post not found"));
+                    .orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));
             PostMapper.INSTANCE.updatePostFromDTO(postDTO, existingPost);
 
             Post updatedPost = postRepository.save(existingPost);
@@ -70,7 +72,7 @@ public class PostServiceImpl implements PostService {
     public void deleteByID(UUID postID) {
         try {
             Post postToDelete = postRepository.findById(postID)
-                    .orElseThrow(() -> new EntityNotFoundException("Post Not Found With ID " + postID));
+                    .orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));
             postRepository.delete(postToDelete);
         } catch (EntityNotFoundException e) {
             throw e;
