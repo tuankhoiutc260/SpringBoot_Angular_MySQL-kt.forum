@@ -1,0 +1,122 @@
+[
+  {
+    "name": "CREATE_POST",
+    "description": "Create a Post"
+  },
+  {
+    "name": "READ_POST",
+    "description": "Read a Post"
+  },
+  {
+    "name": "UPDATE_POST",
+    "description": "Update a Post"
+  },
+  {
+    "name": "DELETE_POST",
+    "description": "Delete a Post"
+  },
+  {
+    "name": "PUBLISH_POST",
+    "description": "Publish a Post"
+  },
+  {
+    "name": "APPROVE_POST",
+    "description": "Approve a Post"
+  },
+  {
+    "name": "CREATE_COMMENT",
+    "description": "Create a Comment"
+  },
+  {
+    "name": "READ_COMMENT",
+    "description": "Read a Comment"
+  },
+  {
+    "name": "UPDATE_COMMENT",
+    "description": "Update a Comment"
+  },
+  {
+    "name": "DELETE_COMMENT",
+    "description": "Delete a Comment"
+  },
+  {
+    "name": "APPROVE_COMMENT",
+    "description": "Approve a Comment"
+  },
+  {
+    "name": "CREATE_USER",
+    "description": "Create a User"
+  },
+  {
+    "name": "READ_USER",
+    "description": "Read a User"
+  },
+  {
+    "name": "UPDATE_USER",
+    "description": "Update a User"
+  },
+  {
+    "name": "DELETE_USER",
+    "description": "Delete a User"
+  },
+  {
+    "name": "MANAGE_ROLES",
+    "description": "Manage Roles"
+  },
+  {
+    "name": "CREATE_CATEGORY",
+    "description": "Create a Category"
+  },
+  {
+    "name": "READ_CATEGORY",
+    "description": "Read a Category"
+  },
+  {
+    "name": "UPDATE_CATEGORY",
+    "description": "Update a Category"
+  },
+  {
+    "name": "DELETE_CATEGORY",
+    "description": "Delete a Category"
+  },
+  {
+    "name": "CREATE_TAG",
+    "description": "Create a Tag"
+  },
+  {
+    "name": "READ_TAG",
+    "description": "Read a Tag"
+  },
+  {
+    "name": "UPDATE_TAG",
+    "description": "Update a Tag"
+  },
+  {
+    "name": "DELETE_TAG",
+    "description": "Delete a Tag"
+  },
+  {
+    "name": "CREATE_PAGE",
+    "description": "Create a Page"
+  },
+  {
+    "name": "READ_PAGE",
+    "description": "Read a Page"
+  },
+  {
+    "name": "UPDATE_PAGE",
+    "description": "Update a Page"
+  },
+  {
+    "name": "DELETE_PAGE",
+    "description": "Delete a Page"
+  },
+  {
+    "name": "VIEW_SETTINGS",
+    "description": "View Settings"
+  },
+  {
+    "name": "UPDATE_SETTINGS",
+    "description": "Update Settings"
+  }
+]
