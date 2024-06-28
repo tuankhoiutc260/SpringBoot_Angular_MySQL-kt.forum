@@ -1,21 +1,19 @@
 package com.tuankhoi.backend.mapper;
 
-import com.tuankhoi.backend.dto.RoleDTO;
+import com.tuankhoi.backend.dto.request.RoleRequest;
+import com.tuankhoi.backend.dto.response.RoleResponse;
 import com.tuankhoi.backend.model.Role;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface RoleMapper {
-    RoleMapper INSTANCE = Mappers.getMapper(RoleMapper.class);
+    @Mapping(target = "permissions", ignore = true)
+    Role toRole(RoleRequest roleRequest);
 
-//    @Mapping(target = "id", ignore = true) // Ignore id mapping for update
-    RoleDTO mapToDTO(Role role);
+    RoleResponse toRoleResponse(Role role);
 
-    Role mapToEntity(RoleDTO roleDTO);
-
-    @Mapping(target = "id", ignore = true) // Ignore id mapping for update
-    void updateRoleFromDTO(RoleDTO roleDTO, @MappingTarget Role role);
+    @Mapping(target = "permissions", ignore = true)
+    void updateRole(@MappingTarget Role role, RoleRequest roleRequest);
 }

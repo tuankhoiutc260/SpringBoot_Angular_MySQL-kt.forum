@@ -1,11 +1,8 @@
 package com.tuankhoi.backend.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -13,10 +10,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -25,48 +18,44 @@ import java.util.UUID;
 @Entity
 @Table(name = "user")
 @EntityListeners(AuditingEntityListener.class)
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class User {
-    //    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private UUID id;
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
-    @Column(updatable = false, nullable = false, columnDefinition = "BINARY(16)")
-    private UUID id;
-
-    @Column(unique = true, nullable = false)
-    private String email;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    String id;
 
     @Column(nullable = false)
-    private String password;
+    String userName;
 
-    private String fullName;
+    @Column(nullable = false)
+    String password;
 
-    private boolean active = true;
+    @Column(unique = true, nullable = false)
+    String email;
+
+    String fullName;
+
+    boolean active = true;
 
     @CreatedDate
     @Column(updatable = false)
-    private LocalDateTime createdDate;
+    LocalDateTime createdDate;
 
     @CreatedBy
     @Column(updatable = false)
-    private UUID createdBy;
+    String createdBy;
 
     @LastModifiedDate
-    private LocalDateTime lastModifiedDate;
+    LocalDateTime lastModifiedDate;
 
     @LastModifiedBy
-    private UUID lastModifiedBy;
+    String lastModifiedBy;
 
     @ManyToOne
-    @JoinColumn(name = "role_id", nullable = false)
-    private Role role;
+    @JoinColumn(name = "role_id") // Tên cột trong bảng user để lưu trữ id của vai trò
+    Role role;
 
-    @OneToMany(mappedBy = "user")
-    private Set<Like> likes = new HashSet<>();
-
+//    @OneToMany(mappedBy = "user")
+//    Set<Like> likes;
 }

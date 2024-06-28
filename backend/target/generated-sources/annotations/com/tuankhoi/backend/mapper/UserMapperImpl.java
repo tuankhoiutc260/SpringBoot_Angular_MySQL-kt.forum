@@ -1,7 +1,7 @@
 package com.tuankhoi.backend.mapper;
 
-import com.tuankhoi.backend.dto.UserDTO;
-import com.tuankhoi.backend.model.Role;
+import com.tuankhoi.backend.dto.request.UserRequest;
+import com.tuankhoi.backend.dto.response.UserResponse;
 import com.tuankhoi.backend.model.User;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
@@ -14,101 +14,54 @@ import org.springframework.stereotype.Component;
 public class UserMapperImpl implements UserMapper {
 
     @Override
-    public UserDTO mapToDTO(User user) {
+    public User toUser(UserRequest userUpdateRequest) {
+        if ( userUpdateRequest == null ) {
+            return null;
+        }
+
+        User.UserBuilder user = User.builder();
+
+        user.userName( userUpdateRequest.getUserName() );
+        user.password( userUpdateRequest.getPassword() );
+        user.email( userUpdateRequest.getEmail() );
+        user.fullName( userUpdateRequest.getFullName() );
+        user.active( userUpdateRequest.isActive() );
+
+        return user.build();
+    }
+
+    @Override
+    public UserResponse toUserResponse(User user) {
         if ( user == null ) {
             return null;
         }
 
-        UserDTO userDTO = new UserDTO();
+        UserResponse.UserResponseBuilder userResponse = UserResponse.builder();
 
-        userDTO.setRole_id( userRoleId( user ) );
-        userDTO.setId( user.getId() );
-        userDTO.setEmail( user.getEmail() );
-        userDTO.setPassword( user.getPassword() );
-        userDTO.setFullName( user.getFullName() );
-        userDTO.setActive( user.isActive() );
-        userDTO.setCreatedDate( user.getCreatedDate() );
-        userDTO.setCreatedBy( user.getCreatedBy() );
-        userDTO.setLastModifiedDate( user.getLastModifiedDate() );
-        userDTO.setLastModifiedBy( user.getLastModifiedBy() );
+        userResponse.id( user.getId() );
+        userResponse.email( user.getEmail() );
+        userResponse.userName( user.getUserName() );
+        userResponse.password( user.getPassword() );
+        userResponse.fullName( user.getFullName() );
+        userResponse.active( user.isActive() );
+        userResponse.createdDate( user.getCreatedDate() );
+        userResponse.createdBy( user.getCreatedBy() );
+        userResponse.lastModifiedDate( user.getLastModifiedDate() );
+        userResponse.lastModifiedBy( user.getLastModifiedBy() );
 
-        return userDTO;
+        return userResponse.build();
     }
 
     @Override
-    public User mapToEntity(UserDTO userDTO) {
-        if ( userDTO == null ) {
-            return null;
-        }
-
-        User user = new User();
-
-        user.setRole( userDTOToRole( userDTO ) );
-        user.setId( userDTO.getId() );
-        user.setEmail( userDTO.getEmail() );
-        user.setPassword( userDTO.getPassword() );
-        user.setFullName( userDTO.getFullName() );
-        user.setActive( userDTO.isActive() );
-        user.setCreatedDate( userDTO.getCreatedDate() );
-        user.setCreatedBy( userDTO.getCreatedBy() );
-        user.setLastModifiedDate( userDTO.getLastModifiedDate() );
-        user.setLastModifiedBy( userDTO.getLastModifiedBy() );
-
-        return user;
-    }
-
-    @Override
-    public void updateUserFromDTO(UserDTO userDTO, User user) {
-        if ( userDTO == null ) {
+    public void updateUser(User user, UserRequest userRequest) {
+        if ( userRequest == null ) {
             return;
         }
 
-        if ( user.getRole() == null ) {
-            user.setRole( new Role() );
-        }
-        userDTOToRole1( userDTO, user.getRole() );
-        user.setEmail( userDTO.getEmail() );
-        user.setPassword( userDTO.getPassword() );
-        user.setFullName( userDTO.getFullName() );
-        user.setActive( userDTO.isActive() );
-        user.setCreatedDate( userDTO.getCreatedDate() );
-        user.setCreatedBy( userDTO.getCreatedBy() );
-        user.setLastModifiedDate( userDTO.getLastModifiedDate() );
-        user.setLastModifiedBy( userDTO.getLastModifiedBy() );
-    }
-
-    private Integer userRoleId(User user) {
-        if ( user == null ) {
-            return null;
-        }
-        Role role = user.getRole();
-        if ( role == null ) {
-            return null;
-        }
-        Integer id = role.getId();
-        if ( id == null ) {
-            return null;
-        }
-        return id;
-    }
-
-    protected Role userDTOToRole(UserDTO userDTO) {
-        if ( userDTO == null ) {
-            return null;
-        }
-
-        Role role = new Role();
-
-        role.setId( userDTO.getRole_id() );
-
-        return role;
-    }
-
-    protected void userDTOToRole1(UserDTO userDTO, Role mappingTarget) {
-        if ( userDTO == null ) {
-            return;
-        }
-
-        mappingTarget.setId( userDTO.getRole_id() );
+        user.setUserName( userRequest.getUserName() );
+        user.setPassword( userRequest.getPassword() );
+        user.setEmail( userRequest.getEmail() );
+        user.setFullName( userRequest.getFullName() );
+        user.setActive( userRequest.isActive() );
     }
 }

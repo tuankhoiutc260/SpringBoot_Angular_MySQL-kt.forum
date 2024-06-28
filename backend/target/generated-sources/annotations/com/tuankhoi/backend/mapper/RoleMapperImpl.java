@@ -1,7 +1,12 @@
 package com.tuankhoi.backend.mapper;
 
-import com.tuankhoi.backend.dto.RoleDTO;
+import com.tuankhoi.backend.dto.request.RoleRequest;
+import com.tuankhoi.backend.dto.response.PermissionResponse;
+import com.tuankhoi.backend.dto.response.RoleResponse;
+import com.tuankhoi.backend.model.Permission;
 import com.tuankhoi.backend.model.Role;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
@@ -13,42 +18,69 @@ import org.springframework.stereotype.Component;
 public class RoleMapperImpl implements RoleMapper {
 
     @Override
-    public RoleDTO mapToDTO(Role role) {
+    public Role toRole(RoleRequest roleRequest) {
+        if ( roleRequest == null ) {
+            return null;
+        }
+
+        Role.RoleBuilder role = Role.builder();
+
+        role.name( roleRequest.getName() );
+        role.description( roleRequest.getDescription() );
+
+        return role.build();
+    }
+
+    @Override
+    public RoleResponse toRoleResponse(Role role) {
         if ( role == null ) {
             return null;
         }
 
-        RoleDTO roleDTO = new RoleDTO();
+        RoleResponse.RoleResponseBuilder roleResponse = RoleResponse.builder();
 
-        roleDTO.setId( role.getId() );
-        roleDTO.setName( role.getName() );
-        roleDTO.setDescription( role.getDescription() );
+        roleResponse.id( role.getId() );
+        roleResponse.name( role.getName() );
+        roleResponse.description( role.getDescription() );
+        roleResponse.permissions( permissionSetToPermissionResponseSet( role.getPermissions() ) );
 
-        return roleDTO;
+        return roleResponse.build();
     }
 
     @Override
-    public Role mapToEntity(RoleDTO roleDTO) {
-        if ( roleDTO == null ) {
-            return null;
-        }
-
-        Role role = new Role();
-
-        role.setId( roleDTO.getId() );
-        role.setName( roleDTO.getName() );
-        role.setDescription( roleDTO.getDescription() );
-
-        return role;
-    }
-
-    @Override
-    public void updateRoleFromDTO(RoleDTO roleDTO, Role role) {
-        if ( roleDTO == null ) {
+    public void updateRole(Role role, RoleRequest roleRequest) {
+        if ( roleRequest == null ) {
             return;
         }
 
-        role.setName( roleDTO.getName() );
-        role.setDescription( roleDTO.getDescription() );
+        role.setName( roleRequest.getName() );
+        role.setDescription( roleRequest.getDescription() );
+    }
+
+    protected PermissionResponse permissionToPermissionResponse(Permission permission) {
+        if ( permission == null ) {
+            return null;
+        }
+
+        PermissionResponse.PermissionResponseBuilder permissionResponse = PermissionResponse.builder();
+
+        permissionResponse.id( permission.getId() );
+        permissionResponse.name( permission.getName() );
+        permissionResponse.description( permission.getDescription() );
+
+        return permissionResponse.build();
+    }
+
+    protected Set<PermissionResponse> permissionSetToPermissionResponseSet(Set<Permission> set) {
+        if ( set == null ) {
+            return null;
+        }
+
+        Set<PermissionResponse> set1 = new LinkedHashSet<PermissionResponse>( Math.max( (int) ( set.size() / .75f ) + 1, 16 ) );
+        for ( Permission permission : set ) {
+            set1.add( permissionToPermissionResponse( permission ) );
+        }
+
+        return set1;
     }
 }

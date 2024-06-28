@@ -1,20 +1,24 @@
 package com.tuankhoi.backend.service;
 
-import com.tuankhoi.backend.dto.UserDTO;
+import com.tuankhoi.backend.dto.request.UserRequest;
+import com.tuankhoi.backend.dto.response.UserResponse;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface UserService {
-    List<UserDTO> findAll();
+    UserResponse create(UserRequest userRequest);
 
-    UserDTO findByID(final UUID id);
+    UserResponse findByID(String id);
 
-    UserDTO create(final UserDTO userDTO);
+    UserResponse findByEmail(String username);
 
-    UserDTO update(final UUID id, final UserDTO userDTO);
+    UserResponse findByUserName(String userName);
 
-    void deleteByID(final UUID id);
+    UserResponse getMyInfo();
 
-    UserDTO findByEmail(String username);
+    List<UserResponse> findAll();
+
+    UserResponse update(String id, UserRequest userRequest);
+
+    void deleteByID(String id);
 }

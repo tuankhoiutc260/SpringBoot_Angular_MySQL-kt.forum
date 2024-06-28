@@ -1,21 +1,16 @@
 package com.tuankhoi.backend.mapper;
 
-import com.tuankhoi.backend.dto.PostDTO;
+import com.tuankhoi.backend.dto.request.PostRequest;
+import com.tuankhoi.backend.dto.response.PostResponse;
 import com.tuankhoi.backend.model.Post;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface PostMapper {
-    PostMapper INSTANCE = Mappers.getMapper(PostMapper.class);
+    Post toPost(PostRequest postRequest);
 
-    //    @Mapping(target = "id", ignore = true) // Ignore id mapping for update
-    PostDTO mapToDTO(Post post);
+    PostResponse toPostResponse(Post post);
 
-    Post mapToEntity(PostDTO postDTO);
-
-    @Mapping(target = "id", ignore = true) // Ignore id mapping for update
-    void updatePostFromDTO(PostDTO postDTO, @MappingTarget Post post);
+    void updatePost(@MappingTarget Post post, PostRequest postRequest);
 }

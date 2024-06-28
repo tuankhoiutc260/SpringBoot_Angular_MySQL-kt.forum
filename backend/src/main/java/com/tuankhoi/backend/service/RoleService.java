@@ -1,17 +1,18 @@
 package com.tuankhoi.backend.service;
 
-import com.tuankhoi.backend.dto.RoleDTO;
+import com.tuankhoi.backend.dto.request.RoleRequest;
+import com.tuankhoi.backend.dto.response.RoleResponse;
 
 import java.util.List;
 
 public interface RoleService {
-    List<RoleDTO> findAll();
+    RoleResponse create(RoleRequest roleRequest);
 
-    RoleDTO findByID(final Integer id);
+    RoleResponse findByID(Integer roleRequestID);
 
-    RoleDTO create(final RoleDTO roleDTO);
+    List<RoleResponse> findAll();
 
-    RoleDTO update(final int id, final RoleDTO roleDTO);
+    RoleResponse update(Integer roleRequestID, RoleRequest roleRequest);
 
-    void deleteByID(final Integer id);
+    void deleteByID(Integer roleRequestID);
 }

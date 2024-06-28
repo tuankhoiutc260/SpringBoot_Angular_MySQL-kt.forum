@@ -1,18 +1,18 @@
 package com.tuankhoi.backend.service;
 
-import com.tuankhoi.backend.dto.PostDTO;
+import com.tuankhoi.backend.dto.request.PostRequest;
+import com.tuankhoi.backend.dto.response.PostResponse;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface PostService {
-    List<PostDTO> findAll();
+    PostResponse create(final PostRequest postRequest);
 
-    PostDTO findByID(final UUID id);
+    PostResponse findByID(final String id);
 
-    PostDTO create(final PostDTO postDTO);
+    List<PostResponse> findAll();
 
-    PostDTO update(final UUID id, final PostDTO postDTO);
+    PostResponse update(final String id, final PostRequest postRequest);
 
-    void deleteByID(final UUID id);
+    void deleteByID(final String id);
 }

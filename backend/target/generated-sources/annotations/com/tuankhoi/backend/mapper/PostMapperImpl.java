@@ -1,6 +1,7 @@
 package com.tuankhoi.backend.mapper;
 
-import com.tuankhoi.backend.dto.PostDTO;
+import com.tuankhoi.backend.dto.request.PostRequest;
+import com.tuankhoi.backend.dto.response.PostResponse;
 import com.tuankhoi.backend.model.Post;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -15,61 +16,56 @@ import org.springframework.stereotype.Component;
 public class PostMapperImpl implements PostMapper {
 
     @Override
-    public PostDTO mapToDTO(Post post) {
+    public Post toPost(PostRequest postRequest) {
+        if ( postRequest == null ) {
+            return null;
+        }
+
+        Post.PostBuilder post = Post.builder();
+
+        post.title( postRequest.getTitle() );
+        post.content( postRequest.getContent() );
+        Set<String> set = postRequest.getTags();
+        if ( set != null ) {
+            post.tags( new LinkedHashSet<String>( set ) );
+        }
+
+        return post.build();
+    }
+
+    @Override
+    public PostResponse toPostResponse(Post post) {
         if ( post == null ) {
             return null;
         }
 
-        PostDTO postDTO = new PostDTO();
+        PostResponse.PostResponseBuilder postResponse = PostResponse.builder();
 
-        postDTO.setId( post.getId() );
-        postDTO.setTitle( post.getTitle() );
-        postDTO.setContent( post.getContent() );
+        postResponse.id( post.getId() );
+        postResponse.title( post.getTitle() );
+        postResponse.content( post.getContent() );
         Set<String> set = post.getTags();
         if ( set != null ) {
-            postDTO.setTags( new LinkedHashSet<String>( set ) );
+            postResponse.tags( new LinkedHashSet<String>( set ) );
         }
-        postDTO.setCreatedDate( post.getCreatedDate() );
-        postDTO.setCreatedBy( post.getCreatedBy() );
-        postDTO.setLastModifiedDate( post.getLastModifiedDate() );
-        postDTO.setLastModifiedBy( post.getLastModifiedBy() );
+        postResponse.createdDate( post.getCreatedDate() );
+        postResponse.createdBy( post.getCreatedBy() );
+        postResponse.lastModifiedDate( post.getLastModifiedDate() );
+        postResponse.lastModifiedBy( post.getLastModifiedBy() );
 
-        return postDTO;
+        return postResponse.build();
     }
 
     @Override
-    public Post mapToEntity(PostDTO postDTO) {
-        if ( postDTO == null ) {
-            return null;
-        }
-
-        Post post = new Post();
-
-        post.setId( postDTO.getId() );
-        post.setTitle( postDTO.getTitle() );
-        post.setContent( postDTO.getContent() );
-        Set<String> set = postDTO.getTags();
-        if ( set != null ) {
-            post.setTags( new LinkedHashSet<String>( set ) );
-        }
-        post.setCreatedDate( postDTO.getCreatedDate() );
-        post.setCreatedBy( postDTO.getCreatedBy() );
-        post.setLastModifiedDate( postDTO.getLastModifiedDate() );
-        post.setLastModifiedBy( postDTO.getLastModifiedBy() );
-
-        return post;
-    }
-
-    @Override
-    public void updatePostFromDTO(PostDTO postDTO, Post post) {
-        if ( postDTO == null ) {
+    public void updatePost(Post post, PostRequest postRequest) {
+        if ( postRequest == null ) {
             return;
         }
 
-        post.setTitle( postDTO.getTitle() );
-        post.setContent( postDTO.getContent() );
+        post.setTitle( postRequest.getTitle() );
+        post.setContent( postRequest.getContent() );
         if ( post.getTags() != null ) {
-            Set<String> set = postDTO.getTags();
+            Set<String> set = postRequest.getTags();
             if ( set != null ) {
                 post.getTags().clear();
                 post.getTags().addAll( set );
@@ -79,14 +75,10 @@ public class PostMapperImpl implements PostMapper {
             }
         }
         else {
-            Set<String> set = postDTO.getTags();
+            Set<String> set = postRequest.getTags();
             if ( set != null ) {
                 post.setTags( new LinkedHashSet<String>( set ) );
             }
         }
-        post.setCreatedDate( postDTO.getCreatedDate() );
-        post.setCreatedBy( postDTO.getCreatedBy() );
-        post.setLastModifiedDate( postDTO.getLastModifiedDate() );
-        post.setLastModifiedBy( postDTO.getLastModifiedBy() );
     }
 }

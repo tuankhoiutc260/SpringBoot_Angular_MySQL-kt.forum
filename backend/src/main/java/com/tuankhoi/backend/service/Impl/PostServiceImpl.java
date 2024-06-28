@@ -1,75 +1,90 @@
 package com.tuankhoi.backend.service.Impl;
 
-import com.tuankhoi.backend.dto.PostDTO;
+import com.tuankhoi.backend.dto.request.PostRequest;
+import com.tuankhoi.backend.dto.response.PostResponse;
 import com.tuankhoi.backend.exception.AppException;
 import com.tuankhoi.backend.exception.ErrorCode;
 import com.tuankhoi.backend.mapper.PostMapper;
 import com.tuankhoi.backend.model.Post;
 import com.tuankhoi.backend.repository.PostRepository;
+import com.tuankhoi.backend.repository.UserRepository;
+import com.tuankhoi.backend.service.AuthenticationService;
 import com.tuankhoi.backend.service.PostService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Slf4j
 public class PostServiceImpl implements PostService {
-    private final PostRepository postRepository;
+    PostRepository postRepository;
+    PostMapper postMapper;
+    AuthenticationService authenticationService;
+    UserRepository userRepository;
 
-    public PostServiceImpl(PostRepository postRepository) {
-        this.postRepository = postRepository;
-    }
-
+    //    @PostAuthorize("@userServiceImpl.findByID(returnObject.createdBy).userName == authentication.name")
     @Override
-    public List<PostDTO> findAll() {
-        final List<Post> postList = postRepository.findAll(Sort.by("id"));
-        return postList.stream()
-                .map(PostMapper.INSTANCE::mapToDTO)
-                .toList();
-    }
-
-    @Override
-    public PostDTO findByID(UUID id) {
-        return postRepository.findById(id)
-                .map(PostMapper.INSTANCE::mapToDTO)
-                .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND));
-    }
-
-    @Override
-    public PostDTO create(PostDTO postDTO) {
+    public PostResponse create(PostRequest postRequest) {
         try {
-            Post post = PostMapper.INSTANCE.mapToEntity(postDTO);
-            Post savedPost = postRepository.save(post);
-            return PostMapper.INSTANCE.mapToDTO(savedPost);
+            Post newPost = postMapper.toPost(postRequest);
+            Post savedPost = postRepository.save(newPost);
+            return postMapper.toPostResponse(savedPost);
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
+            log.error("Failed to create post due to database constraint: {}", e.getMessage(), e);
             throw new IllegalArgumentException("Failed to create post due to database constraint: " + e.getMessage(), e);
         } catch (Exception e) {
+            log.error("Failed to create post: {}", e.getMessage(), e);
             throw new RuntimeException("Failed to create post: " + e.getMessage(), e);
         }
     }
 
     @Override
-    public PostDTO update(UUID id, PostDTO postDTO) {
-        try {
-            Post existingPost = postRepository.findById(id)
-                    .orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));
-            PostMapper.INSTANCE.updatePostFromDTO(postDTO, existingPost);
-
-            Post updatedPost = postRepository.save(existingPost);
-            return PostMapper.INSTANCE.mapToDTO(updatedPost);
-        } catch (DataIntegrityViolationException | ConstraintViolationException e) {
-            throw new IllegalArgumentException("Failed to update post due to database constraint: " + e.getMessage(), e);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to update post: " + e.getMessage(), e);
-        }
+    public List<PostResponse> findAll() {
+        return postRepository.findAll(Sort.by("id"))
+                .stream()
+                .map(postMapper::toPostResponse)
+                .toList();
     }
 
     @Override
-    public void deleteByID(UUID postID) {
+    public PostResponse findByID(String id) {
+        return postRepository.findById(id)
+                .map(postMapper::toPostResponse)
+                .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND));
+    }
+
+    @PostAuthorize("@userServiceImpl.findByUserName(returnObject.createdBy).userName == authentication.name or hasRole('ADMIN')")
+    @Override
+    public PostResponse update(String id, PostRequest postRequest) {
+        try {
+            Post existingPost = postRepository.findById(id)
+                    .orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));
+            postMapper.updatePost(existingPost, postRequest);
+            return postMapper.toPostResponse(postRepository.save(existingPost));
+        } catch (DataIntegrityViolationException | ConstraintViolationException e) {
+            throw new AppException(ErrorCode.DATA_INTEGRITY_VIOLATION, "Failed to update post due to database constraint: " + e.getMessage(), e);
+        } catch (AppException e) {
+            throw e;  // Re-throw if it's already an AppException
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION, "Failed to update post: " + e.getMessage(), e);
+        }
+    }
+
+    @PostAuthorize("@userServiceImpl.findByUserName(returnObject.createdBy).userName == authentication.name or hasRole('ADMIN')")
+    @Override
+    public void deleteByID(String postID) {
         try {
             Post postToDelete = postRepository.findById(postID)
                     .orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));

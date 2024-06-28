@@ -1,47 +1,77 @@
 package com.tuankhoi.backend.controller;
 
-import com.tuankhoi.backend.dto.UserDTO;
+import com.tuankhoi.backend.dto.request.UserRequest;
+import com.tuankhoi.backend.dto.response.APIResponse;
+import com.tuankhoi.backend.dto.response.UserResponse;
 import com.tuankhoi.backend.service.UserService;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/user")
 public class UserController {
-    private final UserService userService;
-
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+    UserService userService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> findByID(@PathVariable final UUID id) {
-        return ResponseEntity.ok(userService.findByID(id));
+    public APIResponse<UserResponse> findByID(@PathVariable String id){
+        return APIResponse.<UserResponse>builder()
+                .result(userService.findByID(id))
+                .build();
+    }
+
+//    @GetMapping("/{user_name}")
+//    public APIResponse<UserResponse> findByUserName(@PathVariable String user_name){
+//        return APIResponse.<UserResponse>builder()
+//                .result(userService.findByUserName(user_name))
+//                .build();
+//    }
+
+    @GetMapping("/my-info")
+    public APIResponse<UserResponse> getMyInfo() {
+        return APIResponse.<UserResponse>builder()
+                .result(userService.getMyInfo())
+                .build();
     }
 
     @GetMapping("")
-    public ResponseEntity<List<UserDTO>> findAll() {
-        return ResponseEntity.ok(userService.findAll());
+    public APIResponse<List<UserResponse>> findAll() {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        log.info("Username: {}", authentication.getName());
+        log.info("Username: {}", authentication.getPrincipal());
+        authentication.getAuthorities().forEach(grantedAuthority -> log.info(grantedAuthority.getAuthority()));
+
+        return APIResponse.<List<UserResponse>>builder()
+                .result(userService.findAll())
+                .build();
     }
 
     @PostMapping
-    public ResponseEntity<UserDTO> create(@RequestBody @Valid UserDTO userDTO) {
-        return new ResponseEntity<>(userService.create(userDTO), HttpStatus.CREATED);
+    public APIResponse<UserResponse> create(@RequestBody @Valid UserRequest userRequest){
+        return APIResponse.<UserResponse>builder()
+                .result(userService.create(userRequest))
+                .build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable UUID id, @RequestBody UserDTO userDTO) {
-        UserDTO updatedUser = userService.update(id, userDTO);
-        return ResponseEntity.ok(updatedUser);
+    public APIResponse<UserResponse> update(@PathVariable String id, @RequestBody UserRequest userRequest){
+        return APIResponse.<UserResponse>builder()
+                .result(userService.update(id, userRequest))
+                .build();
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable UUID id){
+    public APIResponse<Void> delete(@PathVariable String id){
         userService.deleteByID(id);
+        return APIResponse.<Void>builder().build();
     }
 }

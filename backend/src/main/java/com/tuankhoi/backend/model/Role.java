@@ -1,11 +1,8 @@
 package com.tuankhoi.backend.model;
 
-import com.tuankhoi.backend.enums.RoleEnum;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.util.Set;
 
@@ -15,17 +12,17 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "role")
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    Integer id;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, unique = true)
-    private RoleEnum name;
+    String name;
 
-    private String description;
+    String description;
 
-    @OneToMany(mappedBy = "role")
-    private Set<User> users;
+    @ManyToMany
+    Set<Permission> permissions;
 }
