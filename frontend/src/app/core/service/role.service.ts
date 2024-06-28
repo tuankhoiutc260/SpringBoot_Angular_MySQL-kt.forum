@@ -2,7 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { API_URL } from '../config/config';
 import { Observable } from 'rxjs';
-import { Role } from '../interface/role';
+import { Role } from '../interface/model/role';
+import { ApiResponse } from '../interface/response/apiResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -12,21 +13,26 @@ export class RoleService {
 
   constructor(private http: HttpClient) { }
 
-  /**
-   * Get all role from backend
-   * @returns array of roles
-   * @example
-   *    this.roleService.getAllRoles().subscribe({
-   *      next: (roles: Role[]) => {
-   *        this.roles = roles;
-   *    },
-   *    error:(error)=>{
-   *      console.log(error)
-   *    }
-   *    })
-   */
+  create<T>(role: Role): Observable<ApiResponse<T>> {
+    return this.http.post<ApiResponse<T>>(this.apiURL, role)
+  }
 
-  getAllRoles(): Observable<Role[]>{
-    return this.http.get<Role[]>(this.apiURL)
+  findByID<T>(id: number): Observable<ApiResponse<T>> {
+    const url = `${this.apiURL}/${id}`;
+    return this.http.get<ApiResponse<T>>(url);
+  }
+
+  findAll<T>(): Observable<ApiResponse<T>> {
+    return this.http.get<ApiResponse<T>>(this.apiURL);
+  }
+
+  update<T>(id: string, role: Role): Observable<ApiResponse<T>> {
+    const url = `${this.apiURL}/${id}`;
+    return this.http.put<ApiResponse<T>>(url, role);
+  }
+
+  delete<T>(id: string): Observable<ApiResponse<T>> {
+    const url = `${this.apiURL}/${id}`;
+    return this.http.delete<ApiResponse<T>>(url);
   }
 }

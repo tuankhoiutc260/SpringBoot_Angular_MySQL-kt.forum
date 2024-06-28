@@ -1,34 +1,38 @@
-import { Component } from '@angular/core';
-import { Post } from '../../../core/interface/post';
+import { Component, OnInit } from '@angular/core';
 import { PostService } from '../../../core/service/post.service';
+import { ApiResponse } from '../../../core/interface/response/apiResponse';
+import { PostResponse } from '../../../core/interface/response/post-response';
 
 @Component({
   selector: 'app-feed',
   templateUrl: './feed.component.html',
-  styleUrl: './feed.component.scss'
+  styleUrls: ['./feed.component.scss']
 })
-export class FeedComponent {
-  posts: Post[] = [];
-  isVisible: boolean = false
-  post: Post = {}
+export class FeedComponent implements OnInit {
+  postsResponse: PostResponse[] = [];
+  isVisible: boolean = false;
   isEdit: boolean = false;
+  postResponse: PostResponse = {};
 
-  constructor(
-    private postService: PostService,
-  ) { }
+  constructor(private postService: PostService) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.getAllPosts();
   }
 
-  getAllPosts(): void {
-    this.postService.getAllPosts().subscribe({
-      next: (posts: Post[]) => {
-        this.posts = posts;
+  getAllPosts() {
+    this.postService.findAll<PostResponse>().subscribe(
+      (response: ApiResponse<PostResponse>) => {
+        if (Array.isArray(response.result)) {
+          this.postsResponse = response.result;
+          console.log(this.postsResponse)
+        } else {
+          this.postsResponse = [];
+        }
       },
-      error: (error) => {
-        console.log(error)
+      (error) => {
+        console.log('Error fetching posts', error);
       }
-    })
+    );
   }
 }

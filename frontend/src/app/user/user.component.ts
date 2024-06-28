@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthService } from '../core/service/auth.service';
 
 @Component({
   selector: 'app-user',
@@ -6,5 +7,18 @@ import { Component } from '@angular/core';
   styleUrl: './user.component.scss'
 })
 export class UserComponent {
-  currentUserFullName: string = '';
+  currentUserName: string = '';
+
+  constructor(
+    private authService: AuthService
+  ) { }
+
+  ngOnInit() {
+    this.getCurrentUserName();
+  }
+
+  getCurrentUserName() {
+    this.currentUserName = this.authService.getCurrentUserName();
+  }
+
 }

@@ -2,7 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { API_URL } from '../config/config';
 import { Observable } from 'rxjs';
-import { User } from '../interface/user';
+import { User } from '../interface/model/user';
+import { ApiResponse } from '../interface/response/apiResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -12,74 +13,26 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  /**
-   * Get all user from backend
-   * @returns array of users
-   * @example
-   *    this.userService.getUsers().subscribe({
-   *      next: (users: User[]) => {
-   *        this.users = users;
-   *    },
-   *    error:(error)=>{
-   *      console.log(error)
-   *    }
-   *  })
-   */
-
-  getAllUsers(): Observable<User[]> {
-    return this.http.get<User[]>(this.apiURL)
+  create<T>(user: User): Observable<ApiResponse<T>> {
+    return this.http.post<ApiResponse<T>>(this.apiURL, user)
   }
 
-  /**
-   * Create user from backend
-   * @returns user
-   * @example
-   *    this.userService.create().subscribe({
-   *      next: (id) =>{
-   *        this.user.id = id;
-   *    },
-   *    error:(error)=>{
-   *      console.log(error)
-   *    }
-   *  })
-   */
-  create(user: User): Observable<string> {
-    return this.http.post<string>(this.apiURL, user)
-  }
-
-  /**
-   * Update the existing User
-   * @returns user
-   * @example
-   *    this.userService.update().subscribe({
-   *      next: (id) =>{
-   *        this.user.id = id;
-   *    },
-   *    error:(error)=>{
-   *      console.log(error)
-   *    }
-   *  })
-   */
-  update(id: string, user: User): Observable<string> {
+  findByID<T>(id: string): Observable<ApiResponse<T>> {
     const url = `${this.apiURL}/${id}`;
-    return this.http.put<string>(url, user);
+    return this.http.get<ApiResponse<T>>(url);
   }
 
-  /**
- * Get specified user from backend
- * @returns a user
- * @example
- *    this.userService.getUser().subscribe({
- *      next: (user) =>{
- *        this.user = user
- *    },
- *    error:(error)=>{
- *      console.log(error)
- *    }
- *  })
- */
-  getUser(id: string): Observable<User> {
+  findAll<T>(): Observable<ApiResponse<T>> {
+    return this.http.get<ApiResponse<T>>(this.apiURL);
+  }
+
+  update<T>(id: string, user: User): Observable<ApiResponse<T>> {
     const url = `${this.apiURL}/${id}`;
-    return this.http.get<User>(url);
+    return this.http.put<ApiResponse<T>>(url, user);
+  }
+
+  delete<T>(id: string): Observable<ApiResponse<T>> {
+    const url = `${this.apiURL}/${id}`;
+    return this.http.delete<ApiResponse<T>>(url);
   }
 }

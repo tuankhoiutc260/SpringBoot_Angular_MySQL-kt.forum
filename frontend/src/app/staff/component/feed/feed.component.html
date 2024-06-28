@@ -5,10 +5,10 @@
         </div>
     </ng-template>
 
-    <ng-template let-product pTemplate="grid" let-posts>
+    <ng-template let-postResponse pTemplate="grid" let-posts>
         <div class="grid grid-nogutter">
             <div class="col-12 sm:col-12 md:col-6 lg:col-6 xl:col-4 p-2" *ngFor="let post of posts">
-                <app-post class="cursor-pointer" [canEdit]="true" [post]="post"
+                <app-post class="cursor-pointer" [canEdit]="true" [postResponse]="post"
                     (isEditing)="openDialogEdit(post)"></app-post>
             </div>
         </div>
@@ -58,7 +58,7 @@
             </div>
         </ng-container>
         <div class="flex gap-2 justify-content-center">
-            <p-button (click)="deletePost($event)" label="Delete" severity="danger"></p-button>
+            <!-- <p-button (click)="deletePost($event)" label="Delete" severity="danger"></p-button> -->
             <p-button (click)="savePost()" label="Save" severity="success"></p-button>
         </div>
     </ng-template>

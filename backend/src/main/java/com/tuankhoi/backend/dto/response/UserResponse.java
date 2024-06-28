@@ -15,11 +15,11 @@ import java.util.Set;
 public class UserResponse {
     String id;
 
-    String email;
-
     String userName;
 
     String password;
+
+    String email;
 
     String fullName;
 

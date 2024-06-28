@@ -3,8 +3,8 @@ export interface Post {
     title?: string;
     content?: string;
     tags?: string[];
-    createdDate?: string;
+    createdDate?: Date | string;
     createdBy?: string;
-    lastModifiedDate?: string;
+    lastModifiedDate?: Date | string;
     lastModifiedBy?: string;
 }

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Post } from '../../../core/interface/post';
+import { Post } from '../../../core/interface/model/post';
+import { PostResponse } from '../../../core/interface/response/post-response';
 
 @Component({
   selector: 'app-post',
@@ -7,7 +8,7 @@ import { Post } from '../../../core/interface/post';
   styleUrl: './post.component.scss'
 })
 export class PostComponent {
-  @Input() post!: Post;
+  @Input() postResponse!: PostResponse;
   @Input() canEdit!: boolean;
   @Output() isEditing = new EventEmitter();
 }

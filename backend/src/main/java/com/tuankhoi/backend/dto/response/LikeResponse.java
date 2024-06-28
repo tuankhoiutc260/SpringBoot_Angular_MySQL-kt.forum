@@ -1,7 +1,5 @@
 package com.tuankhoi.backend.dto.response;
 
-import com.tuankhoi.backend.model.Post;
-import com.tuankhoi.backend.model.User;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -19,7 +17,7 @@ import java.time.LocalDateTime;
 public class LikeResponse {
     LocalDateTime createdDate;
 
-    User user;
+    UserResponse user;
 
-    Post post;
+    PostResponse post;
 }

@@ -39,9 +39,9 @@ public class UserMapperImpl implements UserMapper {
         UserResponse.UserResponseBuilder userResponse = UserResponse.builder();
 
         userResponse.id( user.getId() );
-        userResponse.email( user.getEmail() );
         userResponse.userName( user.getUserName() );
         userResponse.password( user.getPassword() );
+        userResponse.email( user.getEmail() );
         userResponse.fullName( user.getFullName() );
         userResponse.active( user.isActive() );
         userResponse.createdDate( user.getCreatedDate() );
