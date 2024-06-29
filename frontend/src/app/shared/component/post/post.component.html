@@ -1,4 +1,4 @@
-<div [routerLink]="canEdit ?[] : ['./posts/' + postResponse.id]"
+<div [routerLink]="canEdit ?[] : ['./post/' + postResponse.id]"
     class="border-1 border-solid p-4 flex flex-column h-full   ">
     <div class=" flex justify-content-between">
         <small *ngIf="postResponse.createdBy">{{postResponse.createdBy
@@ -12,6 +12,6 @@
     </div>
     <div *ngIf="canEdit" class="flex gap-2 justify-content-end">
         <p-button (click)="isEditing.emit()" label="Edit" severity="success"></p-button>
-        <p-button [routerLink]="['./posts/' + postResponse.id]" label="Details" severity="primary"></p-button>
+        <p-button [routerLink]="['./post/' + postResponse.id]" label="Details" severity="primary"></p-button>
     </div>
 </div>

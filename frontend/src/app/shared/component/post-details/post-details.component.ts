@@ -11,8 +11,8 @@ import { PostRequest } from '../../../core/interface/request/post-request';
   styleUrls: ['./post-details.component.scss'] // Chỉnh sửa thành styleUrls để chỉ định file CSS
 })
 export class PostDetailsComponent implements OnInit {
-  postID: string = ''; // Khai báo biến postID ở đầu class
-  postResponse: PostResponse = {}; // Khai báo biến post ở đầu class
+  postID: string = '';
+  postResponse: PostResponse = {};
 
   constructor(
     private postService: PostService,
@@ -35,7 +35,6 @@ export class PostDetailsComponent implements OnInit {
       (apiResponse: ApiResponse<PostResponse>) => {
         if (apiResponse.result) {
           this.postResponse = apiResponse.result;
-          console.log(apiResponse)
         } else {
           this.postResponse = {};
         }

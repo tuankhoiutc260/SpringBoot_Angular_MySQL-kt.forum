@@ -1,16 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { StaffComponent } from './staff.component';
-import { PrimengModule } from '../user/primeng.modules';
-import { RouterModule, Routes } from '@angular/router';
 import { FeedComponent } from './component/feed/feed.component';
 import { UserManagementComponent } from './component/user-management/user-management.component';
+import { RouterModule, Routes } from '@angular/router';
+import { PrimengModule } from '../user/primeng.modules';
 import { FormsModule } from '@angular/forms';
-import { UserIDToNamePipe } from '../core/pipe/user-idto-name.pipe';
-import { CoreModule } from '../core/core.module';
-import { PostComponent } from '../shared/component/post/post.component';
 import { SharedModule } from '../shared/shared.module';
 import { PostDetailsComponent } from '../shared/component/post-details/post-details.component';
+// import { SharedModule } from 'primeng/api';
 
 const routes: Routes = [
   {
@@ -22,7 +20,7 @@ const routes: Routes = [
     component: UserManagementComponent
   },
   {
-    path: 'posts', children: [
+    path: 'post', children: [
       {
         path: ':postID',
         component: PostDetailsComponent
@@ -35,9 +33,7 @@ const routes: Routes = [
   declarations: [
     StaffComponent,
     FeedComponent,
-    UserManagementComponent,
-
-
+    UserManagementComponent
   ],
   imports: [
     CommonModule,
@@ -45,7 +41,6 @@ const routes: Routes = [
     FormsModule,
     SharedModule,
     RouterModule.forChild(routes),
-
   ]
 })
 export class StaffModule { }

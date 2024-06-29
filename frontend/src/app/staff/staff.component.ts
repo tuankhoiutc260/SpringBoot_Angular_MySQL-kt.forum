@@ -12,8 +12,10 @@ export class StaffComponent {
       link: ''
     },
     {
-      name: 'User management',
+      name: 'User Management',
       link: 'user-management'
     }
   ]
+
+
 }

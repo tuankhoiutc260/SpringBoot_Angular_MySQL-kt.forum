@@ -72,6 +72,7 @@ export class UserManagementComponent implements OnInit { // Implement OnInit
     this.isEdit = true;
     this.isVisible = true;
     this.userResponse = { ...userResponse };
+    console.log(this.userResponse)
   }
 
 

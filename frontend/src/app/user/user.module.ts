@@ -14,7 +14,7 @@ const routes: Routes = [
     component: FeedComponent
   },
   {
-    path: 'posts', children: [
+    path: 'post', children: [
       {
         path: ':postID',
         component: PostDetailsComponent

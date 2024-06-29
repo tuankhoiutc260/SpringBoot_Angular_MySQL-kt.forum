@@ -25,7 +25,7 @@ export class LoginComponent {
           this.authService.setToken(response.result.token);
           this.authService.setCurrentUserName(this.login.userName); // Lưu tên người dùng hiện tại
 
-          this.router.navigate([""]);
+          this.router.navigate(["/"]);
           console.log(response);
         } else {
           console.log('Authentication failed');

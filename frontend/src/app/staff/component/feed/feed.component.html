@@ -1,15 +1,17 @@
-<p-dataView #dv [value]="posts" [layout]="'grid'" [rows]="5" [paginator]="true">
+<p-dataView #dv [value]="postsResponse" [layout]="'grid'" [rows]="5" [paginator]="true">
     <ng-template pTemplate="header">
         <div class="flex justify-content-end">
             <p-button (click)="openDialogNew()" label="Write" severity="success"></p-button>
         </div>
     </ng-template>
 
-    <ng-template let-postResponse pTemplate="grid" let-posts>
+    <ng-template let-postResponse pTemplate="grid">
         <div class="grid grid-nogutter">
-            <div class="col-12 sm:col-12 md:col-6 lg:col-6 xl:col-4 p-2" *ngFor="let post of posts">
-                <app-post class="cursor-pointer" [canEdit]="true" [postResponse]="post"
-                    (isEditing)="openDialogEdit(post)"></app-post>
+            <div class="col-12 sm:col-12 md:col-6 lg:col-6 xl:col-4 p-2" *ngFor="let postResponse of postsResponse">
+                <app-post class="cursor-pointer" [canEdit]="true" [postResponse]="postResponse"
+                    (isEditing)="openDialogEdit(postResponse)"></app-post>
+
+
             </div>
         </div>
     </ng-template>
@@ -20,21 +22,21 @@
     <ng-template pTemplate="content">
         <div *ngIf="isEdit" class="flex flex-column gap-2 mb-4">
             <label for="id">ID</label>
-            <input pInputText id="id" [(ngModel)]="post.id" readonly>
+            <input pInputText id="id" [(ngModel)]="postResponse.id" readonly>
         </div>
 
         <div class="flex flex-column gap-2 mb-4">
             <label for="title">Title</label>
-            <input pInputText id="id" [(ngModel)]="post.title">
+            <input pInputText id="id" [(ngModel)]="postResponse.title">
         </div>
         <div class="flex flex-column gap-2 mb-4">
             <label for="tags">Tags</label>
-            <p-chips [(ngModel)]="post.tags" />
+            <p-chips [(ngModel)]="postResponse.tags" />
         </div>
         <div class="flex flex-column gap-2 mb-4">
             <label for="content">Content</label>
             <!-- <p-editor [(ngModel)]="post.content" [style]="{ height: '320px' }" /> -->
-            <textarea rows="5" cols="30" pInputTextarea [(ngModel)]="post.content">
+            <textarea rows="5" cols="30" pInputTextarea [(ngModel)]="postResponse.content">
         </textarea>
         </div>
 
@@ -42,24 +44,25 @@
         <ng-container *ngIf="isEdit">
             <div class="flex flex-column gap-2 mb-4">
                 <label for="createdDate">Created Date</label>
-                <input pInputText id="id" [ngModel]="post.createdDate | date:'HH:mm:ss - dd/MM/yyyy'" readonly>
+                <input pInputText id="id" [ngModel]="postResponse.createdDate | date:'HH:mm:ss - dd/MM/yyyy'" readonly>
             </div>
             <div class="flex flex-column gap-2 mb-4">
                 <label for="createdBy">Created By</label>
-                <input pInputText id="id" [(ngModel)]="post.createdBy" readonly>
+                <input pInputText id="id" [(ngModel)]="postResponse.createdBy" readonly>
             </div>
             <div class="flex flex-column gap-2 mb-4">
                 <label for="lastModifiedDate">Last Modified Date</label>
-                <input pInputText id="id" [ngModel]="post.lastModifiedDate  | date:'HH:mm:ss - dd/MM/yyyy'" readonly>
+                <input pInputText id="id" [ngModel]="postResponse.lastModifiedDate  | date:'HH:mm:ss - dd/MM/yyyy'"
+                    readonly>
             </div>
             <div class="flex flex-column gap-2 mb-4">
                 <label for="lastModifiedBy">Last Modified By</label>
-                <input pInputText id="id" [(ngModel)]="post.lastModifiedBy" readonly>
+                <input pInputText id="id" [(ngModel)]="postResponse.lastModifiedBy" readonly>
             </div>
         </ng-container>
         <div class="flex gap-2 justify-content-center">
             <!-- <p-button (click)="deletePost($event)" label="Delete" severity="danger"></p-button> -->
-            <p-button (click)="savePost()" label="Save" severity="success"></p-button>
+            <!-- <p-button (click)="savePost()" label="Save" severity="success"></p-button> -->
         </div>
     </ng-template>
 </p-dialog>
