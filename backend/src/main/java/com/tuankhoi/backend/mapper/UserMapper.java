@@ -12,7 +12,7 @@ public interface UserMapper {
     @Mapping(target = "role", ignore = true)
     User toUser(UserRequest userUpdateRequest);
 
-    @Mapping(target = "role", ignore = true)
+//    @Mapping(target = "role", ignore = true)
     UserResponse toUserResponse(User user);
 
     @Mapping(target = "role", ignore = true)

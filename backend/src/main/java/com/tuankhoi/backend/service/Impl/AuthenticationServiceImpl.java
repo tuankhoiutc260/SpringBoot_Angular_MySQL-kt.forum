@@ -20,8 +20,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -92,7 +90,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .issuer("tuankhoi.com")
                 .issueTime(new Date())
                 .expirationTime(new Date(
-                        Instant.now().plus(5, ChronoUnit.HOURS).toEpochMilli()
+                        Instant.now().plus(1, ChronoUnit.MINUTES).toEpochMilli()
                 ))
                 .claim("scope", buildScope(user))
                 .build();

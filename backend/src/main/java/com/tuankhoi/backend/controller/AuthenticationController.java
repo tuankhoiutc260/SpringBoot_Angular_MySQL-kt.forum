@@ -19,10 +19,12 @@ import java.text.ParseException;
 
 @RestController
 @RequestMapping("/api/v1/auth")
-@RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthenticationController {
-    AuthenticationService authenticationService;
+    private final AuthenticationService authenticationService;
+
+    public AuthenticationController(AuthenticationService authenticationService) {
+        this.authenticationService = authenticationService;
+    }
 
     @PostMapping("/login")
     public APIResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {

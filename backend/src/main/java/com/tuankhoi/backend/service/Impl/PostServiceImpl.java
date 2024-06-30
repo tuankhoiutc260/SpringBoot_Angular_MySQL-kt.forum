@@ -23,6 +23,7 @@ import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -60,9 +61,12 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostResponse findByID(String id) {
+//        Optional<Post> post = postRepository.findById(id);
+
+//        return postMapper.toPostResponse(null);
         return postRepository.findById(id)
                 .map(postMapper::toPostResponse)
-                .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND));
+                .orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));
     }
 
     @PostAuthorize("@userServiceImpl.findByUserName(returnObject.createdBy).userName == authentication.name or hasRole('ADMIN')")
@@ -82,7 +86,8 @@ public class PostServiceImpl implements PostService {
         }
     }
 
-    @PostAuthorize("@userServiceImpl.findByUserName(returnObject.createdBy).userName == authentication.name or hasRole('ADMIN')")
+//    @PostAuthorize("@userServiceImpl.findByUserName(returnObject.createdBy).userName == authentication.name or hasRole('ADMIN')")
+    @PostAuthorize("hasRole('ADMIN') ")
     @Override
     public void deleteByID(String postID) {
         try {

@@ -6,13 +6,13 @@ import com.tuankhoi.backend.dto.response.PostResponse;
 import java.util.List;
 
 public interface PostService {
-    PostResponse create(final PostRequest postRequest);
+    PostResponse create(PostRequest postRequest);
 
-    PostResponse findByID(final String id);
+    PostResponse findByID(String id);
 
     List<PostResponse> findAll();
 
-    PostResponse update(final String id, final PostRequest postRequest);
+    PostResponse update(String id, PostRequest postRequest);
 
-    void deleteByID(final String id);
+    void deleteByID(String id);
 }
