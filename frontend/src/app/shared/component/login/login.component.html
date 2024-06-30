@@ -1,13 +1,21 @@
 <div class="card m-auto col-12 sm:col-6 flex flex-column align-item-stretch">
     <h1 class="text-center">Login</h1>
+
     <div class="flex flex-column gap-2 mb-4">
         <label for="userName">User name</label>
         <input pInputText id="id" [(ngModel)]="login.userName ">
+
     </div>
+
     <div class="flex flex-column gap-2 mb-4">
         <label for="password">Password</label>
         <input pInputText id="id" [(ngModel)]="login.password">
     </div>
-    <p-button (click)="onLogin()" class="m-auto mb-4" label=" Login" severity="primary"></p-button>
-    <p [routerLink]="['/']" class="underline cursor-pointer text-center">Back to Home</p>
+    <small class="text-red-500 text-center">{{errorMessage}}</small>
+
+    <div class="py-3 text-center">
+        <p-button (click)="onLogin()" class="m-auto mb-4" label=" Login" severity="primary"></p-button>
+        <p [routerLink]="['/']" class="underline cursor-pointer ">Back to Home</p>
+    </div>
+
 </div>

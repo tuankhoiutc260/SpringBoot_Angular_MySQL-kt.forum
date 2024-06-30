@@ -22,7 +22,7 @@ export class PostDetailsComponent implements OnInit {
   ngOnInit() {
     this.postID = this.activatedRoute.snapshot.paramMap.get('postID') || '';
     if (this.postID) {
-      this.getPosts(this.postID);
+      this.getPost(this.postID);
     }
     else {
       console.log("falure")
@@ -30,18 +30,18 @@ export class PostDetailsComponent implements OnInit {
     }
   }
 
-  getPosts(id: string) {
-    this.postService.findByID<PostRequest>(id).subscribe(
-      (apiResponse: ApiResponse<PostResponse>) => {
+  getPost(id: string) {
+    this.postService.findByID(id).subscribe({
+      next: (apiResponse: ApiResponse<PostResponse>) => {
         if (apiResponse.result) {
           this.postResponse = apiResponse.result;
         } else {
-          this.postResponse = {};
+          this.postResponse = { id: '', title: '', content: '' }; // Khởi tạo giá trị mặc định cho PostResponse
         }
       },
-      (error) => {
+      error: (error) => {
         console.error('Error fetching posts', error);
       }
-    );
+    });
   }
 }

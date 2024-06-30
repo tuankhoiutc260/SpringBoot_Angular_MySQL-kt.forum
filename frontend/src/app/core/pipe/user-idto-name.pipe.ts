@@ -10,12 +10,8 @@ export class UserIDToNamePipe implements PipeTransform {
   constructor(private userService: UserService) { }
 
   transform(id: string): Observable<string | undefined> {
-    return this.userService.findByID<User>(id).pipe(
-      // map(user => user.fullName)
+    return this.userService.findByID(id).pipe(
       map(apiResponse => apiResponse.result?.fullName)
     );
-
-
   }
-
 }

@@ -5,8 +5,8 @@ import { MessageService } from 'primeng/api';
 import { ApiResponse } from '../../../core/interface/response/apiResponse';
 import { RoleResponse } from '../../../core/interface/response/role-response';
 import { UserResponse } from '../../../core/interface/response/user-response';
-import { RoleRequest } from '../../../core/interface/request/role-request';
 import { UserRequest } from '../../../core/interface/request/user-request';
+import { RoleIdToNamePipe } from '../../../core/pipe/role-id-to-name.pipe';
 
 @Component({
   selector: 'app-user-management',
@@ -14,138 +14,138 @@ import { UserRequest } from '../../../core/interface/request/user-request';
   styleUrl: './user-management.component.scss', // Sửa lỗi cú pháp
   providers: [MessageService]
 })
+
 export class UserManagementComponent implements OnInit { // Implement OnInit
   rolesResponse: RoleResponse[] = [];
   roleResponse: RoleResponse = {};
   usersResponse: UserResponse[] = [];
   isVisible: boolean = false;
   userResponse: UserResponse = {};
+  userRequest: UserRequest = {};
   isEdit: boolean = false;
+  userRequestID: string | null = null; // ID của bài viết, nếu đang cập nhật
+
 
   constructor(
     private roleService: RoleService,
     private userService: UserService,
-    private messageService: MessageService
+    private messageService: MessageService,
   ) { }
 
   ngOnInit() {
     this.getAllRoles();
     this.getAllUsers();
   }
+  onDropdownChange(selectedValue: any) {
+    console.log('Selected value:', selectedValue);
+    // Điều gì đó khác ở đây với lựa chọn bộ lọc
+  }
 
   getAllRoles() {
-    this.roleService.findAll<RoleResponse>().subscribe(
-      (apiResponse: ApiResponse<RoleResponse>) => {
-        if (Array.isArray(apiResponse.result)) {
-          this.rolesResponse = apiResponse.result;
-        } else {
-          this.rolesResponse = [];
+    this.roleService.findAll().subscribe({
+      next: (apiResponse: ApiResponse<RoleResponse[]>) => {
+        const roleResponseList = apiResponse.result;
+        if (roleResponseList) {
+          this.rolesResponse = roleResponseList;
+        }
+        else {
+          console.error('No result found in response: ', apiResponse.message)
         }
       },
-      (error) => {
-        console.log(error);
+      error: (error) => {
+        console.error('Error fetching posts: ', error)
       }
-    );
+    });
+  }
+
+  onRoleChange(roleId: any) {
+    if (this.userResponse.role) {
+      this.userResponse.role.id = roleId;
+    } else {
+      this.userResponse.role = { id: roleId };
+    }
   }
 
   getAllUsers() {
-    this.userService.findAll<UserResponse>().subscribe(
-      (apiResponse: ApiResponse<UserResponse>) => {
-        if (Array.isArray(apiResponse.result)) {
-          this.usersResponse = apiResponse.result;
-        } else {
-          this.usersResponse = [];
+    this.userService.findAll().subscribe({
+      next: (apiResponse: ApiResponse<UserResponse[]>) => {
+        const userResponseList = apiResponse.result;
+        if (userResponseList) {
+          this.usersResponse = userResponseList
+        }
+        else {
+          console.error('No result found in response: ', apiResponse.message)
         }
       },
-      (error) => {
-        console.log(error);
+      error: (apiResponse: ApiResponse<UserResponse>) => {
+        console.error(apiResponse.message)
       }
-    );
+    });
   }
-
-  // getRoleByID(roleID: number) {
-  //   // return this.role.find(role => role.id === roleID)?.name;
-  //   return this.roleService.findByID<RoleRequest>(roleID);
-  // }
 
   openDialogEdit(userResponse: UserResponse): void {
     this.isEdit = true;
     this.isVisible = true;
     this.userResponse = { ...userResponse };
-    console.log(this.userResponse)
   }
-
-
 
   openDialogNew(): void {
     this.isEdit = false;
     this.isVisible = true;
     this.userResponse = {
-      role_id: 1,
+      role: {
+        id: 1
+      },
       active: true
-    } as UserResponse; // Chuyển đối tượng sang User để tránh lỗi kiểu
+    } as UserResponse;
   }
 
-  saveUser(): void {
-    // if (this.user.id) {
-    //   // Updating existing user
-    //   const updatedUser: Partial<User> = { ...this.user };
-    //   delete updatedUser.createdDate;
-    //   delete updatedUser.createdBy;
-    //   delete updatedUser.lastModifiedDate;
-    //   delete updatedUser.lastModifiedBy;
+  saveUser() {
+    this.userRequest = {
+      ...this.userResponse,
+      role: this.userResponse.role?.id
+    };
+    this.userRequestID = this.userResponse.id ?? null;
 
-    //   this.userService.update<User>(this.user.id, updatedUser).subscribe({
-    //     next: () => {
-    //       this.isVisible = false;
-    //       const index = this.users.findIndex(user => user.id === this.user.id);
-    //       if (index !== -1) {
-    //         this.users[index] = { ...this.users[index], ...this.users };
-    //       }
-    //       this.messageService.add({ severity: 'success', summary: 'Success', detail: 'User is updated' });
-    //     },
-    //     error: (error) => {
-    //       console.log('Error updating user:', error);
-    //     }
-    //   });
-    // } else {
-    //   // Creating new user
-    //   const newUser: Partial<User> = { ...this.user };
-    //   delete newUser.id;
-    //   delete newUser.createdDate;
-    //   delete newUser.createdBy;
-    //   delete newUser.lastModifiedDate;
-    //   delete newUser.lastModifiedBy;
-
-    //   this.userService.create<User>(newUser as User).subscribe({
-    //     next: (apiResponse: ApiResponse<User>) => {
-    //       if (apiResponse.result) {
-    //         const id = apiResponse.result.id;
-    //         this.isVisible = false;
-    //         const newUserWithId = { ...newUser, id };
-    //         this.users.push(newUserWithId);
-    //         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'User is created' });
-    //       } else {
-    //         console.log('Error creating user: Response does not contain user ID');
-    //       }
-    //     },
-    //     error: (error) => {
-    //       console.log('Error creating user:', error);
-    //     }
-    //   });
-    // }
+    this.userService.save(this.userRequestID, this.userRequest).subscribe({
+      next: (apiResponse: ApiResponse<UserResponse>) => {
+        const userResponse = apiResponse.result;
+        if (userResponse) {
+          if (this.userRequestID) {
+            const index = this.usersResponse.findIndex(user => user.id === this.userRequestID);
+            if (index !== -1) {
+              this.usersResponse[index] = userResponse;
+            }
+            this.showMessage('info', 'Confirmed', 'User updated');
+          } else {
+            this.usersResponse.unshift(userResponse);
+            this.showMessage('info', 'Confirmed', 'User created');
+          }
+          this.isVisible = false;
+          this.resetForm();
+          this.loadPage();
+        } else {
+          console.error('No result found in response:', apiResponse);
+        }
+      },
+      error: (apiResponse: ApiResponse<UserResponse>) => {
+        this.showMessage('error', 'Error', apiResponse.message ?? '');
+      }
+    });
   }
 
-  set userRoleId(roleId: number | undefined) {
-    // if (this.user.role) {
-    //   this.user.role.id = roleId;
-    // } else {
-    //   this.user.role = { id: roleId } as Role;
-    // }
+  resetForm() {
+    this.userRequest = {};
+    this.userRequestID = null;
   }
 
-  get userRoleId(): number | undefined {
-    return this.userResponse.role?.id;
+  loadPage() {
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
   }
 
+  showMessage(severityRequest: string, summaryRequest: string, detailRequest: string) {
+    this.messageService.add({ severity: severityRequest, summary: summaryRequest, detail: detailRequest });
+  }
 }

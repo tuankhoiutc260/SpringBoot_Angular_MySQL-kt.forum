@@ -2,6 +2,11 @@ import { Injectable } from '@angular/core';
 import { API_URL } from '../config/config';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { AuthenticationRequest } from '../interface/request/authentication-request';
+import { ApiResponse } from '../interface/response/apiResponse';
+import { AuthenticationResponse } from '../interface/response/authenticated-response';
+import { IntrospectResponse } from '../interface/response/introspect-request';
+import { IntrospectRequest } from '../interface/request/introspect-request';
 
 @Injectable({
   providedIn: 'root'
@@ -11,8 +16,13 @@ export class AuthService {
   private apiURL = API_URL + 'api/v1/auth'
   constructor(private http: HttpClient) { }
 
-  login(credentials: { userName: any, password: any }): Observable<any> {
-    return this.http.post<any>(`${this.apiURL}/login`, credentials);
+
+  login(authenticationRequest: AuthenticationRequest): Observable<ApiResponse<AuthenticationResponse>> {
+    return this.http.post<ApiResponse<AuthenticationResponse>>(`${this.apiURL}/login`, authenticationRequest)
+  }
+
+  introspect(introspectRequest: IntrospectRequest): Observable<ApiResponse<IntrospectResponse>> {
+    return this.http.post<ApiResponse<IntrospectResponse>>(`${this.apiURL}/introspect`, introspectRequest)
   }
 
   //TOKEN
@@ -55,4 +65,7 @@ export class AuthService {
     window.localStorage.removeItem("password");
   }
 
+  canActive(): boolean {
+    return !!this.getToken();
+  }
 }

@@ -2,8 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { API_URL } from '../config/config';
 import { Observable } from 'rxjs';
-import { User } from '../interface/model/user';
 import { ApiResponse } from '../interface/response/apiResponse';
+import { UserRequest } from '../interface/request/user-request';
+import { UserResponse } from '../interface/response/user-response';
 
 @Injectable({
   providedIn: 'root'
@@ -13,26 +14,34 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  create<T>(user: User): Observable<ApiResponse<T>> {
-    return this.http.post<ApiResponse<T>>(this.apiURL, user)
+  create(userRequest: UserRequest): Observable<ApiResponse<UserResponse>> {
+    return this.http.post<ApiResponse<UserResponse>>(this.apiURL, userRequest)
   }
 
-  findByID<T>(id: string): Observable<ApiResponse<T>> {
-    const url = `${this.apiURL}/${id}`;
-    return this.http.get<ApiResponse<T>>(url);
+  findByID(userRequestID: string): Observable<ApiResponse<UserResponse>> {
+    const url = `${this.apiURL}/${userRequestID}`;
+    return this.http.get<ApiResponse<UserResponse>>(url);
   }
 
-  findAll<T>(): Observable<ApiResponse<T>> {
-    return this.http.get<ApiResponse<T>>(this.apiURL);
+  findAll(): Observable<ApiResponse<UserResponse[]>> {
+    return this.http.get<ApiResponse<UserResponse[]>>(this.apiURL);
   }
 
-  update<T>(id: string, user: User): Observable<ApiResponse<T>> {
-    const url = `${this.apiURL}/${id}`;
-    return this.http.put<ApiResponse<T>>(url, user);
+  update(userRequestID: string, userRequest: UserRequest): Observable<ApiResponse<UserResponse>> {
+    const url = `${this.apiURL}/${userRequestID}`;
+    return this.http.put<ApiResponse<UserResponse>>(url, userRequest);
   }
 
-  delete<T>(id: string): Observable<ApiResponse<T>> {
-    const url = `${this.apiURL}/${id}`;
-    return this.http.delete<ApiResponse<T>>(url);
+  delete(userRequestID: string): Observable<ApiResponse<UserResponse>> {
+    const url = `${this.apiURL}/${userRequestID}`;
+    return this.http.delete<ApiResponse<UserResponse>>(url);
+  }
+
+  save(userRequestID: string | null, userRequest: UserRequest): Observable<ApiResponse<UserResponse>> {
+    if (userRequestID) {
+      return this.update(userRequestID, userRequest);
+    } else {
+      return this.create(userRequest);
+    }
   }
 }

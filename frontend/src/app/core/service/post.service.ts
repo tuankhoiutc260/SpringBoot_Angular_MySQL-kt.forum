@@ -4,6 +4,8 @@ import { API_URL } from '../config/config';
 import { Observable } from 'rxjs';
 import { Post } from '../interface/model/post';
 import { ApiResponse } from '../interface/response/apiResponse';
+import { PostRequest } from '../interface/request/post-request';
+import { PostResponse } from '../interface/response/post-response';
 
 @Injectable({
   providedIn: 'root'
@@ -13,31 +15,34 @@ export class PostService {
 
   constructor(private http: HttpClient) { }
 
-  create<T>(post: Post): Observable<ApiResponse<T>> {
-    return this.http.post<ApiResponse<T>>(this.apiURL, post)
+  create(postRequest: PostRequest): Observable<ApiResponse<PostResponse>> {
+    return this.http.post<ApiResponse<PostResponse>>(this.apiURL, postRequest);
   }
 
-  findByID<T>(id: string): Observable<ApiResponse<T>> {
-    const url = `${this.apiURL}/${id}`;
-    return this.http.get<ApiResponse<T>>(url);
+  findByID(postRequestID: string): Observable<ApiResponse<PostResponse>> {
+    const url = `${this.apiURL}/${postRequestID}`;
+    return this.http.get<ApiResponse<PostResponse>>(url);
   }
 
-  // findByIDs(id: string): ApiResponse {
-  //   const url = `${this.apiURL}/${id}`;
-  //   return this.http.get<ApiResponse>(url);
-  // }
-
-  findAll<T>(): Observable<ApiResponse<T>> {
-    return this.http.get<ApiResponse<T>>(this.apiURL);
+  findAll(): Observable<ApiResponse<PostResponse[]>> {
+    return this.http.get<ApiResponse<PostResponse[]>>(this.apiURL);
   }
 
-  update<T>(id: string, post: Post): Observable<ApiResponse<T>> {
-    const url = `${this.apiURL}/${id}`;
-    return this.http.put<ApiResponse<T>>(url, post);
+  update(postRequestID: string, postRequest: PostRequest): Observable<ApiResponse<PostResponse>> {
+    const url = `${this.apiURL}/${postRequestID}`;
+    return this.http.put<ApiResponse<PostResponse>>(url, postRequest);
   }
 
-  delete<T>(id: string): Observable<ApiResponse<T>> {
-    const url = `${this.apiURL}/${id}`;
-    return this.http.delete<ApiResponse<T>>(url);
+  delete(postRequestID: string): Observable<ApiResponse<PostResponse>> {
+    const url = `${this.apiURL}/${postRequestID}`;
+    return this.http.delete<ApiResponse<PostResponse>>(url);
+  }
+
+  save(postRequestID: string | null, postRequest: PostRequest): Observable<ApiResponse<PostResponse>> {
+    if (postRequestID) {
+      return this.update(postRequestID, postRequest);
+    } else {
+      return this.create(postRequest);
+    }
   }
 }

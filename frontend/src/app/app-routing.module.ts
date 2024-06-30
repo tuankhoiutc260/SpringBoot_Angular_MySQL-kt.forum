@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { UserComponent } from './user/user.component';
 import { LoginComponent } from './shared/component/login/login.component';
 import { StaffComponent } from './staff/staff.component';
+import { authGuard } from './core/guard/auth.guard';
 
 const routes: Routes = [
   {
@@ -14,6 +15,7 @@ const routes: Routes = [
   {
     component: StaffComponent,
     path: 'staff',
+    canActivate: [authGuard],
     loadChildren: () =>
       import('./staff/staff.module').then(m => m.StaffModule)
   },

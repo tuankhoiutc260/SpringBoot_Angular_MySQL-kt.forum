@@ -1,14 +1,22 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../../core/service/auth.service';
 import { Router } from '@angular/router';
+import { ApiResponse } from '../../../core/interface/response/apiResponse';
+import { AuthenticationRequest } from '../../../core/interface/request/authentication-request';
+import { AuthenticationResponse } from '../../../core/interface/response/authenticated-response';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  styleUrls: ['./login.component.scss'] // Sửa thành styleUrls
 })
 export class LoginComponent {
-  login: any = { userName: '', password: '' }
+  login: AuthenticationRequest = {
+    userName: '',
+    password: ''
+  };
+  errorMessage: string = '';
 
   constructor(
     private authService: AuthService,
@@ -20,21 +28,22 @@ export class LoginComponent {
     this.authService.removeCurrentUserName();
 
     this.authService.login(this.login).subscribe({
-      next: (response) => {
-        if (response.code === 1000 && response.result.authenticated) {
-          this.authService.setToken(response.result.token);
-          this.authService.setCurrentUserName(this.login.userName); // Lưu tên người dùng hiện tại
+      next: (apiResponse: ApiResponse<AuthenticationResponse>) => {
+        if (apiResponse.result) {
+          this.authService.setToken(apiResponse.result.token!);
+          this.authService.setCurrentUserName(this.login.userName!);
 
-          this.router.navigate(["/"]);
-          console.log(response);
+          this.router.navigate(['/']);
+          console.log(apiResponse);
         } else {
-          console.log('Authentication failed');
+          this.errorMessage = "Login error: No token found in response";
         }
       },
-      error: (error) => {
-        console.log("Login error: ", error);
+      error: (httpErrorResponse: HttpErrorResponse) => {
+        const errorMessage = httpErrorResponse.error.message;
+        console.error("Login error: ", errorMessage);
+        this.errorMessage = 'Invalid Username or Password';
       }
     });
   }
-
 }

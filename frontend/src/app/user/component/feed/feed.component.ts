@@ -31,17 +31,19 @@ export class FeedComponent implements OnInit, OnDestroy {
     // });
   }
 
-  getAllPosts() {
-    this.subscription = this.postService.findAll<PostResponse>().subscribe({
-      next: (response: ApiResponse<PostResponse>) => {
-        if (Array.isArray(response.result)) {
-          this.postsResponse = response.result;
+
+  getAllPosts(): void {
+    this.postService.findAll().subscribe({
+      next: (apiResponse: ApiResponse<PostResponse[]>) => {
+        const postResponseList = apiResponse.result;
+        if (postResponseList) {
+          this.postsResponse = postResponseList;
         } else {
-          this.postsResponse = [];
+          console.error('No result found in response:', apiResponse.message);
         }
       },
       error: (error) => {
-        console.log('Lỗi khi tải bài đăng', error);
+        console.error('Error fetching posts:', error);
       }
     });
   }

@@ -8,6 +8,8 @@ import { PrimengModule } from '../user/primeng.modules';
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { PostDetailsComponent } from '../shared/component/post-details/post-details.component';
+import { RoleIdToNamePipe } from '../core/pipe/role-id-to-name.pipe';
+import { CoreModule } from '../core/core.module';
 // import { SharedModule } from 'primeng/api';
 
 const routes: Routes = [
@@ -33,9 +35,10 @@ const routes: Routes = [
   declarations: [
     StaffComponent,
     FeedComponent,
-    UserManagementComponent
+    UserManagementComponent,
   ],
   imports: [
+    CoreModule,
     CommonModule,
     PrimengModule,
     FormsModule,

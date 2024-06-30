@@ -15,7 +15,7 @@
         </ng-template>
         <ng-template pTemplate="header">
             <tr>
-                <th>#</th> <!-- New column for row numbers -->
+                <th>#</th>
                 <th>Email</th>
                 <th>Full Name</th>
                 <th>Role</th>
@@ -26,7 +26,7 @@
                 <th></th>
                 <th></th>
                 <th>
-                    <p-columnFilter field="role_id" matchMode="equals" [showMenu]="false">
+                    <p-columnFilter field="role.id  " matchMode="equals" [showMenu]="false">
                         <ng-template pTemplate="filter" let-value let-filter="filterCallback">
                             <p-dropdown [ngModel]="value" [options]="rolesResponse" optionLabel="name" optionValue="id"
                                 (onChange)="filter($event.value)" placeholder="Select One" [showClear]="true">
@@ -39,16 +39,15 @@
                 </th>
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-user let-index="rowIndex"> <!-- Added let-i="rowIndex" -->
-            <!-- <tr class="cursor-pointer" (click)="openDialogEdit(user)"> -->
-            <tr class="cursor-pointer" (click)="openDialogNew()">
-                <td>{{ index + 1 }}</td> <!-- Display row number -->
-                <td>{{ user.email }}</td>
-                <td>{{ user.fullName }}</td>
-                <!-- <td>{{ getRoleByID(user.role?.id) }}</td>  -->
+        <ng-template pTemplate="body" let-userResponse let-index="rowIndex">
+            <tr class="cursor-pointer" (click)="openDialogEdit(userResponse)">
+                <td>{{ index + 1 }}</td>
+                <td>{{ userResponse.email }}</td>
+                <td>{{ userResponse.fullName }}</td>
+                <td>{{ userResponse.role?.id | roleIdToName | async }}</td>
                 <td>
                     <i class="pi"
-                        [ngClass]="{ 'pi-check-circle text-green-500': user.active, 'pi-times-circle text-red-500': !user.active }"></i>
+                        [ngClass]="{ 'pi-check-circle text-green-500': userResponse.active, 'pi-times-circle text-red-500': !userResponse.active }"></i>
                 </td>
             </tr>
         </ng-template>
@@ -67,12 +66,12 @@
                 <div class="flex flex-column gap-2 mb-4 flex-grow-1">
                     <label for="role">Role</label>
                     <div class="card flex">
-                        <p-dropdown [options]="rolesResponse" [ngModel]="userRoleId"
-                            (ngModelChange)="userRoleId = $event" optionValue="id" optionLabel="name"></p-dropdown>
+                        <p-dropdown [options]="rolesResponse" [ngModel]="userResponse.role?.id"
+                            (ngModelChange)="onRoleChange($event)" optionValue="id" optionLabel="name"></p-dropdown>
                     </div>
                 </div>
                 <div class="flex flex-column gap-2 mb-4 flex-grow-1">
-                    <label for="email">Status</label>
+                    <label for="active">Status</label>
                     <div class="card flex">
                         <p-selectButton [options]="[{label: 'Active', value: true}, {label: 'Disable', value: false}]"
                             [(ngModel)]="userResponse.active" optionLabel="label" optionValue="value"></p-selectButton>

@@ -31,7 +31,7 @@
         </div>
         <div class="flex flex-column gap-2 mb-4">
             <label for="tags">Tags</label>
-            <p-chips [(ngModel)]="postResponse.tags" />
+            <p-chips [(ngModel)]="postResponse.tags"></p-chips>
         </div>
         <div class="flex flex-column gap-2 mb-4">
             <label for="content">Content</label>
@@ -61,8 +61,8 @@
             </div>
         </ng-container>
         <div class="flex gap-2 justify-content-center">
-            <!-- <p-button (click)="deletePost($event)" label="Delete" severity="danger"></p-button> -->
-            <!-- <p-button (click)="savePost()" label="Save" severity="success"></p-button> -->
+            <p-button (click)="deletePost($event)" label="Delete" severity="danger"></p-button>
+            <p-button (click)="savePost()" label="Save" severity="success"></p-button>
         </div>
     </ng-template>
 </p-dialog>

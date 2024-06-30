@@ -2,8 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { API_URL } from '../config/config';
 import { Observable } from 'rxjs';
-import { Role } from '../interface/model/role';
 import { ApiResponse } from '../interface/response/apiResponse';
+import { RoleRequest } from '../interface/request/role-request';
+import { RoleResponse } from '../interface/response/role-response';
 
 @Injectable({
   providedIn: 'root'
@@ -13,26 +14,26 @@ export class RoleService {
 
   constructor(private http: HttpClient) { }
 
-  create<T>(role: Role): Observable<ApiResponse<T>> {
-    return this.http.post<ApiResponse<T>>(this.apiURL, role)
+  create(roleRequest: RoleRequest): Observable<ApiResponse<RoleResponse>> {
+    return this.http.post<ApiResponse<RoleResponse>>(this.apiURL, roleRequest)
   }
 
-  findByID<T>(id: number): Observable<ApiResponse<T>> {
-    const url = `${this.apiURL}/${id}`;
-    return this.http.get<ApiResponse<T>>(url);
+  findByID(roleRequestID: number): Observable<ApiResponse<RoleResponse>> {
+    const url = `${this.apiURL}/${roleRequestID}`;
+    return this.http.get<ApiResponse<RoleResponse>>(url);
   }
 
-  findAll<T>(): Observable<ApiResponse<T>> {
-    return this.http.get<ApiResponse<T>>(this.apiURL);
+  findAll(): Observable<ApiResponse<RoleResponse[]>> {
+    return this.http.get<ApiResponse<RoleResponse[]>>(this.apiURL);
   }
 
-  update<T>(id: string, role: Role): Observable<ApiResponse<T>> {
-    const url = `${this.apiURL}/${id}`;
-    return this.http.put<ApiResponse<T>>(url, role);
+  update(roleRequestID: number, roleRequest: RoleRequest): Observable<ApiResponse<RoleResponse>> {
+    const url = `${this.apiURL}/${roleRequestID}`;
+    return this.http.put<ApiResponse<RoleResponse>>(url, roleRequest);
   }
 
-  delete<T>(id: string): Observable<ApiResponse<T>> {
-    const url = `${this.apiURL}/${id}`;
-    return this.http.delete<ApiResponse<T>>(url);
+  delete(roleRequestID: number): Observable<ApiResponse<RoleResponse>> {
+    const url = `${this.apiURL}/${roleRequestID}`;
+    return this.http.delete<ApiResponse<RoleResponse>>(url);
   }
 }
