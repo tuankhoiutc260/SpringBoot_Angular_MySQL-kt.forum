@@ -50,8 +50,8 @@ public class Post {
     @LastModifiedBy
     String lastModifiedBy;
 
-//    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
-//    Set<Like> likes;
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+    private Set<Like> likes = new HashSet<>();
 
 //    private Set<Comment> comments;
 }

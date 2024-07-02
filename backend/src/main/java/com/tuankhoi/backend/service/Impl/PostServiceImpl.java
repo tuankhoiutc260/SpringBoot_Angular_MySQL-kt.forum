@@ -11,10 +11,6 @@ import com.tuankhoi.backend.repository.UserRepository;
 import com.tuankhoi.backend.service.AuthenticationService;
 import com.tuankhoi.backend.service.PostService;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -23,17 +19,17 @@ import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
 public class PostServiceImpl implements PostService {
-    PostRepository postRepository;
-    PostMapper postMapper;
-    AuthenticationService authenticationService;
-    UserRepository userRepository;
+    private final PostRepository postRepository;
+    private final PostMapper postMapper;
+
+    public PostServiceImpl(PostRepository postRepository, PostMapper postMapper) {
+        this.postRepository = postRepository;
+        this.postMapper = postMapper;
+    }
 
     //    @PostAuthorize("@userServiceImpl.findByID(returnObject.createdBy).userName == authentication.name")
     @Override
@@ -53,7 +49,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostResponse> findAll() {
-        return postRepository.findAll(Sort.by("id"))
+        return postRepository.findAll(Sort.by(Sort.Order.desc("createdDate")))
                 .stream()
                 .map(postMapper::toPostResponse)
                 .toList();
@@ -61,9 +57,6 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostResponse findByID(String id) {
-//        Optional<Post> post = postRepository.findById(id);
-
-//        return postMapper.toPostResponse(null);
         return postRepository.findById(id)
                 .map(postMapper::toPostResponse)
                 .orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));
@@ -80,7 +73,7 @@ public class PostServiceImpl implements PostService {
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
             throw new AppException(ErrorCode.DATA_INTEGRITY_VIOLATION, "Failed to update post due to database constraint: " + e.getMessage(), e);
         } catch (AppException e) {
-            throw e;  // Re-throw if it's already an AppException
+            throw e;
         } catch (Exception e) {
             throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION, "Failed to update post: " + e.getMessage(), e);
         }

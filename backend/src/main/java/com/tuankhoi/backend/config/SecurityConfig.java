@@ -1,6 +1,6 @@
 package com.tuankhoi.backend.config;
 
-import com.tuankhoi.backend.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,7 +16,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
@@ -33,14 +32,15 @@ import java.util.Optional;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-//@RequiredArgsConstructor
-//@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Slf4j
 public class SecurityConfig implements WebMvcConfigurer {
-    private static final Logger log = LoggerFactory.getLogger(SecurityConfig.class);
     private final String[] PUBLIC_ENDPOINTS = {
 
             "/api/v1/auth/login",
-            "/api/v1/auth/introspect"
+            "/api/v1/auth/introspect",
+            "/api/v1/post/**",
+            "/api/v1/like/**"
+
     };
 
     @Value("${jwt.signerKey}")
@@ -54,7 +54,8 @@ public class SecurityConfig implements WebMvcConfigurer {
         httpSecurity.authorizeHttpRequests(request ->
                 request
                         .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
-                        .anyRequest().authenticated());
+                        .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS).permitAll()                        .anyRequest().authenticated());
+//                        .anyRequest().hasAnyRole("STAFF", "ADMIN"));
 
         httpSecurity.oauth2ResourceServer(
                 httpSecurityOAuth2ResourceServerConfigurer ->

@@ -11,14 +11,9 @@ import com.tuankhoi.backend.dto.response.AuthenticationResponse;
 import com.tuankhoi.backend.dto.response.IntrospectResponse;
 import com.tuankhoi.backend.exception.AppException;
 import com.tuankhoi.backend.exception.ErrorCode;
-import com.tuankhoi.backend.model.Role;
 import com.tuankhoi.backend.model.User;
 import com.tuankhoi.backend.repository.UserRepository;
 import com.tuankhoi.backend.service.AuthenticationService;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -36,15 +31,16 @@ import java.util.StringJoiner;
 
 @Service
 @Slf4j
-@RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthenticationServiceImpl implements AuthenticationService {
-    UserRepository userRepository;
+    private final UserRepository userRepository;
     //    https://generate-random.org/encryption-key-generator?count=1&bytes=32&cipher=aes-256-cbc&string=&password=
 
-    @NonFinal
     @Value("${jwt.signerKey}")
     protected String SIGNER_KEY;
+
+    public AuthenticationServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public IntrospectResponse introspectResponse(IntrospectRequest introspectRequest)
@@ -67,14 +63,20 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
+//        var user = userRepository.findByUserName(request.getUserName())
+//                .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
         var user = userRepository.findByUserName(request.getUserName())
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_USERNAME_PASSWORD_INVALID));
+
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
 
         if (!authenticated)
-            throw new AppException(ErrorCode.UNAUTHENTICATED);
+            throw new AppException(ErrorCode.USER_USERNAME_PASSWORD_INVALID);
+        else if(!user.isActive()){
+            throw new AppException(ErrorCode.ACCOUNT_INACTIVE);
 
+        }
         var token = generateToken(user);
         return AuthenticationResponse.builder()
                 .token(token)
@@ -82,7 +84,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .build();
     }
 
-    private String generateToken(User user) {
+    @Override
+    public String generateToken(User user) {
         JWSHeader jwsHeader = new JWSHeader(JWSAlgorithm.HS512);
 
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
@@ -90,7 +93,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .issuer("tuankhoi.com")
                 .issueTime(new Date())
                 .expirationTime(new Date(
-                        Instant.now().plus(1, ChronoUnit.MINUTES).toEpochMilli()
+                        Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()
                 ))
                 .claim("scope", buildScope(user))
                 .build();
@@ -108,7 +111,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
     }
 
-    private String buildScope(User user) {
+    @Override
+    public String buildScope(User user) {
         StringJoiner stringJoiner = new StringJoiner(" ");
         if (user.getRole() != null) {
             stringJoiner.add("ROLE_" + user.getRole().getName());

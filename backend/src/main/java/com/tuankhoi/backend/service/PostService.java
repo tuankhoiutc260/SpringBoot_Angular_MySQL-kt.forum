@@ -2,6 +2,7 @@ package com.tuankhoi.backend.service;
 
 import com.tuankhoi.backend.dto.request.PostRequest;
 import com.tuankhoi.backend.dto.response.PostResponse;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 

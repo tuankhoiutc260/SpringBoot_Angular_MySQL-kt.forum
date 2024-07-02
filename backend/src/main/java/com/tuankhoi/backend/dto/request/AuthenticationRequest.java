@@ -1,5 +1,6 @@
 package com.tuankhoi.backend.dto.request;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Getter
@@ -8,6 +9,8 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class AuthenticationRequest {
+    @NotBlank(message = "USER_NAME_NOTBLANK")
     private String userName;
+
     private String password;
 }

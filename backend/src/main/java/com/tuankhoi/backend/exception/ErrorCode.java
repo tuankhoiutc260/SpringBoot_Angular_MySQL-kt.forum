@@ -17,10 +17,12 @@ public enum ErrorCode {
     USER_EMAIL_INVALID(1001, "Email should be valid", HttpStatus.BAD_REQUEST),
     USER_NAME_NOTBLANK(1002, "Username cannot be null", HttpStatus.BAD_REQUEST),
     USER_NAME_INVALID(1003, "Username must be at least 8 characters", HttpStatus.BAD_REQUEST),
+    USER_PASSWORD_NOTBLANK(1002, "Password cannot be null", HttpStatus.BAD_REQUEST),
     USER_PASSWORD_INVALID(1004, "Password must be at least 8 characters", HttpStatus.BAD_REQUEST),
     USER_EXISTED(1005, "User existed", HttpStatus.BAD_REQUEST),
     USER_EMAIL_EXISTED(1006, "Email existed", HttpStatus.BAD_REQUEST),
     USER_NOTFOUND(1007, "User not found", HttpStatus.NOT_FOUND),
+    USER_USERNAME_PASSWORD_INVALID(1008, "Incorrect Username or Password", HttpStatus.UNAUTHORIZED),
 
     // ROLE
     ROLE_EXISTED(2001, "Role existed", HttpStatus.BAD_REQUEST),
@@ -40,7 +42,8 @@ public enum ErrorCode {
 
     // Authentication and Authorization
     UNAUTHENTICATED(5001, "Unauthenticated", HttpStatus.UNAUTHORIZED),
-    UNAUTHORIZED(5002, "You do not have permission", HttpStatus.FORBIDDEN);
+    UNAUTHORIZED(5002, "You do not have permission", HttpStatus.FORBIDDEN),
+    ACCOUNT_INACTIVE(5003, "Your Account is not Active", HttpStatus.UNAUTHORIZED); // Sửa lỗi cú pháp và thêm mã lỗi này
 
     private int code;
     private String message;

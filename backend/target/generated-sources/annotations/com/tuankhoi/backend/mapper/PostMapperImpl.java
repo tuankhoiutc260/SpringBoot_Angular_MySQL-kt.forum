@@ -1,7 +1,9 @@
 package com.tuankhoi.backend.mapper;
 
 import com.tuankhoi.backend.dto.request.PostRequest;
+import com.tuankhoi.backend.dto.response.LikeResponse;
 import com.tuankhoi.backend.dto.response.PostResponse;
+import com.tuankhoi.backend.model.Like;
 import com.tuankhoi.backend.model.Post;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -52,6 +54,7 @@ public class PostMapperImpl implements PostMapper {
         postResponse.createdBy( post.getCreatedBy() );
         postResponse.lastModifiedDate( post.getLastModifiedDate() );
         postResponse.lastModifiedBy( post.getLastModifiedBy() );
+        postResponse.likes( likeSetToLikeResponseSet( post.getLikes() ) );
 
         return postResponse.build();
     }
@@ -80,5 +83,31 @@ public class PostMapperImpl implements PostMapper {
                 post.setTags( new LinkedHashSet<String>( set ) );
             }
         }
+    }
+
+    protected LikeResponse likeToLikeResponse(Like like) {
+        if ( like == null ) {
+            return null;
+        }
+
+        LikeResponse.LikeResponseBuilder likeResponse = LikeResponse.builder();
+
+        likeResponse.id( like.getId() );
+        likeResponse.createdDate( like.getCreatedDate() );
+
+        return likeResponse.build();
+    }
+
+    protected Set<LikeResponse> likeSetToLikeResponseSet(Set<Like> set) {
+        if ( set == null ) {
+            return null;
+        }
+
+        Set<LikeResponse> set1 = new LinkedHashSet<LikeResponse>( Math.max( (int) ( set.size() / .75f ) + 1, 16 ) );
+        for ( Like like : set ) {
+            set1.add( likeToLikeResponse( like ) );
+        }
+
+        return set1;
     }
 }

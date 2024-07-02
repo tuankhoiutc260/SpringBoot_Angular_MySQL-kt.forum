@@ -12,13 +12,16 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/post")
 public class PostController {
-    PostService postService;
+    private final PostService postService;
+
+    public PostController(PostService postService) {
+        this.postService = postService;
+    }
 
     @GetMapping("/{id}")
     public APIResponse<PostResponse> findByID(@PathVariable String id){

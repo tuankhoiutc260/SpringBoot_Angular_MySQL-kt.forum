@@ -30,5 +30,5 @@ public class PostResponse {
 
     String lastModifiedBy;
 
-//    Set<LikeResponse> likes;
+    Set<LikeResponse> likes;
 }

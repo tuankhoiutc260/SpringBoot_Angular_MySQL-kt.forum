@@ -15,9 +15,11 @@ import java.time.LocalDateTime;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class LikeResponse {
+    Long id;
+
     LocalDateTime createdDate;
 
-    UserResponse user;
+    String userID;
 
-    PostResponse post;
+    String postID;
 }
