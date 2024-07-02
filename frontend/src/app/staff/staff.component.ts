@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { AuthService } from '../core/service/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-staff',
@@ -16,6 +18,16 @@ export class StaffComponent {
       link: 'user-management'
     }
   ]
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) { }
+
+  logout() {
+    this.authService.removeToken();
+    this.authService.removeCurrentUserName();
+    this.router.navigate(['/login']);
+  }
 
 
 }

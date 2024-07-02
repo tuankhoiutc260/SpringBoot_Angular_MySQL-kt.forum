@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { API_URL } from '../config/config';
 import { Observable } from 'rxjs';
-import { Post } from '../interface/model/post';
 import { ApiResponse } from '../interface/response/apiResponse';
 import { PostRequest } from '../interface/request/post-request';
 import { PostResponse } from '../interface/response/post-response';

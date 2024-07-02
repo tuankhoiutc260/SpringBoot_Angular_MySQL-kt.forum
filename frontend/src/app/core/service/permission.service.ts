@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { ApiResponse } from '../interface/response/apiResponse';
 import { Observable } from 'rxjs';
 import { PermissionRequest } from '../interface/request/permission-request';
+import { PermissionResponse } from '../interface/response/permission-response';
 
 @Injectable({
   providedIn: 'root'
@@ -13,26 +14,26 @@ export class PermissionService {
 
   constructor(private http: HttpClient) { }
 
-  create(permissionRequest: PermissionRequest): Observable<ApiResponse<PermissionRequest>> {
-    return this.http.post<ApiResponse<PermissionRequest>>(this.apiURL, permissionRequest)
+  create(permissionRequest: PermissionRequest): Observable<ApiResponse<PermissionResponse>> {
+    return this.http.post<ApiResponse<PermissionResponse>>(this.apiURL, permissionRequest)
   }
 
-  findByID(permissionRequestID: string): Observable<ApiResponse<PermissionRequest>> {
+  findByID(permissionRequestID: string): Observable<ApiResponse<PermissionResponse>> {
     const url = `${this.apiURL}/${permissionRequestID}`;
-    return this.http.get<ApiResponse<PermissionRequest>>(url);
+    return this.http.get<ApiResponse<PermissionResponse>>(url);
   }
 
-  findAll(): Observable<ApiResponse<PermissionRequest[]>> {
-    return this.http.get<ApiResponse<PermissionRequest[]>>(this.apiURL);
+  findAll(): Observable<ApiResponse<PermissionResponse[]>> {
+    return this.http.get<ApiResponse<PermissionResponse[]>>(this.apiURL);
   }
 
-  update(permissionRequestID: string, permissionRequest: PermissionRequest): Observable<ApiResponse<PermissionRequest>> {
+  update(permissionRequestID: string, permissionRequest: PermissionRequest): Observable<ApiResponse<PermissionResponse>> {
     const url = `${this.apiURL}/${permissionRequestID}`;
-    return this.http.put<ApiResponse<PermissionRequest>>(url, permissionRequest);
+    return this.http.put<ApiResponse<PermissionResponse>>(url, permissionRequest);
   }
 
-  delete(permissionRequestID: string): Observable<ApiResponse<PermissionRequest>> {
+  delete(permissionRequestID: string): Observable<ApiResponse<PermissionResponse>> {
     const url = `${this.apiURL}/${permissionRequestID}`;
-    return this.http.delete<ApiResponse<PermissionRequest>>(url);
+    return this.http.delete<ApiResponse<PermissionResponse>>(url);
   }
 }

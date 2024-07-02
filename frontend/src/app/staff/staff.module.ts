@@ -10,12 +10,15 @@ import { SharedModule } from '../shared/shared.module';
 import { PostDetailsComponent } from '../shared/component/post-details/post-details.component';
 import { RoleIdToNamePipe } from '../core/pipe/role-id-to-name.pipe';
 import { CoreModule } from '../core/core.module';
+import { authGuard } from '../core/guard/auth.guard';
 // import { SharedModule } from 'primeng/api';
 
 const routes: Routes = [
   {
     path: '',
-    component: FeedComponent
+    component: FeedComponent,
+    // canActivate: [authGuard],
+    // data: { expectedRole: 'ROLE_ADMIN' } // Đảm bảo sử dụng đúng khóa
   },
   {
     path: 'user-management',

@@ -4,6 +4,7 @@ import { UserComponent } from './user/user.component';
 import { LoginComponent } from './shared/component/login/login.component';
 import { StaffComponent } from './staff/staff.component';
 import { authGuard } from './core/guard/auth.guard';
+import { NotFoundComponent } from './shared/component/not-found/not-found.component';
 
 const routes: Routes = [
   {
@@ -16,6 +17,8 @@ const routes: Routes = [
     component: StaffComponent,
     path: 'staff',
     canActivate: [authGuard],
+    data: { expectedRole: 'ROLE_ADMIN' || 'ROLE_STAFF' },// Sử dụng mảng để chỉ định nhiều vai trò
+
     loadChildren: () =>
       import('./staff/staff.module').then(m => m.StaffModule)
   },
@@ -23,6 +26,11 @@ const routes: Routes = [
     path: 'login',
     component: LoginComponent,
     title: 'Login'
+  },
+  {
+    path: '404',
+    component: NotFoundComponent,
+    title: '404'
   }
 ];
 

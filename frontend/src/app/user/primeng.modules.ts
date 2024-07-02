@@ -15,6 +15,8 @@ import { EditorModule } from 'primeng/editor';
 import { TagModule } from 'primeng/tag';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { FloatLabelModule } from 'primeng/floatlabel';
+
 
 
 
@@ -37,6 +39,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
         TagModule,
         InputTextareaModule,
         ConfirmDialogModule,
+        FloatLabelModule,
     ]
 })
 

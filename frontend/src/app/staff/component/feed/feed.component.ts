@@ -1,10 +1,13 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { PostService } from '../../../core/service/post.service';
 import { ApiResponse } from '../../../core/interface/response/apiResponse';
 import { PostResponse } from '../../../core/interface/response/post-response';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { PostRequest } from '../../../core/interface/request/post-request';
+
+import Quill from 'quill';
+
 
 @Component({
   selector: 'app-feed',
@@ -18,8 +21,20 @@ export class FeedComponent implements OnInit {
   isEdit: boolean = false;
   postResponse: PostResponse = {};
   postRequest: PostRequest = {};
-  private subscription!: Subscription;
   postRequestID: string | null = null; // ID của bài viết, nếu đang cập nhật
+
+
+
+
+
+  content?: {
+    html: string | undefined,
+    text: string | undefined,
+  };
+
+
+
+
 
 
   constructor(
@@ -32,6 +47,9 @@ export class FeedComponent implements OnInit {
   ngOnInit() {
     this.getAllPosts();
   }
+
+
+
 
   getAllPosts() {
     this.postService.findAll().subscribe({
@@ -56,20 +74,26 @@ export class FeedComponent implements OnInit {
   }
 
   openDialogEdit(postResponse: PostResponse) {
+    this.postResponse = { ...postResponse };
+
+    this.content = { html: postResponse.content, text: undefined }; // Gán giá trị mặc định cho html
+
     this.isEdit = true;
     this.isVisible = true;
-    this.postResponse = { ...postResponse };
   }
 
   savePost() {
+
+    const htmlContent = this.content as unknown as string;
     this.postRequest = { ...this.postResponse }
+    this.postRequest.content = htmlContent
+
     this.postRequestID = this.postResponse.id ?? null;
     this.postService.save(this.postRequestID, this.postRequest).subscribe({
       next: (apiResponse: ApiResponse<PostResponse>) => {
         const postResponse = apiResponse.result;
         if (postResponse) {
           if (this.postRequestID) {
-            // Nếu đang cập nhật, thay thế bài viết trong danh sách
             const index = this.postsResponse.findIndex(post => post.id === this.postRequestID);
             if (index !== -1) {
               this.postsResponse[index] = postResponse;
@@ -82,7 +106,7 @@ export class FeedComponent implements OnInit {
           }
           this.isVisible = false
           this.resetForm();
-          this.loadPage()
+          // this.loadPage()
         } else {
           console.error('No result found in response:', apiResponse);
         }
@@ -91,6 +115,7 @@ export class FeedComponent implements OnInit {
         this.showMessage('error', 'Error', apiResponse.message ?? '');
       }
     });
+
   }
 
   resetForm() {

@@ -1,7 +1,23 @@
 import { inject } from '@angular/core';
-import { CanActivateFn } from '@angular/router';
+import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../service/auth.service';
 
 export const authGuard: CanActivateFn = (route, state) => {
-  return inject(AuthService).canActive();
+  const authService = inject(AuthService);
+  const router = inject(Router);
+
+  const expectedRole = route.data?.['expectedRole'];
+  const currentRole = authService.getRole();
+
+  if (authService.isAuthenticated() && currentRole === expectedRole) {
+    return true;
+  } else {
+    router.navigate(['/login'], {
+      queryParams: {
+        returnUrl: state.url,
+        message: currentRole === expectedRole ? 'Unauthorized' : 'Your Account don\'t have Permission. Please Login again!'
+      }
+    });
+    return false;
+  }
 };

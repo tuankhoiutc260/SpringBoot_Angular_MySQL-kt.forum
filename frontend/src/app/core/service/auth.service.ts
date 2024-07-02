@@ -7,25 +7,26 @@ import { ApiResponse } from '../interface/response/apiResponse';
 import { AuthenticationResponse } from '../interface/response/authenticated-response';
 import { IntrospectResponse } from '../interface/response/introspect-request';
 import { IntrospectRequest } from '../interface/request/introspect-request';
+import { jwtDecode } from "jwt-decode";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private apiURL = API_URL + 'api/v1/auth'
+  private apiURL = API_URL + 'api/v1/auth';
+
   constructor(private http: HttpClient) { }
 
-
   login(authenticationRequest: AuthenticationRequest): Observable<ApiResponse<AuthenticationResponse>> {
-    return this.http.post<ApiResponse<AuthenticationResponse>>(`${this.apiURL}/login`, authenticationRequest)
+    return this.http.post<ApiResponse<AuthenticationResponse>>(`${this.apiURL}/login`, authenticationRequest);
   }
 
   introspect(introspectRequest: IntrospectRequest): Observable<ApiResponse<IntrospectResponse>> {
-    return this.http.post<ApiResponse<IntrospectResponse>>(`${this.apiURL}/introspect`, introspectRequest)
+    return this.http.post<ApiResponse<IntrospectResponse>>(`${this.apiURL}/introspect`, introspectRequest);
   }
 
-  //TOKEN
+  // TOKEN
   setToken(token: string) {
     window.localStorage.setItem("auth_token", token);
   }
@@ -38,13 +39,12 @@ export class AuthService {
     window.localStorage.removeItem("auth_token");
   }
 
-  //USERNAME
+  // USERNAME
   setCurrentUserName(userName: string) {
     window.localStorage.setItem("user_name", userName);
   }
 
   getCurrentUserName(): string {
-    console.log(window.localStorage)
     return window.localStorage.getItem("user_name") || '';
   }
 
@@ -52,7 +52,7 @@ export class AuthService {
     window.localStorage.removeItem("user_name");
   }
 
-  //PASSWORD
+  // PASSWORD
   setCurrentPassword(password: string) {
     window.localStorage.setItem("password", password);
   }
@@ -65,7 +65,22 @@ export class AuthService {
     window.localStorage.removeItem("password");
   }
 
+  // Check if user is authenticated
   canActive(): boolean {
+    return !!this.getToken();
+  }
+
+
+  getRole(): string {
+    const token = this.getToken();
+    if (token) {
+      const decodedToken: any = jwtDecode(token);
+      return decodedToken.scope || 'ROLE_USER';
+    }
+    return 'ROLE_USER';
+  }
+
+  isAuthenticated(): boolean {
     return !!this.getToken();
   }
 }

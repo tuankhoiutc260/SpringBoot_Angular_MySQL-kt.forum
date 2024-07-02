@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../../core/service/auth.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ApiResponse } from '../../../core/interface/response/apiResponse';
 import { AuthenticationRequest } from '../../../core/interface/request/authentication-request';
 import { AuthenticationResponse } from '../../../core/interface/response/authenticated-response';
@@ -20,8 +20,15 @@ export class LoginComponent {
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) { }
+
+  ngOnInit(): void {
+    this.activatedRoute.queryParams.subscribe(params => {
+      this.errorMessage = params['message']
+    })
+  }
 
   onLogin() {
     this.authService.removeToken();
@@ -42,7 +49,7 @@ export class LoginComponent {
       error: (httpErrorResponse: HttpErrorResponse) => {
         const errorMessage = httpErrorResponse.error.message;
         console.error("Login error: ", errorMessage);
-        this.errorMessage = 'Invalid Username or Password';
+        this.errorMessage = errorMessage;
       }
     });
   }

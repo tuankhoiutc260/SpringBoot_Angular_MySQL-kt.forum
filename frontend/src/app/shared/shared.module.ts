@@ -1,3 +1,5 @@
+;
+import { NotFoundComponent } from './component/not-found/not-found.component'
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PostComponent } from './component/post/post.component';
@@ -7,6 +9,7 @@ import { RouterModule } from '@angular/router';
 import { PostDetailsComponent } from './component/post-details/post-details.component';
 import { FormsModule } from '@angular/forms';
 import { LoginComponent } from './component/login/login.component';
+import { InteractComponent } from './component/interact/interact.component';
 
 
 
@@ -14,7 +17,9 @@ import { LoginComponent } from './component/login/login.component';
   declarations: [
     PostComponent,
     PostDetailsComponent,
-    LoginComponent
+    LoginComponent,
+    NotFoundComponent,
+    InteractComponent
 
   ],
   imports: [
