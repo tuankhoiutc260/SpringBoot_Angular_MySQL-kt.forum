@@ -9,6 +9,9 @@ import { UserResponse } from '../../../core/interface/response/user-response';
 import { UserRequest } from '../../../core/interface/request/user-request';
 import { UserService } from '../../../core/service/user.service';
 import { MessageService } from 'primeng/api';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { alphanumericValidator } from '../../../core/validator/alphanumeric.validator';
+import { passwordMatchValidator } from '../../../core/validator/password-match-validator.validator';
 
 @Component({
   selector: 'app-login',
@@ -22,6 +25,13 @@ export class LoginComponent {
   userResponse: UserResponse = {};
   userRequest: UserRequest = {};
   usersResponse: UserResponse[] = [];
+
+  signUpForm = new FormGroup({
+    email: new FormControl('', [Validators.required, Validators.email]), // Đã sửa từ emmai thành email
+    userName: new FormControl('', [Validators.required, Validators.minLength(6), alphanumericValidator()]),
+    password: new FormControl('', [Validators.required, Validators.minLength(8), alphanumericValidator()]),
+    rePassword: new FormControl('', [Validators.required, passwordMatchValidator]) // Đảm bảo đã import và sử dụng hàm validator này
+  });
 
 
   visible: boolean = false;
@@ -89,34 +99,32 @@ export class LoginComponent {
     }, 2000);
   }
   signUp() {
-    // this.userRequest = {
-    //   ...this.userResponse,
-    //   role: this.userResponse.role?.id
-    // };
-    console.log("Sign up");
-
-    this.userService.save(null, this.userRequest).subscribe({
-      next: (apiResponse: ApiResponse<UserResponse>) => {
-        const userResponse = apiResponse.result;
-        if (userResponse) {
-          this.usersResponse.unshift(userResponse);
-          // this.showMessage('info', 'Confirmed', 'User created');
-
-          // this.isVisible = false;
-          // this.resetForm();
-          // this.loadPage();
-          this.message = 'Sign up successfully, please Sign in!'
-          this.loadPage()
-        } else {
-          console.error('No result found in response:', apiResponse);
+      if (this.signUpForm.valid) {
+      this.userRequest = {
+        email: this.signUpForm.value.email!,
+        userName: this.signUpForm.value.userName!,
+        password: this.signUpForm.value.password!
+      };
+      this.userService.save(null, this.userRequest).subscribe({
+        next: (apiResponse: ApiResponse<UserResponse>) => {
+          const userResponse = apiResponse.result;
+          if (userResponse) {
+            this.usersResponse.unshift(userResponse);
+            this.message = 'Sign up successfully, please Sign in!';
+            this.loadPage();
+          } else {
+            console.error('No result found in response:', apiResponse);
+          }
+        },
+        error: (httpErrorResponse: HttpErrorResponse) => {
+          const errorMessage = httpErrorResponse.error.message;
+          console.error('Sign up error:', errorMessage);
+          this.message = errorMessage;
         }
-      },
-      error: (httpErrorResponse: HttpErrorResponse) => {
-        const errorMessage = httpErrorResponse.error.message;
-        console.error("Login error: ", errorMessage);
-        this.message = errorMessage;
-      }
-    });
+      });
+    } else {
+      this.message = 'Please fill out the form correctly before submitting.';
+    }
   }
 
 

@@ -7,7 +7,7 @@ import { CoreModule } from '../core/core.module';
 import { PrimengModule } from '../user/primeng.modules';
 import { RouterModule } from '@angular/router';
 import { PostDetailsComponent } from './component/post-details/post-details.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './component/login/login.component';
 import { InteractComponent } from './component/interact/interact.component';
 
@@ -27,7 +27,8 @@ import { InteractComponent } from './component/interact/interact.component';
     CoreModule,
     PrimengModule,
     RouterModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule 
 
   ],
   exports: [

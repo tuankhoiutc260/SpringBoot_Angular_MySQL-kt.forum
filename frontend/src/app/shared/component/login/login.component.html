@@ -7,7 +7,7 @@
         <div class="cont-login ">
             <div class="cont-content flex flex-column align-item-center justify-content-center gap-5">
                 <div class="flex flex-column gap-3">
-                    <span class="text-5xl font-bold">Welcome back</span>
+                    <span class="text-5xl font-bold">Welcome back!</span>
                 </div>
 
                 <div class="flex flex-column gap-3">
@@ -49,62 +49,76 @@
         <div class="cont-register">
             <div class="cont-content flex flex-column align-item-center justify-content-center gap-5">
                 <div class="flex flex-column gap-3">
-                    <span>START FOR FREE</span>
-                    <span class="text-5xl font-bold" >Create new account</span>
+                    <span class="text-5xl font-bold">Create new account</span>
                 </div>
 
-                <div class="flex flex-column gap-3">
+                <form [formGroup]="signUpForm" class="flex flex-column gap-3">
                     <div class="flex flex-column gap-2">
-                        <label class="ml-2 font-bold" for="email">Email</label>
-                        <p-iconField iconPosition="right" class="flex flex-column gap-2">
-                            <p-inputIcon styleClass="pi pi-envelope" />
-                            <input id="email" type="text" pInputText [(ngModel)]="userRequest.email" style="width: 100%;"
-                                placeholder="Enter your email" />
-                        </p-iconField>
-                        <small></small>
+                      <label class="ml-2 font-bold" for="email">Email</label>
+                      <p-iconField iconPosition="right" class="flex flex-column gap-2">
+                        <p-inputIcon styleClass="pi pi-envelope" />
+                        <input id="email" type="text" pInputText style="width: 100%;" placeholder="Enter your email" formControlName="email" />
+                      </p-iconField>
+                      <div class="flex flex-column align-items-center">
+                        <small *ngIf="signUpForm.get('email')?.hasError('required') && signUpForm.get('email')?.touched">Email is required.</small>
+                        <small *ngIf="signUpForm.get('email')?.hasError('email') && signUpForm.get('email')?.touched">Please enter a valid email address.</small>
+                      </div>
                     </div>
-
+                  
                     <div class="flex flex-column gap-2">
-                        <label class="ml-2 font-bold" for="userName">User name</label>
-                        <p-iconField iconPosition="right" class="flex flex-column gap-2">
-                            <p-inputIcon styleClass="pi pi-user" />
-                            <input id="userName" type="text" pInputText [(ngModel)]="userRequest.userName"
-                                style="width: 100%;" placeholder="Minimum 6 alphanumeric character" />
-                        </p-iconField>
-                        <small></small>
+                      <label class="ml-2 font-bold" for="userNameInput">User name</label> <!-- Changed id to userNameInput -->
+                      <p-iconField iconPosition="right" class="flex flex-column gap-2">
+                        <p-inputIcon styleClass="pi pi-user" />
+                        <input id="userNameInput" type="text" pInputText style="width: 100%;" placeholder="Minimum 6 alphanumeric character" formControlName="userName" /> <!-- Changed id to userNameInput -->
+                      </p-iconField>
+                      <div class="flex flex-column align-items-center">
+                        <small *ngIf="signUpForm.get('userName')?.hasError('required') && signUpForm.get('userName')?.touched">Username is required.</small>
+                        <small *ngIf="signUpForm.get('userName')?.hasError('minlength') && signUpForm.get('userName')?.touched">Username must be at least 6 characters long.</small>
+                        <small *ngIf="signUpForm.get('userName')?.hasError('alphanumeric') && signUpForm.get('userName')?.touched">Username must contain letters and numbers only.</small>
+                      </div>
                     </div>
-
+                  
                     <div class="flex flex-column gap-2">
-                        <label class="ml-2 font-bold" for="password">Password</label>
-                        <p-password id="password" type="password" class="w-full" [feedback]="false"
-                            styleClass="p-password p-component p-inputwrapper p-input-icon-right"
-                            [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" [toggleMask]="true"
-                            placeholder="Minimum 8 alphanumeric characters"
-                            [(ngModel)]="userRequest.password"></p-password>
-                        <small></small>
+                      <label class="ml-2 font-bold" for="password">Password</label>
+                      <p-password id="password" type="password" class="w-full" [feedback]="false"
+                        styleClass="p-password p-component p-inputwrapper p-input-icon-right" 
+                        [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" [toggleMask]="true"
+                        placeholder="Minimum 8 alphanumeric characters" formControlName="password">
+                      </p-password>
+                      <div class="flex flex-column align-items-center">
+                        <small *ngIf="signUpForm.get('password')?.hasError('required') && signUpForm.get('password')?.touched">Password is required.</small>
+                        <small *ngIf="signUpForm.get('password')?.hasError('minlength') && signUpForm.get('password')?.touched">Password must be at least 8 characters long.</small>
+                        <small *ngIf="signUpForm.get('password')?.hasError('alphanumeric') && signUpForm.get('password')?.touched">Password must contain letters and numbers only.</small>
+                      </div>
                     </div>
-
+                  
                     <div class="flex flex-column gap-2">
-                        <label class="ml-2 font-bold" for="re-password">Re-Password</label>
-                        <p-password id="re-password" type="password" class="w-full" [feedback]="false"
-                            styleClass="p-password p-component p-inputwrapper p-input-icon-right"
-                            [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" [toggleMask]="true"
-                            placeholder="Re-enter your password"></p-password>
-                        <small></small>
+                      <label class="ml-2 font-bold" for="rePassword">Re-Password</label>
+                      <p-password id="rePassword" type="password" class="w-full" [feedback]="false"
+                        styleClass="p-password p-component p-inputwrapper p-input-icon-right" 
+                        [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" [toggleMask]="true"
+                        placeholder="Re-enter your password" formControlName="rePassword">
+                      </p-password>
+                      <div class="flex flex-column align-items-center">
+                        <small *ngIf="signUpForm.get('rePassword')?.hasError('required') && signUpForm.get('rePassword')?.touched">Confirm Password is required.</small>
+                        <small *ngIf="signUpForm.get('rePassword')?.hasError('passwordMismatch') && signUpForm.get('rePassword')?.touched">Passwords do not match.</small>
+                      </div>
                     </div>
-
+                  
                     <div class="flex justify-content-between">
-                        <div class="flex align-items-center gap-2">
-                            <p-checkbox value="New York" inputId="ny" />
-                            <label for="ny">I have read and agreed to the <span
-                                    class="cursor-pointer text-underline" (click)="validateEmail()">terms and conditions</span></label>
-                        </div>
+                      <div class="flex align-items-center gap-2">
+                        <p-checkbox value="New York" inputId="ny" />
+                        <label for="ny">I have read and agreed to the <span class="cursor-pointer text-underline">terms and conditions</span></label>
+                      </div>
                     </div>
-                </div>
-                <small class="text-center font-bold">{{message}}</small>
+                  </form>
+                  
+                  
+                  
+                <!-- <small class="text-center font-bold">{{message}}</small> -->
 
-                <p-button id="btn-sign-up" class="text-center p-button-secondary" [raised]="true"
-                    label="Sign up" (click)="signUp()"></p-button>
+                <p-button id="btn-sign-up" class="text-center p-button-secondary" [raised]="true" label="Sign up"
+                    (click)="signUp()"></p-button>
             </div>
         </div>
 
@@ -122,7 +136,7 @@
                 <div class="cont-toggle-right">
                     <h1>Hello, Friend!</h1>
                     <p>Register with your personal details to use all of site features</p>
-                    <span>Don't Have An Account? </span>
+                    <p>Don't Have An Account? </p>
 
                     <p-button class="text-center" [raised]="true" label="Sign up" (click)="toggleActive()"></p-button>
                 </div>
