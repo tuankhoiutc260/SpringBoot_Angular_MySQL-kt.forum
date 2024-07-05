@@ -25,30 +25,19 @@
             <input pInputText id="id" [(ngModel)]="postResponse.id" readonly>
         </div>
 
-        <div class="flex flex-column gap-2 mt-4 mb-4">
+        <div class="flex flex-column gap-2 mb-4">
             <label for="title">Title</label>
             <input pInputText id="id" [(ngModel)]="postResponse.title">
         </div>
-        <!-- <div class="flex flex-column gap-2 mb-4">
+        <div class="flex flex-column gap-2 mb-4">
             <label for="tags">Tags</label>
             <p-chips [(ngModel)]="postResponse.tags"></p-chips>
-        </div> -->
+        </div>
 
-
-        <p-floatLabel class="flex flex-column gap-2 mt-5 mb-4">
-            <p-chips id="chips" [(ngModel)]="postResponse.tags" />
-            <label for="chips">Tags</label>
-        </p-floatLabel>
         <div class="flex flex-column gap-2 mb-4">
-            <label for="content">Content</label>
+            <label (click)="checkID()" for="content">Content</label>
 
             <p-editor [(ngModel)]="content" [style]="{ height: '320px' }" />
-            <!-- <p-editor [(ngModel)]="postResponse.content" [style]="{ height: '320px' }" /> -->
-            <!-- <p-editor [(ngModel)]="content" [style]="{ height: '320px' }" /> -->
-
-            <!-- <p-editor [(ngModel)]="postResponse.content" [style]="{ height: '320px' }"></p-editor> -->
-            <!-- <textarea rows="5" cols="30" pInputTextarea [(ngModel)]="postResponse.content">
-            </textarea> -->
         </div>
 
 

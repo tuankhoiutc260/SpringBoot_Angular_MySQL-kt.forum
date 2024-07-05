@@ -10,7 +10,7 @@ import { RoleResponse } from '../interface/response/role-response';
   providedIn: 'root'
 })
 export class RoleService {
-  private apiURL = API_URL + 'api/v1/role'
+  private apiURL = API_URL + 'api/v1/roles'
 
   constructor(private http: HttpClient) { }
 

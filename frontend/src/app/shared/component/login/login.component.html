@@ -1,21 +1,132 @@
-<div class="card m-auto col-12 sm:col-6 flex flex-column align-item-stretch">
-    <h1 class="text-center">Login</h1>
-
-    <div class="flex flex-column gap-2 mb-4">
-        <label for="userName">User name</label>
-        <input pInputText id="id" [(ngModel)]="login.userName ">
-
+<div class="main flex flex-column justify-content-center align-items-center gap-5">
+    <div class="cont-logo" style="text-align: center;" (click)="toggleActive()">
+        <img src="assets/images/kt-blog-logo-outline-white.png" width="260px" height="110px">
     </div>
 
-    <div class="flex flex-column gap-2 mb-4">
-        <label for="password">Password</label>
-        <input pInputText id="id" [(ngModel)]="login.password">
-    </div>
-    <small class="text-red-500 text-center">{{errorMessage}}</small>
+    <div class="cont-auth gap-3" [class.active]="isActive">
+        <div class="cont-login ">
+            <div class="cont-content flex flex-column align-item-center justify-content-center gap-5">
+                <div class="flex flex-column gap-3">
+                    <span class="text-5xl font-bold">Welcome back</span>
+                </div>
 
-    <div class="py-3 text-center">
-        <p-button (click)="onLogin()" class="m-auto mb-4" label=" Login" severity="primary"></p-button>
-        <p [routerLink]="['/']" class="underline cursor-pointer ">Back to Home</p>
-    </div>
+                <div class="flex flex-column gap-3">
+                    <div class="flex flex-column gap-2">
+                        <label class="ml-2 font-bold" for="userName">User name</label>
+                        <p-iconField iconPosition="right" class="flex flex-column gap-2">
+                            <p-inputIcon styleClass="pi pi-user" />
+                            <input id="userName" type="text" pInputText [(ngModel)]="login.userName"
+                                placeholder="Enter your user name" style="width: 100%;" />
+                        </p-iconField>
+                        <small></small>
+                    </div>
 
+                    <div class="flex flex-column gap-2">
+                        <label class="ml-2 font-bold" for="password">Password</label>
+                        <p-password id="password" type="password" class="w-full" [feedback]="false"
+                            styleClass="p-password p-component p-inputwrapper p-input-icon-right"
+                            [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" [toggleMask]="true"
+                            placeholder="Enter your password" [(ngModel)]="login.password"></p-password>
+                        <small></small>
+                    </div>
+
+                    <div class="flex justify-content-between">
+                        <div class="flex align-items-center gap-2">
+                            <p-checkbox value="New York" inputId="ny" />
+                            <label for="ny">Remember me</label>
+                        </div>
+                        <div class="flex align-items-center"><span class="cursor-pointer text-underline">Forgot
+                                password?</span></div>
+                    </div>
+                </div> <small class="text-center font-bold">{{message}}</small>
+
+
+                <p-button class="text-center" [raised]="true" label="Sign in" (click)="onLogin()"></p-button>
+
+            </div>
+        </div>
+
+        <div class="cont-register">
+            <div class="cont-content flex flex-column align-item-center justify-content-center gap-5">
+                <div class="flex flex-column gap-3">
+                    <span>START FOR FREE</span>
+                    <span class="text-5xl font-bold" >Create new account</span>
+                </div>
+
+                <div class="flex flex-column gap-3">
+                    <div class="flex flex-column gap-2">
+                        <label class="ml-2 font-bold" for="email">Email</label>
+                        <p-iconField iconPosition="right" class="flex flex-column gap-2">
+                            <p-inputIcon styleClass="pi pi-envelope" />
+                            <input id="email" type="text" pInputText [(ngModel)]="userRequest.email" style="width: 100%;"
+                                placeholder="Enter your email" />
+                        </p-iconField>
+                        <small></small>
+                    </div>
+
+                    <div class="flex flex-column gap-2">
+                        <label class="ml-2 font-bold" for="userName">User name</label>
+                        <p-iconField iconPosition="right" class="flex flex-column gap-2">
+                            <p-inputIcon styleClass="pi pi-user" />
+                            <input id="userName" type="text" pInputText [(ngModel)]="userRequest.userName"
+                                style="width: 100%;" placeholder="Minimum 6 alphanumeric character" />
+                        </p-iconField>
+                        <small></small>
+                    </div>
+
+                    <div class="flex flex-column gap-2">
+                        <label class="ml-2 font-bold" for="password">Password</label>
+                        <p-password id="password" type="password" class="w-full" [feedback]="false"
+                            styleClass="p-password p-component p-inputwrapper p-input-icon-right"
+                            [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" [toggleMask]="true"
+                            placeholder="Minimum 8 alphanumeric characters"
+                            [(ngModel)]="userRequest.password"></p-password>
+                        <small></small>
+                    </div>
+
+                    <div class="flex flex-column gap-2">
+                        <label class="ml-2 font-bold" for="re-password">Re-Password</label>
+                        <p-password id="re-password" type="password" class="w-full" [feedback]="false"
+                            styleClass="p-password p-component p-inputwrapper p-input-icon-right"
+                            [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" [toggleMask]="true"
+                            placeholder="Re-enter your password"></p-password>
+                        <small></small>
+                    </div>
+
+                    <div class="flex justify-content-between">
+                        <div class="flex align-items-center gap-2">
+                            <p-checkbox value="New York" inputId="ny" />
+                            <label for="ny">I have read and agreed to the <span
+                                    class="cursor-pointer text-underline" (click)="validateEmail()">terms and conditions</span></label>
+                        </div>
+                    </div>
+                </div>
+                <small class="text-center font-bold">{{message}}</small>
+
+                <p-button id="btn-sign-up" class="text-center p-button-secondary" [raised]="true"
+                    label="Sign up" (click)="signUp()"></p-button>
+            </div>
+        </div>
+
+        <div class="cont-toggle ">
+            <div class="toggle">
+                <div class=" cont-toggle-left">
+                    <h1>Welcome Back!</h1>
+                    <p>Enter your personal details to use all of site features</p>
+                    <p>Already A Member?</p>
+
+                    <p-button class="text-center" [raised]="true" label="Sign in" (click)="toggleActive()"></p-button>
+
+                </div>
+
+                <div class="cont-toggle-right">
+                    <h1>Hello, Friend!</h1>
+                    <p>Register with your personal details to use all of site features</p>
+                    <span>Don't Have An Account? </span>
+
+                    <p-button class="text-center" [raised]="true" label="Sign up" (click)="toggleActive()"></p-button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

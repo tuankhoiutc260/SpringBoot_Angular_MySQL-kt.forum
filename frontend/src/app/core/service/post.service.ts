@@ -10,7 +10,7 @@ import { PostResponse } from '../interface/response/post-response';
   providedIn: 'root'
 })
 export class PostService {
-  private apiURL = API_URL + 'api/v1/post'
+  private apiURL = API_URL + 'api/v1/posts'
 
   constructor(private http: HttpClient) { }
 

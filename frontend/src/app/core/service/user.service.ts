@@ -10,7 +10,7 @@ import { UserResponse } from '../interface/response/user-response';
   providedIn: 'root'
 })
 export class UserService {
-  private apiURL = API_URL + 'api/v1/user'
+  private apiURL = API_URL + 'api/v1/users'
 
   constructor(private http: HttpClient) { }
 

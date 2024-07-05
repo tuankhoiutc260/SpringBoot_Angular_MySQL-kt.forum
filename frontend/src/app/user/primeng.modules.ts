@@ -16,6 +16,11 @@ import { TagModule } from 'primeng/tag';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { FloatLabelModule } from 'primeng/floatlabel';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { CardModule } from 'primeng/card';
+import { PasswordModule } from 'primeng/password';
+import { TooltipModule } from 'primeng/tooltip';
+import { CheckboxModule } from 'primeng/checkbox';
 
 
 
@@ -40,6 +45,11 @@ import { FloatLabelModule } from 'primeng/floatlabel';
         InputTextareaModule,
         ConfirmDialogModule,
         FloatLabelModule,
+        ProgressSpinnerModule,
+        CardModule,
+        PasswordModule,
+        TooltipModule,
+        CheckboxModule
     ]
 })
 

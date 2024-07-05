@@ -7,6 +7,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { PostRequest } from '../../../core/interface/request/post-request';
 
 import Quill from 'quill';
+import { HttpErrorResponse } from '@angular/common/http';
 
 
 @Component({
@@ -71,6 +72,8 @@ export class FeedComponent implements OnInit {
     this.isEdit = false;
     this.isVisible = true
     this.postResponse = {}
+    this.content = { html: this.postResponse.content, text: undefined }; // Gán giá trị mặc định cho html
+
   }
 
   openDialogEdit(postResponse: PostResponse) {
@@ -81,14 +84,21 @@ export class FeedComponent implements OnInit {
     this.isEdit = true;
     this.isVisible = true;
   }
-
+  checkID() {
+    console.log(this.postResponse.id)
+  }
   savePost() {
 
-    const htmlContent = this.content as unknown as string;
+    // const htmlContent = this.content as unknown as string;
+    const htmlContent = typeof this.content === 'object' && this.content !== null && 'html' in this.content
+      ? this.content.html
+      : this.content as unknown as string;
+
     this.postRequest = { ...this.postResponse }
     this.postRequest.content = htmlContent
 
     this.postRequestID = this.postResponse.id ?? null;
+    console.log(htmlContent)
     this.postService.save(this.postRequestID, this.postRequest).subscribe({
       next: (apiResponse: ApiResponse<PostResponse>) => {
         const postResponse = apiResponse.result;
@@ -111,8 +121,9 @@ export class FeedComponent implements OnInit {
           console.error('No result found in response:', apiResponse);
         }
       },
-      error: (apiResponse: ApiResponse<PostResponse>) => {
-        this.showMessage('error', 'Error', apiResponse.message ?? '');
+      error: (httpErrorResponse: HttpErrorResponse) => {
+        console.log(httpErrorResponse.error.message)
+        // this.showMessage('error', 'Error', apiResponse.message!);
       }
     });
 
