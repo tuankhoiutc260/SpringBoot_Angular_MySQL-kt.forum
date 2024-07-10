@@ -44,6 +44,7 @@ public class PostMapperImpl implements PostMapper {
         PostResponse.PostResponseBuilder postResponse = PostResponse.builder();
 
         postResponse.id( post.getId() );
+        postResponse.image( post.getImage() );
         postResponse.title( post.getTitle() );
         postResponse.content( post.getContent() );
         Set<String> set = post.getTags();

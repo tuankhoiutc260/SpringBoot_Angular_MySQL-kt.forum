@@ -16,6 +16,8 @@ import java.util.Set;
 public class PostResponse {
     String id;
 
+    String image;
+
     String title;
 
     String content;

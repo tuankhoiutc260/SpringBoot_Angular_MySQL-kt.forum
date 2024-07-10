@@ -31,6 +31,7 @@ public class UserRequest {
     String password;
 
     @Email(message = "USER_EMAIL_INVALID")
+    @NotBlank(message = "USER_EMAIL_NOTBLANK")
     String email;
 
     String fullName;

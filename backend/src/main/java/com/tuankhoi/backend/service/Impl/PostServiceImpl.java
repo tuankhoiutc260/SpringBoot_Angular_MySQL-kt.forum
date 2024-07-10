@@ -7,8 +7,6 @@ import com.tuankhoi.backend.exception.ErrorCode;
 import com.tuankhoi.backend.mapper.PostMapper;
 import com.tuankhoi.backend.model.Post;
 import com.tuankhoi.backend.repository.PostRepository;
-import com.tuankhoi.backend.repository.UserRepository;
-import com.tuankhoi.backend.service.AuthenticationService;
 import com.tuankhoi.backend.service.PostService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +15,9 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Base64;
 import java.util.List;
 
 @Service
@@ -25,6 +25,7 @@ import java.util.List;
 public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final PostMapper postMapper;
+
 
     public PostServiceImpl(PostRepository postRepository, PostMapper postMapper) {
         this.postRepository = postRepository;
@@ -35,7 +36,10 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostResponse create(PostRequest postRequest) {
         try {
+            MultipartFile imageFile = postRequest.getImage();
+            String base64Image = imageFile != null ? Base64.getEncoder().encodeToString(imageFile.getBytes()) : null;
             Post newPost = postMapper.toPost(postRequest);
+            newPost.setImage(base64Image);
             Post savedPost = postRepository.save(newPost);
             return postMapper.toPostResponse(savedPost);
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
@@ -66,8 +70,11 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostResponse update(String id, PostRequest postRequest) {
         try {
+            MultipartFile imageFile = postRequest.getImage();
+            String base64Image = imageFile != null ? Base64.getEncoder().encodeToString(imageFile.getBytes()) : null;
             Post existingPost = postRepository.findById(id)
                     .orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));
+            existingPost.setImage(base64Image);
             postMapper.updatePost(existingPost, postRequest);
             return postMapper.toPostResponse(postRepository.save(existingPost));
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {

@@ -12,7 +12,6 @@ import com.tuankhoi.backend.repository.LikeRepository;
 import com.tuankhoi.backend.repository.PostRepository;
 import com.tuankhoi.backend.repository.UserRepository;
 import com.tuankhoi.backend.service.LikeService;
-import org.hibernate.query.derived.AnonymousTupleBasicEntityIdentifierMapping;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;

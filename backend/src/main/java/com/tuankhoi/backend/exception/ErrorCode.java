@@ -15,8 +15,9 @@ public enum ErrorCode {
 
     // USER
     USER_EMAIL_INVALID(1001, "Email should be valid", HttpStatus.BAD_REQUEST),
+    USER_EMAIL_NOTBLANK(1002, "Email cannot be null", HttpStatus.BAD_REQUEST),
     USER_NAME_NOTBLANK(1002, "Username cannot be null", HttpStatus.BAD_REQUEST),
-    USER_NAME_INVALID(1003, "Username must be at least 8 characters", HttpStatus.BAD_REQUEST),
+    USER_NAME_INVALID(1003, "Username must be at least 6 characters", HttpStatus.BAD_REQUEST),
     USER_PASSWORD_NOTBLANK(1002, "Password cannot be null", HttpStatus.BAD_REQUEST),
     USER_PASSWORD_INVALID(1004, "Password must be at least 8 characters", HttpStatus.BAD_REQUEST),
     USER_EXISTED(1005, "User existed", HttpStatus.BAD_REQUEST),

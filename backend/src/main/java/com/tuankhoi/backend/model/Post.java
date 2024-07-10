@@ -17,15 +17,19 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "post")
 @EntityListeners(AuditingEntityListener.class)
-@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     String id;
+
+        @Lob
+    @Column(columnDefinition = "MEDIUMBLOB")
+    String image;
 
     @Column(nullable = false)
     String title;

@@ -7,7 +7,7 @@ import com.tuankhoi.backend.service.LikeService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/like")
+@RequestMapping("/api/v1/likes")
 public class LikeController {
     private final LikeService likeService;
 

@@ -10,7 +10,6 @@ import com.tuankhoi.backend.model.User;
 import com.tuankhoi.backend.repository.PermissionRepository;
 import com.tuankhoi.backend.repository.RoleRepository;
 import com.tuankhoi.backend.repository.UserRepository;
-import com.tuankhoi.backend.service.UserService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
