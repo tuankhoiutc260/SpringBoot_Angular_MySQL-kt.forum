@@ -52,7 +52,7 @@
                     <span class="text-5xl font-bold">Create new account</span>
                 </div>
 
-                <form [formGroup]="signUpForm" class="flex flex-column gap-3">
+                <form [formGroup]="signUpForm" class="flex flex-column gap-3" (ngSubmit)="signUp()">
                     <div class="flex flex-column gap-2">
                       <label class="ml-2 font-bold" for="email">Email</label>
                       <p-iconField iconPosition="right" class="flex flex-column gap-2">
@@ -110,15 +110,16 @@
                         <p-checkbox value="New York" inputId="ny" />
                         <label for="ny">I have read and agreed to the <span class="cursor-pointer text-underline">terms and conditions</span></label>
                       </div>
-                    </div>
+                    </div>      
+                    <p-button id="btn-sign-up" class="text-center p-button-secondary" [raised]="true" label="Sign up" type="submit"
+                    ></p-button>
                   </form>
-                  
+             
                   
                   
                 <!-- <small class="text-center font-bold">{{message}}</small> -->
 
-                <p-button id="btn-sign-up" class="text-center p-button-secondary" [raised]="true" label="Sign up"
-                    (click)="signUp()"></p-button>
+                
             </div>
         </div>
 

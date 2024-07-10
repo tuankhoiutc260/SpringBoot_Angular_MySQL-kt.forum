@@ -5,7 +5,7 @@ import { FeedComponent } from './component/feed/feed.component';
 import { UserManagementComponent } from './component/user-management/user-management.component';
 import { RouterModule, Routes } from '@angular/router';
 import { PrimengModule } from '../user/primeng.modules';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { PostDetailsComponent } from '../shared/component/post-details/post-details.component';
 import { RoleIdToNamePipe } from '../core/pipe/role-id-to-name.pipe';
@@ -17,8 +17,6 @@ const routes: Routes = [
   {
     path: '',
     component: FeedComponent,
-    // canActivate: [authGuard],
-    // data: { expectedRole: 'ROLE_ADMIN' } // Đảm bảo sử dụng đúng khóa
   },
   {
     path: 'user-management',
@@ -47,6 +45,7 @@ const routes: Routes = [
     FormsModule,
     SharedModule,
     RouterModule.forChild(routes),
+    ReactiveFormsModule
   ]
 })
 export class StaffModule { }

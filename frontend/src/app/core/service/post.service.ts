@@ -14,8 +14,18 @@ export class PostService {
 
   constructor(private http: HttpClient) { }
 
+  // create(postRequest: PostRequest): Observable<ApiResponse<PostResponse>> {
+  //   return this.http.post<ApiResponse<PostResponse>>(this.apiURL, postRequest);
+  // }
   create(postRequest: PostRequest): Observable<ApiResponse<PostResponse>> {
-    return this.http.post<ApiResponse<PostResponse>>(this.apiURL, postRequest);
+    const formData = new FormData();
+    if (postRequest.image) {
+      formData.append('image', postRequest.image);
+    }
+    formData.append('title', postRequest.title!);
+    formData.append('content', postRequest.content!);
+    formData.append('tags', postRequest.tags!.join(','));
+    return this.http.post<ApiResponse<PostResponse>>(this.apiURL, formData);
   }
 
   findByID(postRequestID: string): Observable<ApiResponse<PostResponse>> {
@@ -28,8 +38,17 @@ export class PostService {
   }
 
   update(postRequestID: string, postRequest: PostRequest): Observable<ApiResponse<PostResponse>> {
+    const formData = new FormData();
+    if (postRequest.image) {
+      formData.append('image', postRequest.image);
+    }
+    formData.append('title', postRequest.title!);
+    formData.append('content', postRequest.content!);
+    formData.append('tags', postRequest.tags!.join(','));
     const url = `${this.apiURL}/${postRequestID}`;
-    return this.http.put<ApiResponse<PostResponse>>(url, postRequest);
+
+    console.log(postRequest)
+    return this.http.put<ApiResponse<PostResponse>>(url, formData);
   }
 
   delete(postRequestID: string): Observable<ApiResponse<PostResponse>> {

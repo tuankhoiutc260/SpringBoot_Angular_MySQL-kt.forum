@@ -21,6 +21,9 @@ import { CardModule } from 'primeng/card';
 import { PasswordModule } from 'primeng/password';
 import { TooltipModule } from 'primeng/tooltip';
 import { CheckboxModule } from 'primeng/checkbox';
+import { FileUploadModule } from 'primeng/fileupload';
+import { BadgeModule } from 'primeng/badge';
+import { PanelModule } from 'primeng/panel';
 
 
 
@@ -49,7 +52,10 @@ import { CheckboxModule } from 'primeng/checkbox';
         CardModule,
         PasswordModule,
         TooltipModule,
-        CheckboxModule
+        CheckboxModule,
+        FileUploadModule,
+        BadgeModule,
+        PanelModule
     ]
 })
 

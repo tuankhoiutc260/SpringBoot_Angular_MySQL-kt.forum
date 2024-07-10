@@ -1,13 +1,12 @@
-import { Component, OnInit, OnDestroy, SimpleChanges } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
 import { PostService } from '../../../core/service/post.service';
 import { ApiResponse } from '../../../core/interface/response/apiResponse';
 import { PostResponse } from '../../../core/interface/response/post-response';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { PostRequest } from '../../../core/interface/request/post-request';
-
-import Quill from 'quill';
 import { HttpErrorResponse } from '@angular/common/http';
+import {  SafeResourceUrl } from '@angular/platform-browser';
+
 
 
 @Component({
@@ -17,42 +16,47 @@ import { HttpErrorResponse } from '@angular/common/http';
   providers: [MessageService, ConfirmationService]
 })
 export class FeedComponent implements OnInit {
-  postsResponse: PostResponse[] = [];
   isVisible: boolean = false;
+
   isEdit: boolean = false;
-  postResponse: PostResponse = {};
-  postRequest: PostRequest = {};
-  postRequestID: string | null = null; // ID của bài viết, nếu đang cập nhật
 
+  isImageValid: boolean = true
 
+  isContentValid: boolean = true;
 
+  isTitleValid: boolean = true;
 
+  isTagsValid: boolean = true;
 
-  content?: {
+  isActiveImage: boolean = false;
+
+  fileName: string = '';
+
+  imagePreview: SafeResourceUrl | null = null; // Đảm bảo bạn đã import SafeResourceUrl từ @angular/platform-browser
+
+  postContent?: {
     html: string | undefined,
     text: string | undefined,
-  };
+  }
 
+  postsResponse: PostResponse[] = [];
 
+  postRequest: PostRequest = {}
 
-
-
+  postResponse: PostResponse = {}
 
   constructor(
     private postService: PostService,
     private messageService: MessageService,
-    private confirmationService: ConfirmationService
-
-  ) { }
-
-  ngOnInit() {
-    this.getAllPosts();
+    private confirmationService: ConfirmationService,
+  ) {
   }
 
+  ngOnInit() {
+    this.loadPosts();
+  }
 
-
-
-  getAllPosts() {
+  loadPosts(): void {
     this.postService.findAll().subscribe({
       next: (apiResponse: ApiResponse<PostResponse[]>) => {
         const postResponseList = apiResponse.result;
@@ -62,89 +66,62 @@ export class FeedComponent implements OnInit {
           console.error('No result found in response: ', apiResponse.message);
         }
       },
-      error: (apiResponse: ApiResponse<PostResponse>) => {
-        console.error(apiResponse.message)
-      }
-    });
-  }
-
-  openDialogNew() {
-    this.isEdit = false;
-    this.isVisible = true
-    this.postResponse = {}
-    this.content = { html: this.postResponse.content, text: undefined }; // Gán giá trị mặc định cho html
-
-  }
-
-  openDialogEdit(postResponse: PostResponse) {
-    this.postResponse = { ...postResponse };
-
-    this.content = { html: postResponse.content, text: undefined }; // Gán giá trị mặc định cho html
-
-    this.isEdit = true;
-    this.isVisible = true;
-  }
-  checkID() {
-    console.log(this.postResponse.id)
-  }
-  savePost() {
-
-    // const htmlContent = this.content as unknown as string;
-    const htmlContent = typeof this.content === 'object' && this.content !== null && 'html' in this.content
-      ? this.content.html
-      : this.content as unknown as string;
-
-    this.postRequest = { ...this.postResponse }
-    this.postRequest.content = htmlContent
-
-    this.postRequestID = this.postResponse.id ?? null;
-    console.log(htmlContent)
-    this.postService.save(this.postRequestID, this.postRequest).subscribe({
-      next: (apiResponse: ApiResponse<PostResponse>) => {
-        const postResponse = apiResponse.result;
-        if (postResponse) {
-          if (this.postRequestID) {
-            const index = this.postsResponse.findIndex(post => post.id === this.postRequestID);
-            if (index !== -1) {
-              this.postsResponse[index] = postResponse;
-            }
-            this.showMessage('info', 'Confirmed', 'Post updated')
-
-          } else {
-            this.postsResponse.unshift(postResponse);
-            this.showMessage('info', 'Confirmed', 'Post created')
-          }
-          this.isVisible = false
-          this.resetForm();
-          // this.loadPage()
-        } else {
-          console.error('No result found in response:', apiResponse);
-        }
-      },
       error: (httpErrorResponse: HttpErrorResponse) => {
-        console.log(httpErrorResponse.error.message)
-        // this.showMessage('error', 'Error', apiResponse.message!);
+        console.error(httpErrorResponse.error.message)
       }
     });
-
   }
 
-  resetForm() {
-    this.postRequest = {};
-    this.postRequestID = null;
+  getHtmlContent(): string {
+    const htmlContent = typeof this.postContent === 'object'
+      && this.postContent !== null
+      && 'html' in this.postContent
+      ? this.postContent.html
+      : this.postContent as unknown as string;
+    return htmlContent!
   }
 
-  loadPage() {
-    setTimeout(() => {
-      window.location.reload();
-    }, 2000);
+  onCreatePost() {
+    this.validateFields()
+    if (this.isImageValid && this.isImageValid && this.isTitleValid && this.isContentValid && this.isTagsValid) {
+      this.postRequest.content = this.getHtmlContent();
+      this.postService.create(this.postRequest).subscribe({
+        next: () => {
+          this.showMessage('info', 'Confirmed', 'Post created')
+          this.isVisible = false;
+          this.onLoadPage()
+        },
+        error: (apiResponse: ApiResponse<PostResponse>) => {
+          console.error('Error creating post:', apiResponse);
+        }
+      });
+    }
   }
 
-  showMessage(severityRequest: string, summaryRequest: string, detailRequest: string) {
-    this.messageService.add({ severity: severityRequest, summary: summaryRequest, detail: detailRequest });
+  onUpdatePost(): void {
+    this.postRequest.content = this.getHtmlContent();
+    this.postService.update(this.postResponse.id!, this.postRequest).subscribe({
+      next: () => {
+        this.showMessage('info', 'Confirmed', 'Post updated')
+        this.isVisible = false;
+        this.onLoadPage()
+      },
+      error: (apiResponse: ApiResponse<PostResponse>) => {
+        console.error(apiResponse);
+      }
+    });
   }
 
-  deletePost(event: Event) {
+  onSubmit(){
+    if(this.postResponse.id){
+      this.onUpdatePost()
+    }
+    else{
+      this.onCreatePost()
+    }
+  }
+
+  onDeletePost(event: Event) {
     this.confirmationService.confirm({
       target: event.target as EventTarget,
       message: 'Do you want to delete this post?',
@@ -163,7 +140,7 @@ export class FeedComponent implements OnInit {
             this.postsResponse = this.postsResponse.filter(postResponse => postResponse.id !== this.postResponse.id);
             this.isVisible = false;
             this.showMessage('info', 'Confirmed', 'Post deleted')
-            this.loadPage()
+            this.onLoadPage()
           },
           error: (error) => {
             console.log(error);
@@ -177,6 +154,108 @@ export class FeedComponent implements OnInit {
     });
   }
 
+  validateFields() {
+    this.isTitleValid = this.postRequest.title !== undefined && this.postRequest.title.trim() !== '';
+    this.isTagsValid = this.postRequest.tags != undefined && this.postRequest.tags.toString() !== ''
+    this.isContentValid = typeof (this.postContent) == 'object'
+      ? !(this.postContent?.html === undefined && this.postContent?.text === undefined)
+      : this.postContent !== null
 
+  }
 
+  onSelectFile(event: any): void {
+    const selectedFiles = event.target.files;
+
+    if (selectedFiles.length > 0) {
+      const file: File = event.target.files[0];
+      const mimeType = file.type;
+
+      if (mimeType.match(/image\/*/) == null) {
+        this.isImageValid = false;
+        this.isActiveImage = false;
+        this.imagePreview = ''
+        this.fileName = ''
+        return;
+      }
+      else {
+        this.isImageValid = false;
+        this.isImageValid = true;
+      }
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.imagePreview = reader.result;
+        this.isActiveImage = true;
+        this.fileName = file.name
+      }
+      this.postRequest.image = file;
+      reader.readAsDataURL(file);
+    }
+  }
+
+  openDialogNew() {
+    this.isEdit = false;
+    this.isVisible = true
+    this.isActiveImage = false
+    this.imagePreview = null
+    this.postRequest = {}
+    this.postContent = { html: this.postRequest.content, text: undefined };
+  }
+
+  dataURItoBlob(dataURI: string) {
+    const byteString = window.atob(dataURI);
+    const arrayBuffer = new ArrayBuffer(byteString.length);
+    const int8Array = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < byteString.length; i++) {
+      int8Array[i] = byteString.charCodeAt(i);
+    }
+    const blob = new Blob([int8Array], { type: 'image/png' });
+    return blob;
+  }
+
+  openDialogEdit(postResponse: PostResponse) {
+    this.isEdit = true;
+    this.isVisible = true;
+    this.postResponse = { ...postResponse };
+
+    if (postResponse.image) {
+      this.imagePreview = ('data:image/png;base64,'
+        + postResponse.image);
+      this.isActiveImage = true
+
+      const base64 = postResponse.image!;
+      const imageName = postResponse.title!;
+      this.fileName = imageName;
+      const imageBlob = this.dataURItoBlob(base64);
+      const imageFile = new File([imageBlob], imageName, { type: 'image/png' });
+      this.postRequest.image = imageFile;
+    }
+    else {
+      this.imagePreview = null
+      this.isActiveImage = false
+      this.fileName = '';
+      this.postRequest.image = null;
+    }
+
+    this.postRequest.title = postResponse.title;
+    this.postRequest.tags = postResponse.tags;
+    this.postContent = { html: postResponse.content, text: undefined };
+
+    const htmlContent = typeof this.postContent === 'object'
+      && this.postContent !== null
+      && 'html' in this.postContent
+      ? this.postContent.html
+      : this.postContent as unknown as string;
+
+    this.postRequest.content = htmlContent
+  }
+
+  onLoadPage() {
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
+  }
+
+  showMessage(severityRequest: string, summaryRequest: string, detailRequest: string) {
+    this.messageService.add({ severity: severityRequest, summary: summaryRequest, detail: detailRequest });
+  }
 }
