@@ -14,9 +14,6 @@ export class PostService {
 
   constructor(private http: HttpClient) { }
 
-  // create(postRequest: PostRequest): Observable<ApiResponse<PostResponse>> {
-  //   return this.http.post<ApiResponse<PostResponse>>(this.apiURL, postRequest);
-  // }
   create(postRequest: PostRequest): Observable<ApiResponse<PostResponse>> {
     const formData = new FormData();
     if (postRequest.image) {
@@ -36,7 +33,7 @@ export class PostService {
   findAll(): Observable<ApiResponse<PostResponse[]>> {
     return this.http.get<ApiResponse<PostResponse[]>>(this.apiURL);
   }
-
+  
   update(postRequestID: string, postRequest: PostRequest): Observable<ApiResponse<PostResponse>> {
     const formData = new FormData();
     if (postRequest.image) {

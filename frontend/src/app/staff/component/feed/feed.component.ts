@@ -7,8 +7,6 @@ import { PostRequest } from '../../../core/interface/request/post-request';
 import { HttpErrorResponse } from '@angular/common/http';
 import {  SafeResourceUrl } from '@angular/platform-browser';
 
-
-
 @Component({
   selector: 'app-feed',
   templateUrl: './feed.component.html',
@@ -32,7 +30,7 @@ export class FeedComponent implements OnInit {
 
   fileName: string = '';
 
-  imagePreview: SafeResourceUrl | null = null; // Đảm bảo bạn đã import SafeResourceUrl từ @angular/platform-browser
+  imagePreview: SafeResourceUrl | null = null;
 
   postContent?: {
     html: string | undefined,

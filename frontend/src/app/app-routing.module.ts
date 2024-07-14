@@ -17,8 +17,7 @@ const routes: Routes = [
     component: StaffComponent,
     path: 'staff',
     canActivate: [authGuard],
-    data: { expectedRole: 'ROLE_ADMIN' || 'ROLE_STAFF' },// Sử dụng mảng để chỉ định nhiều vai trò
-
+    data: { expectedRole: 'ROLE_ADMIN' || 'ROLE_STAFF' },
     loadChildren: () =>
       import('./staff/staff.module').then(m => m.StaffModule)
   },

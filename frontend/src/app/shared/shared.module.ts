@@ -19,7 +19,7 @@ import { InteractComponent } from './component/interact/interact.component';
     PostDetailsComponent,
     LoginComponent,
     NotFoundComponent,
-    InteractComponent
+    InteractComponent,
 
   ],
   imports: [

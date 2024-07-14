@@ -1,19 +1,36 @@
-<!-- <p-dataView #dv [value]="posts" [layout]="'grid'" [rows]="5" [paginator]="true">
-    <ng-template let-product pTemplate="grid" let-posts>
-        <div class="grid grid-nogutter">
-            <div class="col-12 sm:col-12 md:col-6 lg:col-6 xl:col-4 p-2" *ngFor="let post of posts">
-                <app-post class="cursor-pointer" [canEdit]="false" [post]="post"></app-post>
-            </div>
+<!-- <div class="card-container">
+    <div *ngFor="let postResponse of postsResponse">
+        <app-post class="card cursor-pointer" [canEdit]="false" [postResponse]="postResponse"></app-post>
+    </div>
+</div> -->
+<div class="card-container">
+    <div *ngFor="let postResponse of pagedPosts">
+      <!-- Your existing app-post component -->
+      <app-post class="card cursor-pointer" [canEdit]="false" [postResponse]="postResponse"></app-post>
+    </div>
+  </div>
+  
+  <p-paginator [rows]="pageSize" [totalRecords]="totalPosts" (onPageChange)="onPageChange($event)"></p-paginator>
+  
+
+
+
+<!-- <p-dataView #dv [value]="postsResponse" [layout]="'grid'" [rows]="5" [paginator]="true" field="id" class="hehe">
+    <ng-template let-postResponse pTemplate="grid">
+        <div *ngFor="let postResponse of postsResponse">
+            <app-post [canEdit]="false" [postResponse]="postResponse"></app-post>
         </div>
     </ng-template>
 </p-dataView> -->
 
-<p-dataView #dv [value]="postsResponse" [layout]="'grid'" [rows]="5" [paginator]="true" field="id">
-    <ng-template let-postResponse pTemplate="grid">
+<!-- <app-post [canEdit]="false" [postResponse]="postResponse"></app-post> -->
+<!-- <p-dataView #dv [value]="postsResponse">
+    <ng-template let-postResponse pTemplate="grid" let-postsResponse>
         <div class="grid grid-nogutter">
-            <div class="col-12 sm:col-12 md:col-6 lg:col-6 xl:col-4 p-2" *ngFor="let postResponse of postsResponse">
-                <app-post class="cursor-pointer" [canEdit]="false" [postResponse]="postResponse"></app-post>
+            <div class="col-12 sm:col-6 md:col-4 xl:col-6 p-2" *ngFor="let postResponse of postsResponse">
+                <app-post [canEdit]="false" [postResponse]="postResponse"></app-post>
+
             </div>
         </div>
     </ng-template>
-</p-dataView>
+</p-dataView> -->

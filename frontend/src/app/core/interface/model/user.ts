@@ -7,6 +7,7 @@ export interface User {
     email?: string;
     fullName?: string;
     active?: boolean;
+    image?:string;
     createdDate?: Date | string;
     createdBy?: string;
     lastModifiedDate?: Date | string;

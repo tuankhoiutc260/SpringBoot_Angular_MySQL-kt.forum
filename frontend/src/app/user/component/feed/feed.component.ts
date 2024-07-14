@@ -24,6 +24,7 @@ export class FeedComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.getAllPosts();
 
+
     // Ví dụ: Đăng ký theo dõi sự kiện từ socket để nhận bài đăng mới
     // this.socketSubscription = this.socketService.onNewPost().subscribe((newPost: PostResponse) => {
     //   // Thêm bài đăng mới vào đầu mảng hoặc xử lý theo nhu cầu
@@ -32,12 +33,32 @@ export class FeedComponent implements OnInit, OnDestroy {
   }
 
 
+  // getAllPosts(): void {
+  //   this.postService.findAll().subscribe({
+  //     next: (apiResponse: ApiResponse<PostResponse[]>) => {
+  //       const postResponseList = apiResponse.result;
+  //       if (postResponseList) {
+  //         this.postsResponse = postResponseList;
+         
+  //         this.totalPosts = postResponseList.length;
+  //       } else {
+  //         console.error('No result found in response:', apiResponse.message);
+  //       }
+  //     },
+  //     error: (error) => {
+  //       console.error('Error fetching posts:', error);
+  //     }
+  //   });
+  // }
+
   getAllPosts(): void {
     this.postService.findAll().subscribe({
       next: (apiResponse: ApiResponse<PostResponse[]>) => {
         const postResponseList = apiResponse.result;
         if (postResponseList) {
           this.postsResponse = postResponseList;
+          this.totalPosts = postResponseList.length;
+          this.updatePagedPosts(0); // Initialize pagedPosts array
         } else {
           console.error('No result found in response:', apiResponse.message);
         }
@@ -46,6 +67,18 @@ export class FeedComponent implements OnInit, OnDestroy {
         console.error('Error fetching posts:', error);
       }
     });
+  }
+
+  pagedPosts: PostResponse[] = [];
+  totalPosts: number = 0;
+  pageSize: number = 12; // Number of items per page
+  onPageChange(event: any): void {
+    const firstItemIndex = event.first;
+    this.updatePagedPosts(firstItemIndex);
+  }
+
+  private updatePagedPosts(startIndex: number): void {
+    this.pagedPosts = this.postsResponse.slice(startIndex, startIndex + this.pageSize);
   }
 
   ngOnDestroy() {

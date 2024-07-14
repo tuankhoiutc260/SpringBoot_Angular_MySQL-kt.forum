@@ -11,5 +11,6 @@ export interface UserResponse {
     createdBy?: string;
     lastModifiedDate?: Date | string;
     lastModifiedBy?: string;
+    image?:string;
     role?: RoleResponse
 }

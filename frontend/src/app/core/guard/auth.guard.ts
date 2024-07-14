@@ -8,6 +8,7 @@ export const authGuard: CanActivateFn = (route, state) => {
 
   const expectedRole = route.data?.['expectedRole'];
   const currentRole = authService.getRole();
+  console.log(authService.getRole())
 
   if (authService.isAuthenticated() && currentRole === expectedRole) {
     return true;
@@ -15,7 +16,7 @@ export const authGuard: CanActivateFn = (route, state) => {
     router.navigate(['/login'], {
       queryParams: {
         returnUrl: state.url,
-        message: currentRole === expectedRole ? 'Unauthorized' : 'Your Account don\'t have Permission. Please Login again!'
+        message: currentRole === expectedRole ? 'Login expired, please Login again!' : 'Your Account don\'t have Permission. Please Login again!'
       }
     });
     return false;

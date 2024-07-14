@@ -77,7 +77,7 @@ export class AuthService {
       const decodedToken: any = jwtDecode(token);
       return decodedToken.scope || 'ROLE_USER';
     }
-    return 'ROLE_USER';
+    return 'ROLE_ANONYMOUS';
   }
 
   isAuthenticated(): boolean {

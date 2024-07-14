@@ -101,37 +101,37 @@ export class UserManagementComponent implements OnInit { // Implement OnInit
   }
 
   saveUser() {
-    this.userRequest = {
-      ...this.userResponse,
-      role: this.userResponse.role?.id
-    };
-    this.userRequestID = this.userResponse.id ?? null;
+    // this.userRequest = {
+    //   ...this.userResponse,
+    //   role: this.userResponse.role?.id
+    // };
+    // this.userRequestID = this.userResponse.id ?? null;
 
-    this.userService.save(this.userRequestID, this.userRequest).subscribe({
-      next: (apiResponse: ApiResponse<UserResponse>) => {
-        const userResponse = apiResponse.result;
-        if (userResponse) {
-          if (this.userRequestID) {
-            const index = this.usersResponse.findIndex(user => user.id === this.userRequestID);
-            if (index !== -1) {
-              this.usersResponse[index] = userResponse;
-            }
-            this.showMessage('info', 'Confirmed', 'User updated');
-          } else {
-            this.usersResponse.unshift(userResponse);
-            this.showMessage('info', 'Confirmed', 'User created');
-          }
-          this.isVisible = false;
-          this.resetForm();
-          this.loadPage();
-        } else {
-          console.error('No result found in response:', apiResponse);
-        }
-      },
-      error: (apiResponse: ApiResponse<UserResponse>) => {
-        this.showMessage('error', 'Error', apiResponse.message ?? '');
-      }
-    });
+    // this.userService.save(this.userRequestID, this.userRequest).subscribe({
+    //   next: (apiResponse: ApiResponse<UserResponse>) => {
+    //     const userResponse = apiResponse.result;
+    //     if (userResponse) {
+    //       if (this.userRequestID) {
+    //         const index = this.usersResponse.findIndex(user => user.id === this.userRequestID);
+    //         if (index !== -1) {
+    //           this.usersResponse[index] = userResponse;
+    //         }
+    //         this.showMessage('info', 'Confirmed', 'User updated');
+    //       } else {
+    //         this.usersResponse.unshift(userResponse);
+    //         this.showMessage('info', 'Confirmed', 'User created');
+    //       }
+    //       this.isVisible = false;
+    //       this.resetForm();
+    //       this.loadPage();
+    //     } else {
+    //       console.error('No result found in response:', apiResponse);
+    //     }
+    //   },
+    //   error: (apiResponse: ApiResponse<UserResponse>) => {
+    //     this.showMessage('error', 'Error', apiResponse.message ?? '');
+    //   }
+    // });
   }
 
   resetForm() {

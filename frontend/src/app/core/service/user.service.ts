@@ -15,11 +15,20 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   create(userRequest: UserRequest): Observable<ApiResponse<UserResponse>> {
+    // const formDataCreateUser = new FormData();
+    // formDataCreateUser.append('email', userRequest.email!)
+    // formDataCreateUser.append('userName', userRequest.userName!)
+    // formDataCreateUser.append('password', userRequest.password!)
     return this.http.post<ApiResponse<UserResponse>>(this.apiURL, userRequest)
   }
 
   findByID(userRequestID: string): Observable<ApiResponse<UserResponse>> {
-    const url = `${this.apiURL}/${userRequestID}`;
+    const url = `${this.apiURL}/id/${userRequestID}`;
+    return this.http.get<ApiResponse<UserResponse>>(url);
+  }
+
+  findByUserName(userRequestUserName: string): Observable<ApiResponse<UserResponse>> {
+    const url = `${this.apiURL}/username/${userRequestUserName}`;
     return this.http.get<ApiResponse<UserResponse>>(url);
   }
 

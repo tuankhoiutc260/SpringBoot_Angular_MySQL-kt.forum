@@ -4,5 +4,6 @@ export interface UserRequest {
     email?: string;
     fullName?: string;
     active?: boolean;
+    image?: File | null;
     role?: number
 }

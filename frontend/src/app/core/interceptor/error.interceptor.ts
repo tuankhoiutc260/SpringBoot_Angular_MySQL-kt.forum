@@ -20,7 +20,7 @@ export class ErrorInterceptor implements HttpInterceptor {
           if (error.status === 401 || error.status === 403) {
             this.router.navigate(['/login'], {
               queryParams: {
-                message: error.status === 401 ? 'Unauthorized' : 'Please login to Administrator account!'
+                message: error.status === 401 ? 'Login expired, please Login again!' : 'Please login to Administrator account!'
               }
             });
           }

@@ -40,9 +40,7 @@
                     <small *ngIf="!isImageValid" class="error-message">Only images are supported.</small>
                 </div>
             </div>
-          
-
-
+        
             <div class="flex flex-column gap-2 mb-4">
                 <label for="postTitle" class="ml-2">Title</label>
                 <input pInputText id="postTitle" [(ngModel)]="postRequest.title" name="title"
@@ -62,7 +60,7 @@
 
             <div class="flex flex-column gap-2 mb-4">
                 <label for="postContent" class="ml-2">Content</label>
-                <p-editor id="postContent" [(ngModel)]="postContent" name="content" [style]="{ height: '300px' }"
+                <p-editor id="postContent" [(ngModel)]="postContent" name="content"  [style]="{ 'height': '500px' }"
                     placeholder="Enter your post content"></p-editor>
                 <div class="flex flex-column align-items-center">
                     <small *ngIf="!isContentValid" class="error-message">Title is required.</small>

@@ -1,5 +1,5 @@
 :host ::ng-deep .p-dialog {
-  max-height: 100%;
+  height: 90%;
 }
 
 .preview {
@@ -16,7 +16,7 @@
 }
 
 .cont-img-post {
-  width: 100%;
+  width: 100%;  
   height: 20%;
 }
 
@@ -106,3 +106,15 @@ opacity: 1;
 .error-message{
   color: red;
 }
+
+
+// new 
+/* Basic styles */
+
+
+// .card-container {
+//   display: grid;
+//   gap: 40px;
+//   padding: 0 300px; /* Padding for the container */
+// }
+

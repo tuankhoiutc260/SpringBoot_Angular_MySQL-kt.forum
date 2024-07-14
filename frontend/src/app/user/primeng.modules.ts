@@ -24,6 +24,11 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { FileUploadModule } from 'primeng/fileupload';
 import { BadgeModule } from 'primeng/badge';
 import { PanelModule } from 'primeng/panel';
+import { RippleModule } from 'primeng/ripple';
+import { AvatarModule } from 'primeng/avatar';
+import { AvatarGroupModule } from 'primeng/avatargroup';
+import { PaginatorModule } from 'primeng/paginator';
+
 
 
 
@@ -55,7 +60,12 @@ import { PanelModule } from 'primeng/panel';
         CheckboxModule,
         FileUploadModule,
         BadgeModule,
-        PanelModule
+        PanelModule,
+        RippleModule,
+        AvatarModule,
+        AvatarGroupModule,
+        PaginatorModule,
+        
     ]
 })
 
