@@ -1,15 +1,27 @@
-/* You can add global styles to this file, and also import other style files */
 html {
     font-size: 14px;
 }
 
+:root{
+    --color-red-1: #FC9CA2;
+    --color-red-2: #FB747D;
+    --color-red-3: #FA4C58;
+    --color-red-4: #F92432;
+    --color-red-5: #E30613;
+    --color-red-6: #C70512;
+    --color-red-7: #9F040E;
+    --color-red-8: #77030B;
+    --color-red-9: #500207;
+}
+
+:host ::ng-deep .p-button{
+    background: var(--color-red-4);
+}
+
 body {
-    // padding: 1rem;
     margin: 0;
 }
 
-// .card {
-//     background: var(--surface-card);
-//     border: var(--card-border);
-//     border-radius: 10px;
-// }
+.content{
+    padding: 0.5rem;
+}

@@ -10,6 +10,8 @@ import { PostDetailsComponent } from './component/post-details/post-details.comp
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './component/login/login.component';
 import { InteractComponent } from './component/interact/interact.component';
+import { HeaderComponent } from './component/header/header.component';
+import { FooterComponent } from './component/footer/footer.component';
 
 
 
@@ -20,6 +22,8 @@ import { InteractComponent } from './component/interact/interact.component';
     LoginComponent,
     NotFoundComponent,
     InteractComponent,
+    HeaderComponent,
+    FooterComponent,
 
   ],
   imports: [
@@ -32,7 +36,9 @@ import { InteractComponent } from './component/interact/interact.component';
 
   ],
   exports: [
-    PostComponent
+    PostComponent,
+    HeaderComponent,
+    FooterComponent
   ]
 })
 export class SharedModule { }

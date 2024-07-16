@@ -1,0 +1,36 @@
+ul{
+    all: unset;
+}
+
+li{
+    list-style: none;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.cont-footer{
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    border-radius: 1rem;
+}
+
+.logo {
+    font-family: "Merriweather", serif;
+    font-size: 3rem;
+    font-weight: bolder;
+    color: var(--color-red-4);
+}
+
+.cont-footer li{
+    cursor: pointer;
+    margin-bottom: 0.5rem;
+    transition: 0.2s ease;
+}
+
+.cont-footer li:hover{
+    color: var(--color-red-4);
+}

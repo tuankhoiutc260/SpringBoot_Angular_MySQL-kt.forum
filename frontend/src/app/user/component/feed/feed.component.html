@@ -1,36 +1,23 @@
-<!-- <div class="card-container">
-    <div *ngFor="let postResponse of postsResponse">
-        <app-post class="card cursor-pointer" [canEdit]="false" [postResponse]="postResponse"></app-post>
+<div class="flex flex-column gap-3"  >
+    <div class="cont-banner flex flex-column align-items-center gap-2 p-4 border-round-2xl	">
+        <h2>Welcome to <span class="font-bold" >kt.forum</span></h2>   
+    
+        <h1 class="text-center">
+            Craft narratives
+            <img src="https://img.icons8.com/?size=100&id=16380&format=png&color=000000">
+            that ignite<span> inspiration </span>
+            <img src="https://img.icons8.com/?size=100&id=20523&format=png&color=000000">,
+            <br><span> knowledge </span>
+            <img src="https://img.icons8.com/?size=100&id=Gvq4CL3hxDVR&format=png&color=000000">,
+            and<span> entertainment </span>
+            <img src="https://img.icons8.com/?size=100&id=9vdP7gCiMiAA&format=png&color=000000">
+        </h1>
     </div>
-</div> -->
-<div class="card-container">
-    <div *ngFor="let postResponse of pagedPosts">
-      <!-- Your existing app-post component -->
-      <app-post class="card cursor-pointer" [canEdit]="false" [postResponse]="postResponse"></app-post>
+    <div class="card-container">
+        <div *ngFor="let postResponse of pagedPosts">
+            <app-post class="card cursor-pointer" [canEdit]="false" [postResponse]="postResponse"></app-post>
+        </div>
     </div>
-  </div>
-  
-  <p-paginator [rows]="pageSize" [totalRecords]="totalPosts" (onPageChange)="onPageChange($event)"></p-paginator>
-  
-
-
-
-<!-- <p-dataView #dv [value]="postsResponse" [layout]="'grid'" [rows]="5" [paginator]="true" field="id" class="hehe">
-    <ng-template let-postResponse pTemplate="grid">
-        <div *ngFor="let postResponse of postsResponse">
-            <app-post [canEdit]="false" [postResponse]="postResponse"></app-post>
-        </div>
-    </ng-template>
-</p-dataView> -->
-
-<!-- <app-post [canEdit]="false" [postResponse]="postResponse"></app-post> -->
-<!-- <p-dataView #dv [value]="postsResponse">
-    <ng-template let-postResponse pTemplate="grid" let-postsResponse>
-        <div class="grid grid-nogutter">
-            <div class="col-12 sm:col-6 md:col-4 xl:col-6 p-2" *ngFor="let postResponse of postsResponse">
-                <app-post [canEdit]="false" [postResponse]="postResponse"></app-post>
-
-            </div>
-        </div>
-    </ng-template>
-</p-dataView> -->
+    
+    <p-paginator [rows]="pageSize" [totalRecords]="totalPosts" (onPageChange)="onPageChange($event)"></p-paginator>
+</div>

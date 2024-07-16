@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { API_URL } from '../config/config';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { AuthenticationRequest } from '../interface/request/authentication-request';
 import { ApiResponse } from '../interface/response/apiResponse';
 import { AuthenticationResponse } from '../interface/response/authenticated-response';
@@ -16,10 +16,22 @@ export class AuthService {
 
   private apiURL = API_URL + 'api/v1/auth';
 
+  private isSignUpActiveSource = new BehaviorSubject<boolean>(false);
+
+  isSignUpActive$ = this.isSignUpActiveSource.asObservable();
+
   constructor(private http: HttpClient) { }
 
   login(authenticationRequest: AuthenticationRequest): Observable<ApiResponse<AuthenticationResponse>> {
     return this.http.post<ApiResponse<AuthenticationResponse>>(`${this.apiURL}/login`, authenticationRequest);
+  }
+
+  setSignUpActive(value: boolean) {
+    this.isSignUpActiveSource.next(value);
+  }
+
+  getSignUpActive() {
+    return this.isSignUpActiveSource.getValue();
   }
 
   introspect(introspectRequest: IntrospectRequest): Observable<ApiResponse<IntrospectResponse>> {

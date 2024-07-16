@@ -9,7 +9,7 @@ import { UserResponse } from '../../../core/interface/response/user-response';
 import { UserRequest } from '../../../core/interface/request/user-request';
 import { UserService } from '../../../core/service/user.service';
 import { MessageService } from 'primeng/api';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {  FormControl, FormGroup, Validators } from '@angular/forms';
 import { alphanumericValidator } from '../../../core/validator/alphanumeric.validator';
 import { passwordMatchValidator } from '../../../core/validator/password-match-validator.validator';
 
@@ -48,10 +48,16 @@ export class LoginComponent {
 
   message: string = '';
 
-  isActive: boolean = false;
+  isSignUpActive: boolean = false;
 
   toggleActive() {
-    this.isActive = !this.isActive;
+    this.isSignUpActive = !this.isSignUpActive;
+  }
+
+  getSignUpActive(){
+    this.authService.isSignUpActive$.subscribe(value => {
+      this.isSignUpActive = value;
+    });
   }
 
   constructor(
@@ -62,7 +68,7 @@ export class LoginComponent {
     private messageService: MessageService,
 
   ) {
-
+    this.getSignUpActive()
   }
 
   ngOnInit(): void {
@@ -70,11 +76,6 @@ export class LoginComponent {
       this.message = params['message']
     })
   }
-
- test(){
-  console.log(this.message)
- }
-
 
   onLoadPage() {
     setTimeout(() => {
@@ -85,11 +86,7 @@ export class LoginComponent {
   showMessage(severityRequest: string, summaryRequest: string, detailRequest: string) {
     this.messageService.add({ severity: severityRequest, summary: summaryRequest, detail: detailRequest });
   }
-  loadPage() {
-    setTimeout(() => {
-      window.location.reload();
-    }, 2000);
-  }
+
 
   onSignIn() {
     if (this.signInForm.valid) {
@@ -131,7 +128,7 @@ export class LoginComponent {
       this.userService.create(this.userRequest).subscribe({
         next: () => {
           this.showMessage('info', 'Confirmed', 'Sign up successfully, please Sign in again!')
-          this.loadPage();
+          this.onLoadPage();
         },
         error: (httpErrorResponse: HttpErrorResponse) => {
           const errorMessage = httpErrorResponse.error.message;
@@ -143,9 +140,4 @@ export class LoginComponent {
       this.showMessage('error', 'Error', 'Please fill out the form correctly before submitting.')
     }
   }
-
-
-
-
-
 }

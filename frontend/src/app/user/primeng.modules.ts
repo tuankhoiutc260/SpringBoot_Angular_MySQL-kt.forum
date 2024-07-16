@@ -28,10 +28,12 @@ import { RippleModule } from 'primeng/ripple';
 import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
 import { PaginatorModule } from 'primeng/paginator';
-
-
-
-
+import { CarouselModule } from 'primeng/carousel';
+import { MenubarModule } from 'primeng/menubar';
+import { MenuModule } from 'primeng/menu';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
+import { DividerModule } from 'primeng/divider';
 
 @NgModule({
     declarations: [],
@@ -65,6 +67,12 @@ import { PaginatorModule } from 'primeng/paginator';
         AvatarModule,
         AvatarGroupModule,
         PaginatorModule,
+        CarouselModule,
+        MenubarModule,
+        MenuModule,
+        InputGroupModule,
+        InputGroupAddonModule,
+        DividerModule
         
     ]
 })

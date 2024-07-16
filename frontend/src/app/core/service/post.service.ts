@@ -30,6 +30,11 @@ export class PostService {
     return this.http.get<ApiResponse<PostResponse>>(url);
   }
 
+  findTop10ByOrderByLikesDesc(): Observable<ApiResponse<PostResponse[]>> {
+    const url = `${this.apiURL}/top10`;
+    return this.http.get<ApiResponse<PostResponse[]>>(url);
+  }
+
   findAll(): Observable<ApiResponse<PostResponse[]>> {
     return this.http.get<ApiResponse<PostResponse[]>>(this.apiURL);
   }

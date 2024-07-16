@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Post } from '../../../core/interface/model/post';
 import { PostResponse } from '../../../core/interface/response/post-response';
 import { SafeResourceUrl } from '@angular/platform-browser';
 import { UserResponse } from '../../../core/interface/response/user-response';
@@ -28,9 +27,6 @@ export class PostComponent {
   ){}
 
   ngOnInit(): void {
-
-
-
       if (this.postResponse.image) {
         this.imagePreview = ('data:image/png;base64,'
           + this.postResponse.image);
@@ -40,12 +36,9 @@ export class PostComponent {
         this.fileName = imageName;
         const imageBlob = this.dataURItoBlob(base64);
         const imageFile = new File([imageBlob], imageName, { type: 'image/png' });
-        // this.postRequest.image = imageFile;
       }
-    
 
       this.minRead = this.calculateMinRead(this.postResponse.content!)
-
       this.onGetInfoUser();
   }
 
@@ -62,8 +55,8 @@ export class PostComponent {
 
   calculateMinRead(text: string): number {
     const wordsPerMinute = 200;
-    const cleanText = text.replace(/[^\w\s]/gi, ''); // Loại bỏ các ký tự không phải từ
-    const textLength = cleanText.split(/\s+/).length; // Đếm số từ
+    const cleanText = text.replace(/[^\w\s]/gi, ''); 
+    const textLength = cleanText.split(/\s+/).length; 
     return Math.ceil(textLength / wordsPerMinute);
   }
 

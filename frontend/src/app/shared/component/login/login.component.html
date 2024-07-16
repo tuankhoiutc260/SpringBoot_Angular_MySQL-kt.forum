@@ -3,7 +3,7 @@
     <img src="assets/images/kt-blog-logo-outline-white.png" width="260px" height="110px">
   </div>
 
-  <div class="cont-auth gap-3" [class.active]="isActive">
+  <div class="cont-auth gap-3" [class.active]="isSignUpActive">
     <div class="cont-login ">
       <div class="cont-content flex flex-column align-item-center justify-content-center gap-5">
         <div class="flex flex-column gap-3">
@@ -41,7 +41,7 @@
               <p-checkbox value="New York" inputId="ny" />
               <label for="ny">Remember me</label>
             </div>
-            <div class="flex align-items-center"><span class="cursor-pointer text-underline" (click)="test()">Forgot
+            <div class="flex align-items-center"><span class="cursor-pointer text-underline">Forgot
                 password?</span></div>
           </div>
           <p-button type="submit" class="text-center" [raised]="true" label="Sign in"></p-button>

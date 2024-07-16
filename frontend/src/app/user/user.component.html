@@ -1,21 +1,13 @@
-<div>
-    <div class="m-auto col-12 xl:col-8 flex justify-content-between align-item-center">
-        <img [routerLink]="['/']" class="cursor-pointer" style="width: 64px;"
-            src="https://angular.io/assets/images/logos/angular/angular.svg" alt="">
-        <div *ngIf="currentUserName" class="flex align-items-center gap-3">
-            <p [routerLink]="['/staff']">{{currentUserName}}</p>
-            <p-button (click)="logout()" label="Logout" severity="success"></p-button>
-        </div>
-        <div *ngIf="!currentUserName">
-            <p-button [routerLink]="['./login']" label="Login"></p-button>
-        </div>
+<div class="flex flex-column ">
+    <header #header>
+        <app-header></app-header>
+    </header>
+
+    <div class="content" >
+        <router-outlet></router-outlet>
     </div>
-    <hr>
-</div>
 
-<h2 class="mb-3 mt-5 text-center text-4xl">FEEDS</h2>
-<!-- <app-feed></app-feed> -->
-
-<div class="content">
-    <router-outlet></router-outlet>
+    <footer>
+        <app-footer></app-footer>
+    </footer>
 </div>

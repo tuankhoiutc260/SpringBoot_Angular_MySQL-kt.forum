@@ -15,10 +15,6 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   create(userRequest: UserRequest): Observable<ApiResponse<UserResponse>> {
-    // const formDataCreateUser = new FormData();
-    // formDataCreateUser.append('email', userRequest.email!)
-    // formDataCreateUser.append('userName', userRequest.userName!)
-    // formDataCreateUser.append('password', userRequest.password!)
     return this.http.post<ApiResponse<UserResponse>>(this.apiURL, userRequest)
   }
 
