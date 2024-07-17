@@ -10,12 +10,13 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
     @Mapping(target = "role", ignore = true)
+    @Mapping(target = "image", ignore = true)
     User toUser(UserRequest userUpdateRequest);
 
-//    @Mapping(target = "role", ignore = true)
     UserResponse toUserResponse(User user);
 
     @Mapping(target = "role", ignore = true)
+    @Mapping(target = "image", ignore = true)
     void updateUser(@MappingTarget User user, UserRequest userRequest);
 }
 

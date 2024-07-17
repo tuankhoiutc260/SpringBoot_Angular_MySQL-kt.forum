@@ -23,13 +23,13 @@ import java.util.Set;
 public class PostRequest {
     MultipartFile image;
 
-//    @NotBlank(message = "POST_TITLE_NOTBLANK")
-//    @Size(max = 255, message = "POST_TITLE_INVALID")
+    @NotBlank(message = "POST_TITLE_NOTBLANK")
+    @Size(max = 255, message = "POST_TITLE_INVALID")
     String title;
 
-//    @NotBlank(message = "POST_CONTENT_NOTBLANK")
+    @NotBlank(message = "POST_CONTENT_NOTBLANK")
     String content;
 
-//    @NotEmpty(message = "POST_TAGS_NOTEMPTY")
+    @NotEmpty(message = "POST_TAGS_NOTEMPTY")
     Set<String> tags = new HashSet<>();
 }

@@ -36,6 +36,10 @@ public class User {
 
     String fullName;
 
+    @Lob
+    @Column(columnDefinition = "MEDIUMBLOB")
+    String image;
+
     boolean active = true;
 
     @CreatedDate
@@ -53,9 +57,6 @@ public class User {
     String lastModifiedBy;
 
     @ManyToOne
-    @JoinColumn(name = "role_id") // Tên cột trong bảng user để lưu trữ id của vai trò
+    @JoinColumn(name = "role_id")
     Role role;
-
-//    @OneToMany(mappedBy = "user")
-//    Set<Like> likes;
 }

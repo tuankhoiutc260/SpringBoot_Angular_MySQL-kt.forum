@@ -10,12 +10,15 @@ import com.tuankhoi.backend.model.User;
 import com.tuankhoi.backend.repository.RoleRepository;
 import com.tuankhoi.backend.repository.UserRepository;
 import com.tuankhoi.backend.service.UserService;
+import com.tuankhoi.backend.untils.ImageUtil;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -23,6 +26,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.nio.file.NoSuchFileException;
 import java.util.*;
 
 @Service
@@ -35,8 +40,10 @@ public class UserServiceImpl implements UserService {
     UserMapper userMapper;
     RoleRepository roleRepository;
 
+    @NonFinal
+    @Value("${default.avatar.image.path}")
+    private String defaultAvatarImagePath;
 
-//    @PostAuthorize("hasRole('ADMIN')")
     @Override
     public UserResponse create(UserRequest userRequest) {
         try {
@@ -46,6 +53,14 @@ public class UserServiceImpl implements UserService {
                 throw new AppException(ErrorCode.USER_EMAIL_EXISTED);
             User newUser = userMapper.toUser(userRequest);
             newUser.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+            String base64Image;
+            try {
+                base64Image = ImageUtil.getImageAsBase64(defaultAvatarImagePath);
+            } catch (NoSuchFileException e) {
+                throw new RuntimeException("Default avatar image file not found: " + e.getMessage(), e);
+            }
+
+            newUser.setImage(base64Image);
             if (userRequest.getRole() == null)
                 newUser.setRole(roleRepository.findByName(RoleEnum.USER.name()).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND)));
             else
@@ -53,6 +68,8 @@ public class UserServiceImpl implements UserService {
             return userMapper.toUserResponse(userRepository.save(newUser));
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
             throw new IllegalArgumentException("Failed to create user due to database constraint: " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -72,7 +89,7 @@ public class UserServiceImpl implements UserService {
         return findByUserName(userName);
     }
 
-    @PostAuthorize("hasRole('ADMIN')")
+//    @PostAuthorize("hasRole('ADMIN')")
     @Override
     public UserResponse findByEmail(String username) {
         return userRepository.findByEmail(username)
@@ -80,7 +97,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
     }
 
-    @PostAuthorize("hasRole('ADMIN')")
+//    @PostAuthorize("hasRole('ADMIN')")
     @Override
     public UserResponse findByUserName(String userName) {
         return userRepository

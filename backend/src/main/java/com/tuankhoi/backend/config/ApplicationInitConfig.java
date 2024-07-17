@@ -10,10 +10,13 @@ import com.tuankhoi.backend.model.User;
 import com.tuankhoi.backend.repository.PermissionRepository;
 import com.tuankhoi.backend.repository.RoleRepository;
 import com.tuankhoi.backend.repository.UserRepository;
+import com.tuankhoi.backend.untils.ImageUtil;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,6 +38,9 @@ public class ApplicationInitConfig {
     PermissionRepository permissionRepository;
     UserRepository userRepository;
 
+    @NonFinal
+    @Value("${avatar.admin.image.path}")
+    private String avatarAdminImagePath;
 
     @Bean
     public ApplicationRunner applicationRunner() {
@@ -94,7 +100,9 @@ public class ApplicationInitConfig {
         }
     }
 
-    private void createAdminUser() {
+
+
+    private void createAdminUser() throws IOException {
         Role adminRole = roleRepository.findByName("ADMIN").orElse(null);
         if (adminRole == null) {
             log.warn("Admin role not found, cannot create admin user");
@@ -105,6 +113,8 @@ public class ApplicationInitConfig {
                     .email("admin@gmail.com")
                     .userName("admin")
                     .password(passwordEncoder.encode("admin"))
+                    .fullName("Admin")
+                    .image(ImageUtil.getImageAsBase64(avatarAdminImagePath))
                     .role(adminRole)
                     .active(true)
                     .build();

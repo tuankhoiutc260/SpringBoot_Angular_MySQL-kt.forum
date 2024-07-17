@@ -12,6 +12,8 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Service;
@@ -53,17 +55,30 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostResponse> findAll() {
-        return postRepository.findAll(Sort.by(Sort.Order.desc("createdDate")))
+        return postRepository.findAll(Sort.by(Sort.Order.asc("createdDate")))
                 .stream()
                 .map(postMapper::toPostResponse)
                 .toList();
     }
 
     @Override
-    public PostResponse findByID(String id) {
-        return postRepository.findById(id)
+    public List<PostResponse> findTop10ByOrderByLikesDesc() {
+        return postRepository.findTop10ByOrderByLikesDesc().stream().map(postMapper::toPostResponse).toList();
+    }
+
+    @Override
+    public PostResponse findByID(String postID) {
+        return postRepository.findById(postID)
                 .map(postMapper::toPostResponse)
                 .orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));
+    }
+
+    @Override
+    public List<PostResponse> findByUserName(String userName) {
+        return postRepository.findByCreatedBy(userName)
+                .stream()
+                .map(postMapper::toPostResponse)
+                .toList();
     }
 
     @PostAuthorize("@userServiceImpl.findByUserName(returnObject.createdBy).userName == authentication.name or hasRole('ADMIN')")
@@ -86,7 +101,7 @@ public class PostServiceImpl implements PostService {
         }
     }
 
-//    @PostAuthorize("@userServiceImpl.findByUserName(returnObject.createdBy).userName == authentication.name or hasRole('ADMIN')")
+    //    @PostAuthorize("@userServiceImpl.findByUserName(returnObject.createdBy).userName == authentication.name or hasRole('ADMIN')")
     @PostAuthorize("hasRole('ADMIN') ")
     @Override
     public void deleteByID(String postID) {

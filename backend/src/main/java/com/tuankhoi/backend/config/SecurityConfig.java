@@ -40,7 +40,8 @@ public class SecurityConfig implements WebMvcConfigurer {
             "/api/v1/auth/introspect",
             "/api/v1/posts/**",
             "/api/v1/likes/**",
-            "/api/v1/users/**",
+            "/api/v1/users"
+
 
 
     };
@@ -56,7 +57,8 @@ public class SecurityConfig implements WebMvcConfigurer {
         httpSecurity.authorizeHttpRequests(request ->
                 request
                         .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
-                        .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS).permitAll()                        .anyRequest().authenticated());
+                        .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS).permitAll()
+                        .anyRequest().authenticated());
 //                        .anyRequest().hasAnyRole("STAFF", "ADMIN"));
 
         httpSecurity.oauth2ResourceServer(

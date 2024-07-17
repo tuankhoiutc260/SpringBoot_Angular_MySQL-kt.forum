@@ -23,6 +23,8 @@ public class UserResponse {
 
     String fullName;
 
+    String image;
+
     boolean active = true;
 
     LocalDateTime createdDate;

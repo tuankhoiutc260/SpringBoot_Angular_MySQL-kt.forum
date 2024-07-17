@@ -27,7 +27,7 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.UUID)
     String id;
 
-        @Lob
+    @Lob
     @Column(columnDefinition = "MEDIUMBLOB")
     String image;
 

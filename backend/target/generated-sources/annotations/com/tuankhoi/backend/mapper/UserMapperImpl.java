@@ -49,6 +49,7 @@ public class UserMapperImpl implements UserMapper {
         userResponse.password( user.getPassword() );
         userResponse.email( user.getEmail() );
         userResponse.fullName( user.getFullName() );
+        userResponse.image( user.getImage() );
         userResponse.active( user.isActive() );
         userResponse.createdDate( user.getCreatedDate() );
         userResponse.createdBy( user.getCreatedBy() );

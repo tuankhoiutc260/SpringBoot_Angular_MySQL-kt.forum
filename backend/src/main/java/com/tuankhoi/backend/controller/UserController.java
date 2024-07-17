@@ -22,19 +22,19 @@ import java.util.List;
 public class UserController {
     UserService userService;
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public APIResponse<UserResponse> findByID(@PathVariable String id){
         return APIResponse.<UserResponse>builder()
                 .result(userService.findByID(id))
                 .build();
     }
 
-//    @GetMapping("/{user_name}")
-//    public APIResponse<UserResponse> findByUserName(@PathVariable String user_name){
-//        return APIResponse.<UserResponse>builder()
-//                .result(userService.findByUserName(user_name))
-//                .build();
-//    }
+    @GetMapping("/username/{userName}")
+    public APIResponse<UserResponse> findByUserName(@PathVariable String userName){
+        return APIResponse.<UserResponse>builder()
+                .result(userService.findByUserName(userName))
+                .build();
+    }
 
     @GetMapping("/my-info")
     public APIResponse<UserResponse> getMyInfo() {

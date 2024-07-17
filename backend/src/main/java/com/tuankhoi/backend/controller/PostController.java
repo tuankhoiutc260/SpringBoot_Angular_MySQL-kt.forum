@@ -20,10 +20,24 @@ public class PostController {
         this.postService = postService;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public APIResponse<PostResponse> findByID(@PathVariable String id) {
         return APIResponse.<PostResponse>builder()
                 .result(postService.findByID(id))
+                .build();
+    }
+
+    @GetMapping("/user-post/{userName}")
+    public APIResponse<List<PostResponse>> findByCreatedBy(@PathVariable String userName) {
+        return APIResponse.<List<PostResponse>>builder()
+                .result(postService.findByUserName(userName))
+                .build();
+    }
+
+    @GetMapping("/top10")
+    public APIResponse<List<PostResponse>> findTop10ByOrderByLikesDesc() {
+        return APIResponse.<List<PostResponse>>builder()
+                .result(postService.findTop10ByOrderByLikesDesc())
                 .build();
     }
 
@@ -40,7 +54,6 @@ public class PostController {
                 .result(postService.create(postRequest))
                 .build();
     }
-
 
     @PutMapping("/{id}")
     public APIResponse<PostResponse> update(@PathVariable String id, @ModelAttribute PostRequest postRequest) {

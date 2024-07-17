@@ -8,9 +8,13 @@ import java.util.List;
 public interface PostService {
     PostResponse create(PostRequest postRequest);
 
-    PostResponse findByID(String id);
+    PostResponse findByID(String postID);
+
+    List<PostResponse> findByUserName(String userName);
 
     List<PostResponse> findAll();
+
+    List<PostResponse> findTop10ByOrderByLikesDesc();
 
     PostResponse update(String id, PostRequest postRequest);
 
