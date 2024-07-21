@@ -1,10 +1,10 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ApiResponse } from '../interface/response/apiResponse';
-import { LikeResponse } from '../interface/response/likeResponse';
-import { LikeRequest } from '../interface/request/like-request';
 import { API_URL } from '../../core/config/config';
+import { LikeRequest } from '../model/request/like-request';
+import { ApiResponse } from '../model/response/apiResponse';
+import { LikeResponse } from '../model/response/likeResponse';
 
 @Injectable({
   providedIn: 'root'

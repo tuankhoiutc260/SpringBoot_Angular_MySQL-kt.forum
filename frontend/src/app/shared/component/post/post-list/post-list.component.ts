@@ -1,9 +1,9 @@
 import { Component, Input, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { UserResponse } from '../../../../api/interface/response/user-response';
-import { PostResponse } from '../../../../api/interface/response/post-response';
 import { PostApiService } from '../../../../api/service/post-api.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { PostResponse } from '../../../../api/model/response/post-response';
+import { UserResponse } from '../../../../api/model/response/user-response';
 
 @Component({
   selector: 'app-post-list',

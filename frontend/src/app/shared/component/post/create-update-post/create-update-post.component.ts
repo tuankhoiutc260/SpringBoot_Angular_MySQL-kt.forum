@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { PostResponse } from '../../../../api/interface/response/post-response';
-import { PostRequest } from '../../../../api/interface/request/post-request';
 import { SafeResourceUrl } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
-import { ApiResponse } from '../../../../api/interface/response/apiResponse';
 import { PostApiService } from '../../../../api/service/post-api.service';
 import { MessageService } from 'primeng/api';
+import { PostRequest } from '../../../../api/model/request/post-request';
+import { ApiResponse } from '../../../../api/model/response/apiResponse';
+import { PostResponse } from '../../../../api/model/response/post-response';
 
 @Component({
   selector: 'app-create-update-post',

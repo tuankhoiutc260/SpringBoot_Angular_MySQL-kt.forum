@@ -1,8 +1,8 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { UserResponse } from '../api/interface/response/user-response';
 import { Subscription } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { AuthService } from '../core/service/auth.service';
+import { UserResponse } from '../api/model/response/user-response';
 
 @Component({
   selector: 'app-user',

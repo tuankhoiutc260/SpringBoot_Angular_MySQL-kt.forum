@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { jwtDecode } from 'jwt-decode';
-import { ApiResponse } from '../../api/interface/response/apiResponse';
 import { UserApiService } from '../../api/service/user-api.service';
-import { UserResponse } from '../../api/interface/response/user-response';
+import { ApiResponse } from '../../api/model/response/apiResponse';
+import { UserResponse } from '../../api/model/response/user-response';
 
 @Injectable({
   providedIn: 'root'

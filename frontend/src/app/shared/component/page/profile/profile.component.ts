@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { PostResponse } from '../../../../api/interface/response/post-response';
-import { UserResponse } from '../../../../api/interface/response/user-response';
 import { PostApiService } from '../../../../api/service/post-api.service';
 import { UserApiService } from '../../../../api/service/user-api.service';
-import { ApiResponse } from '../../../../api/interface/response/apiResponse';
 import { AuthService } from '../../../../core/service/auth.service';
+import { ApiResponse } from '../../../../api/model/response/apiResponse';
+import { PostResponse } from '../../../../api/model/response/post-response';
+import { UserResponse } from '../../../../api/model/response/user-response';
 
 @Component({
   selector: 'app-profile',

@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ApiResponse } from '../interface/response/apiResponse';
-import { PostRequest } from '../interface/request/post-request';
-import { PostResponse } from '../interface/response/post-response';
 import { API_URL } from '../../core/config/config';
+import { PostRequest } from '../model/request/post-request';
+import { ApiResponse } from '../model/response/apiResponse';
+import { PostResponse } from '../model/response/post-response';
 
 @Injectable({
   providedIn: 'root'

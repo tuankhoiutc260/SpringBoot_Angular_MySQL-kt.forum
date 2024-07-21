@@ -1,14 +1,12 @@
 import { Component, HostListener, Input } from '@angular/core';
-import { UserResponse } from '../../../../api/interface/response/user-response';
 import { MenuItem } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { PostApiService } from '../../../../api/service/post-api.service';
-import { PostResponse } from '../../../../api/interface/response/post-response';
-import { ApiResponse } from '../../../../api/interface/response/apiResponse';
 import { AuthService } from '../../../../core/service/auth.service';
-import { SafeResourceUrl } from '@angular/platform-browser';
-import { PostRequest } from '../../../../api/interface/request/post-request';
+import { ApiResponse } from '../../../../api/model/response/apiResponse';
+import { PostResponse } from '../../../../api/model/response/post-response';
+import { UserResponse } from '../../../../api/model/response/user-response';
 
 @Component({
   selector: 'app-header',

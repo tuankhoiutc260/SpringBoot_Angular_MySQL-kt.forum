@@ -5,15 +5,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { alphanumericValidator } from '../../core/validator/alphanumeric.validator';
 import { passwordMatchValidator } from '../../core/validator/password-match-validator.validator';
-import { UserResponse } from '../../api/interface/response/user-response';
-import { AuthenticationRequest } from '../../api/interface/request/authentication-request';
-import { UserRequest } from '../../api/interface/request/user-request';
-import { ApiResponse } from '../../api/interface/response/apiResponse';
-import { AuthenticationResponse } from '../../api/interface/response/authenticated-response';
 import { AuthApiService } from '../../api/service/auth-api.service';
 import { UserApiService } from '../../api/service/user-api.service';
 import { AuthService } from '../../core/service/auth.service';
 import { Subscription } from 'rxjs';
+import { AuthenticationRequest } from '../../api/model/request/authentication-request';
+import { UserRequest } from '../../api/model/request/user-request';
+import { ApiResponse } from '../../api/model/response/apiResponse';
+import { AuthenticationResponse } from '../../api/model/response/authenticated-response';
+import { UserResponse } from '../../api/model/response/user-response';
 
 @Component({
   selector: 'app-login',

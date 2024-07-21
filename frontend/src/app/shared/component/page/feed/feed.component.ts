@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { PostApiService } from '../../../../api/service/post-api.service';
-import { PostResponse } from '../../../../api/interface/response/post-response';
-import { ApiResponse } from '../../../../api/interface/response/apiResponse';
+import { ApiResponse } from '../../../../api/model/response/apiResponse';
+import { PostResponse } from '../../../../api/model/response/post-response';
 
 @Component({
   selector: 'app-feed',

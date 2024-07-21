@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { PostResponse } from '../../../../api/interface/response/post-response';
-import { UserResponse } from '../../../../api/interface/response/user-response';
 import { UserApiService } from '../../../../api/service/user-api.service';
-import { ApiResponse } from '../../../../api/interface/response/apiResponse';
 import { Router } from '@angular/router';
 import { SharedDataService } from '../../../../core/service/shared-data.service';
+import { ApiResponse } from '../../../../api/model/response/apiResponse';
+import { PostResponse } from '../../../../api/model/response/post-response';
+import { UserResponse } from '../../../../api/model/response/user-response';
 
 @Component({
   selector: 'app-post',

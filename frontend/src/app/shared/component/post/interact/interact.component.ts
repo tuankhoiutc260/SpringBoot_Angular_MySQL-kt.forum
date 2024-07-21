@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
-import { LikeRequest } from '../../../../api/interface/request/like-request';
 import { LikeApiService } from '../../../../api/service/like-api.service';
-import { ApiResponse } from '../../../../api/interface/response/apiResponse';
-import { LikeResponse } from '../../../../api/interface/response/likeResponse';
+import { LikeRequest } from '../../../../api/model/request/like-request';
+import { ApiResponse } from '../../../../api/model/response/apiResponse';
+import { LikeResponse } from '../../../../api/model/response/likeResponse';
 
 @Component({
   selector: 'app-interact',

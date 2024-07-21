@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { ApiResponse } from '../interface/response/apiResponse';
-import { UserResponse } from '../interface/response/user-response';
-import { UserRequest } from '../interface/request/user-request';
 import { API_URL } from '../../core/config/config';
+import { UserRequest } from '../model/request/user-request';
+import { ApiResponse } from '../model/response/apiResponse';
+import { UserResponse } from '../model/response/user-response';
 
 @Injectable({
   providedIn: 'root'

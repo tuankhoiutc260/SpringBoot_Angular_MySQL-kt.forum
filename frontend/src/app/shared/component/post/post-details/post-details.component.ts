@@ -1,13 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import { UserResponse } from '../../../../api/interface/response/user-response';
-import { PostResponse } from '../../../../api/interface/response/post-response';
 import { Subscription } from 'rxjs';
 import { PostApiService } from '../../../../api/service/post-api.service';
 import { AuthService } from '../../../../core/service/auth.service';
-import { ApiResponse } from '../../../../api/interface/response/apiResponse';
 import { SharedDataService } from '../../../../core/service/shared-data.service';
+import { ApiResponse } from '../../../../api/model/response/apiResponse';
+import { PostResponse } from '../../../../api/model/response/post-response';
+import { UserResponse } from '../../../../api/model/response/user-response';
 
 @Component({
   selector: 'app-post-details',

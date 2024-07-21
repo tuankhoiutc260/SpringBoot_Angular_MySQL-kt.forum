@@ -1,4 +1,4 @@
-import { RoleEnum } from "../model/role";
+import { RoleEnum } from "../entity/role";
 
 export interface RoleRequest {
     name?: RoleEnum;
