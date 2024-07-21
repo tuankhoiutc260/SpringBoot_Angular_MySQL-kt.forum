@@ -3,6 +3,7 @@ package com.tuankhoi.backend.config;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,6 +42,7 @@ public class SecurityConfig implements WebMvcConfigurer {
             "/api/v1/posts/**",
             "/api/v1/likes/**",
             "/api/v1/users/**",
+            "/api/v1/auth/logout"
 
 //            "/api/v1/users/username/**"
 
@@ -49,9 +51,9 @@ public class SecurityConfig implements WebMvcConfigurer {
 
     };
 
-    @Value("${jwt.signerKey}")
-    private String signerKey;
 
+    @Autowired
+    private CustomJwtDecoder customJwtDecoder;
 
     @Bean
     protected SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -67,7 +69,7 @@ public class SecurityConfig implements WebMvcConfigurer {
         httpSecurity.oauth2ResourceServer(
                 httpSecurityOAuth2ResourceServerConfigurer ->
                         httpSecurityOAuth2ResourceServerConfigurer
-                                .jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder())
+                                .jwt(jwtConfigurer -> jwtConfigurer.decoder(customJwtDecoder)
                                         .jwtAuthenticationConverter(jwtAuthenticationConverter()))
                                 .authenticationEntryPoint(new JWTAuthenticationEntryPoint())
         );
@@ -84,15 +86,15 @@ public class SecurityConfig implements WebMvcConfigurer {
         return jwtAuthenticationConverter;
     }
 
-    @Bean
-    public JwtDecoder jwtDecoder() {
-        SecretKeySpec secretKeySpec = new SecretKeySpec(signerKey.getBytes(), "HS512");
-
-        return NimbusJwtDecoder
-                .withSecretKey(secretKeySpec)
-                .macAlgorithm(MacAlgorithm.HS512)
-                .build();
-    }
+//    @Bean
+//    public JwtDecoder jwtDecoder() {
+//        SecretKeySpec secretKeySpec = new SecretKeySpec(signerKey.getBytes(), "HS512");
+//
+//        return NimbusJwtDecoder
+//                .withSecretKey(secretKeySpec)
+//                .macAlgorithm(MacAlgorithm.HS512)
+//                .build();
+//    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

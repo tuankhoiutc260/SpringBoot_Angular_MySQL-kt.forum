@@ -2,6 +2,7 @@ package com.tuankhoi.backend.controller;
 
 import com.nimbusds.jose.JOSEException;
 import com.tuankhoi.backend.dto.request.IntrospectRequest;
+import com.tuankhoi.backend.dto.request.LogoutRequest;
 import com.tuankhoi.backend.dto.response.APIResponse;
 import com.tuankhoi.backend.dto.request.AuthenticationRequest;
 import com.tuankhoi.backend.dto.response.AuthenticationResponse;
@@ -34,9 +35,18 @@ public class AuthenticationController {
     @PostMapping("/introspect")
     public APIResponse<IntrospectResponse> authenticate(@RequestBody IntrospectRequest request)
             throws ParseException, JOSEException {
-        var result = authenticationService.introspectResponse(request);
+        var result = authenticationService.introspect(request);
         return APIResponse.<IntrospectResponse>builder()
                 .result(result)
                 .build();
     }
+
+    @PostMapping("/logout")
+    public APIResponse<Void> logout(@RequestBody LogoutRequest request)
+            throws ParseException, JOSEException {
+        authenticationService.logout(request);
+        return APIResponse.<Void>builder()
+                .build();
+    }
+
 }
