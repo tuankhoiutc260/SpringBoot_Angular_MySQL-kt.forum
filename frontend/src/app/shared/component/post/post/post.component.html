@@ -1,0 +1,34 @@
+<div class="card" >
+  <div class="card"  (click)="navigateToPost(postAuthorInfo.userName!, postResponse.id!)">
+    <div class="card-image">
+      <img [src]="postResponse.image ? (postResponse.image | dataUriToBlob) : ''">
+    </div>
+    <div class="card-content flex flex-column gap-3">
+      <small class="small">
+        {{ postResponse.createdDate | date:'dd MMM yyyy' }}&nbsp;&nbsp;
+        <i class="pi pi-clock"></i>&nbsp;&nbsp;
+        {{ minRead }} mins read
+      </small>
+      <h2 class="post-title">{{postResponse.title}}</h2>
+      <p class="post-content">{{postResponse.content | htmlToPlaintext}}</p>
+      <div class="card-author flex align-items-center gap-3 justify-content-between	">
+        <div class="flex align-items-center gap-3">
+          <img [src]="postAuthorInfo.image ? (postAuthorInfo.image | dataUriToBlob) : ''"
+            style="width: 28px; height: 28px; border-radius: 50%;">
+          <span>{{postAuthorInfo.fullName}}</span>
+        </div>
+        <div class="flex gap-2 align-items-center">
+          <span>{{postResponse.countLikes}}</span>
+          <i class="pi pi-heart"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="canEdit" class="flex gap-2 justify-content-end btn-post-function">
+    <p-button (click)="isUpdate.emit()" icon="pi pi-pen-to-square"  />
+    <p-button (click)="deletePost()" icon="pi pi-trash" severity="danger" />
+
+  </div>
+ 
+</div>

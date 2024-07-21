@@ -1,9 +1,9 @@
 <div class="flex flex-column ">
     <header #header>
-        <app-header></app-header>
+        <app-header [userLoginInfo]="userLoginInfo || defaultUserLoginInfo"></app-header>
     </header>
-
-    <div class="content" >
+    
+    <div class="content">
         <router-outlet></router-outlet>
     </div>
 

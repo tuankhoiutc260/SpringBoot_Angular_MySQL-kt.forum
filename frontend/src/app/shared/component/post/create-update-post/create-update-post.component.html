@@ -1,0 +1,57 @@
+<p-dialog header="Post details" [modal]="true" [style]="{ width: '50rem' }" [(visible)]="isDialogVisible"
+    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [maximizable]="true" (onHide)="onDialogHide()">
+    <ng-template pTemplate="content">
+        <form>
+            <div class=" flex justify-content-center mb-4 mt-1">
+                <div class=" container flex flex-column justify-content-center">
+                    <div class="img-area cursor-pointer p-2 flex flex-column align-items-center justify-content-center"
+                        [class.active]="isActiveImage" data-img="Click to change new image" (click)="inputFile.click()">
+                        <input id="input" type="file" accept="image/*" hidden #inputFile
+                            (change)="onSelectFile($event)" />
+                        <i class="pi pi-cloud-upload text-6xl	 "></i>
+                        <h3>Upload image</h3>
+                        <p>Image size must be less than <span>2MB</span></p>
+                        <img *ngIf="imagePreview" [src]="imagePreview" alt="Image preview" class="img-preview" />
+                    </div>
+                </div>
+                <div class="flex flex-column align-items-center">
+                    <small *ngIf="!isImageValid" class="error-message">Only images are supported.</small>
+                </div>
+            </div>
+
+            <div class="flex flex-column gap-2 mb-4">
+                <label for="postTitle" class="ml-2">Title</label>
+                <input pInputText id="postTitle" [(ngModel)]="postRequest.title" name="title"
+                    placeholder="Enter your post title">
+                <div class="flex flex-column align-items-center">
+                    <small *ngIf="!isTitleValid" class="error-message">Title is required.</small>
+                </div>
+            </div>
+
+            <div class="flex flex-column gap-2 mb-4">
+                <label for="tags">Tags</label>
+                <p-chips [(ngModel)]="postRequest.tags" name="tags" placeholder="Enter your post tags"></p-chips>
+                <div class="flex flex-column align-items-center">
+                    <small *ngIf="!isTagsValid" class="error-message">Tags is required.</small>
+                </div>
+            </div>
+
+            <div class="flex flex-column gap-2">
+                <label for="postContent" class="ml-2">Content</label>
+                <p-editor id="postContent" [(ngModel)]="postContent" name="content" [style]="{ 'height': '500px' }"
+                    placeholder="Enter your post content"></p-editor>
+                <div class="flex flex-column align-items-center">
+                    <small *ngIf="!isContentValid" class="error-message">Title is required.</small>
+                </div>
+            </div>
+        </form>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <div class="flex gap-2 justify-content-center mt-2">
+            <p-button (click)="this.isDialogVisible = false" label="Cancel" text="true" severity="danger"></p-button>
+            <p-button (click)="onSubmit()" label="Save" severity="success" [outlined]="true"></p-button>
+        </div>
+    </ng-template>
+</p-dialog>
+<p-toast />

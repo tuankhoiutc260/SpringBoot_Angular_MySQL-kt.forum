@@ -1,0 +1,17 @@
+<div class="flex flex-column gap-3">
+    <div class="card-container">
+        <div *ngFor="let postResponse of pagedPosts">
+            <app-post class="card cursor-pointer" (isDelete)="onDeletePost($event)"
+            (isUpdate)="openDialogEdit(postResponse)" [canEdit]="canEdit" [postResponse]="postResponse"
+            [userLoginInfo]="userLoginInfo || defaultUserLoginInfo"></app-post>
+  
+        </div>
+    </div>
+
+    <p-paginator [rows]="pageSize" [totalRecords]="totalPosts" (onPageChange)="onPageChange($event)"></p-paginator>
+</div>
+
+<app-create-update-post [postResponse]="selectedPostResponse" [isDialogVisible]="isDialogVisible"
+    (isDialogVisibleChange)="isDialogVisible = $event"></app-create-update-post>
+<p-toast/>
+<p-confirmDialog />

@@ -1,30 +1,25 @@
 import { Injectable } from '@angular/core';
-import { API_URL } from '../config/config';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { AuthenticationRequest } from '../interface/request/authentication-request';
-import { ApiResponse } from '../interface/response/apiResponse';
-import { AuthenticationResponse } from '../interface/response/authenticated-response';
-import { IntrospectResponse } from '../interface/response/introspect-request';
-import { IntrospectRequest } from '../interface/request/introspect-request';
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode } from 'jwt-decode';
+import { ApiResponse } from '../../api/interface/response/apiResponse';
+import { UserApiService } from '../../api/service/user-api.service';
+import { UserResponse } from '../../api/interface/response/user-response';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-
-  private apiURL = API_URL + 'api/v1/auth';
-
   private isSignUpActiveSource = new BehaviorSubject<boolean>(false);
+  private userLoginInfoSubject = new BehaviorSubject<UserResponse | null>(null);
 
   isSignUpActive$ = this.isSignUpActiveSource.asObservable();
+  userLoginInfo$ = this.userLoginInfoSubject.asObservable();
 
-  constructor(private http: HttpClient) { }
-
-  login(authenticationRequest: AuthenticationRequest): Observable<ApiResponse<AuthenticationResponse>> {
-    return this.http.post<ApiResponse<AuthenticationResponse>>(`${this.apiURL}/login`, authenticationRequest);
-  }
+  constructor(
+    private userApiService: UserApiService,
+    private http: HttpClient
+  ) { }
 
   setSignUpActive(value: boolean) {
     this.isSignUpActiveSource.next(value);
@@ -32,10 +27,6 @@ export class AuthService {
 
   getSignUpActive() {
     return this.isSignUpActiveSource.getValue();
-  }
-
-  introspect(introspectRequest: IntrospectRequest): Observable<ApiResponse<IntrospectResponse>> {
-    return this.http.post<ApiResponse<IntrospectResponse>>(`${this.apiURL}/introspect`, introspectRequest);
   }
 
   // TOKEN
@@ -78,21 +69,48 @@ export class AuthService {
   }
 
   // Check if user is authenticated
-  canActive(): boolean {
-    return !!this.getToken();
-  }
+  // canActive(): boolean {
+  //   return !!this.getToken();
+  // }
 
+  // getRole(): string {
+  //   const token = this.getToken();
+  //   if (token) {
+  //     const decodedToken: any = jwtDecode(token);
+  //     return decodedToken.scope || 'ROLE_USER';
+  //   }
+  //   return 'ROLE_ANONYMOUS';
+  // }
 
-  getRole(): string {
-    const token = this.getToken();
-    if (token) {
-      const decodedToken: any = jwtDecode(token);
-      return decodedToken.scope || 'ROLE_USER';
+  // isAuthenticated(): boolean {
+  //   return !!this.getToken();
+  // }
+
+  // New utility method to fetch and set user login info
+  fetchAndSetUserLoginInfo(): void {
+    const userName = this.getCurrentUserName();
+    if (userName) {
+      this.userApiService.findByUserName(userName).subscribe({
+        next: (apiResponse: ApiResponse<UserResponse>) => {
+          const userLoginInfo = apiResponse.result;
+          if (userLoginInfo) {
+            this.userLoginInfoSubject.next(userLoginInfo);
+          } else {
+            console.error('No result found in response:', apiResponse.message);
+          }
+        },
+        error: (error) => {
+          console.error('Error fetching user:', error);
+        }
+      });
     }
-    return 'ROLE_ANONYMOUS';
   }
 
-  isAuthenticated(): boolean {
-    return !!this.getToken();
+  getUserLoginInfo(): Observable<UserResponse | null> {
+    return this.userLoginInfo$;
+  }
+
+  getUserLoginInfoValue(): UserResponse | null {
+    return this.userLoginInfoSubject.value;
   }
 }

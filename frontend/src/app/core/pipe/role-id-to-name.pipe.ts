@@ -1,12 +1,12 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { RoleService } from '../service/role.service';
 import { Observable, map } from 'rxjs';
+import { RoleApiService } from '../../api/service/role-api.service';
 
 @Pipe({
   name: 'roleIdToName'
 })
 export class RoleIdToNamePipe implements PipeTransform {
-  constructor(private roleService: RoleService) { }
+  constructor(private roleService: RoleApiService) { }
 
   transform(id: number): Observable<string | undefined> {
     return this.roleService.findByID(id).pipe(

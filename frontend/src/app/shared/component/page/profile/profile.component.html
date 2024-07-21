@@ -1,0 +1,32 @@
+<div class="flex flex-column gap-5">
+    <div class="cont-profile-info flex flex-column gap-3 align-items-center ">
+        <img class="border-circle img-profile " [src]="userResponse.image ? (userResponse.image | dataUriToBlob) : ''"
+            width="100px" height="100px">
+        <span>&#64;{{userResponse.userName}}</span>
+        <div class="flex gap-6">
+            <div class="flex flex-column align-items-center gap-1">
+                <h2 class="m-0">{{totalPosts}}</h2>
+                <span>{{ totalPosts <= 1 ? 'Post' : 'Posts' }}</span>
+            </div>
+            <div class="flex flex-column align-items-center  gap-1">
+                <h2 class="m-0">{{ totalLikes }} </h2>
+                <span>{{ totalLikes <= 1 ? 'Like' : 'Likes' }}</span>
+            </div>
+        </div>
+    </div>
+    <div class="cont-my-post flex flex-column gap-4 align-items-center">
+        <div class="flex gap-4">
+            <button class="btn" [class.active]="activeButton === 'bars'" (click)="toggleActive('bars')"
+                (click)="getPostsCreatedBy()">
+                <i class="pi pi-bars"></i>
+            </button>
+
+            <button class="btn" [class.active]="activeButton === 'heart'" (click)="toggleActive('heart')"
+                (click)="getPostsLiked()">
+                <i class="pi pi-heart"></i>
+            </button>
+        </div>
+        <app-post-list [defaultUserLoginInfo]="defaultUserLoginInfo" [userLoginInfo]="userLoginInfo"
+            [postsResponse]="postsResponse" [userName]="userName" [canEdit]="canEdit"></app-post-list>
+    </div>
+</div>
