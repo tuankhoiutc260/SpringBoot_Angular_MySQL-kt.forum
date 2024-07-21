@@ -7,6 +7,8 @@ import { AuthService } from '../../../../core/service/auth.service';
 import { ApiResponse } from '../../../../api/model/response/apiResponse';
 import { PostResponse } from '../../../../api/model/response/post-response';
 import { UserResponse } from '../../../../api/model/response/user-response';
+import { AuthApiService } from '../../../../api/service/auth-api.service';
+import { LogoutRequest } from '../../../../api/model/request/logout-request';
 
 @Component({
   selector: 'app-header',
@@ -23,6 +25,7 @@ export class HeaderComponent {
   constructor(
     private postApiService: PostApiService,
     private authService: AuthService,
+    private authApiService: AuthApiService,
     private router: Router
   ) { }
 
@@ -143,6 +146,18 @@ export class HeaderComponent {
   }
 
   logout() {
+    
+
+    const logoutRequest: LogoutRequest = { token: this.authService.getToken() };
+    const sub =  this.authApiService.logout(logoutRequest).subscribe({
+      next: ()=>{
+      },
+      error: (error)=>{
+        console.error('Logout error:', error);
+      }
+    }
+    );
+    this.subscription.add(sub);
     this.authService.removeToken();
     this.authService.removeCurrentUserName();
     this.router.navigate(['/login']);

@@ -7,6 +7,7 @@ import { IntrospectRequest } from '../model/request/introspect-request';
 import { ApiResponse } from '../model/response/apiResponse';
 import { AuthenticationResponse } from '../model/response/authenticated-response';
 import { IntrospectResponse } from '../model/response/introspect-request';
+import { LogoutRequest } from '../model/request/logout-request';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,10 @@ export class AuthApiService {
 
   login(authenticationRequest: AuthenticationRequest): Observable<ApiResponse<AuthenticationResponse>> {
     return this.http.post<ApiResponse<AuthenticationResponse>>(`${this.apiURL}/login`, authenticationRequest);
+  }
+
+  logout(logoutRequest: LogoutRequest): Observable<ApiResponse<void>>{
+    return this.http.post<ApiResponse<void>>(`${this.apiURL}/logout`, logoutRequest)
   }
 
   introspect(introspectRequest: IntrospectRequest): Observable<ApiResponse<IntrospectResponse>> {
