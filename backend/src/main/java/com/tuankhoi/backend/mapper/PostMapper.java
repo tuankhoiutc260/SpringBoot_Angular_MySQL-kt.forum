@@ -14,6 +14,12 @@ public interface PostMapper {
 
     PostResponse toPostResponse(Post post);
 
+    default PostResponse toPostResponseWithCountLikes(Post post) {
+        PostResponse postResponse = toPostResponse(post);
+        postResponse.setCountLikes(post.getLikes().size());
+        return postResponse;
+    }
+
     @Mapping(target = "image", ignore = true)
     void updatePost(@MappingTarget Post post, PostRequest postRequest);
 }

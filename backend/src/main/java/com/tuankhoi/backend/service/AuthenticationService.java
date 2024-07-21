@@ -18,6 +18,6 @@ public interface AuthenticationService {
     Authentication getAuthenticatedUser();
 
     String generateToken(User user);
-    String buildScope(User user);
 
+    String buildScope(User user);
 }

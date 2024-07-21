@@ -24,7 +24,7 @@ public class LikeController {
 
     @GetMapping("/is-liked")
     public APIResponse<Boolean> isLiked(@RequestParam String postId) {
-        LikeRequest likeRequest = new LikeRequest(postId); // null for userId since it's not needed
+        LikeRequest likeRequest = new LikeRequest(postId);
         return APIResponse.<Boolean>builder()
                 .result(likeService.isLiked(likeRequest))
                 .build();

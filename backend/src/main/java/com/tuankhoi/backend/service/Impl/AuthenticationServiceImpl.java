@@ -89,7 +89,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         JWSHeader jwsHeader = new JWSHeader(JWSAlgorithm.HS512);
 
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
-                .subject(user.getUserName())
+                .subject(user.getId())
                 .issuer("tuankhoi.com")
                 .issueTime(new Date())
                 .expirationTime(new Date(

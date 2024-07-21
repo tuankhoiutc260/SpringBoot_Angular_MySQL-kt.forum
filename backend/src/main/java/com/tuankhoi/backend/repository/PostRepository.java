@@ -10,16 +10,22 @@ import java.util.List;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, String> {
-    @Query(value = "SELECT p.*\n" +
-            "FROM post p\n" +
-            "JOIN (\n" +
-            "    SELECT post_id\n" +
-            "    FROM likes\n" +
-            "    GROUP BY post_id\n" +
-            "    ORDER BY COUNT(*) DESC\n" +
-            "    LIMIT 10\n" +
-            ") l ON p.id = l.post_id;", nativeQuery = true)
+    @Query(value = """
+            WITH top_liked_posts AS
+            (
+                SELECT post_id
+                FROM likes
+                GROUP BY post_id
+                ORDER BY COUNT(*) DESC
+                LIMIT 10
+            )
+            SELECT p.*
+            FROM post p
+            JOIN top_liked_posts t ON p.id = t.post_id;""", nativeQuery = true)
     List<Post> findTop10ByOrderByLikesDesc();
 
     List<Post> findByCreatedBy(String createdBy);
+
+    @Query("SELECT p FROM Post p JOIN Like l ON p.id = l.post.id WHERE l.user.id = :userID")
+    List<Post> findPostsLiked(String userID);
 }

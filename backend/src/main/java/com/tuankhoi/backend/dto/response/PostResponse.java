@@ -33,4 +33,6 @@ public class PostResponse {
     String lastModifiedBy;
 
     Set<LikeResponse> likes;
+
+    Integer countLikes;
 }

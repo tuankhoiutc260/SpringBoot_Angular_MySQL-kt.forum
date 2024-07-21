@@ -41,6 +41,13 @@ public class PostController {
                 .build();
     }
 
+    @GetMapping("/posts-liked/{userName}")
+    public APIResponse<List<PostResponse>> findPostsLiked(@PathVariable String userName) {
+        return APIResponse.<List<PostResponse>>builder()
+                .result(postService.findPostsLiked(userName))
+                .build();
+    }
+
     @GetMapping("")
     public APIResponse<List<PostResponse>> findAll() {
         return APIResponse.<List<PostResponse>>builder()

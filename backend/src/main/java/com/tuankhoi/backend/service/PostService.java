@@ -12,6 +12,8 @@ public interface PostService {
 
     List<PostResponse> findByUserName(String userName);
 
+    List<PostResponse> findPostsLiked(String userName);
+
     List<PostResponse> findAll();
 
     List<PostResponse> findTop10ByOrderByLikesDesc();

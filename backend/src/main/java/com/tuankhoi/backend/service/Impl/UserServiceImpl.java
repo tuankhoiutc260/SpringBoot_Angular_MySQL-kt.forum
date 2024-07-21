@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    @PostAuthorize("hasRole('ADMIN')")
+//    @PostAuthorize("hasRole('ADMIN')")
     @Override
     public UserResponse findByID(String userID) {
         return userRepository.findById(userID)
@@ -106,7 +106,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
     }
 
-    @PostAuthorize("hasRole('ADMIN')")
+//    @PostAuthorize("hasRole('ADMIN')")
 //    @PreAuthorize("hasAuthority('CREATE_POST')")
     @Override
     public List<UserResponse> findAll() {
@@ -133,7 +133,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    @PostAuthorize("hasRole('ADMIN')")
+//    @PostAuthorize("hasRole('ADMIN')")
     @Override
     public void deleteByID(String userID) {
         try {

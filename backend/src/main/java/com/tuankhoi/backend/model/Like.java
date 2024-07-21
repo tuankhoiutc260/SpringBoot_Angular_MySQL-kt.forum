@@ -13,7 +13,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "likes")
+@Table(name = "likes", indexes = {
+        @Index(name = "idx_likes_post_id", columnList = "post_id"),
+        @Index(name = "idx_likes_user_id", columnList = "user_id")
+})
 @EntityListeners(AuditingEntityListener.class)
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)

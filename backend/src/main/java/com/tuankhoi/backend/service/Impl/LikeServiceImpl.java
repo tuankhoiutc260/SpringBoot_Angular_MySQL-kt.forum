@@ -45,7 +45,8 @@ public class LikeServiceImpl implements LikeService {
     public Boolean isLiked(LikeRequest likeRequest) {
         Post existingPost = postRepository.findById(likeRequest.getPostID()).orElseThrow(()->new AppException(ErrorCode.POST_NOTFOUND));
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Optional<User> existingUser = userRepository.findByUserName(authentication.getName());
+//        Optional<User> existingUser = userRepository.findByUserName(authentication.getName());
+        Optional<User> existingUser = userRepository.findById(authentication.getName());
 
         if (authentication instanceof AnonymousAuthenticationToken) {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
@@ -62,7 +63,7 @@ public class LikeServiceImpl implements LikeService {
         Post existingPost = postRepository.findById(likeRequest.getPostID())
                 .orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Optional<User> existingUser = userRepository.findByUserName(authentication.getName());
+        Optional<User> existingUser = userRepository.findById(authentication.getName());
         if (existingUser.isEmpty()) {
             throw new AppException(ErrorCode.USER_NOTFOUND);
         }

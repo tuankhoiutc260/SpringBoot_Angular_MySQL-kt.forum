@@ -9,13 +9,16 @@ import com.tuankhoi.backend.model.Post;
 import com.tuankhoi.backend.repository.PostRepository;
 import com.tuankhoi.backend.service.PostService;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,16 +26,16 @@ import java.util.Base64;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+
 @Slf4j
 public class PostServiceImpl implements PostService {
-    private final PostRepository postRepository;
-    private final PostMapper postMapper;
+    PostRepository postRepository;
+    PostMapper postMapper;
 
 
-    public PostServiceImpl(PostRepository postRepository, PostMapper postMapper) {
-        this.postRepository = postRepository;
-        this.postMapper = postMapper;
-    }
+
 
     //    @PostAuthorize("@userServiceImpl.findByID(returnObject.createdBy).userName == authentication.name")
     @Override
@@ -57,19 +60,19 @@ public class PostServiceImpl implements PostService {
     public List<PostResponse> findAll() {
         return postRepository.findAll(Sort.by(Sort.Order.asc("createdDate")))
                 .stream()
-                .map(postMapper::toPostResponse)
+                .map(postMapper::toPostResponseWithCountLikes)
                 .toList();
     }
 
     @Override
     public List<PostResponse> findTop10ByOrderByLikesDesc() {
-        return postRepository.findTop10ByOrderByLikesDesc().stream().map(postMapper::toPostResponse).toList();
+        return postRepository.findTop10ByOrderByLikesDesc().stream().map(postMapper::toPostResponseWithCountLikes).toList();
     }
 
     @Override
     public PostResponse findByID(String postID) {
         return postRepository.findById(postID)
-                .map(postMapper::toPostResponse)
+                .map(postMapper::toPostResponseWithCountLikes)
                 .orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));
     }
 
@@ -77,11 +80,19 @@ public class PostServiceImpl implements PostService {
     public List<PostResponse> findByUserName(String userName) {
         return postRepository.findByCreatedBy(userName)
                 .stream()
-                .map(postMapper::toPostResponse)
+                .map(postMapper::toPostResponseWithCountLikes)
                 .toList();
     }
 
-    @PostAuthorize("@userServiceImpl.findByUserName(returnObject.createdBy).userName == authentication.name or hasRole('ADMIN')")
+    @Override
+    public List<PostResponse> findPostsLiked(String userName){
+        return postRepository.findPostsLiked(userName)
+                .stream()
+                .map(postMapper::toPostResponseWithCountLikes)
+                .toList();
+    }
+
+    @PostAuthorize("@userServiceImpl.findByID(returnObject.createdBy).userName == authentication.name or hasRole('ADMIN')")
     @Override
     public PostResponse update(String id, PostRequest postRequest) {
         try {
@@ -91,7 +102,7 @@ public class PostServiceImpl implements PostService {
                     .orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));
             existingPost.setImage(base64Image);
             postMapper.updatePost(existingPost, postRequest);
-            return postMapper.toPostResponse(postRepository.save(existingPost));
+            return postMapper.toPostResponseWithCountLikes(postRepository.save(existingPost));
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
             throw new AppException(ErrorCode.DATA_INTEGRITY_VIOLATION, "Failed to update post due to database constraint: " + e.getMessage(), e);
         } catch (AppException e) {
