@@ -3,6 +3,7 @@ package com.tuankhoi.backend.controller;
 import com.nimbusds.jose.JOSEException;
 import com.tuankhoi.backend.dto.request.IntrospectRequest;
 import com.tuankhoi.backend.dto.request.LogoutRequest;
+import com.tuankhoi.backend.dto.request.RefreshRequest;
 import com.tuankhoi.backend.dto.response.APIResponse;
 import com.tuankhoi.backend.dto.request.AuthenticationRequest;
 import com.tuankhoi.backend.dto.response.AuthenticationResponse;
@@ -46,6 +47,15 @@ public class AuthenticationController {
             throws ParseException, JOSEException {
         authenticationService.logout(request);
         return APIResponse.<Void>builder()
+                .build();
+    }
+
+    @PostMapping("/refresh-token")
+    public APIResponse<AuthenticationResponse> refreshToken(@RequestBody RefreshRequest refreshRequest)
+            throws ParseException, JOSEException {
+        var result = authenticationService.refreshToken(refreshRequest);
+        return APIResponse.<AuthenticationResponse>builder()
+                .result(result)
                 .build();
     }
 
