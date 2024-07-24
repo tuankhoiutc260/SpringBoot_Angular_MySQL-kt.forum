@@ -57,5 +57,6 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private Set<Like> likes = new HashSet<>();
 
-//    private Set<Comment> comments;
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+    private Set<Comment> comments = new HashSet<>();
 }

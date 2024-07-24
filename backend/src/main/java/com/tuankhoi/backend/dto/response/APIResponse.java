@@ -12,6 +12,8 @@ import lombok.*;
 public class APIResponse <T>{
     @Builder.Default
     private int code = 1000;
+
     private String message;
+
     private T result;
 }

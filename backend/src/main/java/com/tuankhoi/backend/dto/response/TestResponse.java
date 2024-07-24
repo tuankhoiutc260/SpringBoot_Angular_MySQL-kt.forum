@@ -6,6 +6,8 @@ import lombok.*;
 @NoArgsConstructor
 public class TestResponse {
     private Long id;
+
     private String title;
+
     private String testImage;
 }

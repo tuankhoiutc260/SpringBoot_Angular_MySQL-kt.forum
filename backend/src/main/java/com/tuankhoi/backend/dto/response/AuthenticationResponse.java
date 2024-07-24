@@ -9,5 +9,6 @@ import lombok.*;
 @Builder
 public class AuthenticationResponse {
     private String token;
+
     private boolean authenticated;
 }

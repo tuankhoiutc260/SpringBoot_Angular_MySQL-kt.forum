@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.tuankhoi.backend.BackendApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 15.42 s -- in com.tuankhoi.backend.BackendApplicationTests

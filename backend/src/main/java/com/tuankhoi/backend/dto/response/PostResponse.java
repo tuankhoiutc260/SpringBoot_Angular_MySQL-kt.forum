@@ -35,4 +35,7 @@ public class PostResponse {
     Set<LikeResponse> likes;
 
     Integer countLikes;
+
+    Set<CommentResponse> comments;
+
 }

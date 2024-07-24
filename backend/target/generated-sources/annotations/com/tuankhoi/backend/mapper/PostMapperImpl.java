@@ -1,8 +1,10 @@
 package com.tuankhoi.backend.mapper;
 
 import com.tuankhoi.backend.dto.request.PostRequest;
+import com.tuankhoi.backend.dto.response.CommentResponse;
 import com.tuankhoi.backend.dto.response.LikeResponse;
 import com.tuankhoi.backend.dto.response.PostResponse;
+import com.tuankhoi.backend.model.Comment;
 import com.tuankhoi.backend.model.Like;
 import com.tuankhoi.backend.model.Post;
 import java.util.LinkedHashSet;
@@ -56,6 +58,7 @@ public class PostMapperImpl implements PostMapper {
         postResponse.lastModifiedDate( post.getLastModifiedDate() );
         postResponse.lastModifiedBy( post.getLastModifiedBy() );
         postResponse.likes( likeSetToLikeResponseSet( post.getLikes() ) );
+        postResponse.comments( commentSetToCommentResponseSet( post.getComments() ) );
 
         return postResponse.build();
     }
@@ -107,6 +110,36 @@ public class PostMapperImpl implements PostMapper {
         Set<LikeResponse> set1 = new LinkedHashSet<LikeResponse>( Math.max( (int) ( set.size() / .75f ) + 1, 16 ) );
         for ( Like like : set ) {
             set1.add( likeToLikeResponse( like ) );
+        }
+
+        return set1;
+    }
+
+    protected CommentResponse commentToCommentResponse(Comment comment) {
+        if ( comment == null ) {
+            return null;
+        }
+
+        CommentResponse.CommentResponseBuilder commentResponse = CommentResponse.builder();
+
+        commentResponse.id( comment.getId() );
+        commentResponse.content( comment.getContent() );
+        commentResponse.createdDate( comment.getCreatedDate() );
+        commentResponse.createdBy( comment.getCreatedBy() );
+        commentResponse.lastModifiedDate( comment.getLastModifiedDate() );
+        commentResponse.lastModifiedBy( comment.getLastModifiedBy() );
+
+        return commentResponse.build();
+    }
+
+    protected Set<CommentResponse> commentSetToCommentResponseSet(Set<Comment> set) {
+        if ( set == null ) {
+            return null;
+        }
+
+        Set<CommentResponse> set1 = new LinkedHashSet<CommentResponse>( Math.max( (int) ( set.size() / .75f ) + 1, 16 ) );
+        for ( Comment comment : set ) {
+            set1.add( commentToCommentResponse( comment ) );
         }
 
         return set1;

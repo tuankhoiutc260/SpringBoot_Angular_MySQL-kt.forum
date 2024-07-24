@@ -36,6 +36,9 @@ public enum ErrorCode {
     POST_CONTENT_NOTBLANK(3003, "Content cannot be blank", HttpStatus.BAD_REQUEST),
     POST_TAGS_NOTEMPTY(3004, "Tags cannot be empty", HttpStatus.BAD_REQUEST),
     POST_NOTFOUND(3005, "Post not found", HttpStatus.NOT_FOUND),
+    COMMENT_CONTENT_NOTBLANK(3006, "Comment cannot be blank", HttpStatus.BAD_REQUEST),
+    COMMENT_POST_ID_NOTBLANK(3007, "Post ID of Comment cannot be blank", HttpStatus.BAD_REQUEST),
+
 
     // PERMISSION
     PERMISSION_EXISTED(4001, "Permission existed", HttpStatus.BAD_REQUEST),

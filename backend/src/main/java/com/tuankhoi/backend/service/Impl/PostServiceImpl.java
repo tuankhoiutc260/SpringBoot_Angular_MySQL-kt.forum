@@ -9,16 +9,12 @@ import com.tuankhoi.backend.model.Post;
 import com.tuankhoi.backend.repository.PostRepository;
 import com.tuankhoi.backend.service.PostService;
 import jakarta.persistence.EntityNotFoundException;
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PostAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,15 +23,10 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-
 @Slf4j
 public class PostServiceImpl implements PostService {
-    PostRepository postRepository;
-    PostMapper postMapper;
-
-
-
+    private final PostRepository postRepository;
+    private final PostMapper postMapper;
 
     //    @PostAuthorize("@userServiceImpl.findByID(returnObject.createdBy).userName == authentication.name")
     @Override
