@@ -10,7 +10,7 @@ import { PostResponse } from '../model/response/post-response';
   providedIn: 'root'
 })
 export class PostApiService {
-  private apiURL = API_URL + 'api/v1/posts'
+  private apiURL = API_URL + 'posts'
 
   constructor(private http: HttpClient) { }
 
@@ -61,9 +61,9 @@ export class PostApiService {
     return this.http.put<ApiResponse<PostResponse>>(url, formData);
   }
 
-  delete(postRequestID: string): Observable<ApiResponse<PostResponse>> {
+  delete(postRequestID: string): Observable<ApiResponse<void>> {
     const url = `${this.apiURL}/${postRequestID}`;
-    return this.http.delete<ApiResponse<PostResponse>>(url);
+    return this.http.delete<ApiResponse<void>>(url);
   }
 
   save(postRequestID: string | null, postRequest: PostRequest): Observable<ApiResponse<PostResponse>> {

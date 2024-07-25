@@ -10,7 +10,7 @@ import { LikeResponse } from '../model/response/likeResponse';
   providedIn: 'root'
 })
 export class LikeApiService {
-  private apiURL = API_URL + 'api/v1/likes'
+  private apiURL = API_URL + 'likes'
 
   constructor(private http: HttpClient) { }
 

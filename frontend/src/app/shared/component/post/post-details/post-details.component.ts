@@ -12,12 +12,12 @@ import { UserResponse } from '../../../../api/model/response/user-response';
 @Component({
   selector: 'app-post-details',
   templateUrl: './post-details.component.html',
-  styleUrls: ['./post-details.component.scss'] ,
+  styleUrls: ['./post-details.component.scss'],
   providers: [MessageService]
 })
 export class PostDetailsComponent implements OnInit, OnDestroy {
   postID: string = '';
-  userName: string = ''
+  userName: string = '';
   postResponse: PostResponse = {};
   postAuthorInfo: UserResponse | null = null;
   private subscription: Subscription = new Subscription();
@@ -41,21 +41,21 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
       this.postAuthorInfo = info;
     });
   }
-  
+
   onLikeFailed() {
     this.messageService.add({ severity: 'error', summary: 'Error', detail: 'You should Sign in first' });
   }
-  
+
   isLogin(): boolean {
-    return this.authService.getCurrentUserName() ? true : false
+    return this.authService.getCurrentUserName() ? true : false;
   }
 
   getPostDetails(id: string) {
     const sub = this.postApiService.findByID(id).subscribe({
       next: (apiResponse: ApiResponse<PostResponse>) => {
         const post = apiResponse.result;
-        if(post){
-          this.postResponse = post
+        if (post) {
+          this.postResponse = post;
         } else {
           console.error('No result found in response:', apiResponse.message);
         }

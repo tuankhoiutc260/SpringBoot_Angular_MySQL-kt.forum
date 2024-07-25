@@ -13,7 +13,7 @@ import { LogoutRequest } from '../model/request/logout-request';
   providedIn: 'root'
 })
 export class AuthApiService {
-  private apiURL = API_URL + 'api/v1/auth';
+  private apiURL = API_URL + 'auth';
 
   constructor(private http: HttpClient) { } 
 

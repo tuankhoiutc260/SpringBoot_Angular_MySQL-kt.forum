@@ -7,6 +7,8 @@ import { TruncatePipe } from './pipe/truncate.pipe';
 import { UserIdToUserNamePipe } from './pipe/user-id-to-user-name.pipe';
 import { UserNameToUserIdPipe } from './pipe/user-name-to-user-id.pipe';
 import { UserIdToFullNamePipe } from './pipe/user-id-to-full-name.pipe';
+import { UserIdToUserImagePipe } from './pipe/user-id-to-user-image.pipe';
+import { TimeAgoPipe } from './pipe/time-ago.pipe';
 
 
 
@@ -19,6 +21,8 @@ import { UserIdToFullNamePipe } from './pipe/user-id-to-full-name.pipe';
     UserIdToUserNamePipe,
     UserNameToUserIdPipe,
     UserIdToFullNamePipe,
+    UserIdToUserImagePipe,
+    TimeAgoPipe
 
   ],
   imports: [
@@ -31,7 +35,9 @@ import { UserIdToFullNamePipe } from './pipe/user-id-to-full-name.pipe';
     TruncatePipe,
     UserIdToUserNamePipe,
     UserNameToUserIdPipe,
-    UserIdToFullNamePipe
+    UserIdToFullNamePipe,
+    UserIdToUserImagePipe,
+    TimeAgoPipe
 
   ]
 })

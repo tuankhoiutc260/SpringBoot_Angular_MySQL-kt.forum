@@ -24,6 +24,8 @@
     <app-interact [isLogin]="isLogin()" [countLikes]="postResponse.countLikes!" *ngIf="postResponse.id"
         [postID]="postResponse.id" (likeFailed)="onLikeFailed()">
     </app-interact>
+
+    <app-comments [postID]="postID"></app-comments>
 </div>
 
 <p-toast></p-toast>

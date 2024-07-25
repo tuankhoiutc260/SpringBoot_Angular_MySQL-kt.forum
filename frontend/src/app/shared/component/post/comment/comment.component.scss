@@ -1,0 +1,20 @@
+:host ::ng-deep .p-inputtext {
+    padding: 0.75rem 0.75rem 2rem 0.75rem;
+}
+
+
+.cont-comment-request{
+    position: relative;
+
+    
+    .comment-request-length{
+        color: #4b5563;
+        position: absolute;
+        bottom: 0.5rem;
+        right: 0.5rem;
+    }
+}
+
+.comment-response-content{
+    word-break: break-word; 
+}

@@ -10,7 +10,7 @@ import { PermissionResponse } from '../model/response/permission-response';
   providedIn: 'root'
 })
 export class PermissionApiService {
-  private apiURL = API_URL + 'api/v1/permissions'
+  private apiURL = API_URL + 'permissions'
 
   constructor(private http: HttpClient) { }
 

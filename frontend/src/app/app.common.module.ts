@@ -10,9 +10,9 @@ import { PostComponent } from './shared/component/post/post/post.component';
 import { FeedComponent } from './shared/component/page/feed/feed.component';
 import { PostDetailsComponent } from './shared/component/post/post-details/post-details.component';
 import { InteractComponent } from './shared/component/post/interact/interact.component';
-import { MessageService } from 'primeng/api';
 import { ProfileComponent } from './shared/component/page/profile/profile.component';
 import { CreateUpdatePostComponent } from './shared/component/post/create-update-post/create-update-post.component';
+import { CommentsComponent } from './shared/component/post/comment/comment.component';
 
 
 @NgModule({
@@ -20,7 +20,7 @@ import { CreateUpdatePostComponent } from './shared/component/post/create-update
     CommonModule,
     ReactiveFormsModule,
     PrimengModule,
-    CoreModule
+    CoreModule,
 ],
     exports: [
         PrimengModule,
@@ -39,7 +39,8 @@ import { CreateUpdatePostComponent } from './shared/component/post/create-update
         PostComponent,
         PostDetailsComponent,
         InteractComponent,
-        CreateUpdatePostComponent
+        CreateUpdatePostComponent,
+        CommentsComponent,
     ],
     declarations: [
         // layout
@@ -55,7 +56,8 @@ import { CreateUpdatePostComponent } from './shared/component/post/create-update
         PostComponent,
         PostDetailsComponent,
         InteractComponent,
-        CreateUpdatePostComponent
+        CreateUpdatePostComponent,
+        CommentsComponent,
     ]
 })
 
@@ -63,7 +65,7 @@ export class AppCommonModule {
     static forRoot(): ModuleWithProviders<any> {
         return {
             ngModule: AppCommonModule,
-            providers: []
+            providers: [],
         };
     }
 }
