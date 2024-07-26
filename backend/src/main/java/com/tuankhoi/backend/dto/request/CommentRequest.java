@@ -11,9 +11,11 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CommentRequest {
-    @NotBlank(message = "COMMENT_CONTENT_NOTBLANK")
+//    @NotBlank(message = "COMMENT_CONTENT_NOTBLANK")
     String content;
 
-    @NotBlank(message = "COMMENT_POST_ID_NOTBLANK")
+//    @NotBlank(message = "COMMENT_POST_ID_NOTBLANK")
     String postID;
+
+    String parentId;
 }

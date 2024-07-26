@@ -34,7 +34,7 @@ public class Post {
     @Column(nullable = false)
     String title;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", nullable = false)
     String content;
 
     @ElementCollection

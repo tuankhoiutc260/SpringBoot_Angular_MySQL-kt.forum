@@ -39,9 +39,15 @@ public class CommentServiceImpl implements CommentService {
             Post post = postRepository.findById(commentRequest.getPostID())
                     .orElseThrow(() -> new AppException(ErrorCode.COMMENT_POST_ID_NOTBLANK));
 
-            Comment newcomment = commentMapper.toEntity(commentRequest);
-            newcomment.setPost(post);
-            Comment savedComment = commentRepository.save(newcomment);
+            Comment newComment = commentMapper.toEntity(commentRequest);
+            newComment.setPost(post);
+
+            if (commentRequest.getParentId() != null) {
+                Comment parentComment = commentRepository.findById(commentRequest.getParentId())
+                        .orElseThrow(() -> new AppException(ErrorCode.COMMENT_PARENT_ID_NOTBLANK));
+                newComment.setParent(parentComment);
+            }
+            Comment savedComment = commentRepository.save(newComment);
 
             CommentResponse response = commentMapper.toResponse(savedComment);
 

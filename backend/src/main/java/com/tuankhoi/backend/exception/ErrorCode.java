@@ -38,6 +38,7 @@ public enum ErrorCode {
     POST_NOTFOUND(3005, "Post not found", HttpStatus.NOT_FOUND),
     COMMENT_CONTENT_NOTBLANK(3006, "Comment cannot be blank", HttpStatus.BAD_REQUEST),
     COMMENT_POST_ID_NOTBLANK(3007, "Post ID of Comment cannot be blank", HttpStatus.BAD_REQUEST),
+    COMMENT_PARENT_ID_NOTBLANK(3008, "Comment Parent ID cannot be blank", HttpStatus.BAD_REQUEST),
 
 
     // PERMISSION
