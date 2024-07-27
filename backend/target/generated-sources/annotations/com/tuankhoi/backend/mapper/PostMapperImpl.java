@@ -7,7 +7,9 @@ import com.tuankhoi.backend.dto.response.PostResponse;
 import com.tuankhoi.backend.model.Comment;
 import com.tuankhoi.backend.model.Like;
 import com.tuankhoi.backend.model.Post;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
@@ -115,6 +117,19 @@ public class PostMapperImpl implements PostMapper {
         return set1;
     }
 
+    protected List<CommentResponse> commentListToCommentResponseList(List<Comment> list) {
+        if ( list == null ) {
+            return null;
+        }
+
+        List<CommentResponse> list1 = new ArrayList<CommentResponse>( list.size() );
+        for ( Comment comment : list ) {
+            list1.add( commentToCommentResponse( comment ) );
+        }
+
+        return list1;
+    }
+
     protected CommentResponse commentToCommentResponse(Comment comment) {
         if ( comment == null ) {
             return null;
@@ -124,6 +139,7 @@ public class PostMapperImpl implements PostMapper {
 
         commentResponse.id( comment.getId() );
         commentResponse.content( comment.getContent() );
+        commentResponse.replies( commentListToCommentResponseList( comment.getReplies() ) );
         commentResponse.createdDate( comment.getCreatedDate() );
         commentResponse.createdBy( comment.getCreatedBy() );
         commentResponse.lastModifiedDate( comment.getLastModifiedDate() );

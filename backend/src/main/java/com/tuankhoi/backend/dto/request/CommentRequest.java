@@ -17,5 +17,5 @@ public class CommentRequest {
 //    @NotBlank(message = "COMMENT_POST_ID_NOTBLANK")
     String postID;
 
-    String parentId;
+    String parentID;
 }

@@ -56,14 +56,14 @@ public class UserController {
     }
 
     @PostMapping
-    public APIResponse<UserResponse> create(@RequestBody @Valid UserRequest userRequest){
+    public APIResponse<UserResponse> create(@ModelAttribute @Valid UserRequest userRequest){
         return APIResponse.<UserResponse>builder()
                 .result(userService.create(userRequest))
                 .build();
     }
 
     @PutMapping("/{id}")
-    public APIResponse<UserResponse> update(@PathVariable String id, @RequestBody UserRequest userRequest){
+    public APIResponse<UserResponse> update(@PathVariable String id, @ModelAttribute UserRequest userRequest){
         return APIResponse.<UserResponse>builder()
                 .result(userService.update(id, userRequest))
                 .build();

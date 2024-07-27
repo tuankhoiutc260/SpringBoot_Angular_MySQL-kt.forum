@@ -10,5 +10,7 @@ public interface CommentService {
 
     List<CommentResponse> findByPostID(String postID) ;
 
+    List<CommentResponse> findByParentID(String parentID) ;
+
     void delete(String commentID) ;
 }

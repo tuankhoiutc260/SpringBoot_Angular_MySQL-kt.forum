@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, String> {
     List<Comment> findByPostIdOrderByCreatedDateDesc(String postId);
+
+    List<Comment> findByParentId(String parentID);
 }

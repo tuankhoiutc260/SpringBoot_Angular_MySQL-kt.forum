@@ -36,16 +36,20 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public CommentResponse create(CommentRequest commentRequest) {
         try {
+//            Comment existingComment = commentRepository.findById(commentRequest.getPostID()).o
             Post post = postRepository.findById(commentRequest.getPostID())
                     .orElseThrow(() -> new AppException(ErrorCode.COMMENT_POST_ID_NOTBLANK));
 
             Comment newComment = commentMapper.toEntity(commentRequest);
             newComment.setPost(post);
 
-            if (commentRequest.getParentId() != null) {
-                Comment parentComment = commentRepository.findById(commentRequest.getParentId())
+            if (commentRequest.getParentID() != null) {
+                Comment parentComment = commentRepository.findById(commentRequest.getParentID())
                         .orElseThrow(() -> new AppException(ErrorCode.COMMENT_PARENT_ID_NOTBLANK));
                 newComment.setParent(parentComment);
+            }
+            else{
+                newComment.setParent(null);
             }
             Comment savedComment = commentRepository.save(newComment);
 
@@ -68,6 +72,13 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<CommentResponse> findByPostID(String postID) {
         return commentRepository.findByPostIdOrderByCreatedDateDesc(postID).stream()
+                .map(commentMapper::toResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CommentResponse> findByParentID(String parentID) {
+        return commentRepository.findByParentId(parentID).stream()
                 .map(commentMapper::toResponse)
                 .collect(Collectors.toList());
     }

@@ -19,7 +19,7 @@ public class CommentResponse {
 
     String postID;
 
-    String parentId;
+    String parentID;
 
     List<CommentResponse> replies;
 

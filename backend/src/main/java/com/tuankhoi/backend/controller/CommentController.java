@@ -29,6 +29,13 @@ public class CommentController {
                 .build();
     }
 
+    @GetMapping("/parent-comment/{parentID}")
+    public APIResponse<List<CommentResponse>> findByParentID(@PathVariable String parentID){
+        return APIResponse.<List<CommentResponse>>builder()
+                .result(commentService.findByParentID(parentID))
+                .build();
+    }
+
     @DeleteMapping("/{commentID}")
     public APIResponse<Void> delete(@PathVariable String commentID){
         commentService.delete(commentID);

@@ -108,7 +108,7 @@ public class ApplicationInitConfig {
             log.warn("Admin role not found, cannot create admin user");
             return;
         }
-        if (userRepository.findByUserName("admin").isEmpty()) {
+        if (userRepository.findByUserName("admin1").isEmpty()) {
             User user = User.builder()
                     .email("admin@gmail.com")
                     .userName("admin")
@@ -118,7 +118,16 @@ public class ApplicationInitConfig {
                     .role(adminRole)
                     .active(true)
                     .build();
-            userRepository.save(user);
+            User user2 = User.builder()
+                    .email("admin1@gmail.com")
+                    .userName("admin1")
+                    .password(passwordEncoder.encode("admin"))
+                    .fullName("Admin1")
+                    .image(ImageUtil.getImageAsBase64(avatarAdminImagePath))
+                    .role(adminRole)
+                    .active(true)
+                    .build();
+            userRepository.save(user2);
             log.info("Admin user has been created with default Email: admin@gmail.com and Password: admin");
         } else {
             log.info("Admin user already exists, skipping creation.");

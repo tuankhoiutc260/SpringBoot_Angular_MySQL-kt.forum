@@ -40,7 +40,7 @@ public class CommentMapperImpl implements CommentMapper {
         CommentResponse.CommentResponseBuilder commentResponse = CommentResponse.builder();
 
         commentResponse.postID( commentPostId( comment ) );
-        commentResponse.parentId( commentParentId( comment ) );
+        commentResponse.parentID( commentParentId( comment ) );
         commentResponse.replies( commentListToCommentResponseList( comment.getReplies() ) );
         commentResponse.id( comment.getId() );
         commentResponse.content( comment.getContent() );
@@ -71,7 +71,7 @@ public class CommentMapperImpl implements CommentMapper {
 
         Comment.CommentBuilder comment = Comment.builder();
 
-        comment.id( commentRequest.getParentId() );
+        comment.id( commentRequest.getParentID() );
 
         return comment.build();
     }
