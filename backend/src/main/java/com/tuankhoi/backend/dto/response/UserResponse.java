@@ -27,13 +27,13 @@ public class UserResponse {
 
     boolean active = true;
 
-    LocalDateTime createdDate;
-
     String createdBy;
 
-    LocalDateTime lastModifiedDate;
+    LocalDateTime createdDate;
 
     String lastModifiedBy;
+
+    LocalDateTime lastModifiedDate;
 
     RoleResponse role;
 }

@@ -5,11 +5,11 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -23,46 +23,32 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Comment {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
 
-//    @Column(columnDefinition = "TEXT", nullable = false)
-//    String content;
-
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", nullable = false)
     String content;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "post_id", nullable = false)
-//    Post post;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
+    Comment parentComment;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     Post post;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "parent_id")
-//    Comment parent;
-
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "parent_id")
-    private Comment parent;
-
-
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<Comment> replies;
-
-    @CreatedDate
-    @Column(updatable = false)
-    LocalDateTime createdDate;
+    @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL)
+    List<Comment> replies = new ArrayList<>();
 
     @CreatedBy
     @Column(updatable = false)
     String createdBy;
 
-    @LastModifiedDate
-    LocalDateTime lastModifiedDate;
+    @CreatedDate
+    @Column(updatable = false)
+    LocalDateTime createdDate;
 
-    @LastModifiedBy
-    String lastModifiedBy;
+    @LastModifiedDate
+    @Column(name = "last_modified_date")
+    LocalDateTime lastModifiedDate;
 }

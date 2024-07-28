@@ -13,7 +13,7 @@ import java.util.List;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CommentResponse {
-    String id;
+    Long id;
 
     String content;
 
@@ -23,11 +23,9 @@ public class CommentResponse {
 
     List<CommentResponse> replies;
 
-    LocalDateTime createdDate;
-
     String createdBy;
 
-    LocalDateTime lastModifiedDate;
+    LocalDateTime createdDate;
 
-    String lastModifiedBy;
+    LocalDateTime lastModifiedDate;
 }

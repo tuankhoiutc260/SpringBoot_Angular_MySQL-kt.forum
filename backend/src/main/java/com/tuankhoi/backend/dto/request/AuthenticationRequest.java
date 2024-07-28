@@ -12,5 +12,6 @@ public class AuthenticationRequest {
     @NotBlank(message = "USER_NAME_NOTBLANK")
     private String userName;
 
+    @NotBlank(message = "PASSWORD_NOTBLANK")
     private String password;
 }

@@ -25,7 +25,7 @@ public class CommentMapperImpl implements CommentMapper {
         Comment.CommentBuilder comment = Comment.builder();
 
         comment.post( commentRequestToPost( request ) );
-        comment.parent( commentRequestToComment( request ) );
+        comment.parentComment( commentRequestToComment( request ) );
         comment.content( request.getContent() );
 
         return comment.build();
@@ -40,14 +40,16 @@ public class CommentMapperImpl implements CommentMapper {
         CommentResponse.CommentResponseBuilder commentResponse = CommentResponse.builder();
 
         commentResponse.postID( commentPostId( comment ) );
-        commentResponse.parentID( commentParentId( comment ) );
+        Long id1 = commentParentCommentId( comment );
+        if ( id1 != null ) {
+            commentResponse.parentID( String.valueOf( id1 ) );
+        }
         commentResponse.replies( commentListToCommentResponseList( comment.getReplies() ) );
         commentResponse.id( comment.getId() );
         commentResponse.content( comment.getContent() );
-        commentResponse.createdDate( comment.getCreatedDate() );
         commentResponse.createdBy( comment.getCreatedBy() );
+        commentResponse.createdDate( comment.getCreatedDate() );
         commentResponse.lastModifiedDate( comment.getLastModifiedDate() );
-        commentResponse.lastModifiedBy( comment.getLastModifiedBy() );
 
         return commentResponse.build();
     }
@@ -71,7 +73,7 @@ public class CommentMapperImpl implements CommentMapper {
 
         Comment.CommentBuilder comment = Comment.builder();
 
-        comment.id( commentRequest.getParentID() );
+        comment.id( commentRequest.getParentCommentID() );
 
         return comment.build();
     }
@@ -91,15 +93,15 @@ public class CommentMapperImpl implements CommentMapper {
         return id;
     }
 
-    private String commentParentId(Comment comment) {
+    private Long commentParentCommentId(Comment comment) {
         if ( comment == null ) {
             return null;
         }
-        Comment parent = comment.getParent();
-        if ( parent == null ) {
+        Comment parentComment = comment.getParentComment();
+        if ( parentComment == null ) {
             return null;
         }
-        String id = parent.getId();
+        Long id = parentComment.getId();
         if ( id == null ) {
             return null;
         }

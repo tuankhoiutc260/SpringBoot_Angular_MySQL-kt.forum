@@ -10,11 +10,12 @@ import org.mapstruct.Mapping;
 public interface CommentMapper {
 
     @Mapping(target = "post.id", source = "postID")
-    @Mapping(target = "parent.id", source = "parentID")
+    @Mapping(target = "parentComment.id", source = "parentCommentID")
     Comment toEntity(CommentRequest request);
 
     @Mapping(target = "postID", source = "post.id")
-    @Mapping(target = "parentID", source = "parent.id")
+    @Mapping(target = "parentID", source = "parentComment.id")
+//    @Mapping(target = "replies", ignore = true)
     @Mapping(target = "replies", source = "replies")
     CommentResponse toResponse(Comment comment);
 }

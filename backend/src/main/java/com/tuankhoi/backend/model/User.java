@@ -42,19 +42,19 @@ public class User {
 
     boolean active = true;
 
-    @CreatedDate
-    @Column(updatable = false)
-    LocalDateTime createdDate;
-
     @CreatedBy
     @Column(updatable = false)
     String createdBy;
 
-    @LastModifiedDate
-    LocalDateTime lastModifiedDate;
+    @CreatedDate
+    @Column(updatable = false)
+    LocalDateTime createdDate;
 
     @LastModifiedBy
     String lastModifiedBy;
+
+    @LastModifiedDate
+    LocalDateTime lastModifiedDate;
 
     @ManyToOne
     @JoinColumn(name = "role_id")

@@ -18,28 +18,32 @@ public class CommentController {
     @PostMapping
     public APIResponse<CommentResponse> create(@RequestBody CommentRequest commentRequest){
         return APIResponse.<CommentResponse>builder()
-                .result(commentService.create(commentRequest))
+                .result(commentService.addComment(commentRequest))
                 .build();
     }
 
     @GetMapping("/post/{postID}")
-    public APIResponse<List<CommentResponse>> findByPostID(@PathVariable String postID){
+    public APIResponse<List<CommentResponse>> getCommentListByPostID(@PathVariable String postID,
+                                                                     @RequestParam(defaultValue = "0") int page,
+                                                                     @RequestParam(defaultValue = "5") int size){
         return APIResponse.<List<CommentResponse>>builder()
-                .result(commentService.findByPostID(postID))
+                .result(commentService.getCommentsByPostId(postID, page, size))
                 .build();
     }
 
-    @GetMapping("/parent-comment/{parentID}")
-    public APIResponse<List<CommentResponse>> findByParentID(@PathVariable String parentID){
+    @GetMapping("/{commentID}/replies")
+    public APIResponse<List<CommentResponse>> getReplyCommentListByCommentID(@PathVariable Long commentID,
+                                                                             @RequestParam(defaultValue = "0") int page,
+                                                                             @RequestParam(defaultValue = "5") int size){
         return APIResponse.<List<CommentResponse>>builder()
-                .result(commentService.findByParentID(parentID))
+                .result(commentService.getRepliesByCommentId(commentID, page, size))
                 .build();
     }
 
-    @DeleteMapping("/{commentID}")
-    public APIResponse<Void> delete(@PathVariable String commentID){
-        commentService.delete(commentID);
-        return APIResponse.<Void>builder()
-                .build();
-    }
+//    @DeleteMapping("/{commentID}")
+//    public APIResponse<Void> delete(@PathVariable String commentID){
+//        commentService.delete(commentID);
+//        return APIResponse.<Void>builder()
+//                .build();
+//    }
 }

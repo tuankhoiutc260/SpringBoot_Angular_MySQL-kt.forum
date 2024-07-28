@@ -40,19 +40,19 @@ public class Post {
     @ElementCollection
     Set<String> tags = new HashSet<>();
 
-    @CreatedDate
-    @Column(updatable = false)
-    LocalDateTime createdDate;
-
     @CreatedBy
     @Column(updatable = false)
     String createdBy;
 
-    @LastModifiedDate
-    LocalDateTime lastModifiedDate;
+    @CreatedDate
+    @Column(updatable = false)
+    LocalDateTime createdDate;
 
     @LastModifiedBy
     String lastModifiedBy;
+
+    @LastModifiedDate
+    LocalDateTime lastModifiedDate;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private Set<Like> likes = new HashSet<>();

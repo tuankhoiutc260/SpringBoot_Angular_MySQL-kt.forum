@@ -140,10 +140,9 @@ public class PostMapperImpl implements PostMapper {
         commentResponse.id( comment.getId() );
         commentResponse.content( comment.getContent() );
         commentResponse.replies( commentListToCommentResponseList( comment.getReplies() ) );
-        commentResponse.createdDate( comment.getCreatedDate() );
         commentResponse.createdBy( comment.getCreatedBy() );
+        commentResponse.createdDate( comment.getCreatedDate() );
         commentResponse.lastModifiedDate( comment.getLastModifiedDate() );
-        commentResponse.lastModifiedBy( comment.getLastModifiedBy() );
 
         return commentResponse.build();
     }

@@ -2,6 +2,7 @@ package com.tuankhoi.backend.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Getter
 @Setter
@@ -9,11 +10,12 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class APIResponse <T>{
     @Builder.Default
-    private int code = 1000;
+    int code = 1000;
 
-    private String message;
+    String message;
 
-    private T result;
+    T result;
 }
