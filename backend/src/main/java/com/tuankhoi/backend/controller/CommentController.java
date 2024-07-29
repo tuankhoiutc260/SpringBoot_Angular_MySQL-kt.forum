@@ -40,6 +40,22 @@ public class CommentController {
                 .build();
     }
 
+    @GetMapping("/{commentID}/all-replies")
+    public APIResponse<List<CommentResponse>> getAllRepliesForComment(@PathVariable Long commentID,
+                                                                      @RequestParam(defaultValue = "0") int page,
+                                                                      @RequestParam(defaultValue = "5") int size) {
+        return APIResponse.<List<CommentResponse>>builder()
+                .result(commentService.getAllRepliesByCommentID(commentID, page, size))
+                .build();
+    }
+
+//    @GetMapping("/{commentID}/all-replies")
+//    public APIResponse<List<CommentResponse>> getAllRepliesByCommentID(@PathVariable Long commentID) {
+//        return APIResponse.<List<CommentResponse>>builder()
+//                .result(commentService.getAllRepliesByCommentID(commentID))
+//                .build();
+//    }
+
 //    @DeleteMapping("/{commentID}")
 //    public APIResponse<Void> delete(@PathVariable String commentID){
 //        commentService.delete(commentID);

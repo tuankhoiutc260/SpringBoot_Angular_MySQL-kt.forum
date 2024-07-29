@@ -15,7 +15,6 @@ public interface CommentMapper {
 
     @Mapping(target = "postID", source = "post.id")
     @Mapping(target = "parentID", source = "parentComment.id")
-//    @Mapping(target = "replies", ignore = true)
     @Mapping(target = "replies", source = "replies")
     CommentResponse toResponse(Comment comment);
 }
