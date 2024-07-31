@@ -17,7 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -61,45 +60,11 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<CommentResponse> getRepliesByCommentId(Long commentId, int page, int size) {
+    public List<CommentResponse> getAllReplyCommentsByCommentId(Long commentId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        List<Comment> replyList = commentRepository.findByParentCommentIdOrderByCreatedDateDesc(commentId, pageable);
-        return replyList.stream().map(commentMapper::toResponse).collect(Collectors.toList());
+        List<Comment> commentList = commentRepository.findAllReplyCommentsByCommentId(commentId, pageable);
+        return commentList.stream().map(commentMapper::toResponse).collect(Collectors.toList());
     }
-
-    @Override
-    public List<CommentResponse> getAllRepliesByCommentID(Long commentId, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        List<Comment> allReplies = new ArrayList<>();
-
-        List<Comment> directReplies = commentRepository.findByParentCommentIdOrderByCreatedDateDesc(commentId, pageable);
-        allReplies.addAll(directReplies);
-
-        // Lấy replies của replies (đệ quy)
-        for (Comment reply : directReplies) {
-            allReplies.addAll(getAllRepliesRecursive(reply.getId(), pageable));
-        }
-
-        return allReplies.stream().map(commentMapper::toResponse).collect(Collectors.toList());
-    }
-
-    private List<Comment> getAllRepliesRecursive(Long commentId, Pageable pageable) {
-        List<Comment> replies = new ArrayList<>();
-        List<Comment> directReplies = commentRepository.findByParentCommentIdOrderByCreatedDateDesc(commentId, pageable);
-        replies.addAll(directReplies);
-
-        for (Comment reply : directReplies) {
-            replies.addAll(getAllRepliesRecursive(reply.getId(), pageable));
-        }
-
-        return replies;
-    }
-
-//    @Override
-//    public List<CommentResponse> getAllRepliesByCommentID(Long commentID) {
-//        List<Comment> allReplies = commentRepository.findAllByParentCommentIdOrderByCreatedDateDesc(commentID);
-//        return allReplies.stream().map(commentMapper::toResponse).collect(Collectors.toList());
-//    }
 }
 
 

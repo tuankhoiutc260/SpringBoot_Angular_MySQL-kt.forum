@@ -10,7 +10,7 @@ public interface CommentService {
 
     List<CommentResponse> getCommentsByPostId(String postId, int page, int size);
 
-    List<CommentResponse> getRepliesByCommentId(Long commentId, int page, int size);
+//    List<CommentResponse> getRepliesByCommentId(Long commentId, int page, int size);
 
-    List<CommentResponse> getAllRepliesByCommentID(Long commentId, int page, int size);
+    List<CommentResponse> getAllReplyCommentsByCommentId(Long commentId, int page, int size);
 }
