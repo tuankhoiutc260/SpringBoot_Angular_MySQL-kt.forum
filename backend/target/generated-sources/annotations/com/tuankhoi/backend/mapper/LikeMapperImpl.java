@@ -36,8 +36,8 @@ public class LikeMapperImpl implements LikeMapper {
 
         LikeResponse.LikeResponseBuilder likeResponse = LikeResponse.builder();
 
-        likeResponse.postID( likePostId( like ) );
-        likeResponse.userID( likeUserId( like ) );
+        likeResponse.postId( likePostId( like ) );
+        likeResponse.userId( likeUserId( like ) );
         likeResponse.id( like.getId() );
         likeResponse.createdDate( like.getCreatedDate() );
 
@@ -51,7 +51,7 @@ public class LikeMapperImpl implements LikeMapper {
 
         Post.PostBuilder post = Post.builder();
 
-        post.id( likeRequest.getPostID() );
+        post.id( likeRequest.getPostId() );
 
         return post.build();
     }

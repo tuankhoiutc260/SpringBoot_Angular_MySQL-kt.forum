@@ -39,10 +39,10 @@ public class CommentMapperImpl implements CommentMapper {
 
         CommentResponse.CommentResponseBuilder commentResponse = CommentResponse.builder();
 
-        commentResponse.postID( commentPostId( comment ) );
+        commentResponse.postId( commentPostId( comment ) );
         Long id1 = commentParentCommentId( comment );
         if ( id1 != null ) {
-            commentResponse.parentID( String.valueOf( id1 ) );
+            commentResponse.parentId( String.valueOf( id1 ) );
         }
         commentResponse.replies( commentListToCommentResponseList( comment.getReplies() ) );
         commentResponse.id( comment.getId() );
@@ -61,7 +61,7 @@ public class CommentMapperImpl implements CommentMapper {
 
         Post.PostBuilder post = Post.builder();
 
-        post.id( commentRequest.getPostID() );
+        post.id( commentRequest.getPostId() );
 
         return post.build();
     }
@@ -73,7 +73,7 @@ public class CommentMapperImpl implements CommentMapper {
 
         Comment.CommentBuilder comment = Comment.builder();
 
-        comment.id( commentRequest.getParentCommentID() );
+        comment.id( commentRequest.getParentCommentId() );
 
         return comment.build();
     }

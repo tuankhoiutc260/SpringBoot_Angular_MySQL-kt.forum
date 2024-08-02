@@ -60,9 +60,9 @@ public class PermissionServiceImpl implements PermissionService {
 
     @PostAuthorize("hasRole('ADMIN')")
     @Override
-    public PermissionResponse update(Integer permissionRequestID, PermissionRequest permissionRequest) {
+    public PermissionResponse update(Integer permissionRequestId, PermissionRequest permissionRequest) {
         try {
-            Permission existingPermission = permissionRepository.findById(permissionRequestID).orElseThrow(()->
+            Permission existingPermission = permissionRepository.findById(permissionRequestId).orElseThrow(()->
                     new AppException(ErrorCode.PERMISSION_NOTFOUND));
             permissionMapper.updatePermission(existingPermission, permissionRequest);
             return permissionMapper.toPermissionResponse(permissionRepository.save(existingPermission));
@@ -73,9 +73,9 @@ public class PermissionServiceImpl implements PermissionService {
 
     @PostAuthorize("hasRole('ADMIN')")
     @Override
-    public void delete(Integer permissionID) {
+    public void delete(Integer permissionId) {
         try {
-            Permission permissionToDelete = permissionRepository.findById(permissionID)
+            Permission permissionToDelete = permissionRepository.findById(permissionId)
                     .orElseThrow(() -> new AppException(ErrorCode.PERMISSION_NOTFOUND));
             permissionRepository.delete(permissionToDelete);
         } catch (EntityNotFoundException e) {

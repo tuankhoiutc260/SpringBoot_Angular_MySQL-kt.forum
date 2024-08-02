@@ -17,9 +17,9 @@ public class CommentResponse {
 
     String content;
 
-    String postID;
+    String postId;
 
-    String parentID;
+    String parentId;
 
     List<CommentResponse> replies;
 

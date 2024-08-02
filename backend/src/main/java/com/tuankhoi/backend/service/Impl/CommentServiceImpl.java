@@ -31,14 +31,14 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentResponse addComment(CommentRequest commentRequest) {
-        Post existingPost = postRepository.findById(commentRequest.getPostID())
+        Post existingPost = postRepository.findById(commentRequest.getPostId())
                 .orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));
 
         Comment newComment = commentMapper.toEntity(commentRequest);
         newComment.setPost(existingPost);
 
-        if (commentRequest.getParentCommentID() != null) {
-            Comment parentComment = commentRepository.findById(commentRequest.getParentCommentID())
+        if (commentRequest.getParentCommentId() != null) {
+            Comment parentComment = commentRepository.findById(commentRequest.getParentCommentId())
                     .orElseThrow(() -> new AppException(ErrorCode.PARENT_COMMENT_NOTFOUND));
             newComment.setParentComment(parentComment);
         } else {

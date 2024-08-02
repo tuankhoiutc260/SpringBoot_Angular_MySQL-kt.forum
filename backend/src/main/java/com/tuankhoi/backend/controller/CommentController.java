@@ -22,21 +22,21 @@ public class CommentController {
                 .build();
     }
 
-    @GetMapping("/post/{postID}")
-    public APIResponse<List<CommentResponse>> getCommentListByPostID(@PathVariable String postID,
+    @GetMapping("/post/{postId}")
+    public APIResponse<List<CommentResponse>> getCommentListByPostId(@PathVariable String postId,
                                                                      @RequestParam(defaultValue = "0") int page,
                                                                      @RequestParam(defaultValue = "5") int size){
         return APIResponse.<List<CommentResponse>>builder()
-                .result(commentService.getCommentsByPostId(postID, page, size))
+                .result(commentService.getCommentsByPostId(postId, page, size))
                 .build();
     }
 
-    @GetMapping("/{commentID}/all-replies")
-    public APIResponse<List<CommentResponse>> getAllRepliesForComment(@PathVariable Long commentID,
+    @GetMapping("/{commentId}/all-replies")
+    public APIResponse<List<CommentResponse>> getAllRepliesForComment(@PathVariable Long commentId,
                                                                       @RequestParam(defaultValue = "0") int page,
                                                                       @RequestParam(defaultValue = "5") int size) {
         return APIResponse.<List<CommentResponse>>builder()
-                .result(commentService.getAllReplyCommentsByCommentId(commentID, page, size))
+                .result(commentService.getAllReplyCommentsByCommentId(commentId, page, size))
                 .build();
     }
 }

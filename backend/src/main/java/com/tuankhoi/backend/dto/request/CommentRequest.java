@@ -12,7 +12,7 @@ import lombok.experimental.FieldDefaults;
 public class CommentRequest {
     String content;
 
-    String postID;
+    String postId;
 
-    Long parentCommentID;
+    Long parentCommentId;
 }

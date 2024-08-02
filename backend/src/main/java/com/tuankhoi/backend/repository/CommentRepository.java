@@ -11,13 +11,13 @@ import java.util.List;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-    List<Comment> findByPostIdAndParentCommentIsNullOrderByCreatedDateDesc(String postID, Pageable pageable);
+    List<Comment> findByPostIdAndParentCommentIsNullOrderByCreatedDateDesc(String postId, Pageable pageable);
 
     @Query(value = """
             WITH RECURSIVE sub_comments AS (
                 SELECT *
                 FROM comment
-                WHERE id = :commentID
+                WHERE id = :commentId
                 UNION ALL
                 SELECT c.*
                 FROM comment c
@@ -25,7 +25,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
             )
             SELECT *
             FROM sub_comments
-            WHERE id <> :commentID
+            WHERE id <> :commentId
             ORDER BY created_date ASC;""", nativeQuery = true)
-    List<Comment> findAllReplyCommentsByCommentId(@Param("commentID") Long commentID, Pageable pageable);
+    List<Comment> findAllReplyCommentsByCommentId(@Param("commentId") Long commentId, Pageable pageable);
 }

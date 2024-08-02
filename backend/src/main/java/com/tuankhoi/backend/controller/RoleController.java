@@ -21,9 +21,9 @@ public class RoleController {
     RoleService roleService;
 
     @GetMapping("/{id}")
-    public APIResponse<RoleResponse> findByID(@PathVariable int id) {
+    public APIResponse<RoleResponse> findById(@PathVariable int id) {
         return APIResponse.<RoleResponse>builder()
-                .result(roleService.findByID(id))
+                .result(roleService.findById(id))
                 .build();
     }
 
@@ -50,7 +50,7 @@ public class RoleController {
 
     @DeleteMapping("/{id}")
     public APIResponse<Void> delete(@PathVariable int id) {
-        roleService.deleteByID(id);
+        roleService.deleteById(id);
         return APIResponse.<Void>builder()
                 .build();
     }

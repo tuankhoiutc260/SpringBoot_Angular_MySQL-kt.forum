@@ -12,7 +12,7 @@ public interface PermissionService {
 
     List<PermissionResponse> findAll();
 
-    PermissionResponse update(Integer permissionRequestID, PermissionRequest permissionRequest);
+    PermissionResponse update(Integer permissionRequestId, PermissionRequest permissionRequest);
 
     void delete(Integer name);
 }

@@ -8,11 +8,11 @@ import java.util.List;
 public interface RoleService {
     RoleResponse create(RoleRequest roleRequest);
 
-    RoleResponse findByID(Integer roleRequestID);
+    RoleResponse findById(Integer roleRequestId);
 
     List<RoleResponse> findAll();
 
-    RoleResponse update(Integer roleRequestID, RoleRequest roleRequest);
+    RoleResponse update(Integer roleRequestId, RoleRequest roleRequest);
 
-    void deleteByID(Integer roleRequestID);
+    void deleteById(Integer roleRequestId);
 }

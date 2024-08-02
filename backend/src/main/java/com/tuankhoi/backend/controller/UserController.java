@@ -23,9 +23,9 @@ public class UserController {
     UserService userService;
 
     @GetMapping("/id/{id}")
-    public APIResponse<UserResponse> findByID(@PathVariable String id){
+    public APIResponse<UserResponse> findById(@PathVariable String id){
         return APIResponse.<UserResponse>builder()
-                .result(userService.findByID(id))
+                .result(userService.findById(id))
                 .build();
     }
 
@@ -71,7 +71,7 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     public APIResponse<Void> delete(@PathVariable String id){
-        userService.deleteByID(id);
+        userService.deleteById(id);
         return APIResponse.<Void>builder().build();
     }
 }

@@ -26,6 +26,6 @@ public interface PostRepository extends JpaRepository<Post, String> {
 
     List<Post> findByCreatedBy(String createdBy);
 
-    @Query("SELECT p FROM Post p JOIN Like l ON p.id = l.post.id WHERE l.user.id = :userID")
-    List<Post> findPostsLiked(String userID);
+    @Query("SELECT p FROM Post p JOIN Like l ON p.id = l.post.id WHERE l.user.id = :userId")
+    List<Post> findPostsLiked(String userId);
 }

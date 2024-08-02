@@ -8,7 +8,7 @@ import java.util.List;
 public interface PostService {
     PostResponse create(PostRequest postRequest);
 
-    PostResponse findByID(String postID);
+    PostResponse findById(String postId);
 
     List<PostResponse> findByUserName(String userName);
 
@@ -20,5 +20,5 @@ public interface PostService {
 
     PostResponse update(String id, PostRequest postRequest);
 
-    void deleteByID(String id);
+    void deleteById(String id);
 }

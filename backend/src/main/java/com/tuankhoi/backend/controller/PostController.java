@@ -21,9 +21,9 @@ public class PostController {
     }
 
     @GetMapping("/id/{id}")
-    public APIResponse<PostResponse> findByID(@PathVariable String id) {
+    public APIResponse<PostResponse> findById(@PathVariable String id) {
         return APIResponse.<PostResponse>builder()
-                .result(postService.findByID(id))
+                .result(postService.findById(id))
                 .build();
     }
 
@@ -71,7 +71,7 @@ public class PostController {
 
     @DeleteMapping("/{id}")
     public APIResponse<Void> delete(@PathVariable String id) {
-        postService.deleteByID(id);
+        postService.deleteById(id);
         return APIResponse.<Void>builder()
                 .build();
     }

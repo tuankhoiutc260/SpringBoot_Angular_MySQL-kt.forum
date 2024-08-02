@@ -36,14 +36,14 @@ public class LikeServiceImpl implements LikeService {
 
     @Override
     public Long countLikes(LikeRequest likeRequest) {
-        Post existingPost = postRepository.findById(likeRequest.getPostID()).orElseThrow(()->new AppException(ErrorCode.POST_NOTFOUND));
+        Post existingPost = postRepository.findById(likeRequest.getPostId()).orElseThrow(()->new AppException(ErrorCode.POST_NOTFOUND));
         return likeRepository.countByPostId(existingPost.getId());
     }
 
     @PostAuthorize("hasRole('ADMIN') or hasRole('USER') or hasRole('STAFF')")
     @Override
     public Boolean isLiked(LikeRequest likeRequest) {
-        Post existingPost = postRepository.findById(likeRequest.getPostID()).orElseThrow(()->new AppException(ErrorCode.POST_NOTFOUND));
+        Post existingPost = postRepository.findById(likeRequest.getPostId()).orElseThrow(()->new AppException(ErrorCode.POST_NOTFOUND));
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 //        Optional<User> existingUser = userRepository.findByUserName(authentication.getName());
         Optional<User> existingUser = userRepository.findById(authentication.getName());
@@ -60,7 +60,7 @@ public class LikeServiceImpl implements LikeService {
     @PostAuthorize("hasRole('ADMIN') or hasRole('USER') or hasRole('STAFF')")
     @Override
     public LikeResponse toggleLike(LikeRequest likeRequest) {
-        Post existingPost = postRepository.findById(likeRequest.getPostID())
+        Post existingPost = postRepository.findById(likeRequest.getPostId())
                 .orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Optional<User> existingUser = userRepository.findById(authentication.getName());

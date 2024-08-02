@@ -19,7 +19,7 @@ public class LikeResponse {
 
     LocalDateTime createdDate;
 
-    String userID;
+    String userId;
 
-    String postID;
+    String postId;
 }

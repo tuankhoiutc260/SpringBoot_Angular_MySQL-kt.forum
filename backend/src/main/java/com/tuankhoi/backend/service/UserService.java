@@ -10,7 +10,7 @@ import java.util.List;
 public interface UserService {
     UserResponse create(UserRequest userRequest);
 
-    UserResponse findByID(String id);
+    UserResponse findById(String id);
 
     UserResponse findByEmail(String username);
 
@@ -22,5 +22,5 @@ public interface UserService {
 
     UserResponse update(String id, UserRequest userRequest);
 
-    void deleteByID(String id);
+    void deleteById(String id);
 }

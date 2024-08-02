@@ -28,7 +28,7 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final PostMapper postMapper;
 
-    //    @PostAuthorize("@userServiceImpl.findByID(returnObject.createdBy).userName == authentication.name")
+    //    @PostAuthorize("@userServiceImpl.findById(returnObject.createdBy).userName == authentication.name")
     @Override
     public PostResponse create(PostRequest postRequest) {
         try {
@@ -61,8 +61,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostResponse findByID(String postID) {
-        return postRepository.findById(postID)
+    public PostResponse findById(String postId) {
+        return postRepository.findById(postId)
                 .map(postMapper::toPostResponseWithCountLikes)
                 .orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));
     }
@@ -83,7 +83,7 @@ public class PostServiceImpl implements PostService {
                 .toList();
     }
 
-    @PostAuthorize("@userServiceImpl.findByID(returnObject.createdBy).userName == authentication.name or hasRole('ADMIN')")
+    @PostAuthorize("@userServiceImpl.findById(returnObject.createdBy).userName == authentication.name or hasRole('ADMIN')")
     @Override
     public PostResponse update(String id, PostRequest postRequest) {
         try {
@@ -106,9 +106,9 @@ public class PostServiceImpl implements PostService {
     //    @PostAuthorize("@userServiceImpl.findByUserName(returnObject.createdBy).userName == authentication.name or hasRole('ADMIN')")
     @PostAuthorize("hasRole('ADMIN') ")
     @Override
-    public void deleteByID(String postID) {
+    public void deleteById(String postId) {
         try {
-            Post postToDelete = postRepository.findById(postID)
+            Post postToDelete = postRepository.findById(postId)
                     .orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));
             postRepository.delete(postToDelete);
         } catch (EntityNotFoundException e) {

@@ -75,8 +75,8 @@ public class UserServiceImpl implements UserService {
 
 //    @PostAuthorize("hasRole('ADMIN')")
     @Override
-    public UserResponse findByID(String userID) {
-        return userRepository.findById(userID)
+    public UserResponse findById(String userId) {
+        return userRepository.findById(userId)
                 .map(userMapper::toUserResponse)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
     }
@@ -118,9 +118,9 @@ public class UserServiceImpl implements UserService {
 
     @PostAuthorize("hasRole('ADMIN')")
     @Override
-    public UserResponse update(String userID, UserRequest userRequest) {
+    public UserResponse update(String userId, UserRequest userRequest) {
         try {
-            User existingUser = userRepository.findById(userID)
+            User existingUser = userRepository.findById(userId)
                     .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
             existingUser.setPassword(passwordEncoder.encode(userRequest.getPassword()));
             existingUser.setRole(roleRepository.findById(userRequest.getRole()).orElseThrow(()
@@ -135,9 +135,9 @@ public class UserServiceImpl implements UserService {
 
 //    @PostAuthorize("hasRole('ADMIN')")
     @Override
-    public void deleteByID(String userID) {
+    public void deleteById(String userId) {
         try {
-            User userToDelete = userRepository.findById(userID)
+            User userToDelete = userRepository.findById(userId)
                     .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
             userRepository.delete(userToDelete);
         } catch (EntityNotFoundException e) {

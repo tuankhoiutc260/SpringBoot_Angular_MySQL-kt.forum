@@ -8,10 +8,10 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface LikeMapper {
-    @Mapping(source = "postID", target = "post.id")
+    @Mapping(source = "postId", target = "post.id")
     Like toLike(LikeRequest likeRequest);
 
-    @Mapping(source = "post.id", target = "postID")
-    @Mapping(source = "user.id", target = "userID")
+    @Mapping(source = "post.id", target = "postId")
+    @Mapping(source = "user.id", target = "userId")
     LikeResponse toResponse(Like like);
 }

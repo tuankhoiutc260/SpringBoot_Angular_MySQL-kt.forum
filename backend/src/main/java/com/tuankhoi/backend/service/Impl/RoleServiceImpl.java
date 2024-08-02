@@ -39,8 +39,8 @@ public class RoleServiceImpl implements RoleService {
         try {
             Role newRole = roleMapper.toRole(roleRequest);
             Set<Permission> permissions = new HashSet<>();
-            for (int permissionRequestID : roleRequest.getPermissions()) {
-                Permission permission = permissionRepository.findById(permissionRequestID).orElseThrow(()
+            for (int permissionRequestId : roleRequest.getPermissions()) {
+                Permission permission = permissionRepository.findById(permissionRequestId).orElseThrow(()
                         -> new AppException(ErrorCode.PERMISSION_NOTFOUND));
                 permissions.add(permission);
             }
@@ -54,7 +54,7 @@ public class RoleServiceImpl implements RoleService {
 
     @PostAuthorize("hasRole('ADMIN')")
     @Override
-    public RoleResponse findByID(Integer id) {
+    public RoleResponse findById(Integer id) {
         return roleRepository.findById(id)
                 .map(roleMapper::toRoleResponse)
                 .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND));
@@ -76,8 +76,8 @@ public class RoleServiceImpl implements RoleService {
             Role existingRole = roleRepository.findById(id)
                     .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND));
             Set<Permission> permissions = new HashSet<>();
-            for (int permissionRequestID : roleRequest.getPermissions()) {
-                Permission permission = permissionRepository.findById(permissionRequestID).orElseThrow(()
+            for (int permissionRequestId : roleRequest.getPermissions()) {
+                Permission permission = permissionRepository.findById(permissionRequestId).orElseThrow(()
                         -> new AppException(ErrorCode.PERMISSION_NOTFOUND));
                 permissions.add(permission);
             }
@@ -91,9 +91,9 @@ public class RoleServiceImpl implements RoleService {
 
     @PostAuthorize("hasRole('ADMIN')")
     @Override
-    public void deleteByID(Integer roleID) {
+    public void deleteById(Integer roleId) {
         try {
-            Role roleToDelete = roleRepository.findById(roleID)
+            Role roleToDelete = roleRepository.findById(roleId)
                     .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND));
             roleRepository.delete(roleToDelete);
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
