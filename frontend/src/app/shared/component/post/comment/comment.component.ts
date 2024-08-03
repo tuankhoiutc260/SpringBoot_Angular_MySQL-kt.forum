@@ -1,90 +1,49 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { CommentService } from '../../../../api/service/comment.service';
-import { WebSocketService } from '../../../../api/service/web-socket.service';
-import { Subscription } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
-import { ApiResponse } from '../../../../api/model/response/apiResponse';
-import { CommentResponse } from '../../../../api/model/response/comment-response';
-import { CommentRequest } from '../../../../api/model/request/comment-request';
+import { Component, Input, OnInit } from "@angular/core";
+import { CommentResponse } from "../../../../api/model/response/comment-response";
+import { CommentApiService } from "../../../../api/service/rest-api/comment-api.service";
+import { CommentRequest } from "../../../../api/model/request/comment-request";
 
 @Component({
-  selector: 'app-comments',
+  selector: 'app-comment',
   templateUrl: './comment.component.html',
-  styleUrl: './comment.component.scss',
+  styleUrls: ['./comment.component.scss'],
 })
-export class CommentsComponent implements OnInit, OnDestroy {
-  private wsSubscription: Subscription = new Subscription();
-  private httpSubscription: Subscription = new Subscription();
-  @Input() postID!: string;
+export class CommentComponent implements OnInit {
+  @Input() comment!: CommentResponse;
+  @Input() postId!: string;
+  showReplyForm = false;
 
-  constructor(
-    private commentService: CommentService,
-    private webSocketService: WebSocketService,
-    private activatedRoute: ActivatedRoute,
-  ) { }
+  constructor(private commentService: CommentApiService) {}
 
   ngOnInit() {
-    this.activatedRoute.params.subscribe(params => {
-      this.loadComments();
-      this.subscribeToComments();
-    });
+    if (!this.comment.replies) {
+      this.comment.replies = [];
+    }
   }
 
-  private subscribeToComments() {
-      this.wsSubscription.unsubscribe();
-      this.wsSubscription  = this.webSocketService.getCommentUpdates(this.postID).subscribe(
-      (message) => {
-        if (message && message.type === 'NEW_COMMENT') {
-          this.commentResponseList.unshift(message.payload);
-        } else if (message && message.type === 'DELETE_COMMENT') {
-          this.commentResponseList = this.commentResponseList.filter(c => c.id !== message.payload);
-        }
-      }
-    );
+  toggleReplyForm() {
+    this.showReplyForm = !this.showReplyForm;
   }
 
-  commentResponseList: CommentResponse[] = []
-  commentRequest: CommentRequest = {}
-  commentResponse: CommentResponse = {}
-  loadComments() {
-    const sub = this.commentService.findByByPostID(this.postID).subscribe({
-      next: (apiResponse: ApiResponse<CommentResponse[]>) => {
-        const commentReponseResultList = apiResponse.result;
-        if (commentReponseResultList) {
-          this.commentResponseList = commentReponseResultList;
-          console.log("Load Comment 1", commentReponseResultList);
-        } else {
-          console.error('No result found in response:', apiResponse.message);
+  onReplyAdded(reply: Partial<CommentRequest>) {
+    console.log(this.comment.id)
+    console.log(this.postId)
+    this.commentService.addComment({
+      ...reply,
+      parentCommentId: this.comment.id,
+      postId: this.postId
+    }).subscribe({
+      next: (response) => {
+        if (response.result) {
+          // Không cần thêm reply vào đây, vì nó sẽ được xử lý bởi WebSocket
+          this.showReplyForm = false;
         }
       },
       error: (error) => {
-        console.error('Error fetching Comments:', error);
+        console.log(reply)
+
+        console.error('Error adding reply:', error);
       }
     });
-    this.httpSubscription.add(sub);
-  }
-
-  addComment() {
-    this.commentRequest.postID = this.postID;
-    this.httpSubscription.add(
-      this.commentService.create(this.commentRequest).subscribe({
-        next: (apiResponse: ApiResponse<CommentResponse>) => {
-          const commentResponse = apiResponse.result;
-          if (commentResponse) {
-            this.commentResponse = commentResponse;
-            this.commentRequest = {}
-          } else {
-            console.error('No result found in response:', apiResponse.message);
-          }
-        },
-        error: (error) => {
-          console.error('Error adding Comment:', error);
-        }
-      })
-    );
-  }
-
-  ngOnDestroy() {
-    this.httpSubscription.unsubscribe();
   }
 }

@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { UserApiService } from '../../../../api/service/user-api.service';
+import { UserApiService } from '../../../../api/service/rest-api/user-api.service';
 import { Router } from '@angular/router';
 import { SharedDataService } from '../../../../core/service/shared-data.service';
-import { ApiResponse } from '../../../../api/model/response/apiResponse';
+import { ApiResponse } from '../../../../api/model/response/api-response';
 import { PostResponse } from '../../../../api/model/response/post-response';
 import { UserResponse } from '../../../../api/model/response/user-response';
 
@@ -47,7 +47,7 @@ export class PostComponent implements OnInit, OnDestroy {
   }
 
   onGetPostAuthor() {
-    const sub = this.userApiService.findByID(this.postResponse.createdBy!).subscribe({
+    const sub = this.userApiService.findById(this.postResponse.createdBy!).subscribe({
       next: (apiResponse: ApiResponse<UserResponse>) => {
         const postAuthorInfo = apiResponse.result;
         if (postAuthorInfo) {
@@ -63,12 +63,12 @@ export class PostComponent implements OnInit, OnDestroy {
     this.subscription.add(sub);
   }
   
-  navigateToPost(userName: string, postID: string): void {
+  navigateToPost(userName: string, postId: string): void {
     if (this.postAuthorInfo && this.postAuthorInfo.userName) {
       this.sharedDataService.setPostAuthorInfo(this.postAuthorInfo);
       const routeUrl = userName === this.userLoginInfo.userName
-        ? `${this.userLoginInfo.userName}/posts/${postID}`
-        : `${userName}/posts/${postID}`;
+        ? `${this.userLoginInfo.userName}/posts/${postId}`
+        : `${userName}/posts/${postId}`;
 
       this.router.navigate([routeUrl]);
     } else {

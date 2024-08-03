@@ -2,13 +2,14 @@ import { Component, HostListener, Input } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
-import { PostApiService } from '../../../../api/service/post-api.service';
+import { PostApiService } from '../../../../api/service/rest-api/post-api.service';
 import { AuthService } from '../../../../core/service/auth.service';
-import { ApiResponse } from '../../../../api/model/response/apiResponse';
+import { ApiResponse } from '../../../../api/model/response/api-response';
 import { PostResponse } from '../../../../api/model/response/post-response';
 import { UserResponse } from '../../../../api/model/response/user-response';
-import { AuthApiService } from '../../../../api/service/auth-api.service';
+import { AuthApiService } from '../../../../api/service/rest-api/auth-api.service';
 import { LogoutRequest } from '../../../../api/model/request/logout-request';
+import { UserApiService } from '../../../../api/service/rest-api/user-api.service';
 
 @Component({
   selector: 'app-header',
@@ -26,7 +27,9 @@ export class HeaderComponent {
     private postApiService: PostApiService,
     private authService: AuthService,
     private authApiService: AuthApiService,
-    private router: Router
+    private router: Router,
+
+    private userService: UserApiService,
   ) { }
 
   ngOnInit(): void {
@@ -146,8 +149,7 @@ export class HeaderComponent {
   }
 
   logout() {
-    
-
+  
     const logoutRequest: LogoutRequest = { token: this.authService.getToken() };
     const sub =  this.authApiService.logout(logoutRequest).subscribe({
       next: ()=>{

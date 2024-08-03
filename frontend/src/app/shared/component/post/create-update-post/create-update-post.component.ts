@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { SafeResourceUrl } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
-import { PostApiService } from '../../../../api/service/post-api.service';
+import { PostApiService } from '../../../../api/service/rest-api/post-api.service';
 import { MessageService } from 'primeng/api';
 import { PostRequest } from '../../../../api/model/request/post-request';
-import { ApiResponse } from '../../../../api/model/response/apiResponse';
+import { ApiResponse } from '../../../../api/model/response/api-response';
 import { PostResponse } from '../../../../api/model/response/post-response';
 
 @Component({

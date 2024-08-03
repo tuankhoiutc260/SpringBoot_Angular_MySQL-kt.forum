@@ -1,7 +1,5 @@
-import { RoleEnum } from "../entity/role";
-
 export interface RoleRequest {
-    name?: RoleEnum;
+    name?: string;
     description?: string;
     permissions?: number[];
 }

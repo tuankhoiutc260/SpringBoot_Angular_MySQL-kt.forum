@@ -2,10 +2,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
-import { PostApiService } from '../../../../api/service/post-api.service';
+import { PostApiService } from '../../../../api/service/rest-api/post-api.service';
 import { AuthService } from '../../../../core/service/auth.service';
 import { SharedDataService } from '../../../../core/service/shared-data.service';
-import { ApiResponse } from '../../../../api/model/response/apiResponse';
+import { ApiResponse } from '../../../../api/model/response/api-response';
 import { PostResponse } from '../../../../api/model/response/post-response';
 import { UserResponse } from '../../../../api/model/response/user-response';
 
@@ -16,7 +16,7 @@ import { UserResponse } from '../../../../api/model/response/user-response';
   providers: [MessageService]
 })
 export class PostDetailsComponent implements OnInit, OnDestroy {
-  postID: string = '';
+  postId: string = '';
   userName: string = '';
   postResponse: PostResponse = {};
   postAuthorInfo: UserResponse | null = null;
@@ -33,8 +33,8 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
       this.userName = params['userName'];
-      this.postID = params['postID'];
-      this.getPostDetails(this.postID);
+      this.postId = params['postId'];
+      this.getPostDetails(this.postId);
     });
 
     this.sharedDataService.postAuthorInfo$.subscribe(info => {
@@ -51,7 +51,7 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
   }
 
   getPostDetails(id: string) {
-    const sub = this.postApiService.findByID(id).subscribe({
+    const sub = this.postApiService.findById(id).subscribe({
       next: (apiResponse: ApiResponse<PostResponse>) => {
         const post = apiResponse.result;
         if (post) {

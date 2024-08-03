@@ -1,29 +1,27 @@
-<div class="m-auto col-11 lg:col-8 flex flex-column gap-3">
-  <h2 class="text-center">Comments</h2>
-  <form (ngSubmit)="addComment()" class="flex flex-column gap-2 align-items-center">
-    <div class="w-full cont-comment-request" >
-      <textarea #commentContent rows="5" pInputTextarea [autoResize]="true" [(ngModel)]="commentRequest.content"
-      name="comment" placeholder="Write your comment" maxlength="1000" class="w-full">
-    </textarea>
-    <small class="comment-request-length" >{{ commentRequest.content?.length || 0 }}/1000</small>
-    </div>
-    <p-button [disabled]="!commentRequest.content || commentRequest.content.trim().length === 0" type="submit"
-      label="Send" [outlined]="true">
-    </p-button>
-  </form>
+<div class="comment">
+  <div class="comment-content">
+    <div class="flex  gap-2 ">
+      <div class="flex flex-column align-items-center">
+        <p-avatar
+          [image]="(comment.createdBy! | userIdToUserImage | async) || 'assets/images/img-default-user.jpg' | dataUriToBlob"
+          shape="circle" size="normal">
+        </p-avatar>
+        <div class="line-comment"></div>
+      </div>
 
-  <div *ngFor="let commentResponse of commentResponseList; let i = index" class="flex flex-column gap-2">
-    <p-divider  *ngIf="commentResponseList.length > 1 && i > 0" />
+      <div class="flex flex-column gap-2 w-full">
 
-    <div class=" flex gap-2">
-      <p-avatar
-        [image]="((commentResponse.createdBy! | userIdToUserImage | async) ?? 'default-image-url') | dataUriToBlob"
-        styleClass="mr-2" shape="circle" size="large"></p-avatar>
-      <div class="flex flex-column">
-        <span><b>{{commentResponse.createdBy! | userIdToFullName | async }}</b> &nbsp;&nbsp;<small> {{
-            commentResponse.createdDate! | timeAgo}}</small></span>
-          <p class="text-justify comment-response-content">{{ commentResponse.content }}</p>
-        <div class="flex gap-6 align-items-center">
+        <div class="flex flex-column gap-2 comment-inf">
+          <div class="flex gap-4 flex-wrap	 align-items-end">
+            <b class="comment-meta">
+              {{ comment.createdBy! | userIdToFullName | async}}
+            </b>
+            <small>{{ comment.createdDate! | timeAgo}}</small>
+          </div>
+          <span>{{ comment.content }}</span>
+        </div>
+
+        <div class="flex gap-6 align-items-center ml-3">
           <div class="flex gap-2">
             <i class="cursor-pointer pi pi-thumbs-up"></i>
             <span>3</span>
@@ -32,9 +30,18 @@
             <i class="cursor-pointer pi pi-thumbs-down"></i>
             <span>1</span>
           </div>
-          <span class="cursor-pointer" >reply</span>
+          <a class="btn-a" (click)="toggleReplyForm()">Reply</a>
+        </div>
+
+        <app-comment-form *ngIf="showReplyForm" (commentAdded)="onReplyAdded($event)" (handleCancel)="toggleReplyForm()"
+          [parentCommentId]="comment.id">
+        </app-comment-form>
+
+        <div class="replies flex flex-column gap-3 mt-3" *ngIf="comment.replies && comment.replies.length > 0">
+          <app-comment *ngFor="let reply of comment.replies" [comment]="reply" [postId]="postId"></app-comment>
         </div>
       </div>
     </div>
   </div>
 </div>
+

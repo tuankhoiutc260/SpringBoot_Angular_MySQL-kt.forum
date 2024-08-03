@@ -1,3 +1,3 @@
 export interface LikeRequest {
-    postID?: string
+    postId?: string
 }

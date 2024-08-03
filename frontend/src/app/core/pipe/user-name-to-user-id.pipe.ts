@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { UserApiService } from '../../api/service/user-api.service';
+import { UserApiService } from '../../api/service/rest-api/user-api.service';
 
 @Pipe({
   name: 'userNameToUserId'

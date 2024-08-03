@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { PostApiService } from '../../../../api/service/post-api.service';
-import { UserApiService } from '../../../../api/service/user-api.service';
+import { PostApiService } from '../../../../api/service/rest-api/post-api.service';
+import { UserApiService } from '../../../../api/service/rest-api/user-api.service';
 import { AuthService } from '../../../../core/service/auth.service';
-import { ApiResponse } from '../../../../api/model/response/apiResponse';
+import { ApiResponse } from '../../../../api/model/response/api-response';
 import { PostResponse } from '../../../../api/model/response/post-response';
 import { UserResponse } from '../../../../api/model/response/user-response';
 

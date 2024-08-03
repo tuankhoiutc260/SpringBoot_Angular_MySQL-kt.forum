@@ -12,7 +12,9 @@ import { PostDetailsComponent } from './shared/component/post/post-details/post-
 import { InteractComponent } from './shared/component/post/interact/interact.component';
 import { ProfileComponent } from './shared/component/page/profile/profile.component';
 import { CreateUpdatePostComponent } from './shared/component/post/create-update-post/create-update-post.component';
-import { CommentsComponent } from './shared/component/post/comment/comment.component';
+import { CommentFormComponent } from './shared/component/post/comment-form/comment-form.component';
+import { CommentsComponent } from './shared/component/post/comments/comments.component';
+import { CommentComponent } from './shared/component/post/comment/comment.component';
 
 
 @NgModule({
@@ -40,7 +42,9 @@ import { CommentsComponent } from './shared/component/post/comment/comment.compo
         PostDetailsComponent,
         InteractComponent,
         CreateUpdatePostComponent,
+        CommentComponent,
         CommentsComponent,
+        CommentFormComponent,
     ],
     declarations: [
         // layout
@@ -57,7 +61,10 @@ import { CommentsComponent } from './shared/component/post/comment/comment.compo
         PostDetailsComponent,
         InteractComponent,
         CreateUpdatePostComponent,
+        CommentComponent,
         CommentsComponent,
+        CommentFormComponent,
+
     ]
 })
 

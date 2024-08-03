@@ -1,3 +1,6 @@
+import { CommentResponse } from "./comment-response";
+import { LikeResponse } from "./like-response";
+
 export interface PostResponse {
     id?: string;
     image?:string;
@@ -8,5 +11,7 @@ export interface PostResponse {
     createdBy?: string;
     lastModifiedDate?: Date | string;
     lastModifiedBy?: string;
+    likes?: LikeResponse[]
     countLikes?: number
+    comments?: CommentResponse[]
 }

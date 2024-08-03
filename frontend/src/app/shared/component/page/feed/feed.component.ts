@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { PostApiService } from '../../../../api/service/post-api.service';
-import { ApiResponse } from '../../../../api/model/response/apiResponse';
+import { PostApiService } from '../../../../api/service/rest-api/post-api.service';
+import { ApiResponse } from '../../../../api/model/response/api-response';
 import { PostResponse } from '../../../../api/model/response/post-response';
 
 @Component({

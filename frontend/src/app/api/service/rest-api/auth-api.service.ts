@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { API_URL } from '../../core/config/config';
+import { API_URL } from '../../../core/config/config';
 import { Observable } from 'rxjs';
-import { AuthenticationRequest } from '../model/request/authentication-request';
-import { IntrospectRequest } from '../model/request/introspect-request';
-import { ApiResponse } from '../model/response/apiResponse';
-import { AuthenticationResponse } from '../model/response/authenticated-response';
-import { IntrospectResponse } from '../model/response/introspect-request';
-import { LogoutRequest } from '../model/request/logout-request';
+import { AuthenticationRequest } from '../../model/request/authentication-request';
+import { IntrospectRequest } from '../../model/request/introspect-request';
+import { ApiResponse } from '../../model/response/api-response';
+import { AuthenticationResponse } from '../../model/response/authenticated-response';
+import { IntrospectResponse } from '../../model/response/introspect-request';
+import { LogoutRequest } from '../../model/request/logout-request';
 
 @Injectable({
   providedIn: 'root'

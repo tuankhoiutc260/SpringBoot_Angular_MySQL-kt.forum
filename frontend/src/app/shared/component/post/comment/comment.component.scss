@@ -1,20 +1,50 @@
-:host ::ng-deep .p-inputtext {
-    padding: 0.75rem 0.75rem 2rem 0.75rem;
+.highlighted {
+    background-color: #fff3cd;
+    transition: background-color 0.5s ease;
+  }
+
+  :host ::ng-deep .p-card {
+    width: 100%;
+}
+
+:host ::ng-deep .p-card .p-card-content{
+  padding: 0;
 }
 
 
-.cont-comment-request{
-    position: relative;
-
-    
-    .comment-request-length{
-        color: #4b5563;
-        position: absolute;
-        bottom: 0.5rem;
-        right: 0.5rem;
-    }
+:host  ::ng-deep   *:focus {
+    box-shadow: none !important;
+  
 }
 
-.comment-response-content{
-    word-break: break-word; 
+.comment-inf{
+  background: #F0F2F5;
+  border-radius: 18px;
+  padding: 1rem;
+  width: fit-content;
+
+}
+
+.btn-a{
+  cursor: pointer;
+  font-weight: bold;
+  color: #65676B;
+}
+.btn-a:hover{
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+:host ::ng-deep .p-avatar{
+  border: 1px solid #D1D2D4;
+}
+
+
+
+.line-comment{
+  border: 1px solid #E7E7E7;
+  border-radius: 10px;
+  margin: 0.5rem;
+  height: 100%;
+  width: 0.1px;
 }

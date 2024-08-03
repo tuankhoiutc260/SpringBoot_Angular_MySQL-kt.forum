@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { PostApiService } from '../../../../api/service/post-api.service';
+import { PostApiService } from '../../../../api/service/rest-api/post-api.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { PostResponse } from '../../../../api/model/response/post-response';
 import { UserResponse } from '../../../../api/model/response/user-response';

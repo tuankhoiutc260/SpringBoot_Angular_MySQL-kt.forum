@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { UserApiService } from '../../api/service/user-api.service';
-import { ApiResponse } from '../../api/model/response/apiResponse';
+import { UserApiService } from '../../api/service/rest-api/user-api.service';
+import { ApiResponse } from '../../api/model/response/api-response';
 import { UserResponse } from '../../api/model/response/user-response';
 
 @Injectable({
@@ -72,18 +72,18 @@ export class AuthService {
   //   return !!this.getToken();
   // }
 
-  // getRole(): string {
-  //   const token = this.getToken();
-  //   if (token) {
-  //     const decodedToken: any = jwtDecode(token);
-  //     return decodedToken.scope || 'ROLE_USER';
-  //   }
-  //   return 'ROLE_ANONYMOUS';
-  // }
+  getRole(): string {
+    const token = this.getToken();
+    if (token) {
+      const decodedToken: any = jwtDecode(token);
+      return decodedToken.scope || 'ROLE_USER';
+    }
+    return 'ROLE_ANONYMOUS';
+  }
 
-  // isAuthenticated(): boolean {
-  //   return !!this.getToken();
-  // }
+  isAuthenticated(): boolean {
+    return !!this.getToken();
+  }
 
   // New utility method to fetch and set user login info
   fetchAndSetUserLoginInfo(): void {
@@ -113,3 +113,7 @@ export class AuthService {
     return this.userLoginInfoSubject.value;
   }
 }
+function jwtDecode(token: string): any {
+  throw new Error('Function not implemented.');
+}
+

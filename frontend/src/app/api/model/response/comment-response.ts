@@ -1,11 +1,11 @@
 export interface CommentResponse {
-    id?: string;
-    content?: string;
-    createdDate?: Date | string;
-    createdBy?: string;
-    lastModifiedBy?: string;
-    lastModifiedDate?: Date | string;
-    postID?: string
-  }
-  
+  id?: number;
+  content?: string;
+  postId?: string;
+  parentId?: number;
+  replies?: CommentResponse[]
+  createdBy?: string;
+  createdDate?: Date | string;
+  lastModifiedDate?: Date | string;
+}
 

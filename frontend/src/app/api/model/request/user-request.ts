@@ -3,7 +3,7 @@ export interface UserRequest {
     password?: string;
     email?: string;
     fullName?: string;
-    active?: boolean;
     image?: File | null;
+    active?: boolean;
     role?: number
 }

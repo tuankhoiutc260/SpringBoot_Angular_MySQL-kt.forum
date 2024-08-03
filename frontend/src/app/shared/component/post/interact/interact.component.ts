@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
-import { LikeApiService } from '../../../../api/service/like-api.service';
+import { LikeApiService } from '../../../../api/service/rest-api/like-api.service';
 import { LikeRequest } from '../../../../api/model/request/like-request';
-import { ApiResponse } from '../../../../api/model/response/apiResponse';
-import { LikeResponse } from '../../../../api/model/response/likeResponse';
+import { ApiResponse } from '../../../../api/model/response/api-response';
+import { LikeResponse } from '../../../../api/model/response/like-response';
 
 @Component({
   selector: 'app-interact',
@@ -13,7 +13,7 @@ import { LikeResponse } from '../../../../api/model/response/likeResponse';
   providers: [MessageService]
 })
 export class InteractComponent implements OnInit, OnDestroy {
-  @Input() postID!: string;
+  @Input() postId!: string;
   @Input() isLogin!: boolean
   @Input() countLikes: number = 0;
   @Output() likeFailed: EventEmitter<void> = new EventEmitter<void>();
@@ -27,7 +27,7 @@ export class InteractComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.likeRequest.postID = this.postID
+    this.likeRequest.postId = this.postId
     this.getIsLiked();
   }
 

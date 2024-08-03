@@ -1,10 +1,10 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { API_URL } from '../../core/config/config';
-import { LikeRequest } from '../model/request/like-request';
-import { ApiResponse } from '../model/response/apiResponse';
-import { LikeResponse } from '../model/response/likeResponse';
+import { API_URL } from '../../../core/config/config';
+import { LikeRequest } from '../../model/request/like-request';
+import { ApiResponse } from '../../model/response/api-response';
+import { LikeResponse } from '../../model/response/like-response';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +20,7 @@ export class LikeApiService {
 
   isLiked(likeRequest: LikeRequest): Observable<ApiResponse<boolean>> {
     const params = new HttpParams()
-      .set('postId', likeRequest.postID!);
+      .set('postId', likeRequest.postId!);
 
     return this.http.get<ApiResponse<boolean>>(`${this.apiURL}/is-liked`, { params });
   }

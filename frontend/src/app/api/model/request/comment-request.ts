@@ -1,5 +1,5 @@
 export interface CommentRequest {
-    content?: string;
-    postID?: string
-  }
-  
+  content?: string;
+  postId?: string;
+  parentCommentId?: number | null
+}

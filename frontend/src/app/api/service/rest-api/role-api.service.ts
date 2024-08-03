@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { API_URL } from '../../core/config/config';
-import { RoleRequest } from '../model/request/role-request';
-import { ApiResponse } from '../model/response/apiResponse';
-import { RoleResponse } from '../model/response/role-response';
+import { API_URL } from '../../../core/config/config';
+import { RoleRequest } from '../../model/request/role-request';
+import { ApiResponse } from '../../model/response/api-response';
+import { RoleResponse } from '../../model/response/role-response';
 
 @Injectable({
   providedIn: 'root'
@@ -18,8 +18,8 @@ export class RoleApiService {
     return this.http.post<ApiResponse<RoleResponse>>(this.apiURL, roleRequest)
   }
 
-  findByID(roleRequestID: number): Observable<ApiResponse<RoleResponse>> {
-    const url = `${this.apiURL}/${roleRequestID}`;
+  findById(roleRequestId: number): Observable<ApiResponse<RoleResponse>> {
+    const url = `${this.apiURL}/${roleRequestId}`;
     return this.http.get<ApiResponse<RoleResponse>>(url);
   }
 
@@ -27,13 +27,13 @@ export class RoleApiService {
     return this.http.get<ApiResponse<RoleResponse[]>>(this.apiURL);
   }
 
-  update(roleRequestID: number, roleRequest: RoleRequest): Observable<ApiResponse<RoleResponse>> {
-    const url = `${this.apiURL}/${roleRequestID}`;
+  update(roleRequestId: number, roleRequest: RoleRequest): Observable<ApiResponse<RoleResponse>> {
+    const url = `${this.apiURL}/${roleRequestId}`;
     return this.http.put<ApiResponse<RoleResponse>>(url, roleRequest);
   }
 
-  delete(roleRequestID: number): Observable<ApiResponse<RoleResponse>> {
-    const url = `${this.apiURL}/${roleRequestID}`;
+  delete(roleRequestId: number): Observable<ApiResponse<RoleResponse>> {
+    const url = `${this.apiURL}/${roleRequestId}`;
     return this.http.delete<ApiResponse<RoleResponse>>(url);
   }
 }

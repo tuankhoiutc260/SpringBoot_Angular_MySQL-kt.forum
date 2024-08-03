@@ -1,9 +1,12 @@
 import { Post } from "./post";
 
 export interface Comment {
-    id?: string;
-    content?:string;
-    createdDate?: Date | string;
-    createdBy?: string;
+    id?: number;
+    content?: string;
+    parentComment?: Comment
     post?: Post
+    replies?: Comment[]
+    createdBy?: string;
+    createdDate?: Date | string;
+    lastModifiedDate?: Date | string
 }

@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { API_URL } from '../../core/config/config';
-import { UserRequest } from '../model/request/user-request';
-import { ApiResponse } from '../model/response/apiResponse';
-import { UserResponse } from '../model/response/user-response';
+import { API_URL } from '../../../core/config/config';
+import { UserRequest } from '../../model/request/user-request';
+import { ApiResponse } from '../../model/response/api-response';
+import { UserResponse } from '../../model/response/user-response';
 
 @Injectable({
   providedIn: 'root'
@@ -18,8 +18,8 @@ export class UserApiService {
     return this.http.post<ApiResponse<UserResponse>>(this.apiURL, userRequest)
   }
 
-  findByID(userRequestID: string): Observable<ApiResponse<UserResponse>> {
-    const url = `${this.apiURL}/id/${userRequestID}`;
+  findById(userRequestId: string): Observable<ApiResponse<UserResponse>> {
+    const url = `${this.apiURL}/id/${userRequestId}`;
     return this.http.get<ApiResponse<UserResponse>>(url);
   }
 
@@ -32,19 +32,19 @@ export class UserApiService {
     return this.http.get<ApiResponse<UserResponse[]>>(this.apiURL);
   }
 
-  update(userRequestID: string, userRequest: UserRequest): Observable<ApiResponse<UserResponse>> {
-    const url = `${this.apiURL}/${userRequestID}`;
+  update(userRequestId: string, userRequest: UserRequest): Observable<ApiResponse<UserResponse>> {
+    const url = `${this.apiURL}/${userRequestId}`;
     return this.http.put<ApiResponse<UserResponse>>(url, userRequest);
   }
 
-  delete(userRequestID: string): Observable<ApiResponse<UserResponse>> {
-    const url = `${this.apiURL}/${userRequestID}`;
+  delete(userRequestId: string): Observable<ApiResponse<UserResponse>> {
+    const url = `${this.apiURL}/${userRequestId}`;
     return this.http.delete<ApiResponse<UserResponse>>(url);
   }
 
-  save(userRequestID: string | null, userRequest: UserRequest): Observable<ApiResponse<UserResponse>> {
-    if (userRequestID) {
-      return this.update(userRequestID, userRequest);
+  save(userRequestId: string | null, userRequest: UserRequest): Observable<ApiResponse<UserResponse>> {
+    if (userRequestId) {
+      return this.update(userRequestId, userRequest);
     } else {
       return this.create(userRequest);
     }

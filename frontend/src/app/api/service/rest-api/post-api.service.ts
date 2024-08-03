@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { API_URL } from '../../core/config/config';
-import { PostRequest } from '../model/request/post-request';
-import { ApiResponse } from '../model/response/apiResponse';
-import { PostResponse } from '../model/response/post-response';
+import { API_URL } from '../../../core/config/config';
+import { PostRequest } from '../../model/request/post-request';
+import { ApiResponse } from '../../model/response/api-response';
+import { PostResponse } from '../../model/response/post-response';
 
 @Injectable({
   providedIn: 'root'
@@ -25,13 +25,13 @@ export class PostApiService {
     return this.http.post<ApiResponse<PostResponse>>(this.apiURL, formData);
   }
 
-  findByID(postRequestID: string): Observable<ApiResponse<PostResponse>> {
-    const url = `${this.apiURL}/id/${postRequestID}`;
+  findById(postRequestId: string): Observable<ApiResponse<PostResponse>> {
+    const url = `${this.apiURL}/id/${postRequestId}`;
     return this.http.get<ApiResponse<PostResponse>>(url);
   }
 
-  findByCreatedBy(userID: string): Observable<ApiResponse<PostResponse[]>> {
-    const url = `${this.apiURL}/user-post/${userID}`;
+  findByCreatedBy(userId: string): Observable<ApiResponse<PostResponse[]>> {
+    const url = `${this.apiURL}/user-post/${userId}`;
     return this.http.get<ApiResponse<PostResponse[]>>(url);  }
   
 
@@ -40,8 +40,8 @@ export class PostApiService {
     return this.http.get<ApiResponse<PostResponse[]>>(url);
   }
 
-  findPostsLiked(userID: string): Observable<ApiResponse<PostResponse[]>> {
-    const url = `${this.apiURL}/posts-liked/${userID}`;;
+  findPostsLiked(userId: string): Observable<ApiResponse<PostResponse[]>> {
+    const url = `${this.apiURL}/posts-liked/${userId}`;;
     return this.http.get<ApiResponse<PostResponse[]>>(url);
   }
 
@@ -49,7 +49,7 @@ export class PostApiService {
     return this.http.get<ApiResponse<PostResponse[]>>(this.apiURL);
   }
   
-  update(postRequestID: string, postRequest: PostRequest): Observable<ApiResponse<PostResponse>> {
+  update(postRequestId: string, postRequest: PostRequest): Observable<ApiResponse<PostResponse>> {
     const formData = new FormData();
     if (postRequest.image) {
       formData.append('image', postRequest.image);
@@ -57,18 +57,18 @@ export class PostApiService {
     formData.append('title', postRequest.title!);
     formData.append('content', postRequest.content!);
     formData.append('tags', postRequest.tags!.join(','));
-    const url = `${this.apiURL}/${postRequestID}`;
+    const url = `${this.apiURL}/${postRequestId}`;
     return this.http.put<ApiResponse<PostResponse>>(url, formData);
   }
 
-  delete(postRequestID: string): Observable<ApiResponse<void>> {
-    const url = `${this.apiURL}/${postRequestID}`;
+  delete(postRequestId: string): Observable<ApiResponse<void>> {
+    const url = `${this.apiURL}/${postRequestId}`;
     return this.http.delete<ApiResponse<void>>(url);
   }
 
-  save(postRequestID: string | null, postRequest: PostRequest): Observable<ApiResponse<PostResponse>> {
-    if (postRequestID) {
-      return this.update(postRequestID, postRequest);
+  save(postRequestId: string | null, postRequest: PostRequest): Observable<ApiResponse<PostResponse>> {
+    if (postRequestId) {
+      return this.update(postRequestId, postRequest);
     } else {
       return this.create(postRequest);
     }
