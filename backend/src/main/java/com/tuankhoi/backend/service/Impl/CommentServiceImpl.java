@@ -12,11 +12,15 @@ import com.tuankhoi.backend.repository.PostRepository;
 import com.tuankhoi.backend.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -60,10 +64,49 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<CommentResponse> getAllReplyCommentsByCommentId(Long commentId, int page, int size) {
+    public List<CommentResponse> getRepliesByCommentId(Long commentId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        List<Comment> commentList = commentRepository.findAllReplyCommentsByCommentId(commentId, pageable);
+        List<Comment> commentList = commentRepository.findRepliesByCommentId(commentId, pageable);
         return commentList.stream().map(commentMapper::toResponse).collect(Collectors.toList());
+    }
+
+    @Override
+    public CommentResponse updateComment(Long commentId, CommentRequest commentRequest) {
+        try {
+            Comment existingComment = commentRepository.findById(commentId)
+                    .orElseThrow(() -> new AppException(ErrorCode.COMMENT_NOT_FOUND));
+            existingComment.setContent(commentRequest.getContent());
+            Comment updatedComment = commentRepository.save(existingComment);
+            CommentResponse commentResponse = commentMapper.toResponse(updatedComment);
+            messagingTemplate.convertAndSend("/topic/comments/" + existingComment.getPost().getId() + "/update", commentResponse);
+            return commentResponse;
+        } catch (DataIntegrityViolationException | ConstraintViolationException e) {
+            throw new AppException(ErrorCode.DATA_INTEGRITY_VIOLATION, "Failed to update post due to database constraint: " + e.getMessage(), e);
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION, "Failed to update comment: " + e.getMessage(), e);
+        }
+    }
+
+//    @Override
+//    public List<CommentResponse> getAllReplyCommentsByCommentId(Long commentId, int page, int size) {
+//        Pageable pageable = PageRequest.of(page, size);
+//        List<Comment> commentList = commentRepository.findAllReplyCommentsByCommentId(commentId, pageable);
+//        return commentList.stream().map(commentMapper::toResponse).collect(Collectors.toList());
+//    }
+
+    @Override
+    public void deleteComment(Long commentId) {
+        try {
+            Comment commentToDelete = commentRepository.findById(commentId)
+                    .orElseThrow(() -> new AppException(ErrorCode.COMMENT_NOT_FOUND));
+            commentRepository.delete(commentToDelete);
+        } catch (DataIntegrityViolationException | ConstraintViolationException e) {
+            throw new IllegalArgumentException("Failed to delete comment due to database constraint", e);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to delete comment", e);
+        }
     }
 }
 

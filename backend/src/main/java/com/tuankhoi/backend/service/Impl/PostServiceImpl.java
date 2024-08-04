@@ -111,8 +111,6 @@ public class PostServiceImpl implements PostService {
             Post postToDelete = postRepository.findById(postId)
                     .orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));
             postRepository.delete(postToDelete);
-        } catch (EntityNotFoundException e) {
-            throw e;
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
             throw new IllegalArgumentException("Failed to delete post due to database constraint", e);
         } catch (Exception e) {

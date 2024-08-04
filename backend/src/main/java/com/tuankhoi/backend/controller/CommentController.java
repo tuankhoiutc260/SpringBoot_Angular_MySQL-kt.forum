@@ -31,12 +31,35 @@ public class CommentController {
                 .build();
     }
 
-    @GetMapping("/{commentId}/all-replies")
-    public APIResponse<List<CommentResponse>> getAllRepliesForComment(@PathVariable Long commentId,
+    @GetMapping("/{commentId}/replies")
+    public APIResponse<List<CommentResponse>> getRepliesByCommentId(@PathVariable Long commentId,
                                                                       @RequestParam(defaultValue = "0") int page,
                                                                       @RequestParam(defaultValue = "5") int size) {
         return APIResponse.<List<CommentResponse>>builder()
-                .result(commentService.getAllReplyCommentsByCommentId(commentId, page, size))
+                .result(commentService.getRepliesByCommentId(commentId, page, size))
+                .build();
+    }
+
+//    @GetMapping("/{commentId}/all-replies")
+//    public APIResponse<List<CommentResponse>> getAllRepliesForComment(@PathVariable Long commentId,
+//                                                                      @RequestParam(defaultValue = "0") int page,
+//                                                                      @RequestParam(defaultValue = "5") int size) {
+//        return APIResponse.<List<CommentResponse>>builder()
+//                .result(commentService.getAllReplyCommentsByCommentId(commentId, page, size))
+//                .build();
+//    }
+
+    @PutMapping("/{commentId}")
+    public APIResponse<CommentResponse> update(@PathVariable Long commentId, @RequestBody CommentRequest commentRequest) {
+        return APIResponse.<CommentResponse>builder()
+                .result(commentService.updateComment(commentId, commentRequest))
+                .build();
+    }
+
+    @DeleteMapping("/{commentId}")
+    public APIResponse<Void> delete(@PathVariable Long commentId){
+        commentService.deleteComment(commentId);
+        return APIResponse.<Void>builder()
                 .build();
     }
 }

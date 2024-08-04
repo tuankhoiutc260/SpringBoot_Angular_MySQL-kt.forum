@@ -51,10 +51,10 @@ public class UserMapperImpl implements UserMapper {
         userResponse.fullName( user.getFullName() );
         userResponse.image( user.getImage() );
         userResponse.active( user.isActive() );
-        userResponse.createdDate( user.getCreatedDate() );
         userResponse.createdBy( user.getCreatedBy() );
-        userResponse.lastModifiedDate( user.getLastModifiedDate() );
+        userResponse.createdDate( user.getCreatedDate() );
         userResponse.lastModifiedBy( user.getLastModifiedBy() );
+        userResponse.lastModifiedDate( user.getLastModifiedDate() );
         userResponse.role( roleToRoleResponse( user.getRole() ) );
 
         return userResponse.build();
