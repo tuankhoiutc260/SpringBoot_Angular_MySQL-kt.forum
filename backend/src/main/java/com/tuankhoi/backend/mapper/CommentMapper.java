@@ -20,7 +20,4 @@ public interface CommentMapper {
     @Mapping(target = "parentId", source = "parentComment.id")
     @Mapping(target = "replies", source = "replies")
     CommentResponse toResponse(Comment comment);
-
-
-//    void updateComment(@MappingTarget Comment comment, CommentRequest commentRequest);
 }

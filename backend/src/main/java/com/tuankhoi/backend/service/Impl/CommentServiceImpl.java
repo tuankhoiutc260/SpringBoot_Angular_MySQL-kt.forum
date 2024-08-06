@@ -2,6 +2,7 @@ package com.tuankhoi.backend.service.Impl;
 
 import com.tuankhoi.backend.dto.request.CommentRequest;
 import com.tuankhoi.backend.dto.response.CommentResponse;
+import com.tuankhoi.backend.dto.websocket.WebSocketMessage;
 import com.tuankhoi.backend.exception.AppException;
 import com.tuankhoi.backend.exception.ErrorCode;
 import com.tuankhoi.backend.mapper.CommentMapper;
@@ -18,9 +19,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,7 +49,13 @@ public class CommentServiceImpl implements CommentService {
         }
         Comment savedComment = commentRepository.save(newComment);
         CommentResponse commentResponse = commentMapper.toResponse(savedComment);
-        messagingTemplate.convertAndSend("/topic/comments/" + existingPost.getId(), commentResponse);
+//        messagingTemplate.convertAndSend("/topic/comments/" + existingPost.getId(), commentResponse);
+
+        WebSocketMessage addCommentMessage = WebSocketMessage.builder()
+                .type("NEW_COMMENT")
+                .payload(commentResponse)
+                .build();
+        messagingTemplate.convertAndSend("/topic/comments/" + commentResponse.getPostId(), addCommentMessage);
         return commentResponse;
     }
 
@@ -78,7 +83,12 @@ public class CommentServiceImpl implements CommentService {
             existingComment.setContent(commentRequest.getContent());
             Comment updatedComment = commentRepository.save(existingComment);
             CommentResponse commentResponse = commentMapper.toResponse(updatedComment);
-            messagingTemplate.convertAndSend("/topic/comments/" + existingComment.getPost().getId() + "/update", commentResponse);
+//            messagingTemplate.convertAndSend("/topic/comments/" + existingComment.getPost().getId() + "/update", commentResponse);
+            WebSocketMessage updateCommentMessage = WebSocketMessage.builder()
+                    .type("UPDATE_COMMENT")
+                    .payload(commentResponse)
+                    .build();
+            messagingTemplate.convertAndSend("/topic/comments/" + existingComment.getPost().getId() + "/update", updateCommentMessage);
             return commentResponse;
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
             throw new AppException(ErrorCode.DATA_INTEGRITY_VIOLATION, "Failed to update post due to database constraint: " + e.getMessage(), e);
@@ -101,7 +111,14 @@ public class CommentServiceImpl implements CommentService {
         try {
             Comment commentToDelete = commentRepository.findById(commentId)
                     .orElseThrow(() -> new AppException(ErrorCode.COMMENT_NOT_FOUND));
+            String postId = commentToDelete.getPost().getId();
             commentRepository.delete(commentToDelete);
+//            messagingTemplate.convertAndSend("/topic/comments/" + postId + "/delete", commentId);
+            WebSocketMessage deleteCommentMessage = WebSocketMessage.builder()
+                    .type("DELETE_COMMENT")
+                    .payload(commentId)
+                    .build();
+            messagingTemplate.convertAndSend("/topic/comments/" + postId + "/delete", deleteCommentMessage);
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
             throw new IllegalArgumentException("Failed to delete comment due to database constraint", e);
         } catch (Exception e) {
