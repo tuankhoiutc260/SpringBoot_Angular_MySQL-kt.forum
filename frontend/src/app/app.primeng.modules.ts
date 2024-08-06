@@ -35,6 +35,7 @@ import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { DividerModule } from 'primeng/divider';
 import { ImageModule } from 'primeng/image';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
 
 @NgModule({
     exports: [
@@ -73,7 +74,8 @@ import { ImageModule } from 'primeng/image';
         InputGroupModule,
         InputGroupAddonModule,
         DividerModule,
-        ImageModule
+        ImageModule,
+        OverlayPanelModule
         
     ]
 })

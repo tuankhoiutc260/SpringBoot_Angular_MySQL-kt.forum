@@ -2,9 +2,18 @@
   <h2 class="text-center">Comments</h2>
   <app-comment-form (commentAdded)="onCommentAdded($event)"></app-comment-form>
   <div class="comments-container flex flex-column gap-5">
-    <app-comment *ngFor="let comment of commentResponseList" [comment]="comment" [postId]="postId"></app-comment>
+    <app-comment *ngFor="let comment of commentResponseList" 
+                 [comment]="comment" 
+                 [postId]="postId"
+                 (commentDeleted)="removeCommentFromList($event)"
+                 (commentUpdated)="updateCommentInList($event)">
+    </app-comment>
   </div>
 
-  <p-button *ngIf="hasMoreRootComments" class="flex justify-content-center" label="Show More Comments" [outlined]="true"
-    (onClick)="loadMoreComments()"></p-button>
+  <p-button *ngIf="hasMoreRootComments" 
+            class="flex justify-content-center" 
+            label="Show More Comments" 
+            [outlined]="true"
+            (onClick)="loadMoreComments()">
+  </p-button>
 </div>

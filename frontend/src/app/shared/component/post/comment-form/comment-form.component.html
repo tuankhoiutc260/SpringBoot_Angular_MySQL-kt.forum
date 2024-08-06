@@ -1,7 +1,7 @@
 <form (ngSubmit)="onSubmit()" class="flex flex-column gap-2 align-items-center">
   <div class="w-full cont-comment-request">
     <textarea #commentContent rows="2" pInputTextarea [autoResize]="true" [(ngModel)]="commentRequest.content"
-      name="comment" maxlength="1000" class="w-full">
+      name="comment" maxlength="1000" class="w-full" placeholder="Write to comment ... ">
     </textarea>
     <small class="comment-request-length">{{ commentRequest.content?.length || 0 }}/1000</small>
   </div>
@@ -13,4 +13,3 @@
     </p-button>
   </div>
 </form>
-

@@ -1,23 +1,23 @@
 .highlighted {
-    background-color: #fff3cd;
-    transition: background-color 0.5s ease;
-  }
-
-  :host ::ng-deep .p-card {
-    width: 100%;
+  background-color: #fff3cd;
+  transition: background-color 0.5s ease;
 }
 
-:host ::ng-deep .p-card .p-card-content{
+:host ::ng-deep .p-card {
+  width: 100%;
+}
+
+:host ::ng-deep .p-card .p-card-content {
   padding: 0;
 }
 
 
-:host  ::ng-deep   *:focus {
-    box-shadow: none !important;
-  
+:host ::ng-deep *:focus {
+  box-shadow: none !important;
+
 }
 
-.comment-inf{
+.comment-inf {
   background: #F0F2F5;
   border-radius: 18px;
   padding: 1rem;
@@ -25,26 +25,49 @@
 
 }
 
-.btn-a{
+.btn-a {
   cursor: pointer;
   font-weight: bold;
   color: #65676B;
 }
-.btn-a:hover{
+
+.btn-a:hover {
   cursor: pointer;
   text-decoration: underline;
 }
 
-:host ::ng-deep .p-avatar{
+.btn {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn:hover {
+  text-decoration: underline;
+}
+
+:host ::ng-deep .p-avatar {
   border: 1px solid #D1D2D4;
 }
 
 
 
-.line-comment{
+
+
+.line-comment {
   border: 1px solid #E7E7E7;
   border-radius: 10px;
   margin: 0.5rem;
   height: 100%;
   width: 0.1px;
 }
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:visited {
+  color: inherit;
+  text-decoration: none;
+}
+

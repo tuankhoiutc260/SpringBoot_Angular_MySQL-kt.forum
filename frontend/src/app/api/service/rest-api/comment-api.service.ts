@@ -1,60 +1,51 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject, Subject } from 'rxjs';
+import { map, Observable, Subject } from 'rxjs';
+import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
+
 import { ApiResponse } from '../../model/response/api-response';
 import { CommentResponse } from '../../model/response/comment-response';
 import { CommentRequest } from '../../model/request/comment-request';
 import { Client } from '@stomp/stompjs';
 import { environment } from '../../../../enviroments/environment';
-import { API_URL } from '../../../core/config/config';
+import { WebSocketService } from '../websocket/web-socket.service';
+import { WebSocketMessage } from '../../model/entity/web-socket-message';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CommentApiService {
-  private apiUrl = API_URL + 'comments';
-  private client: Client;
-  private isConnected: boolean = false;
-  private commentSubject = new Subject<CommentResponse>();
-
-  constructor(private http: HttpClient) {
-    this.client = new Client({
-      brokerURL: `${environment.wsUrl}`,
-      onConnect: () => {
-        console.log('Connected to WebSocket');
-        this.isConnected = true;
-      },
-      onDisconnect: () => {
-        console.log('Disconnected from WebSocket');
-        this.isConnected = false;
-      }
-    });
-  
-    this.client.activate();
+  private apiUrl = `${environment.apiUrl}/comments`;
+  constructor(private http: HttpClient,
+    private webSocketService: WebSocketService
+  ) {
   }
 
-  onNewComment(postId: string): Observable<CommentResponse> {
-    this.ensureConnection(() => {
-      this.client.subscribe(`/topic/comments/${postId}`, message => {
-        const comment: CommentResponse = JSON.parse(message.body);
-        this.commentSubject.next(comment);
-      });
-    });
-    return this.commentSubject.asObservable();
+  onNewComment(postId: string): Observable<WebSocketMessage<CommentResponse>> {
+    return this.webSocketService.listen(`/topic/comments/${postId}`);
   }
 
-  private ensureConnection(callback: () => void) {
-    if (this.isConnected) {
-      callback();
-    } else {
-      const checkConnection = setInterval(() => {
-        if (this.isConnected) {
-          clearInterval(checkConnection);
-          callback();
-        }
-      }, 100);
-    }
+  onUpdateComment(postId: string): Observable<WebSocketMessage<CommentResponse>> {
+    return this.webSocketService.listen(`/topic/comments/${postId}/update`);
   }
+
+  onDeleteComment(postId: string): Observable<WebSocketMessage<number>> {
+    return this.webSocketService.listen(`/topic/comments/${postId}/delete`);
+  }
+
+  // onNewComment(postId: string): Observable<CommentResponse> {
+  //   return new Observable(observer => {
+  //     this.socket$.subscribe(
+  //       message => {
+  //         if (message.type === 'NEW_COMMENT' && message.postId === postId) {
+  //           observer.next(message.comment);
+  //         }
+  //       },
+  //       error => observer.error(error),
+  //       () => observer.complete()
+  //     );
+  //   });
+  // }
 
   addComment(commentRequest: CommentRequest): Observable<ApiResponse<CommentResponse>> {
     return this.http.post<ApiResponse<CommentResponse>>(this.apiUrl, commentRequest);
@@ -64,15 +55,19 @@ export class CommentApiService {
     return this.http.get<ApiResponse<CommentResponse[]>>(`${this.apiUrl}/post/${postId}?page=${page}&size=${size}`);
   }
 
-  getRepliesByCommentId(commentId: string, page: number, size: number): Observable<ApiResponse<CommentResponse[]>> {
+  getRepliesByCommentId(commentId: number, page: number, size: number): Observable<ApiResponse<CommentResponse[]>> {
     return this.http.get<ApiResponse<CommentResponse[]>>(`${this.apiUrl}/${commentId}/replies?page=${page}&size=${size}`);
   }
 
-  getAllRepliesByCommentId(commentId: string, page: number, size: number): Observable<ApiResponse<CommentResponse[]>> {
+  getAllRepliesByCommentId(commentId: number, page: number, size: number): Observable<ApiResponse<CommentResponse[]>> {
     return this.http.get<ApiResponse<CommentResponse[]>>(`${this.apiUrl}/${commentId}/all-replies?page=${page}&size=${size}`);
   }
 
-  delete(commentId: string): Observable<ApiResponse<void>> {
+  updateComment(commentId: number, comment: CommentRequest): Observable<ApiResponse<CommentResponse>> {
+    return this.http.put<ApiResponse<CommentResponse>>(`${this.apiUrl}/${commentId}`, comment);
+  }
+
+  delete(commentId: number): Observable<ApiResponse<void>> {
     const deleteUrl = `${this.apiUrl}/${commentId}`;
     return this.http.delete<ApiResponse<void>>(deleteUrl);
   }

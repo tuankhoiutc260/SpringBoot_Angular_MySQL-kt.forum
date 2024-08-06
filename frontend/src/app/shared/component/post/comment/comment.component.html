@@ -1,6 +1,6 @@
 <div class="comment">
   <div class="comment-content">
-    <div class="flex  gap-2 ">
+    <div class="flex gap-2">
       <div class="flex flex-column align-items-center">
         <p-avatar
           [image]="(comment.createdBy! | userIdToUserImage | async) || 'assets/images/img-default-user.jpg' | dataUriToBlob"
@@ -10,38 +10,69 @@
       </div>
 
       <div class="flex flex-column gap-2 w-full">
-
-        <div class="flex flex-column gap-2 comment-inf">
-          <div class="flex gap-4 flex-wrap	 align-items-end">
-            <b class="comment-meta">
-              {{ comment.createdBy! | userIdToFullName | async}}
-            </b>
-            <small>{{ comment.createdDate! | timeAgo}}</small>
+        <div class="flex gap-1">
+          <div class="flex flex-column gap-2 comment-inf">
+            <div class="flex gap-4 flex-wrap align-items-end">
+              <a class="comment-meta btn" [routerLink]="['/', comment.createdBy! | userIdToUserName | async]"
+                [pTooltip]="'Go to ' + (comment.createdBy! | userIdToFullName | async) + '\'s profile'"
+                tooltipPosition="left">
+                {{ comment.createdBy! | userIdToFullName | async}}
+              </a>
+              <small>{{ comment.createdDate! | timeAgo}}</small>
+            </div>
+            <span *ngIf="!isEditing">{{ comment.content }}</span>
+            <div *ngIf="isEditing" class="p-fluid">
+              <textarea pInputTextarea [(ngModel)]="editedContent" [autoResize]="true"></textarea>
+              <div class="flex justify-content-end mt-2">
+                <p-button label="Cancel" (onClick)="cancelEditing()" styleClass="p-button-text"></p-button>
+                <p-button label="Save" (onClick)="saveEdit()" [disabled]="!editedContent.trim()"></p-button>
+              </div>
+            </div>
           </div>
-          <span>{{ comment.content }}</span>
+          <p-button icon="pi pi-ellipsis-h" [rounded]="true" [text]="true" severity="secondary"
+            (click)="opComment.toggle($event)" *ngIf="canEdit"/>
+
+          <p-overlayPanel #opComment class="opComment">
+            <div class="cont-btn-function-for-comment flex flex-column gap-1">
+              <p-button label="Edit" [link]="true" size="small" icon="pi pi-pen-to-square" (click)="startEditing(); opComment.hide()" />
+              <p-button label="Delete" [link]="true" size="small" icon="pi pi-trash"
+                (click)="onDeleteComment(); opComment.hide()" />
+            </div>
+          </p-overlayPanel>
         </div>
 
         <div class="flex gap-6 align-items-center ml-3">
-          <div class="flex gap-2">
-            <i class="cursor-pointer pi pi-thumbs-up"></i>
+          <div class="flex gap-2 cursor-pointer" (click)="check()">
+            <i class="pi pi-thumbs-up"></i>
             <span>3</span>
           </div>
-          <div class="flex gap-2">
-            <i class="cursor-pointer pi pi-thumbs-down"></i>
+          <div class="flex gap-2 cursor-pointer ">
+            <i class="pi pi-thumbs-down"></i>
             <span>1</span>
           </div>
           <a class="btn-a" (click)="toggleReplyForm()">Reply</a>
         </div>
 
-        <app-comment-form *ngIf="showReplyForm" (commentAdded)="onReplyAdded($event)" (handleCancel)="toggleReplyForm()"
-          [parentCommentId]="comment.id">
+        <app-comment-form *ngIf="showReplyForm" (commentAdded)="onReplyAdded($event)"
+          (handleCancel)="toggleReplyForm()">
         </app-comment-form>
 
         <div class="replies flex flex-column gap-3 mt-3" *ngIf="comment.replies && comment.replies.length > 0">
-          <app-comment *ngFor="let reply of comment.replies" [comment]="reply" [postId]="postId"></app-comment>
+          <p-button *ngIf="!showReplies" label="Show Replies ({{comment.replies.length}})" [text]="true"
+            (onClick)="toggleReplies()">
+          </p-button>
+          <div *ngIf="showReplies">
+            <app-comment *ngFor="let reply of displayedReplies" [comment]="reply" [postId]="postId"></app-comment>
+            <p-button *ngIf="hasMoreReplies" label="Show More Replies" [text]="true" (onClick)="loadMoreReplies()">
+            </p-button>
+            <p-button label="Hide Replies" [text]="true" (onClick)="toggleReplies()">
+            </p-button>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
+<p-toast />
+<p-confirmDialog />

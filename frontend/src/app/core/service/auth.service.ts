@@ -4,6 +4,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { UserApiService } from '../../api/service/rest-api/user-api.service';
 import { ApiResponse } from '../../api/model/response/api-response';
 import { UserResponse } from '../../api/model/response/user-response';
+import { getRoleFromToken, getSubFromToken } from '../utils/jwt-helper';
+
 
 @Injectable({
   providedIn: 'root'
@@ -72,14 +74,31 @@ export class AuthService {
   //   return !!this.getToken();
   // }
 
-  getRole(): string {
-    const token = this.getToken();
-    if (token) {
-      const decodedToken: any = jwtDecode(token);
-      return decodedToken.scope || 'ROLE_USER';
+  // getRole(): string {
+  //   const token = this.getToken();
+  //   if (token) {
+  //     const decodedToken: any = jwtDecode(token);
+  //     return decodedToken.scope || 'ROLE_USER';
+  //   }
+  //   return 'ROLE_ANONYMOUS';
+  // }
+  getRole(): string | null {
+    const token = localStorage.getItem('auth_token');
+    if (!token) {
+      return null;
     }
-    return 'ROLE_ANONYMOUS';
+    return getRoleFromToken(token);
   }
+  
+
+  getUserID(): string | null {
+    const token = localStorage.getItem('auth_token');
+    if (!token) {
+      return null;
+    }
+    return getSubFromToken(token);
+  }
+  
 
   isAuthenticated(): boolean {
     return !!this.getToken();
@@ -113,7 +132,8 @@ export class AuthService {
     return this.userLoginInfoSubject.value;
   }
 }
-function jwtDecode(token: string): any {
-  throw new Error('Function not implemented.');
-}
+
+// function jwtDecode(token: string): any {
+//   throw new Error('Function not implemented.');
+// }
 
