@@ -185,7 +185,16 @@ export class HeaderComponent {
   }
 
   // new post
-  newPost: PostResponse = {}; 
+  newPost: PostResponse = {
+    id: '',
+    title: '',
+    content: '',
+    tags: [],
+    createdDate: '',
+    createdBy: '',
+    lastModifiedDate: '',
+    lastModifiedBy: ''
+  }; 
   isDialogVisible: boolean = false;  isActiveImage: boolean = false;
 
   openDialogNew() {

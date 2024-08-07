@@ -8,6 +8,7 @@ import { SharedDataService } from '../../../../core/service/shared-data.service'
 import { ApiResponse } from '../../../../api/model/response/api-response';
 import { PostResponse } from '../../../../api/model/response/post-response';
 import { UserResponse } from '../../../../api/model/response/user-response';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-post-details',
@@ -18,16 +19,29 @@ import { UserResponse } from '../../../../api/model/response/user-response';
 export class PostDetailsComponent implements OnInit, OnDestroy {
   postId: string = '';
   userName: string = '';
-  postResponse: PostResponse = {};
+  postResponse: PostResponse = {
+    id: '',
+    createdBy: '',
+    title: '',
+    content: '',
+    tags: [],
+    createdDate: '',
+    lastModifiedDate: '',
+    lastModifiedBy: ''
+  };
   postAuthorInfo: UserResponse | null = null;
   private subscription: Subscription = new Subscription();
+  safeContent!: SafeHtml;
+
 
   constructor(
     private postApiService: PostApiService,
     private authService: AuthService,
     private activatedRoute: ActivatedRoute,
     private messageService: MessageService,
-    private sharedDataService: SharedDataService
+    private sharedDataService: SharedDataService,
+    private sanitizer: DomSanitizer
+
   ) { }
 
   ngOnInit() {
@@ -56,6 +70,7 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
         const post = apiResponse.result;
         if (post) {
           this.postResponse = post;
+          this.safeContent = this.sanitizer.bypassSecurityTrustHtml(post.content);
         } else {
           console.error('No result found in response:', apiResponse.message);
         }

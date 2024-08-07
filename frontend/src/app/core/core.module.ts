@@ -9,6 +9,7 @@ import { UserNameToUserIdPipe } from './pipe/user-name-to-user-id.pipe';
 import { UserIdToFullNamePipe } from './pipe/user-id-to-full-name.pipe';
 import { UserIdToUserImagePipe } from './pipe/user-id-to-user-image.pipe';
 import { TimeAgoPipe } from './pipe/time-ago.pipe';
+import { UserIdToUserPipe } from './pipe/user-id-to-user.pipe';
 
 
 
@@ -22,7 +23,8 @@ import { TimeAgoPipe } from './pipe/time-ago.pipe';
     UserNameToUserIdPipe,
     UserIdToFullNamePipe,
     UserIdToUserImagePipe,
-    TimeAgoPipe
+    TimeAgoPipe,
+    UserIdToUserPipe
 
   ],
   imports: [
@@ -37,7 +39,8 @@ import { TimeAgoPipe } from './pipe/time-ago.pipe';
     UserNameToUserIdPipe,
     UserIdToFullNamePipe,
     UserIdToUserImagePipe,
-    TimeAgoPipe
+    TimeAgoPipe,
+    UserIdToUserPipe,
 
   ]
 })

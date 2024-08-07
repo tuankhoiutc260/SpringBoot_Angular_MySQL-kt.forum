@@ -1,11 +1,15 @@
 <div>
+    <!-- <img class="m-auto col-12 lg:col-8" [src]="postResponse.image ? (postResponse.image | dataUriToBlob) : ''"> -->
+
     <h1 class="text-center">{{ postResponse.title }}</h1>
     <div class="flex justify-content-center gap-2 align-items-center">
-        <p-avatar *ngIf="postAuthorInfo?.image" [image]="(postAuthorInfo?.image ?? 'default-image-url') | dataUriToBlob"
-            styleClass="mr-2" shape="circle"></p-avatar>
-        <small *ngIf="postAuthorInfo?.fullName">
-            {{ postAuthorInfo?.fullName }} ({{ postAuthorInfo?.userName }})
-        </small>
+        <ng-container *ngIf="postResponse.createdBy">
+            <ng-container *ngIf="postResponse.createdBy! | userIdToUser | async as user">
+                <p-avatar [image]="(user.image!) | dataUriToBlob" shape="circle" size="normal"></p-avatar>
+                <small>{{ user.fullName }} ({{ user.userName }})</small>
+            </ng-container>
+        </ng-container>
+        
         <span>|</span>
         <small>{{ postResponse.createdDate | date: 'HH:mm:ss dd/MM/yyyy' }}</small>
     </div>
@@ -16,7 +20,7 @@
     <hr>
 
     <div class="ql-snow">
-        <div class="ql-editor m-auto col-12 lg:col-8" [innerHTML]="postResponse.content"></div>
+        <div class="ql-editor m-auto col-12 lg:col-8" [innerHTML]="safeContent"></div>
     </div>
 
     <hr>

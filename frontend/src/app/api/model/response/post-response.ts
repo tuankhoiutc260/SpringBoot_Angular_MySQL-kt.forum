@@ -2,15 +2,15 @@ import { CommentResponse } from "./comment-response";
 import { LikeResponse } from "./like-response";
 
 export interface PostResponse {
-    id?: string;
+    id: string;
     image?:string;
-    title?: string;
-    content?: string;
-    tags?: string[];
-    createdDate?: Date | string;
-    createdBy?: string;
-    lastModifiedDate?: Date | string;
-    lastModifiedBy?: string;
+    title: string;
+    content: string;
+    tags: string[];
+    createdDate: Date | string;
+    createdBy: string;
+    lastModifiedDate: Date | string;
+    lastModifiedBy: string;
     likes?: LikeResponse[]
     countLikes?: number
     comments?: CommentResponse[]

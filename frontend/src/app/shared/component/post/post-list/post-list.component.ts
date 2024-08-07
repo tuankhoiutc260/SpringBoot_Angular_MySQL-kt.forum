@@ -50,7 +50,16 @@ export class PostListComponent implements OnInit, OnDestroy {
 
   // Open dialog update Post
   isDialogVisible: boolean = false;
-  selectedPostResponse: PostResponse = {}; 
+  selectedPostResponse: PostResponse = {
+    id: '',
+    createdBy: '',
+    title: '',
+    content: '',
+    tags: [],
+    createdDate: '',
+    lastModifiedDate: '',
+    lastModifiedBy: ''
+  }; 
 
   openDialogEdit(postResponse: PostResponse): void {
     this.selectedPostResponse = postResponse;
