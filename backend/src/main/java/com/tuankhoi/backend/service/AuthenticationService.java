@@ -8,7 +8,7 @@ import com.tuankhoi.backend.dto.request.LogoutRequest;
 import com.tuankhoi.backend.dto.request.RefreshRequest;
 import com.tuankhoi.backend.dto.response.AuthenticationResponse;
 import com.tuankhoi.backend.dto.response.IntrospectResponse;
-import com.tuankhoi.backend.model.User;
+import com.tuankhoi.backend.entity.User;
 import org.springframework.security.core.Authentication;
 
 import java.text.ParseException;

@@ -2,7 +2,7 @@ package com.tuankhoi.backend.mapper;
 
 import com.tuankhoi.backend.dto.request.PermissionRequest;
 import com.tuankhoi.backend.dto.response.PermissionResponse;
-import com.tuankhoi.backend.model.Permission;
+import com.tuankhoi.backend.entity.Permission;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 

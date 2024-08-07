@@ -2,7 +2,7 @@ package com.tuankhoi.backend.mapper;
 
 import com.tuankhoi.backend.dto.request.UserRequest;
 import com.tuankhoi.backend.dto.response.UserResponse;
-import com.tuankhoi.backend.model.User;
+import com.tuankhoi.backend.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;

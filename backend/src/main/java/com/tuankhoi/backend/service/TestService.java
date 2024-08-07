@@ -3,7 +3,7 @@ package com.tuankhoi.backend.service;
 import com.tuankhoi.backend.dto.request.TestRequest;
 import com.tuankhoi.backend.dto.response.TestResponse;
 import com.tuankhoi.backend.mapper.TestMapper;
-import com.tuankhoi.backend.model.Test;
+import com.tuankhoi.backend.entity.Test;
 import com.tuankhoi.backend.repository.TestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

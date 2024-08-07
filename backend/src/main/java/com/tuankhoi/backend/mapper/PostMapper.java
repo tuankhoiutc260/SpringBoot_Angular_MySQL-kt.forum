@@ -2,7 +2,7 @@ package com.tuankhoi.backend.mapper;
 
 import com.tuankhoi.backend.dto.request.PostRequest;
 import com.tuankhoi.backend.dto.response.PostResponse;
-import com.tuankhoi.backend.model.Post;
+import com.tuankhoi.backend.entity.Post;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;

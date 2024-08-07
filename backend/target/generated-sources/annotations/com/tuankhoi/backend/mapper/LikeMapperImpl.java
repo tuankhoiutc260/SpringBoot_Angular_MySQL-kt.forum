@@ -2,9 +2,9 @@ package com.tuankhoi.backend.mapper;
 
 import com.tuankhoi.backend.dto.request.LikeRequest;
 import com.tuankhoi.backend.dto.response.LikeResponse;
-import com.tuankhoi.backend.model.Like;
-import com.tuankhoi.backend.model.Post;
-import com.tuankhoi.backend.model.User;
+import com.tuankhoi.backend.entity.Like;
+import com.tuankhoi.backend.entity.Post;
+import com.tuankhoi.backend.entity.User;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 

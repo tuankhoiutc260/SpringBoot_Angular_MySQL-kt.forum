@@ -1,6 +1,6 @@
 package com.tuankhoi.backend.repository;
 
-import com.tuankhoi.backend.model.Permission;
+import com.tuankhoi.backend.entity.Permission;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

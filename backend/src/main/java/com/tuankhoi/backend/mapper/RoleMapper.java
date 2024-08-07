@@ -2,7 +2,7 @@ package com.tuankhoi.backend.mapper;
 
 import com.tuankhoi.backend.dto.request.RoleRequest;
 import com.tuankhoi.backend.dto.response.RoleResponse;
-import com.tuankhoi.backend.model.Role;
+import com.tuankhoi.backend.entity.Role;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;

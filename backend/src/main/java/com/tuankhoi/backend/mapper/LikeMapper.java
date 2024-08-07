@@ -2,7 +2,7 @@ package com.tuankhoi.backend.mapper;
 
 import com.tuankhoi.backend.dto.request.LikeRequest;
 import com.tuankhoi.backend.dto.response.LikeResponse;
-import com.tuankhoi.backend.model.Like;
+import com.tuankhoi.backend.entity.Like;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

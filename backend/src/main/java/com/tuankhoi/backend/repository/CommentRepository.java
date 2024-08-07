@@ -1,6 +1,6 @@
 package com.tuankhoi.backend.repository;
 
-import com.tuankhoi.backend.model.Comment;
+import com.tuankhoi.backend.entity.Comment;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

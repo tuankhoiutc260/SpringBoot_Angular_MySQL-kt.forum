@@ -5,7 +5,7 @@ import com.tuankhoi.backend.dto.response.PermissionResponse;
 import com.tuankhoi.backend.exception.AppException;
 import com.tuankhoi.backend.exception.ErrorCode;
 import com.tuankhoi.backend.mapper.PermissionMapper;
-import com.tuankhoi.backend.model.Permission;
+import com.tuankhoi.backend.entity.Permission;
 import com.tuankhoi.backend.repository.PermissionRepository;
 import com.tuankhoi.backend.service.PermissionService;
 import jakarta.persistence.EntityNotFoundException;

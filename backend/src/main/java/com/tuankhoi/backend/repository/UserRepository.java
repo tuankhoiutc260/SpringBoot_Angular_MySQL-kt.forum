@@ -1,9 +1,8 @@
 package com.tuankhoi.backend.repository;
 
-import com.tuankhoi.backend.model.User;
+import com.tuankhoi.backend.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 

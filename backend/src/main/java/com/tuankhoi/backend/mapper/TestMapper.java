@@ -1,7 +1,7 @@
 package com.tuankhoi.backend.mapper;
 
 import com.tuankhoi.backend.dto.response.TestResponse;
-import com.tuankhoi.backend.model.Test;
+import com.tuankhoi.backend.entity.Test;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

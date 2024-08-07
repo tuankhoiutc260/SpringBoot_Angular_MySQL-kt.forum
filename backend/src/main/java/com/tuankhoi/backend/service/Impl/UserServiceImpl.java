@@ -6,7 +6,7 @@ import com.tuankhoi.backend.enums.RoleEnum;
 import com.tuankhoi.backend.exception.AppException;
 import com.tuankhoi.backend.exception.ErrorCode;
 import com.tuankhoi.backend.mapper.UserMapper;
-import com.tuankhoi.backend.model.User;
+import com.tuankhoi.backend.entity.User;
 import com.tuankhoi.backend.repository.RoleRepository;
 import com.tuankhoi.backend.repository.UserRepository;
 import com.tuankhoi.backend.service.UserService;

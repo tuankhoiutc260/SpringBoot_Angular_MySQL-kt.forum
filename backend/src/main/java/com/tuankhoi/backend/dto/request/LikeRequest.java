@@ -1,7 +1,12 @@
 package com.tuankhoi.backend.dto.request;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+/**
+ * For error codes, see {@link com.tuankhoi.backend.exception.ErrorCode}
+ */
 
 @Getter
 @Setter
@@ -10,5 +15,6 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class LikeRequest {
+    @NotBlank(message = "POST_ID_NOTBLANK")
     String postId;
 }
