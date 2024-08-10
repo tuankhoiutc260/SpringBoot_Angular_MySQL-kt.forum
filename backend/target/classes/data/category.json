@@ -1,0 +1,164 @@
+[
+  {
+    "title": "Popular tourist destinations in the country",
+    "subCategories": [
+      {
+        "title": "Hanoi",
+        "description": "The capital city known for its rich history and vibrant culture.",
+        "cover_image": "src/main/resources/assets/images/SubCategory/img_HaNoi.jpg"
+      },
+      {
+        "title": "Ho Chi Minh City",
+        "description": "The bustling economic hub with modern attractions and lively nightlife.",
+        "cover_image": "src/main/resources/assets/images/SubCategory/img_HoChiMinh.jpg"
+      },
+      {
+        "title": "Da Nang",
+        "description": "A coastal city with beautiful beaches and scenic mountains.",
+        "cover_image": "src/main/resources/assets/images/SubCategory/img_DaNang.jpg"
+      },
+      {
+        "title": "Hoi An",
+        "description": "A historic town famous for its well-preserved architecture and lantern-lit streets.",
+        "cover_image": "src/main/resources/assets/images/SubCategory/img_HoiAn.jpg"
+      },
+      {
+        "title": "Hue",
+        "description": "The ancient capital with historical sites and royal heritage.",
+        "cover_image": "src/main/resources/assets/images/SubCategory/img_Hue.jpg"
+      },
+      {
+        "title": "Nha Trang",
+        "description": "A resort city known for its stunning beaches and clear waters.",
+        "cover_image": "src/main/resources/assets/images/SubCategory/img_NhaTrang.jpg"
+      },
+      {
+        "title": "Phu Quoc",
+        "description": "An island paradise with pristine beaches and tropical forests.",
+        "cover_image": "src/main/resources/assets/images/SubCategory/img_PhuQuoc.jpg"
+      },
+      {
+        "title": "Ha Long",
+        "description": "Known for its stunning bay and limestone formations.",
+        "cover_image": "src/main/resources/assets/images/SubCategory/img_HaLong.jpg"
+      },
+      {
+        "title": "Sapa",
+        "description": "A mountainous region with beautiful terraced fields and ethnic minority cultures.",
+        "cover_image": "src/main/resources/assets/images/SubCategory/img_SaPa.jpg"
+      },
+      {
+        "title": "Dalat",
+        "description": "A cool-weather city known for its flowers, lakes, and French colonial architecture.",
+        "cover_image": "src/main/resources/assets/images/SubCategory/img_DaLat.jpg"
+      },
+      {
+        "title": "Can Tho",
+        "description": "A city in the Mekong Delta known for its floating markets and waterways.",
+        "cover_image": "src/main/resources/assets/images/SubCategory/img_CanTho.jpg"
+      },
+      {
+        "title": "Vung Tau",
+        "description": "A coastal city popular for its beaches and seafood.",
+        "cover_image": "src/main/resources/assets/images/SubCategory/img_VungTau.jpg"
+      },
+      {
+        "title": "Quy Nhon",
+        "description": "A quiet beach town with untouched beaches and historical sites.",
+        "cover_image": "src/main/resources/assets/images/SubCategory/img_QuyNhon.jpg"
+      },
+      {
+        "title": "Mui Ne",
+        "description": "Famous for its sand dunes and water sports.",
+        "cover_image": "src/main/resources/assets/images/SubCategory/img_MuiNe.jpg"
+      },
+      {
+        "title": "Hai Phong",
+        "description": "An industrial port city with a blend of history and modernity.",
+        "cover_image": "src/main/resources/assets/images/SubCategory/img_HaiPhong.jpg"
+      }
+    ],
+    "description": "Explore Vietnam's top tourist destinations, from breathtaking natural landscapes to rich cultural sites, offering unique experiences for every traveler."
+  },
+  {
+    "title": "Top Tourist Destinations Around the World",
+    "subCategories": [
+      {
+        "title": "Paris",
+        "description": "The capital of France, renowned for its art, fashion, and landmarks like the Eiffel Tower.",
+        "cover_image": "src/main/resources/assets/images/SubCategory/img_Paris.jpg"
+      },
+      {
+        "title": "New York",
+        "description": "A vibrant city famous for its iconic skyline, Broadway shows, and diverse culture.",
+        "cover_image": "src/main/resources/assets/images/SubCategory/img_NewYork.jpg"
+      },
+      {
+        "title": "Tokyo",
+        "description": "A bustling metropolis known for its technology, fashion, and traditional temples.",
+        "cover_image": "src/main/resources/assets/images/SubCategory/img_Tokyo.jpg"
+      },
+      {
+        "title": "London",
+        "description": "The capital of the UK, known for its historic landmarks, museums, and cultural diversity.",
+        "cover_image": "src/main/resources/assets/images/SubCategory/img_London.jpg"
+      },
+      {
+        "title": "Rome",
+        "description": "Italy's capital, rich in history with ancient ruins like the Colosseum and Vatican City.",
+        "cover_image": "src/main/resources/assets/images/SubCategory/img_Rome.jpg"
+      },
+      {
+        "title": "Barcelona",
+        "description": "A city in Spain known for its unique architecture by Antoni Gaudí and vibrant street life.",
+        "cover_image": "src/main/resources/assets/images/SubCategory/img_Barcelona.jpg"
+      },
+      {
+        "title": "Sydney",
+        "description": "An Australian city famous for its stunning harbor, Opera House, and beautiful beaches.",
+        "cover_image": "src/main/resources/assets/images/SubCategory/img_Sydney.jpg"
+      },
+      {
+        "title": "Dubai",
+        "description": "A luxurious city in the UAE known for its modern architecture, shopping, and nightlife.",
+        "cover_image": "src/main/resources/assets/images/SubCategory/img_Dubai.jpg"
+      },
+      {
+        "title": "Istanbul",
+        "description": "A city straddling Europe and Asia with rich history, including landmarks like the Hagia Sophia.",
+        "cover_image": "src/main/resources/assets/images/SubCategory/img_Istanbul.jpg"
+      },
+      {
+        "title": "Bangkok",
+        "description": "Thailand's capital, famous for its vibrant street life, temples, and bustling markets.",
+        "cover_image": "src/main/resources/assets/images/SubCategory/img_Bangkok.jpg"
+      },
+      {
+        "title": "Singapore",
+        "description": "A city-state known for its cleanliness, modern skyline, and diverse cultural influences.",
+        "cover_image": "src/main/resources/assets/images/SubCategory/img_Singapore.jpg"
+      },
+      {
+        "title": "Rio de Janeiro",
+        "description": "A Brazilian city famous for its carnival, beaches, and the iconic Christ the Redeemer statue.",
+        "cover_image": "src/main/resources/assets/images/SubCategory/img_RiodeJaneiro.jpg"
+      },
+      {
+        "title": "Amsterdam",
+        "description": "The capital of the Netherlands, known for its canals, museums, and historic buildings.",
+        "cover_image": "src/main/resources/assets/images/SubCategory/img_Amsterdam.jpg"
+      },
+      {
+        "title": "Prague",
+        "description": "The capital of the Czech Republic, famous for its well-preserved medieval architecture.",
+        "cover_image": "src/main/resources/assets/images/SubCategory/img_Prague.jpg"
+      },
+      {
+        "title": "Cape Town",
+        "description": "A city in South Africa known for its stunning landscapes, including Table Mountain and beautiful beaches.",
+        "cover_image": "src/main/resources/assets/images/SubCategory/img_CapeTown.jpg"
+      }
+    ],
+    "description": "Discover the most iconic and breathtaking destinations across the globe. From historic landmarks and vibrant cities to natural wonders and serene beaches, these spots offer unforgettable experiences for travelers seeking adventure, culture, and beauty."
+  }
+]
