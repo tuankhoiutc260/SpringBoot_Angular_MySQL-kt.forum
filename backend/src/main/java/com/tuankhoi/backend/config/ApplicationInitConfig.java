@@ -3,13 +3,9 @@ package com.tuankhoi.backend.config;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tuankhoi.backend.dto.request.RoleRequest;
+import com.tuankhoi.backend.entity.*;
 import com.tuankhoi.backend.mapper.RoleMapper;
-import com.tuankhoi.backend.entity.Permission;
-import com.tuankhoi.backend.entity.Role;
-import com.tuankhoi.backend.entity.User;
-import com.tuankhoi.backend.repository.PermissionRepository;
-import com.tuankhoi.backend.repository.RoleRepository;
-import com.tuankhoi.backend.repository.UserRepository;
+import com.tuankhoi.backend.repository.*;
 import com.tuankhoi.backend.untils.ImageUtil;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +33,8 @@ public class ApplicationInitConfig {
     RoleRepository roleRepository;
     PermissionRepository permissionRepository;
     UserRepository userRepository;
+    CategoryRepository categoryRepository;
+    SubCategoryRepository subCategoryRepository;
 
     @NonFinal
     @Value("${avatar.admin.image.path}")
@@ -48,6 +46,7 @@ public class ApplicationInitConfig {
             initializePermissions();
             initializeRoles();
             createAdminUser();
+            this.initializeCategories();
         };
     }
 
@@ -97,6 +96,39 @@ public class ApplicationInitConfig {
             }
         } else {
             log.info("Role table already has data, skipping data initialization.");
+        }
+    }
+
+    private void initializeCategories() {
+        if (subCategoryRepository.count() == 0) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            ClassPathResource resource = new ClassPathResource("data/category.json");
+
+            try {
+                List<Map<String, Object>> data = objectMapper.readValue(resource.getInputStream(), List.class);
+
+                for (Map<String, Object> categoryMap : data) {
+                    Category category = new Category();
+                    category.setTitle((String) categoryMap.get("title"));
+                    category.setDescription((String) categoryMap.get("description"));
+                    category = categoryRepository.save(category);
+
+                    List<Map<String, String>> subCategories = (List<Map<String, String>>) categoryMap.get("subCategories");
+                    for (Map<String, String> subCategoryMap : subCategories) {
+                        SubCategory subCategory = new SubCategory();
+                        subCategory.setTitle(subCategoryMap.get("title"));
+                        subCategory.setDescription(subCategoryMap.get("description"));
+                        subCategory.setCoverImage(ImageUtil.getImageAsBase64(subCategoryMap.get("cover_image")));
+                        subCategory.setCategory(category);
+                        subCategoryRepository.save(subCategory);
+                    }
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            log.info("Category table already has data, skipping data initialization.");
         }
     }
 

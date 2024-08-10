@@ -10,9 +10,11 @@ public interface SubCategoryService {
 
     SubCategoryResponse findById(String subCategoryID);
 
+    List<SubCategoryResponse> findByCategoryId(String categoryId, int page, int size);
+
     List<SubCategoryResponse> findAll();
 
-    SubCategoryResponse update(Integer subCategoryRequestID, SubCategoryRequest subCategoryRequest);
+    SubCategoryResponse update(String subCategoryRequestID, SubCategoryRequest subCategoryRequest);
 
     void deleteById(String subCategoryRequest);
 }
