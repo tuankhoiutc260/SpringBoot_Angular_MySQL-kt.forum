@@ -20,10 +20,10 @@ import java.util.List;
 public class RoleController {
     RoleService roleService;
 
-    @GetMapping("/{id}")
-    public APIResponse<RoleResponse> findById(@PathVariable int id) {
+    @GetMapping("/{roleId}")
+    public APIResponse<RoleResponse> findByRoleId(@PathVariable int roleId) {
         return APIResponse.<RoleResponse>builder()
-                .result(roleService.findById(id))
+                .result(roleService.findByRoleId(roleId))
                 .build();
     }
 
@@ -42,15 +42,15 @@ public class RoleController {
     }
 
     @PutMapping("/{id}")
-    public APIResponse<RoleResponse> update(@PathVariable int id, @RequestBody RoleRequest roleRequest) {
+    public APIResponse<RoleResponse> update(@PathVariable int roleId, @RequestBody RoleRequest roleRequest) {
         return APIResponse.<RoleResponse>builder()
-                .result(roleService.update(id, roleRequest))
+                .result(roleService.update(roleId, roleRequest))
                 .build();
     }
 
     @DeleteMapping("/{id}")
-    public APIResponse<Void> delete(@PathVariable int id) {
-        roleService.deleteById(id);
+    public APIResponse<Void> deleteByRoleId(@PathVariable int roleId) {
+        roleService.deleteByRoleId(roleId);
         return APIResponse.<Void>builder()
                 .build();
     }

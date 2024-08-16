@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/posts")
@@ -27,10 +26,27 @@ public class PostController {
                 .build();
     }
 
+    @GetMapping("/sub-category/{subCategoryId}")
+    public APIResponse<List<PostResponse>> findBySubCategory(@PathVariable String subCategoryId,
+                                                             @RequestParam(defaultValue = "0") int page,
+                                                             @RequestParam(defaultValue = "10") int size) {
+
+        return APIResponse.<List<PostResponse>>builder()
+                .result(postService.findBySubCategoryId(subCategoryId, page, size))
+                .build();
+    }
+
     @GetMapping("/user-post/{userName}")
     public APIResponse<List<PostResponse>> findByCreatedBy(@PathVariable String userName) {
         return APIResponse.<List<PostResponse>>builder()
                 .result(postService.findByUserName(userName))
+                .build();
+    }
+
+    @GetMapping("/title/{title}")
+    public APIResponse<List<PostResponse>> findByTitle(@PathVariable String title) {
+        return APIResponse.<List<PostResponse>>builder()
+                .result(postService.findByUserName(title))
                 .build();
     }
 
@@ -62,16 +78,16 @@ public class PostController {
                 .build();
     }
 
-    @PutMapping("/{id}")
-    public APIResponse<PostResponse> update(@PathVariable String id, @ModelAttribute PostRequest postRequest) {
+    @PutMapping("/{postId}")
+    public APIResponse<PostResponse> update(@PathVariable String postId, @ModelAttribute PostRequest postRequest) {
         return APIResponse.<PostResponse>builder()
-                .result(postService.update(id, postRequest))
+                .result(postService.update(postId, postRequest))
                 .build();
     }
 
-    @DeleteMapping("/{id}")
-    public APIResponse<Void> delete(@PathVariable String id) {
-        postService.deleteById(id);
+    @DeleteMapping("/{postId}")
+    public APIResponse<Void> delete(@PathVariable String postId) {
+        postService.deleteByPostId(postId);
         return APIResponse.<Void>builder()
                 .build();
     }

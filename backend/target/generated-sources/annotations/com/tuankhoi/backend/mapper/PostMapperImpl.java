@@ -31,10 +31,6 @@ public class PostMapperImpl implements PostMapper {
 
         post.title( postRequest.getTitle() );
         post.content( postRequest.getContent() );
-        Set<String> set = postRequest.getTags();
-        if ( set != null ) {
-            post.tags( new LinkedHashSet<String>( set ) );
-        }
 
         return post.build();
     }
@@ -48,13 +44,8 @@ public class PostMapperImpl implements PostMapper {
         PostResponse.PostResponseBuilder postResponse = PostResponse.builder();
 
         postResponse.id( post.getId() );
-        postResponse.image( post.getImage() );
         postResponse.title( post.getTitle() );
         postResponse.content( post.getContent() );
-        Set<String> set = post.getTags();
-        if ( set != null ) {
-            postResponse.tags( new LinkedHashSet<String>( set ) );
-        }
         postResponse.createdDate( post.getCreatedDate() );
         postResponse.createdBy( post.getCreatedBy() );
         postResponse.lastModifiedDate( post.getLastModifiedDate() );
@@ -73,22 +64,6 @@ public class PostMapperImpl implements PostMapper {
 
         post.setTitle( postRequest.getTitle() );
         post.setContent( postRequest.getContent() );
-        if ( post.getTags() != null ) {
-            Set<String> set = postRequest.getTags();
-            if ( set != null ) {
-                post.getTags().clear();
-                post.getTags().addAll( set );
-            }
-            else {
-                post.setTags( null );
-            }
-        }
-        else {
-            Set<String> set = postRequest.getTags();
-            if ( set != null ) {
-                post.setTags( new LinkedHashSet<String>( set ) );
-            }
-        }
     }
 
     protected LikeResponse likeToLikeResponse(Like like) {

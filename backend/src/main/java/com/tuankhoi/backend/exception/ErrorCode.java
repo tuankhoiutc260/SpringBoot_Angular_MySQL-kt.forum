@@ -70,6 +70,8 @@ public enum ErrorCode {
     SUB_CATEGORY_NOTFOUND(6008, "Sub category not found", HttpStatus.NOT_FOUND),
 
     TOKEN_NOTBLANK(7001, "Token cannot be blank", HttpStatus.BAD_REQUEST),
+
+    DATA_INITIALIZATION_FAILED(9001, "Data initialization failed", HttpStatus.INTERNAL_SERVER_ERROR),
     ;
     private int code;
     private String message;

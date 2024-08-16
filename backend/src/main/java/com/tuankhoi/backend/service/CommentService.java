@@ -6,15 +6,15 @@ import com.tuankhoi.backend.dto.response.CommentResponse;
 import java.util.List;
 
 public interface CommentService {
-    CommentResponse addComment(CommentRequest commentRequest);
+    CommentResponse create(CommentRequest commentRequest);
 
-    List<CommentResponse> getCommentsByPostId(String postId, int page, int size);
+    CommentResponse findByCommentId(Long commentId);
 
-    List<CommentResponse> getRepliesByCommentId(Long commentId, int page, int size);
+    List<CommentResponse> findAllCommentAndReplyByPostId(String postId, int page, int size);
 
-    CommentResponse updateComment(Long commentId, CommentRequest commentRequest);
+    List<CommentResponse> findRepliesByCommentId(Long commentId, int page, int size);
 
-//    List<CommentResponse> getAllReplyCommentsByCommentId(Long commentId, int page, int size);
+    CommentResponse update(Long commentId, CommentRequest commentRequest);
 
-    void deleteComment(Long commentId);
+    void deleteByCommentId(Long commentId);
 }

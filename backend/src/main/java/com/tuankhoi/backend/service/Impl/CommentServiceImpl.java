@@ -33,7 +33,7 @@ public class CommentServiceImpl implements CommentService {
     private final SimpMessagingTemplate messagingTemplate;
 
     @Override
-    public CommentResponse addComment(CommentRequest commentRequest) {
+    public CommentResponse create(CommentRequest commentRequest) {
         Post existingPost = postRepository.findById(commentRequest.getPostId())
                 .orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));
 
@@ -49,7 +49,6 @@ public class CommentServiceImpl implements CommentService {
         }
         Comment savedComment = commentRepository.save(newComment);
         CommentResponse commentResponse = commentMapper.toResponse(savedComment);
-//        messagingTemplate.convertAndSend("/topic/comments/" + existingPost.getId(), commentResponse);
 
         WebSocketMessage addCommentMessage = WebSocketMessage.builder()
                 .type("NEW_COMMENT")
@@ -60,23 +59,28 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<CommentResponse> getCommentsByPostId(String postId, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        List<Comment> commentList = commentRepository.findByPostIdAndParentCommentIsNullOrderByCreatedDateDesc(postId, pageable);
-
-        return commentList.stream().map(commentMapper::toResponse)
-                .collect(Collectors.toList());
+    public CommentResponse findByCommentId(Long commentId) {
+        return commentRepository.findById(commentId)
+                .map(commentMapper :: toResponse)
+                .orElseThrow(() -> new AppException(ErrorCode.COMMENT_NOT_FOUND));
     }
 
     @Override
-    public List<CommentResponse> getRepliesByCommentId(Long commentId, int page, int size) {
+    public List<CommentResponse> findAllCommentAndReplyByPostId(String postId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        List<Comment> commentList = commentRepository.findAllByPostIdAndParentCommentIsNullOrParentCommentIdIsNotNullOrderByCreatedDateDesc(postId, pageable);
+        return commentList.stream().map(commentMapper::toResponse).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CommentResponse> findRepliesByCommentId(Long commentId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         List<Comment> commentList = commentRepository.findRepliesByCommentId(commentId, pageable);
         return commentList.stream().map(commentMapper::toResponse).collect(Collectors.toList());
     }
 
     @Override
-    public CommentResponse updateComment(Long commentId, CommentRequest commentRequest) {
+    public CommentResponse update(Long commentId, CommentRequest commentRequest) {
         try {
             Comment existingComment = commentRepository.findById(commentId)
                     .orElseThrow(() -> new AppException(ErrorCode.COMMENT_NOT_FOUND));
@@ -99,15 +103,8 @@ public class CommentServiceImpl implements CommentService {
         }
     }
 
-//    @Override
-//    public List<CommentResponse> getAllReplyCommentsByCommentId(Long commentId, int page, int size) {
-//        Pageable pageable = PageRequest.of(page, size);
-//        List<Comment> commentList = commentRepository.findAllReplyCommentsByCommentId(commentId, pageable);
-//        return commentList.stream().map(commentMapper::toResponse).collect(Collectors.toList());
-//    }
-
     @Override
-    public void deleteComment(Long commentId) {
+    public void deleteByCommentId(Long commentId) {
         try {
             Comment commentToDelete = commentRepository.findById(commentId)
                     .orElseThrow(() -> new AppException(ErrorCode.COMMENT_NOT_FOUND));

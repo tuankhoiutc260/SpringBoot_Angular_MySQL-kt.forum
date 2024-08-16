@@ -10,7 +10,7 @@ import java.util.List;
 public interface UserService {
     UserResponse create(UserRequest userRequest);
 
-    UserResponse findById(String id);
+    UserResponse findByUserId(String userId);
 
     UserResponse findByEmail(String username);
 
@@ -20,7 +20,7 @@ public interface UserService {
 
     List<UserResponse> findAll();
 
-    UserResponse update(String id, UserRequest userRequest);
+    UserResponse update(String userId, UserRequest userRequest);
 
-    void deleteById(String id);
+    void deleteByUserId(String userId);
 }

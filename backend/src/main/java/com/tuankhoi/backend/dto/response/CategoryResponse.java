@@ -19,7 +19,7 @@ public class CategoryResponse {
 
     String description;
 
-    List<SubCategoryResponse> subCategories;
+//    List<SubCategoryResponse> subCategories;
 
     String createdBy;
 

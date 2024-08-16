@@ -2,16 +2,20 @@ package com.tuankhoi.backend.service.Impl;
 
 import com.tuankhoi.backend.dto.request.PostRequest;
 import com.tuankhoi.backend.dto.response.PostResponse;
+import com.tuankhoi.backend.entity.SubCategory;
 import com.tuankhoi.backend.exception.AppException;
 import com.tuankhoi.backend.exception.ErrorCode;
 import com.tuankhoi.backend.mapper.PostMapper;
 import com.tuankhoi.backend.entity.Post;
 import com.tuankhoi.backend.repository.PostRepository;
+import com.tuankhoi.backend.repository.SubCategoryRepository;
 import com.tuankhoi.backend.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Service;
@@ -24,6 +28,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class PostServiceImpl implements PostService {
+    private final SubCategoryRepository subCategoryRepository;
     private final PostRepository postRepository;
     private final PostMapper postMapper;
 
@@ -31,12 +36,12 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostResponse create(PostRequest postRequest) {
         try {
-            MultipartFile imageFile = postRequest.getImage();
-            String base64Image = imageFile != null ? Base64.getEncoder().encodeToString(imageFile.getBytes()) : null;
+//            MultipartFile imageFile = postRequest.getImage();
+//            String base64Image = imageFile != null ? Base64.getEncoder().encodeToString(imageFile.getBytes()) : null;
             Post newPost = postMapper.toPost(postRequest);
-            newPost.setImage(base64Image);
+//            newPost.setImage(base64Image);
             Post savedPost = postRepository.save(newPost);
-            return postMapper.toPostResponse(savedPost);
+            return postMapper.toPostResponseWithCountLikes(savedPost);
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
             log.error("Failed to create post due to database constraint: {}", e.getMessage(), e);
             throw new IllegalArgumentException("Failed to create post due to database constraint: " + e.getMessage(), e);
@@ -67,6 +72,16 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<PostResponse> findBySubCategoryId(String subCategoryId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        SubCategory existingSubCategory = subCategoryRepository.findById(subCategoryId)
+                .orElseThrow(() -> new AppException(ErrorCode.SUB_CATEGORY_NOTFOUND));
+
+        List<Post> postList = postRepository.findBySubCategoryId(existingSubCategory.getId(), pageable);
+        return postList.stream().map(postMapper::toPostResponseWithCountLikes).toList();
+    }
+
+    @Override
     public List<PostResponse> findByUserName(String userName) {
         return postRepository.findByCreatedBy(userName)
                 .stream()
@@ -75,7 +90,14 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostResponse> findPostsLiked(String userName){
+    public PostResponse findByTitle(String title) {
+        return postRepository.findByTitle(title)
+                .map(postMapper::toPostResponseWithCountLikes)
+                .orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));
+    }
+
+    @Override
+    public List<PostResponse> findPostsLiked(String userName) {
         return postRepository.findPostsLiked(userName)
                 .stream()
                 .map(postMapper::toPostResponseWithCountLikes)
@@ -86,11 +108,11 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostResponse update(String id, PostRequest postRequest) {
         try {
-            MultipartFile imageFile = postRequest.getImage();
-            String base64Image = imageFile != null ? Base64.getEncoder().encodeToString(imageFile.getBytes()) : null;
+//            MultipartFile imageFile = postRequest.getImage();
+//            String base64Image = imageFile != null ? Base64.getEncoder().encodeToString(imageFile.getBytes()) : null;
             Post existingPost = postRepository.findById(id)
                     .orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));
-            existingPost.setImage(base64Image);
+//            existingPost.setImage(base64Image);
             postMapper.updatePost(existingPost, postRequest);
             return postMapper.toPostResponseWithCountLikes(postRepository.save(existingPost));
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
@@ -105,7 +127,7 @@ public class PostServiceImpl implements PostService {
     //    @PostAuthorize("@userServiceImpl.findByUserName(returnObject.createdBy).userName == authentication.name or hasRole('ADMIN')")
     @PostAuthorize("hasRole('ADMIN') ")
     @Override
-    public void deleteById(String postId) {
+    public void deleteByPostId(String postId) {
         try {
             Post postToDelete = postRepository.findById(postId)
                     .orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));

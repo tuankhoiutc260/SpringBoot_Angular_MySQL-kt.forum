@@ -10,7 +10,11 @@ public interface PostService {
 
     PostResponse findById(String postId);
 
+    List<PostResponse> findBySubCategoryId(String subCategoryId, int page, int size);
+
     List<PostResponse> findByUserName(String userName);
+
+    PostResponse findByTitle(String title);
 
     List<PostResponse> findPostsLiked(String userName);
 
@@ -20,5 +24,5 @@ public interface PostService {
 
     PostResponse update(String id, PostRequest postRequest);
 
-    void deleteById(String id);
+    void deleteByPostId(String postId);
 }

@@ -22,10 +22,10 @@ import java.util.List;
 public class UserController {
     UserService userService;
 
-    @GetMapping("/id/{id}")
-    public APIResponse<UserResponse> findById(@PathVariable String id){
+    @GetMapping("/id/{userId}")
+    public APIResponse<UserResponse> findByUserId(@PathVariable String userId){
         return APIResponse.<UserResponse>builder()
-                .result(userService.findById(id))
+                .result(userService.findByUserId(userId))
                 .build();
     }
 
@@ -62,16 +62,16 @@ public class UserController {
                 .build();
     }
 
-    @PutMapping("/{id}")
-    public APIResponse<UserResponse> update(@PathVariable String id, @ModelAttribute UserRequest userRequest){
+    @PutMapping("/{userId}")
+    public APIResponse<UserResponse> update(@PathVariable String userId, @ModelAttribute UserRequest userRequest){
         return APIResponse.<UserResponse>builder()
-                .result(userService.update(id, userRequest))
+                .result(userService.update(userId, userRequest))
                 .build();
     }
 
-    @DeleteMapping("/{id}")
-    public APIResponse<Void> delete(@PathVariable String id){
-        userService.deleteById(id);
+    @DeleteMapping("/{userId}")
+    public APIResponse<Void> deleteByUserId(@PathVariable String userId){
+        userService.deleteByUserId(userId);
         return APIResponse.<Void>builder().build();
     }
 }

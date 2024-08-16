@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService {
 
 //    @PostAuthorize("hasRole('ADMIN')")
     @Override
-    public UserResponse findById(String userId) {
+    public UserResponse findByUserId(String userId) {
         return userRepository.findById(userId)
                 .map(userMapper::toUserResponse)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
@@ -135,7 +135,7 @@ public class UserServiceImpl implements UserService {
 
 //    @PostAuthorize("hasRole('ADMIN')")
     @Override
-    public void deleteById(String userId) {
+    public void deleteByUserId(String userId) {
         try {
             User userToDelete = userRepository.findById(userId)
                     .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));

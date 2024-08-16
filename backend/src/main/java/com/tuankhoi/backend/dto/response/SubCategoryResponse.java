@@ -1,38 +1,35 @@
-package com.tuankhoi.backend.dto.response;
+    package com.tuankhoi.backend.dto.response;
 
-import jakarta.persistence.Column;
-import jakarta.validation.constraints.NotBlank;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
+    import lombok.*;
+    import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDateTime;
-import java.util.List;
+    import java.time.LocalDateTime;
+    import java.util.List;
 
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    @FieldDefaults(level = AccessLevel.PRIVATE)
+    public class SubCategoryResponse {
+        String id;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-@FieldDefaults(level = AccessLevel.PRIVATE)
-public class SubCategoryResponse {
-    String title;
+        String title;
 
-    String description;
+        String description;
 
-    String coverImage;
+        String coverImage;
 
-    List<PostResponse> posts;
+//        List<PostResponse> posts;
 
-    String createdBy;
+        String createdBy;
 
-    LocalDateTime createdDate;
+        LocalDateTime createdDate;
 
-    String lastModifiedBy;
+        String lastModifiedBy;
 
-    LocalDateTime lastModifiedDate;
-}
+        LocalDateTime lastModifiedDate;
+
+        Integer totalPosts;
+    }

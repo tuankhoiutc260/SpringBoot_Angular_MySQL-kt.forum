@@ -16,13 +16,13 @@ import java.util.Set;
 public class PostResponse {
     String id;
 
-    String image;
+//    String image;
 
     String title;
 
     String content;
 
-    Set<String> tags = new HashSet<>();
+//    Set<String> tags = new HashSet<>();
 
     LocalDateTime createdDate;
 
@@ -35,6 +35,8 @@ public class PostResponse {
     Set<LikeResponse> likes;
 
     Integer countLikes;
+
+    Integer totalComments;
 
     Set<CommentResponse> comments;
 

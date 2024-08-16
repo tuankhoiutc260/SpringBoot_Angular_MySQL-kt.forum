@@ -28,7 +28,7 @@ public class CategoryController {
     }
 
     @GetMapping("/{categoryID}")
-    public APIResponse<CategoryResponse> findById(@PathVariable String categoryID) {
+    public APIResponse<CategoryResponse> findByCategoryId(@PathVariable String categoryID) {
         return APIResponse.<CategoryResponse>builder()
                 .result(categoryService.findById(categoryID))
                 .build();
@@ -48,9 +48,9 @@ public class CategoryController {
                 .build();
     }
 
-    @DeleteMapping("/{categoryRequestID}")
-    public APIResponse<Void> delete(@PathVariable String categoryRequestID) {
-        categoryService.deleteById(categoryRequestID);
+    @DeleteMapping("/{categoryID}")
+    public APIResponse<Void> deleteByCategoryId(@PathVariable String categoryID) {
+        categoryService.deleteById(categoryID);
         return APIResponse.<Void>builder()
                 .build();
     }

@@ -8,7 +8,7 @@ import java.util.List;
 public interface SubCategoryService {
     SubCategoryResponse create(SubCategoryRequest subCategoryRequest);
 
-    SubCategoryResponse findById(String subCategoryID);
+    SubCategoryResponse findBySubCategoryId(String subCategoryID);
 
     List<SubCategoryResponse> findByCategoryId(String categoryId, int page, int size);
 
@@ -16,5 +16,5 @@ public interface SubCategoryService {
 
     SubCategoryResponse update(String subCategoryRequestID, SubCategoryRequest subCategoryRequest);
 
-    void deleteById(String subCategoryRequest);
+    void deleteBySubCategoryId(String subCategoryId);
 }

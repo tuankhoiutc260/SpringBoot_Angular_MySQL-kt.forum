@@ -73,7 +73,7 @@ public class PermissionServiceImpl implements PermissionService {
 
     @PostAuthorize("hasRole('ADMIN')")
     @Override
-    public void delete(Integer permissionId) {
+    public void deleteByPermissionId(Integer permissionId) {
         try {
             Permission permissionToDelete = permissionRepository.findById(permissionId)
                     .orElseThrow(() -> new AppException(ErrorCode.PERMISSION_NOTFOUND));

@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface SubCategoryRepository extends JpaRepository<SubCategory, String> {
     List<SubCategory> findByCategoryId(String categoryId, Pageable pageable);
+
+    SubCategory findByTitle(String title);
 }

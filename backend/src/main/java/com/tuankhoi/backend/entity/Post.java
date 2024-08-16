@@ -27,9 +27,9 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.UUID)
     String id;
 
-    @Lob
-    @Column(columnDefinition = "MEDIUMBLOB")
-    String image;
+//    @Lob
+//    @Column(columnDefinition = "MEDIUMBLOB")
+//    String image;
 
     @Column(nullable = false)
     String title;
@@ -37,8 +37,8 @@ public class Post {
     @Column(columnDefinition = "TEXT", nullable = false)
     String content;
 
-    @ElementCollection
-    Set<String> tags = new HashSet<>();
+//    @ElementCollection
+//    Set<String> tags = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     SubCategory subCategory;

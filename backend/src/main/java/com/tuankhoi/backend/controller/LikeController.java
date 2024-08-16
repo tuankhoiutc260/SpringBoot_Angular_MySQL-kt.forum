@@ -32,23 +32,9 @@ public class LikeController {
 
     @GetMapping("/count-likes")
     public APIResponse<Long> countLikes(@RequestParam String postId) {
-        LikeRequest likeRequest = new LikeRequest(postId); // null for userId since it's not needed
+        LikeRequest likeRequest = new LikeRequest(postId);
         return APIResponse.<Long>builder()
                 .result(likeService.countLikes(likeRequest))
                 .build();
     }
-
-//    @GetMapping("/is-liked")
-//    public APIResponse<Boolean> isLiked(@RequestParam LikeRequest likeRequest) {
-//        return APIResponse.<Boolean>builder()
-//                .result(likeService.isLiked(likeRequest))
-//                .build();
-//    }
-//
-//    @GetMapping("/count-likes")
-//    public APIResponse<Long> countLikes(@RequestParam LikeRequest likeRequest) {
-//        return APIResponse.<Long>builder()
-//                .result(likeService.countLikes(likeRequest))
-//                .build();
-//    }
 }

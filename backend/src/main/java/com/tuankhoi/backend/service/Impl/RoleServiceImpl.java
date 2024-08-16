@@ -54,8 +54,8 @@ public class RoleServiceImpl implements RoleService {
 
     @PostAuthorize("hasRole('ADMIN')")
     @Override
-    public RoleResponse findById(Integer id) {
-        return roleRepository.findById(id)
+    public RoleResponse findByRoleId(Integer roleId) {
+        return roleRepository.findById(roleId)
                 .map(roleMapper::toRoleResponse)
                 .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND));
     }
@@ -71,9 +71,9 @@ public class RoleServiceImpl implements RoleService {
 
     @PostAuthorize("hasRole('ADMIN')")
     @Override
-    public RoleResponse update(Integer id, RoleRequest roleRequest) {
+    public RoleResponse update(Integer roleId, RoleRequest roleRequest) {
         try {
-            Role existingRole = roleRepository.findById(id)
+            Role existingRole = roleRepository.findById(roleId)
                     .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND));
             Set<Permission> permissions = new HashSet<>();
             for (int permissionRequestId : roleRequest.getPermissions()) {
@@ -91,7 +91,7 @@ public class RoleServiceImpl implements RoleService {
 
     @PostAuthorize("hasRole('ADMIN')")
     @Override
-    public void deleteById(Integer roleId) {
+    public void deleteByRoleId(Integer roleId) {
         try {
             Role roleToDelete = roleRepository.findById(roleId)
                     .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND));

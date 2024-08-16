@@ -14,5 +14,5 @@ public interface PermissionService {
 
     PermissionResponse update(Integer permissionRequestId, PermissionRequest permissionRequest);
 
-    void delete(Integer name);
+    void deleteByPermissionId(Integer permissionId);
 }
