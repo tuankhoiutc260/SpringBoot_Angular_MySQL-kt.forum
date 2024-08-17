@@ -25,4 +25,6 @@ public interface PostService {
     PostResponse update(String id, PostRequest postRequest);
 
     void deleteByPostId(String postId);
+
+    void incrementViewCount(String postId);
 }

@@ -91,4 +91,11 @@ public class PostController {
         return APIResponse.<Void>builder()
                 .build();
     }
+
+    @PutMapping("/{postId}/view")
+    public APIResponse<Void> incrementViewCount(@PathVariable String postId) {
+        postService.incrementViewCount(postId);
+        return APIResponse.<Void>builder()
+                .build();
+    }
 }

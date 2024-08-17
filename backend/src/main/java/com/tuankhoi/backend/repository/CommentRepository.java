@@ -16,5 +16,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Query("SELECT c FROM Comment c WHERE c.parentComment.id = :commentId ORDER BY c.createdDate ASC")
     List<Comment> findRepliesByCommentId(@Param("commentId") Long commentId, Pageable pageable);
 
-    List<Comment> findAllByPostIdAndParentCommentIsNullOrParentCommentIdIsNotNullOrderByCreatedDateDesc(String postId, Pageable pageable);
+    List<Comment> findAllByPostIdOrderByCreatedDateDesc(String postId, Pageable pageable);
+
+//    List<Comment> findAllByPostIdAndParentCommentIsNullOrParentCommentIdIsNotNullOrderByCreatedDateDesc(String postId, Pageable pageable);
 }

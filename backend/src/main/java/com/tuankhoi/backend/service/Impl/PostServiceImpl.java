@@ -138,4 +138,15 @@ public class PostServiceImpl implements PostService {
             throw new RuntimeException("Failed to delete post", e);
         }
     }
+
+    @Override
+    public void incrementViewCount(String postId) {
+        try {
+            Post post = postRepository.findById(postId).orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));
+            post.setViewCount(post.getViewCount() + 1);
+            postRepository.save(post);
+        } catch (DataIntegrityViolationException | ConstraintViolationException e) {
+            throw new IllegalArgumentException("Failed to increase view count", e);
+        }
+    }
 }

@@ -36,8 +36,9 @@ public class PostResponse {
 
     Integer countLikes;
 
-    Integer totalComments;
+    int totalComments;
 
-    Set<CommentResponse> comments;
+    int viewCount;
 
+//    Set<CommentResponse> comments;
 }

@@ -68,7 +68,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<CommentResponse> findAllCommentAndReplyByPostId(String postId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        List<Comment> commentList = commentRepository.findAllByPostIdAndParentCommentIsNullOrParentCommentIdIsNotNullOrderByCreatedDateDesc(postId, pageable);
+        List<Comment> commentList = commentRepository.findAllByPostIdOrderByCreatedDateDesc(postId, pageable);
         return commentList.stream().map(commentMapper::toResponse).collect(Collectors.toList());
     }
 

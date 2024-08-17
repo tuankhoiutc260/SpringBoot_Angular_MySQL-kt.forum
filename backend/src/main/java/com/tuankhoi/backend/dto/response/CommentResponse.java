@@ -21,7 +21,7 @@ public class CommentResponse {
 
     String parentId;
 
-    List<CommentResponse> replies;
+//    List<CommentResponse> replies;
 
     String createdBy;
 
