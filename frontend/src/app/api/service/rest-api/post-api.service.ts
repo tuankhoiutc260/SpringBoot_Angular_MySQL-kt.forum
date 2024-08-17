@@ -30,11 +30,15 @@ export class PostApiService {
     return this.http.get<ApiResponse<PostResponse>>(url);
   }
 
+  findBySubCategoryId(subCategoryId: string, page: number, size: number): Observable<ApiResponse<PostResponse[]>> {
+    const url = `${this.apiUrl}/sub-category/${subCategoryId}?page=${page}&size=${size}`;
+    return this.http.get<ApiResponse<PostResponse[]>>(url);
+  }
+
   findByCreatedBy(userId: string): Observable<ApiResponse<PostResponse[]>> {
     const url = `${this.apiUrl}/user-post/${userId}`;
     return this.http.get<ApiResponse<PostResponse[]>>(url);
   }
-
 
   findTop10ByOrderByLikesDesc(): Observable<ApiResponse<PostResponse[]>> {
     const url = `${this.apiUrl}/top10`;
@@ -74,4 +78,8 @@ export class PostApiService {
       return this.create(postRequest);
     }
   }
+
+  incrementViewCount(postId: string): Observable<ApiResponse<void>> {
+    return this.http.put<ApiResponse<void>>(`${this.apiUrl}/${postId}/view`, null);
+  }  
 }

@@ -6,10 +6,10 @@ import { UserApiService } from '../../api/service/rest-api/user-api.service';
   name: 'userIdToFullName'
 })
 export class UserIdToFullNamePipe implements PipeTransform {
-  constructor(private userService: UserApiService) { }
+  constructor(private userApiService: UserApiService) { }
 
   transform(id: string): Observable<string | undefined> {
-    return this.userService.findById(id).pipe(
+    return this.userApiService.findById(id).pipe(
       map(apiResponse => apiResponse.result?.fullName)
     );
   }

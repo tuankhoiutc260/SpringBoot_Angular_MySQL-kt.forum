@@ -3,7 +3,7 @@ export interface CommentResponse {
   content?: string;
   postId?: string;
   parentId?: number;
-  replies?: CommentResponse[]
+  // replies?: CommentResponse[]
   createdBy?: string;
   createdDate?: Date | string;
   lastModifiedDate?: Date | string;

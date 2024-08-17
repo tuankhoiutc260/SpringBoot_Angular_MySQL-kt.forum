@@ -1,78 +1,46 @@
-<div class="comment">
-  <div class="comment-content">
-    <div class="flex gap-2">
-      <div class="flex flex-column align-items-center">
-        <p-avatar
-          [image]="(comment.createdBy! | userIdToUserImage | async) || 'assets/images/img-default-user.jpg' | dataUriToBlob"
-          shape="circle" size="normal">
-        </p-avatar>
-        <div class="line-comment"></div>
+<div class="flex gap-4 w-full comment-container p-3">
+  <div class="flex flex-column align-items-center gap-2 flex-1">
+    <ng-container *ngIf="commentResponse.createdBy! | userIdToUser | async as user">
+      <img class="border-circle" [src]="user.image | dataUriToBlob" alt="" style="width: 56px; height: 56px;">
+      <small class="text-center"><b>{{user.fullName}}</b></small>
+    </ng-container>
+  </div>
+
+  <div class="card-content flex flex-column gap-3 justify-content-between w-full flex-9">
+    <div class="flex flex-column gap-3">
+      <ng-container *ngIf="!commentResponse.parentId">
+        <div class="flex gap-2 sub-title">
+          <i class="pi pi-clock"></i>
+          <small>{{commentResponse.createdDate | date: "hh:mm:ss • dd MMM yyyy"}}</small>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="commentResponse.parentId">
+        <div class="flex gap-2 sub-title">
+          <i class="pi pi-clock"></i>
+          <small>{{commentResponse.createdDate | date: "hh:mm:ss • dd MMM yyyy"}}</small>
+        </div>
+        <div class="replied-post-container">
+
+          <small class="replied-post-content">
+            reply to: {{ (commentResponse.parentId | commentIdToComment | async)?.content}}
+          </small>
+
+        </div>
+      </ng-container>
+      <span class="post-content">{{commentResponse.content | htmlToPlaintext}}</span>
+    </div>
+    <div class="flex gap-6">
+      <div class="flex gap-2 align-items-center sub-title">
+        <i class="pi pi-heart"></i>
+        <span>1</span>
       </div>
 
-      <div class="flex flex-column gap-2 w-full">
-        <div class="flex gap-1">
-          <div class="flex flex-column gap-2 comment-inf">
-            <div class="flex gap-4 flex-wrap align-items-end">
-              <a class="comment-meta btn" [routerLink]="['/', comment.createdBy! | userIdToUserName | async]"
-                [pTooltip]="'Go to ' + (comment.createdBy! | userIdToFullName | async) + '\'s profile'"
-                tooltipPosition="left">
-                {{ comment.createdBy! | userIdToFullName | async}}
-              </a>
-              <small>{{ comment.createdDate! | timeAgo}}</small>
-            </div>
-            <span *ngIf="!isEditing">{{ comment.content }}</span>
-            <div *ngIf="isEditing" class="p-fluid">
-              <textarea pInputTextarea [(ngModel)]="editedContent" [autoResize]="true"></textarea>
-              <div class="flex justify-content-end mt-2">
-                <p-button label="Cancel" (onClick)="cancelEditing()" styleClass="p-button-text"></p-button>
-                <p-button label="Save" (onClick)="saveEdit()" [disabled]="!editedContent.trim()"></p-button>
-              </div>
-            </div>
-          </div>
-          <p-button icon="pi pi-ellipsis-h" [rounded]="true" [text]="true" severity="secondary"
-            (click)="opComment.toggle($event)" *ngIf="canEdit"/>
-
-          <p-overlayPanel #opComment class="opComment">
-            <div class="cont-btn-function-for-comment flex flex-column gap-1">
-              <p-button label="Edit" [link]="true" size="small" icon="pi pi-pen-to-square" (click)="startEditing(); opComment.hide()" />
-              <p-button label="Delete" [link]="true" size="small" icon="pi pi-trash"
-                (click)="onDeleteComment(); opComment.hide()" />
-            </div>
-          </p-overlayPanel>
-        </div>
-
-        <div class="flex gap-6 align-items-center ml-3">
-          <div class="flex gap-2 cursor-pointer" (click)="check()">
-            <i class="pi pi-thumbs-up"></i>
-            <span>3</span>
-          </div>
-          <div class="flex gap-2 cursor-pointer ">
-            <i class="pi pi-thumbs-down"></i>
-            <span>1</span>
-          </div>
-          <a class="btn-a" (click)="toggleReplyForm()">Reply</a>
-        </div>
-
-        <app-comment-form *ngIf="showReplyForm" (commentAdded)="onReplyAdded($event)"
-          (handleCancel)="toggleReplyForm()">
-        </app-comment-form>
-
-        <div class="replies flex flex-column gap-3 mt-3" *ngIf="comment.replies && comment.replies.length > 0">
-          <p-button *ngIf="!showReplies" label="Show Replies ({{comment.replies.length}})" [text]="true"
-            (onClick)="toggleReplies()">
-          </p-button>
-          <div *ngIf="showReplies">
-            <app-comment *ngFor="let reply of displayedReplies" [comment]="reply" [postId]="postId"></app-comment>
-            <p-button *ngIf="hasMoreReplies" label="Show More Replies" [text]="true" (onClick)="loadMoreReplies()">
-            </p-button>
-            <p-button label="Hide Replies" [text]="true" (onClick)="toggleReplies()">
-            </p-button>
-          </div>
-        </div>
+      <div class="flex gap-2 align-items-center sub-title">
+        <i class="pi pi-reply"></i>
+        <a (click)="toggleReplyForm()">
+          {{ isReplyFormVisible ? 'Cancel Reply' : 'Reply ' }}</a>
       </div>
     </div>
   </div>
 </div>
-
-<p-toast />
-<p-confirmDialog />

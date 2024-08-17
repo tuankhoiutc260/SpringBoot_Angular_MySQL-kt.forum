@@ -7,10 +7,10 @@ import { UserApiService } from '../../api/service/rest-api/user-api.service';
 })
 export class UserNameToUserIdPipe implements PipeTransform {
 
-  constructor(private userService: UserApiService) { }
+  constructor(private userApiService: UserApiService) { }
 
   transform(userName: string): Observable<string | undefined> {
-    return this.userService.findByUserName(userName).pipe(
+    return this.userApiService.findByUserName(userName).pipe(
       map(apiResponse => apiResponse.result?.id)
     );
   }

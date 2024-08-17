@@ -1,35 +1,30 @@
-<div>
-    <!-- <img class="m-auto col-12 lg:col-8" [src]="postResponse.image ? (postResponse.image | dataUriToBlob) : ''"> -->
+<div class="flex flex-column m-auto col-12 sm:col-12 md:col-10 lg:col-8">
+  <ng-container *ngIf="postResponse$ | async as postResponse">
+    <app-post class="cursor-pointer" [postResponse]="postResponse"></app-post>
+    <p-divider></p-divider>
+    <app-comment-form *ngIf="postId" [postId]="postId" [parentCommentId]="null"></app-comment-form>
 
-    <h1 class="text-center">{{ postResponse.title }}</h1>
-    <div class="flex justify-content-center gap-2 align-items-center">
-        <ng-container *ngIf="postResponse.createdBy">
-            <ng-container *ngIf="postResponse.createdBy! | userIdToUser | async as user">
-                <p-avatar [image]="(user.image!) | dataUriToBlob" shape="circle" size="normal"></p-avatar>
-                <small>{{ user.fullName }} ({{ user.userName }})</small>
-            </ng-container>
+    <p-divider></p-divider>
+
+    <div class="flex flex-column gap-3">
+      <ng-container *ngIf="commentResponseList$ | async as commentResponseList">
+        <ng-container *ngFor="let commentResponse of commentResponseList; trackBy: trackByCommentId">
+          <app-comment [commentResponse]="commentResponse" [postOfComment]="postResponse"
+            (showReplyForm)="handleReplyFormVisibility($event, commentResponse.id!)"
+            [isReplyFormVisible]="isReplyFormVisible(commentResponse.id!)">
+          </app-comment>
+
+          <app-comment-form *ngIf="isReplyFormVisible(commentResponse.id!)" [parentCommentId]="commentResponse.id!"
+            [comment]="commentResponse" [postId]="commentResponse.postId!" (commentAdded)="onCommentAdded($event)">
+            >
+          </app-comment-form>
         </ng-container>
-        
-        <span>|</span>
-        <small>{{ postResponse.createdDate | date: 'HH:mm:ss dd/MM/yyyy' }}</small>
-    </div>
-    <div class="flex gap-1 justify-content-center mt-2 mb-4">
-        <p-tag *ngFor="let tag of postResponse.tags" [value]="tag" [rounded]="true"></p-tag>
+        <p-paginator [rows]="commentsPageSize" [totalRecords]="postResponse.totalComments" (onPageChange)="onPageChange($event)"
+      >
+      </p-paginator>
+      </ng-container>
     </div>
 
-    <hr>
 
-    <div class="ql-snow">
-        <div class="ql-editor m-auto col-12 lg:col-8" [innerHTML]="safeContent"></div>
-    </div>
-
-    <hr>
-
-    <app-interact [isLogin]="isLogin()" [countLikes]="postResponse.countLikes!" *ngIf="postResponse.id"
-        [postId]="postResponse.id" (likeFailed)="onLikeFailed()">
-    </app-interact>
-
-    <app-comments [postId]="postId"></app-comments>
+  </ng-container>
 </div>
-
-<p-toast></p-toast>

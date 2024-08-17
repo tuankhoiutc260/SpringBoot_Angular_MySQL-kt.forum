@@ -13,8 +13,10 @@ import { InteractComponent } from './shared/component/post/interact/interact.com
 import { ProfileComponent } from './shared/component/page/profile/profile.component';
 import { CreateUpdatePostComponent } from './shared/component/post/create-update-post/create-update-post.component';
 import { CommentFormComponent } from './shared/component/post/comment-form/comment-form.component';
-import { CommentsComponent } from './shared/component/post/comments/comments.component';
 import { CommentComponent } from './shared/component/post/comment/comment.component';
+import { LazyLoadImageModule } from 'ng-lazyload-image';
+import { CategoryComponent } from './shared/component/category/category/category.component';
+import { SubCategoryComponent } from './shared/component/category/sub-category/sub-category.component';
 
 
 @NgModule({
@@ -23,6 +25,7 @@ import { CommentComponent } from './shared/component/post/comment/comment.compon
     ReactiveFormsModule,
     PrimengModule,
     CoreModule,
+    LazyLoadImageModule,
 ],
     exports: [
         PrimengModule,
@@ -43,8 +46,11 @@ import { CommentComponent } from './shared/component/post/comment/comment.compon
         InteractComponent,
         CreateUpdatePostComponent,
         CommentComponent,
-        CommentsComponent,
         CommentFormComponent,
+
+        CategoryComponent,
+        SubCategoryComponent,
+
     ],
     declarations: [
         // layout
@@ -62,8 +68,10 @@ import { CommentComponent } from './shared/component/post/comment/comment.compon
         InteractComponent,
         CreateUpdatePostComponent,
         CommentComponent,
-        CommentsComponent,
         CommentFormComponent,
+
+        CategoryComponent,        SubCategoryComponent,
+
 
     ]
 })

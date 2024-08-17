@@ -1,116 +1,89 @@
-import { Component, Input, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { PostApiService } from '../../../../api/service/rest-api/post-api.service';
-import { ConfirmationService, MessageService } from 'primeng/api';
 import { PostResponse } from '../../../../api/model/response/post-response';
-import { UserResponse } from '../../../../api/model/response/user-response';
+import { ApiResponse } from '../../../../api/model/response/api-response';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Observable, of, Subject } from 'rxjs';
+import { catchError, map, takeUntil, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-post-list',
   templateUrl: './post-list.component.html',
   styleUrl: './post-list.component.scss',
-  providers: [MessageService, ConfirmationService]
 })
 export class PostListComponent implements OnInit, OnDestroy {
-  @Input() postsResponse: PostResponse[] = []
-  @Input() userName: string = ''
-  @Input() canEdit!: boolean
-  @Input() defaultUserLoginInfo: UserResponse = { };
-  @Input() userLoginInfo: UserResponse | null = null;
-
   totalPosts: number = 0;
-  pageSize: number = 12;
-  pagedPosts: PostResponse[] = [];
-  private subscription: Subscription = new Subscription();
+  postsPageSize: number = 10;
+  postsCurrentPage: number = 1;
+
+  subCategoryId!: string;
+  subCategoryTitleSlug!: string;
+  categoryTitleSlug!: string;
+
+  postResponseList$!: Observable<PostResponse[]>
+
+  isDialogVisible: boolean = false;
+
+
+  private destroy$ = new Subject<void>();
 
   constructor(
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
     private postApiService: PostApiService,
-    private messageService: MessageService,
-    private confirmationService: ConfirmationService,
   ) { }
-  
+
   ngOnInit() {
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['postsResponse'] && !changes['postsResponse'].firstChange) {
-      this.totalPosts = this.postsResponse.length
-      this.updatePagedPosts(0);
-    }
-  }
-
-  updatePagedPosts(startIndex: number): void {
-    this.pagedPosts = this.postsResponse.slice(startIndex, startIndex + this.pageSize);
-  }
-
-  onPageChange(event: any): void {
-    const firstItemIndex = event.first;
-    this.updatePagedPosts(firstItemIndex);
-  }
-
-  // Open dialog update Post
-  isDialogVisible: boolean = false;
-  selectedPostResponse: PostResponse = {
-    id: '',
-    createdBy: '',
-    title: '',
-    content: '',
-    tags: [],
-    createdDate: '',
-    lastModifiedDate: '',
-    lastModifiedBy: ''
-  }; 
-
-  openDialogEdit(postResponse: PostResponse): void {
-    this.selectedPostResponse = postResponse;
-    this.isDialogVisible = true;
-  }
-  // 
-
-  onLoadPage() {
-    setTimeout(() => {
-      window.location.reload();
-    }, 2000);
-  }
-
-  showMessage(severityRequest: string, summaryRequest: string, detailRequest: string) {
-    this.messageService.add({ severity: severityRequest, summary: summaryRequest, detail: detailRequest });
-  }
-
-  onDeletePost(postId: string) {
-    this.confirmationService.confirm({
-      target: undefined,
-      message: 'Do you want to delete this post?',
-      header: 'Delete Confirmation',
-      icon: 'pi pi-info-circle',
-      acceptButtonStyleClass: "p-button-danger p-button-text",
-      rejectButtonStyleClass: "p-button-text p-button-text",
-      acceptIcon: "none",
-      rejectIcon: "none",
-      accept: () => {
-        const sub = this.postApiService.delete(postId).subscribe({
-          next: () => {
-            this.postsResponse = this.postsResponse.filter(postResponse => postResponse.id !== postId);
-            this.isDialogVisible = false;
-            this.showMessage('info', 'Confirmed', 'Post deleted');
-            this.onLoadPage();
-          },
-          error: (error) => {
-            console.log(error);
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Could not delete post' });
-          }
-        });
-        this.subscription.add(sub);
-      },
-      reject: () => {
-        // this.showMessage('error', 'Rejected', 'You have rejected')
-      }
+    this.activatedRoute.params.pipe(
+      takeUntil(this.destroy$),
+      switchMap(params => {
+        this.subCategoryId = params['subcategoryId'];
+        this.subCategoryTitleSlug = params['subcategorySlug'];
+        this.categoryTitleSlug = params['categorySlug'];
+        
+        return this.activatedRoute.queryParams;
+      })
+    ).subscribe(queryParams => {
+      this.postsCurrentPage = queryParams['page'] ? parseInt(queryParams['page']) : 1;
+      this.getPostsBySubCategoryId();
     });
   }
 
   ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  getPostsBySubCategoryId() {
+    const apiPage = this.postsCurrentPage - 1;
+    this.postResponseList$ = this.postApiService.findBySubCategoryId(this.subCategoryId, apiPage, this.postsPageSize)
+      .pipe(
+        map((apiResponse: ApiResponse<PostResponse[]>) => {
+          return apiResponse.result || [];
+        }),
+        catchError(error => {
+          console.error("Error fetching Posts", error);
+          return of([]);
+        })
+      );
+  }
+
+  onPageChange(event: any) {
+    this.postsCurrentPage = event.page + 1; 
+    this.updateUrlAndFetchPosts();
+  }
+
+  onCreatePost(){
+    this.isDialogVisible = true;
+  }
+
+  private updateUrlAndFetchPosts() {
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: { page: this.postsCurrentPage },
+      queryParamsHandling: 'merge'
+    }).then(() => {
+      this.getPostsBySubCategoryId();
+    });
   }
 }

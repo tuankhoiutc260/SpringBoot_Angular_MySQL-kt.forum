@@ -28,8 +28,6 @@ export class HeaderComponent {
     private authService: AuthService,
     private authApiService: AuthApiService,
     private router: Router,
-
-    private userService: UserApiService,
   ) { }
 
   ngOnInit(): void {
@@ -185,16 +183,7 @@ export class HeaderComponent {
   }
 
   // new post
-  newPost: PostResponse = {
-    id: '',
-    title: '',
-    content: '',
-    tags: [],
-    createdDate: '',
-    createdBy: '',
-    lastModifiedDate: '',
-    lastModifiedBy: ''
-  }; 
+  newPost!: PostResponse
   isDialogVisible: boolean = false;  isActiveImage: boolean = false;
 
   openDialogNew() {

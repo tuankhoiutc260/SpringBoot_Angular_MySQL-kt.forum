@@ -8,7 +8,6 @@ import { AuthenticationResponse } from '../../model/response/authenticated-respo
 import { IntrospectResponse } from '../../model/response/introspect-request';
 import { LogoutRequest } from '../../model/request/logout-request';
 import { environment } from '../../../../enviroments/environment';
-import { API_URL } from '../../../core/config/config';
 
 @Injectable({
   providedIn: 'root'

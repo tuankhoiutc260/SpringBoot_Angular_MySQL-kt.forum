@@ -10,6 +10,9 @@ import { UserIdToFullNamePipe } from './pipe/user-id-to-full-name.pipe';
 import { UserIdToUserImagePipe } from './pipe/user-id-to-user-image.pipe';
 import { TimeAgoPipe } from './pipe/time-ago.pipe';
 import { UserIdToUserPipe } from './pipe/user-id-to-user.pipe';
+import { ToSlugPipe } from './pipe/to-slug.pipe';
+import { SubCategoryIdToSubCategoryPipe } from './pipe/sub-category-id-to-sub-category.pipe';
+import { CommentIdToCommentPipe } from './pipe/comment-id-to-comment.pipe';
 
 
 
@@ -24,7 +27,10 @@ import { UserIdToUserPipe } from './pipe/user-id-to-user.pipe';
     UserIdToFullNamePipe,
     UserIdToUserImagePipe,
     TimeAgoPipe,
-    UserIdToUserPipe
+    UserIdToUserPipe,
+    ToSlugPipe,
+    SubCategoryIdToSubCategoryPipe,
+    CommentIdToCommentPipe
 
   ],
   imports: [
@@ -41,6 +47,9 @@ import { UserIdToUserPipe } from './pipe/user-id-to-user.pipe';
     UserIdToUserImagePipe,
     TimeAgoPipe,
     UserIdToUserPipe,
+    ToSlugPipe,
+    SubCategoryIdToSubCategoryPipe,
+    CommentIdToCommentPipe
 
   ]
 })

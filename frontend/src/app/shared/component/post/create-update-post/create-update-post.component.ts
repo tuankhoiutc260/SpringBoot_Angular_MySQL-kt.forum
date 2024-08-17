@@ -47,29 +47,29 @@ export class CreateUpdatePostComponent implements OnInit, OnDestroy {
   }
 
   initializeForm(): void {
-    if (this.postResponse.image) {
-      this.imagePreview = 'data:image/png;base64,' + this.postResponse.image;
-      this.isActiveImage = true;
+    // if (this.postResponse.image) {
+    //   this.imagePreview = 'data:image/png;base64,' + this.postResponse.image;
+    //   this.isActiveImage = true;
 
-      const base64 = this.postResponse.image!;
-      const imageName = this.postResponse.title!;
-      this.fileName = imageName;
-      const imageBlob = this.dataURItoBlob(base64);
-      const imageFile = new File([imageBlob], imageName, { type: 'image/png' });
-      this.postRequest.image = imageFile;
-    } else {
-      this.imagePreview = null;
-      this.isActiveImage = false;
-      this.fileName = '';
-      this.postRequest.image = null;
-    }
+    //   const base64 = this.postResponse.image!;
+    //   const imageName = this.postResponse.title!;
+    //   this.fileName = imageName;
+    //   const imageBlob = this.dataURItoBlob(base64);
+    //   const imageFile = new File([imageBlob], imageName, { type: 'image/png' });
+    //   this.postRequest.image = imageFile;
+    // } else {
+    //   this.imagePreview = null;
+    //   this.isActiveImage = false;
+    //   this.fileName = '';
+    //   this.postRequest.image = null;
+    // }
 
-    this.postRequest.title = this.postResponse.title;
-    this.postRequest.tags = this.postResponse.tags;
-    this.postContent = { html: this.postResponse.content, text: undefined };
+    // this.postRequest.title = this.postResponse.title;
+    // this.postRequest.tags = this.postResponse.tags;
+    // this.postContent = { html: this.postResponse.content, text: undefined };
 
-    const htmlContent = this.postContent?.html ?? this.postContent as unknown as string;
-    this.postRequest.content = htmlContent;
+    // const htmlContent = this.postContent?.html ?? this.postContent as unknown as string;
+    // this.postRequest.content = htmlContent;
   }
 
   dataURItoBlob(dataURI: string) {

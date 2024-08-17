@@ -1,11 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { UserRequest } from '../../model/request/user-request';
 import { ApiResponse } from '../../model/response/api-response';
 import { UserResponse } from '../../model/response/user-response';
 import { environment } from '../../../../enviroments/environment';
-import { API_URL } from '../../../core/config/config';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +20,6 @@ export class UserApiService {
 
   findById(userRequestId: string): Observable<ApiResponse<UserResponse>> {
     const url = `${this.apiUrl}/id/${userRequestId}`;
-
     return this.http.get<ApiResponse<UserResponse>>(url);
   }
 

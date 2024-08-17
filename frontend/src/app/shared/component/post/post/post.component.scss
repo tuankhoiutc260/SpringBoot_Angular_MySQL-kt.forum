@@ -1,111 +1,28 @@
-.pi {
-  font-size: var(--smaller);
-}
-
-.card {
-  width: 100%;
-  height: 100%;
-  position: relative;
-
-  .card-image {
-    width: 100%;
-    height: 50%;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
-      border-radius: 8px;
-    }
-  }
-
-  .card-content {
-    padding: 16px;
-    height: 50%;
-
-    small {
-      color: #4D6385;
-    }
-
-    .post-title,
-    .post-content {
-      margin: 0;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      transition: 0.3s ease;
-    }
-  }
-}
-
-.card:hover .post-title {
-  color: var(--color-red-4);
-}
-
-.card:hover .btn-post-function{
-  opacity: 1;
-}
-
-
-.btn-post-function{
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding: 10px;
-  opacity: 0.5;
+.post-container {
+  background: #FFFFFF;
+  // width: 100%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  // border: 1px solid #E9E8FF;
+  border-radius: 8px;
   transition: 0.3s ease;
+
+}
+
+.post-container:hover {
+  background: #FFFFFF;
+  box-shadow: 0 0 11px rgba(255, 0, 0, 0.4); 
+  transform: scale(1.009);
+
+}
+
+.post-content {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 
-/* Responsive styles for different screen sizes */
-// @media (max-width: 576px) {
-//   .card-container {
-//       grid-template-columns: 1fr; 
-//       // padding: 0 25px;
-//   }
-// }
-
-// @media (min-width: 577px) and (max-width: 768px) {
-//   .card-container {
-//       gap: 20px;
-//       grid-template-columns: repeat(2, 1fr);
-//       padding: 20px;
-//   }
-// }
-
-// @media (min-width: 769px) and (max-width: 992px) {
-//   .card-container {
-//       grid-template-columns: repeat(3, 1fr); 
-//       // padding: 0 70px;
-//   }
-// }
-
-// @media (min-width: 993px) and (max-width: 1200px) {
-//   .card-container {
-//       grid-template-columns: repeat(3, 1fr); /* 3 columns */
-//       padding: 0 130px; /* Padding for large screens */
-//   }
-// }
-
-// @media (min-width: 1201px) and (max-width: 1400px) {
-//   .card-container {
-//       grid-template-columns: repeat(3, 1fr); /* 3 columns */
-//       padding: 0 170px; /* Padding for larger screens */
-//   }
-// }
-
-// @media (min-width: 1401px) and (max-width: 1600px) {
-//   .card-container {
-//       grid-template-columns: repeat(3, 1fr); /* 3 columns */
-//       padding: 0 170px; /* Padding for extra large screens */
-//   }
-// }
-
-// @media (min-width: 1601px) {
-//   .card-container {
-//       grid-template-columns: repeat(3, 1fr); /* 3 columns */
-//       padding: 0 200px; /* Padding for extra large screens */
-//   }
-// }
+.sub-title {
+  color: #65676B;
+}

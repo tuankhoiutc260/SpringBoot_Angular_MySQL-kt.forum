@@ -1,17 +1,47 @@
-<div class="flex flex-column gap-3">
-    <div class="card-container">
-        <div *ngFor="let postResponse of pagedPosts">
-            <app-post class="card cursor-pointer" (isDelete)="onDeletePost($event)"
-            (isUpdate)="openDialogEdit(postResponse)" [canEdit]="canEdit" [postResponse]="postResponse"
-            [userLoginInfo]="userLoginInfo || defaultUserLoginInfo"></app-post>
-  
+<div class="post-list-container flex flex-column gap- align-items-center">
+    <ng-container *ngIf="subCategoryId | subCategoryIdToSubCategory | async as subCategory">
+        <div class="post-list-banner">
+            <div class="banner-image" *ngIf="subCategory.coverImage">
+                <img [src]="subCategory.coverImage | dataUriToBlob" alt="Banner">
+            </div>
+            <div class="banner-title">
+                <ng-container *ngIf="subCategory.title">
+                    <span>{{subCategory.title}}</span>
+                </ng-container>
+            </div>
         </div>
-    </div>
 
-    <p-paginator [rows]="pageSize" [totalRecords]="totalPosts" (onPageChange)="onPageChange($event)"></p-paginator>
+        <!-- <div class="post-list-content w-full flex justify-content-center"> -->
+            <div class=" w-full flex justify-content-center">
+            <ng-container *ngIf="postResponseList$ | async as postResponseList">
+                <div *ngIf="postResponseList.length > 0; else noPosts">
+                    <div class="flex flex-column gap-3 post-list-container m-auto col-12 sm:col-12 md:col-10 lg:col-8"
+                        *ngFor="let postResponse of postResponseList">
+                        <app-post class="cursor-pointer" 
+                            [postResponse]="postResponse"
+                            [routerLink]="['/category', categoryTitleSlug, 'subcategory', subCategoryTitleSlug, 'post', postResponse.title | toSlug, postResponse.id]">
+                        </app-post>
+                    </div>
+            
+                    <p-paginator [first]="(postsCurrentPage - 1) * postsPageSize"
+                        [rows]="postsPageSize" 
+                        [totalRecords]="subCategory.totalPosts"
+                        (onPageChange)="onPageChange($event)">
+                    </p-paginator>
+                </div>
+            
+                <ng-template #noPosts>
+                    <div class="m-auto col-12 sm:col-12 md:col-10 lg:col-8 flex flex-column align-items-center" >
+                        <p>No posts available.</p>
+                        <p-button (click)="onCreatePost()">Create Post</p-button>
+                    </div>
+                </ng-template>
+            </ng-container>
+        </div>
+    </ng-container>
 </div>
 
-<app-create-update-post [postResponse]="selectedPostResponse" [isDialogVisible]="isDialogVisible"
+<app-create-update-post [isDialogVisible]="isDialogVisible"
     (isDialogVisibleChange)="isDialogVisible = $event"></app-create-update-post>
-<p-toast/>
-<p-confirmDialog />
+<!-- <p-toast/>
+<p-confirmDialog /> -->

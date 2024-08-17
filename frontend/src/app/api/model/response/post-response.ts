@@ -3,7 +3,7 @@ import { LikeResponse } from "./like-response";
 
 export interface PostResponse {
     id: string;
-    image?:string;
+    // image?:string;
     title: string;
     content: string;
     tags: string[];
@@ -13,5 +13,7 @@ export interface PostResponse {
     lastModifiedBy: string;
     likes?: LikeResponse[]
     countLikes?: number
-    comments?: CommentResponse[]
+    totalComments: number;
+    // comments?: CommentResponse[]
+    viewCount: number
 }

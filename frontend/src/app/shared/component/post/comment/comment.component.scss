@@ -1,27 +1,24 @@
-.highlighted {
-  background-color: #fff3cd;
-  transition: background-color 0.5s ease;
-}
-
-:host ::ng-deep .p-card {
-  width: 100%;
-}
-
-:host ::ng-deep .p-card .p-card-content {
-  padding: 0;
-}
-
-
-:host ::ng-deep *:focus {
-  box-shadow: none !important;
+.comment-container{
+  background: #FFFFFF;
+  // width: 100%;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        // border: 1px solid #E9E8FF;
+    border-radius: 8px;
 
 }
 
-.comment-inf {
-  background: #F0F2F5;
-  border-radius: 18px;
+.replied-post-container{
+  background: #F4F5F7;
   padding: 1rem;
-  width: fit-content;
+  border-radius: 8px;
+
+}
+
+.replied-post-content{
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 
 }
 
@@ -36,38 +33,20 @@
   text-decoration: underline;
 }
 
-.btn {
-  cursor: pointer;
-  font-weight: bold;
+.sub-title{
+  color: #65676B;
+
 }
 
-.btn:hover {
-  text-decoration: underline;
+.flex-1 {
+  flex: 1;
 }
 
-:host ::ng-deep .p-avatar {
-  border: 1px solid #D1D2D4;
+/* Phần tử thứ hai - Chiếm 80% */
+.flex-9 {
+  flex: 9;
 }
 
-
-
-
-
-.line-comment {
-  border: 1px solid #E7E7E7;
-  border-radius: 10px;
-  margin: 0.5rem;
-  height: 100%;
-  width: 0.1px;
+.post-content{
+  padding: 0px 14px;
 }
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-a:visited {
-  color: inherit;
-  text-decoration: none;
-}
-

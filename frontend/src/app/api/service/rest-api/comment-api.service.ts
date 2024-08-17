@@ -1,12 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, Observable, Subject } from 'rxjs';
-import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
-
+import { Observable } from 'rxjs';
 import { ApiResponse } from '../../model/response/api-response';
 import { CommentResponse } from '../../model/response/comment-response';
 import { CommentRequest } from '../../model/request/comment-request';
-import { Client } from '@stomp/stompjs';
 import { environment } from '../../../../enviroments/environment';
 import { WebSocketService } from '../websocket/web-socket.service';
 import { WebSocketMessage } from '../../model/entity/web-socket-message';
@@ -33,22 +30,12 @@ export class CommentApiService {
     return this.webSocketService.listen(`/topic/comments/${postId}/delete`);
   }
 
-  // onNewComment(postId: string): Observable<CommentResponse> {
-  //   return new Observable(observer => {
-  //     this.socket$.subscribe(
-  //       message => {
-  //         if (message.type === 'NEW_COMMENT' && message.postId === postId) {
-  //           observer.next(message.comment);
-  //         }
-  //       },
-  //       error => observer.error(error),
-  //       () => observer.complete()
-  //     );
-  //   });
-  // }
-
   addComment(commentRequest: CommentRequest): Observable<ApiResponse<CommentResponse>> {
     return this.http.post<ApiResponse<CommentResponse>>(this.apiUrl, commentRequest);
+  }
+
+  findByCommentId(commentId: number): Observable<ApiResponse<CommentResponse>> {
+    return this.http.get<ApiResponse<CommentResponse>>(`${this.apiUrl}/id/${commentId}`);
   }
 
   getCommentsByPostId(postId: string, page: number, size: number): Observable<ApiResponse<CommentResponse[]>> {
