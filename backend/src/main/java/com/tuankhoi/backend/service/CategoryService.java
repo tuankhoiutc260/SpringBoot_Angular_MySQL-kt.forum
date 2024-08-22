@@ -1,5 +1,6 @@
 package com.tuankhoi.backend.service;
 
+import com.tuankhoi.backend.dto.document.CategoryDocument;
 import com.tuankhoi.backend.dto.request.CategoryRequest;
 import com.tuankhoi.backend.dto.response.CategoryResponse;
 
@@ -8,11 +9,17 @@ import java.util.List;
 public interface CategoryService {
     CategoryResponse create(CategoryRequest categoryRequest);
 
-    CategoryResponse findById(String categoryID);
+    CategoryResponse getById(String categoryId);
 
-    List<CategoryResponse> findAll();
+    CategoryResponse update(String categoryId, CategoryRequest categoryRequest);
 
-    CategoryResponse update(String categoryRequestID, CategoryRequest categoryRequest);
+    void deleteById(String categoryId);
 
-    void deleteById(String categoryRequestID);
+    List<CategoryResponse> getAll();
+
+    List<CategoryResponse> search(String query);
+
+    void indexCategory(CategoryDocument categoryDocument);
+
+//    List<CategoryDocument> searchByCriteria(SearchCriteria criteria);
 }

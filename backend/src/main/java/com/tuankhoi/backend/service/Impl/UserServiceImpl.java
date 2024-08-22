@@ -5,11 +5,11 @@ import com.tuankhoi.backend.dto.response.UserResponse;
 import com.tuankhoi.backend.enums.RoleEnum;
 import com.tuankhoi.backend.exception.AppException;
 import com.tuankhoi.backend.exception.ErrorCode;
-import com.tuankhoi.backend.mapper.UserMapper;
-import com.tuankhoi.backend.entity.User;
-import com.tuankhoi.backend.repository.RoleRepository;
-import com.tuankhoi.backend.repository.UserRepository;
-import com.tuankhoi.backend.service.UserService;
+import com.tuankhoi.backend.mapper.IUserMapper;
+import com.tuankhoi.backend.model.entity.User;
+import com.tuankhoi.backend.repository.Jpa.IRoleRepository;
+import com.tuankhoi.backend.repository.Jpa.IUserRepository;
+import com.tuankhoi.backend.service.IUserService;
 import com.tuankhoi.backend.untils.ImageUtil;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AccessLevel;
@@ -34,11 +34,11 @@ import java.util.*;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
-public class UserServiceImpl implements UserService {
-    UserRepository userRepository;
+public class UserServiceImpl implements IUserService {
+    IUserRepository IUserRepository;
     PasswordEncoder passwordEncoder;
-    UserMapper userMapper;
-    RoleRepository roleRepository;
+    IUserMapper IUserMapper;
+    IRoleRepository IRoleRepository;
 
     @NonFinal
     @Value("${default.avatar.image.path}")
@@ -47,11 +47,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse create(UserRequest userRequest) {
         try {
-            if (userRepository.findByUserName(userRequest.getUserName()).isPresent())
+            if (IUserRepository.findByUserName(userRequest.getUserName()).isPresent())
                 throw new AppException(ErrorCode.USER_EXISTED);
-            if (userRepository.findByEmail(userRequest.getEmail()).isPresent())
+            if (IUserRepository.findByEmail(userRequest.getEmail()).isPresent())
                 throw new AppException(ErrorCode.USER_EMAIL_EXISTED);
-            User newUser = userMapper.toUser(userRequest);
+            User newUser = IUserMapper.toUser(userRequest);
             newUser.setPassword(passwordEncoder.encode(userRequest.getPassword()));
             String base64Image;
             try {
@@ -62,10 +62,10 @@ public class UserServiceImpl implements UserService {
 
             newUser.setImage(base64Image);
             if (userRequest.getRole() == null)
-                newUser.setRole(roleRepository.findByName(RoleEnum.USER.name()).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND)));
+                newUser.setRole(IRoleRepository.findByName(RoleEnum.USER.name()).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND)));
             else
-                newUser.setRole(roleRepository.findById(userRequest.getRole()).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND)));
-            return userMapper.toUserResponse(userRepository.save(newUser));
+                newUser.setRole(IRoleRepository.findById(userRequest.getRole()).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND)));
+            return IUserMapper.toUserResponse(IUserRepository.save(newUser));
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
             throw new IllegalArgumentException("Failed to create user due to database constraint: " + e.getMessage(), e);
         } catch (IOException e) {
@@ -76,8 +76,8 @@ public class UserServiceImpl implements UserService {
 //    @PostAuthorize("hasRole('ADMIN')")
     @Override
     public UserResponse findByUserId(String userId) {
-        return userRepository.findById(userId)
-                .map(userMapper::toUserResponse)
+        return IUserRepository.findById(userId)
+                .map(IUserMapper::toUserResponse)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
     }
 
@@ -92,17 +92,17 @@ public class UserServiceImpl implements UserService {
 //    @PostAuthorize("hasRole('ADMIN')")
     @Override
     public UserResponse findByEmail(String username) {
-        return userRepository.findByEmail(username)
-                .map(userMapper::toUserResponse)
+        return IUserRepository.findByEmail(username)
+                .map(IUserMapper::toUserResponse)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
     }
 
 //    @PostAuthorize("hasRole('ADMIN')")
     @Override
     public UserResponse findByUserName(String userName) {
-        return userRepository
+        return IUserRepository
                 .findByUserName(userName)
-                .map(userMapper::toUserResponse)
+                .map(IUserMapper::toUserResponse)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
     }
 
@@ -110,9 +110,9 @@ public class UserServiceImpl implements UserService {
 //    @PreAuthorize("hasAuthority('CREATE_POST')")
     @Override
     public List<UserResponse> findAll() {
-        return userRepository.findAll(Sort.by("id"))
+        return IUserRepository.findAll(Sort.by("id"))
                 .stream()
-                .map(userMapper::toUserResponse)
+                .map(IUserMapper::toUserResponse)
                 .toList();
     }
 
@@ -120,14 +120,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse update(String userId, UserRequest userRequest) {
         try {
-            User existingUser = userRepository.findById(userId)
+            User existingUser = IUserRepository.findById(userId)
                     .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
             existingUser.setPassword(passwordEncoder.encode(userRequest.getPassword()));
-            existingUser.setRole(roleRepository.findById(userRequest.getRole()).orElseThrow(()
+            existingUser.setRole(IRoleRepository.findById(userRequest.getRole()).orElseThrow(()
                     -> new AppException(ErrorCode.ROLE_NOTFOUND)));
-            userMapper.updateUser(existingUser, userRequest);
-            User user = userRepository.save(existingUser);
-            return userMapper.toUserResponse(user);
+            IUserMapper.updateUser(existingUser, userRequest);
+            User user = IUserRepository.save(existingUser);
+            return IUserMapper.toUserResponse(user);
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
             throw new IllegalArgumentException("Failed to update user due to database constraint: " + e.getMessage(), e);
         }
@@ -137,9 +137,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteByUserId(String userId) {
         try {
-            User userToDelete = userRepository.findById(userId)
+            User userToDelete = IUserRepository.findById(userId)
                     .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
-            userRepository.delete(userToDelete);
+            IUserRepository.delete(userToDelete);
         } catch (EntityNotFoundException e) {
             throw e;
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {

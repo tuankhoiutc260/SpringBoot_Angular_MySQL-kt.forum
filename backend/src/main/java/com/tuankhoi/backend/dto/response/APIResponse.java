@@ -18,4 +18,6 @@ public class APIResponse <T>{
     String message;
 
     T result;
+
+    Long totalRecords;
 }

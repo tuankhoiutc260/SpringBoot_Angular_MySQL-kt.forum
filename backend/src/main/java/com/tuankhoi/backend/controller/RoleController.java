@@ -3,7 +3,7 @@ package com.tuankhoi.backend.controller;
 import com.tuankhoi.backend.dto.request.RoleRequest;
 import com.tuankhoi.backend.dto.response.APIResponse;
 import com.tuankhoi.backend.dto.response.RoleResponse;
-import com.tuankhoi.backend.service.RoleService;
+import com.tuankhoi.backend.service.IRoleService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -18,39 +18,39 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/roles")
 public class RoleController {
-    RoleService roleService;
+    IRoleService IRoleService;
 
     @GetMapping("/{roleId}")
     public APIResponse<RoleResponse> findByRoleId(@PathVariable int roleId) {
         return APIResponse.<RoleResponse>builder()
-                .result(roleService.findByRoleId(roleId))
+                .result(IRoleService.findByRoleId(roleId))
                 .build();
     }
 
     @GetMapping("")
     public APIResponse<List<RoleResponse>> findAll() {
         return APIResponse.<List<RoleResponse>>builder()
-                .result(roleService.findAll())
+                .result(IRoleService.findAll())
                 .build();
     }
 
     @PostMapping
     public APIResponse<RoleResponse> create(@RequestBody RoleRequest roleRequest) {
         return APIResponse.<RoleResponse>builder()
-                .result(roleService.create(roleRequest))
+                .result(IRoleService.create(roleRequest))
                 .build();
     }
 
     @PutMapping("/{id}")
     public APIResponse<RoleResponse> update(@PathVariable int roleId, @RequestBody RoleRequest roleRequest) {
         return APIResponse.<RoleResponse>builder()
-                .result(roleService.update(roleId, roleRequest))
+                .result(IRoleService.update(roleId, roleRequest))
                 .build();
     }
 
     @DeleteMapping("/{id}")
     public APIResponse<Void> deleteByRoleId(@PathVariable int roleId) {
-        roleService.deleteByRoleId(roleId);
+        IRoleService.deleteByRoleId(roleId);
         return APIResponse.<Void>builder()
                 .build();
     }

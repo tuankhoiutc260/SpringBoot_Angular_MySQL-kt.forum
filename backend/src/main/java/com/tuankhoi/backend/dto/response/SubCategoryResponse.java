@@ -1,35 +1,32 @@
-    package com.tuankhoi.backend.dto.response;
+package com.tuankhoi.backend.dto.response;
 
-    import lombok.*;
-    import lombok.experimental.FieldDefaults;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
-    import java.time.LocalDateTime;
-    import java.util.List;
+import java.time.LocalDateTime;
 
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Builder
-    @FieldDefaults(level = AccessLevel.PRIVATE)
-    public class SubCategoryResponse {
-        String id;
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class SubCategoryResponse {
+    String id;
 
-        String title;
+    String title;
 
-        String description;
+    String description;
 
-        String coverImage;
+    String coverImage;
 
-//        List<PostResponse> posts;
+    String createdBy;
 
-        String createdBy;
+    LocalDateTime createdDate;
 
-        LocalDateTime createdDate;
+    String lastModifiedBy;
 
-        String lastModifiedBy;
+    LocalDateTime lastModifiedDate;
 
-        LocalDateTime lastModifiedDate;
-
-        Integer totalPosts;
-    }
+    Integer totalPosts;
+}

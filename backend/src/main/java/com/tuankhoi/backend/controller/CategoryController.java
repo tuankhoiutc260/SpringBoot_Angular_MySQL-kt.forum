@@ -28,16 +28,16 @@ public class CategoryController {
     }
 
     @GetMapping("/{categoryID}")
-    public APIResponse<CategoryResponse> findByCategoryId(@PathVariable String categoryID) {
+    public APIResponse<CategoryResponse> getByCategoryId(@PathVariable String categoryID) {
         return APIResponse.<CategoryResponse>builder()
-                .result(categoryService.findById(categoryID))
+                .result(categoryService.getById(categoryID))
                 .build();
     }
 
     @GetMapping("")
-    public APIResponse<List<CategoryResponse>> findAll() {
+    public APIResponse<List<CategoryResponse>> getAll() {
         return APIResponse.<List<CategoryResponse>>builder()
-                .result(categoryService.findAll())
+                .result(categoryService.getAll())
                 .build();
     }
 
@@ -52,6 +52,13 @@ public class CategoryController {
     public APIResponse<Void> deleteByCategoryId(@PathVariable String categoryID) {
         categoryService.deleteById(categoryID);
         return APIResponse.<Void>builder()
+                .build();
+    }
+
+    @GetMapping("/search")
+    public APIResponse<List<CategoryResponse>> search(@RequestParam String query) {
+        return APIResponse.<List<CategoryResponse>>builder()
+                .result(categoryService.search(query))
                 .build();
     }
 }

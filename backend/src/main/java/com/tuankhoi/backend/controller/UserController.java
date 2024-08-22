@@ -3,7 +3,7 @@ package com.tuankhoi.backend.controller;
 import com.tuankhoi.backend.dto.request.UserRequest;
 import com.tuankhoi.backend.dto.response.APIResponse;
 import com.tuankhoi.backend.dto.response.UserResponse;
-import com.tuankhoi.backend.service.UserService;
+import com.tuankhoi.backend.service.IUserService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -20,26 +20,26 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
-    UserService userService;
+    IUserService IUserService;
 
     @GetMapping("/id/{userId}")
     public APIResponse<UserResponse> findByUserId(@PathVariable String userId){
         return APIResponse.<UserResponse>builder()
-                .result(userService.findByUserId(userId))
+                .result(IUserService.findByUserId(userId))
                 .build();
     }
 
     @GetMapping("/username/{userName}")
     public APIResponse<UserResponse> findByUserName(@PathVariable String userName){
         return APIResponse.<UserResponse>builder()
-                .result(userService.findByUserName(userName))
+                .result(IUserService.findByUserName(userName))
                 .build();
     }
 
     @GetMapping("/my-info")
     public APIResponse<UserResponse> getMyInfo() {
         return APIResponse.<UserResponse>builder()
-                .result(userService.getMyInfo())
+                .result(IUserService.getMyInfo())
                 .build();
     }
 
@@ -51,27 +51,27 @@ public class UserController {
         authentication.getAuthorities().forEach(grantedAuthority -> log.info(grantedAuthority.getAuthority()));
 
         return APIResponse.<List<UserResponse>>builder()
-                .result(userService.findAll())
+                .result(IUserService.findAll())
                 .build();
     }
 
     @PostMapping
     public APIResponse<UserResponse> create(@ModelAttribute @Valid UserRequest userRequest){
         return APIResponse.<UserResponse>builder()
-                .result(userService.create(userRequest))
+                .result(IUserService.create(userRequest))
                 .build();
     }
 
     @PutMapping("/{userId}")
     public APIResponse<UserResponse> update(@PathVariable String userId, @ModelAttribute UserRequest userRequest){
         return APIResponse.<UserResponse>builder()
-                .result(userService.update(userId, userRequest))
+                .result(IUserService.update(userId, userRequest))
                 .build();
     }
 
     @DeleteMapping("/{userId}")
     public APIResponse<Void> deleteByUserId(@PathVariable String userId){
-        userService.deleteByUserId(userId);
+        IUserService.deleteByUserId(userId);
         return APIResponse.<Void>builder().build();
     }
 }

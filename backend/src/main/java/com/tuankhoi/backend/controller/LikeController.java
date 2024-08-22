@@ -3,22 +3,22 @@ package com.tuankhoi.backend.controller;
 import com.tuankhoi.backend.dto.request.LikeRequest;
 import com.tuankhoi.backend.dto.response.APIResponse;
 import com.tuankhoi.backend.dto.response.LikeResponse;
-import com.tuankhoi.backend.service.LikeService;
+import com.tuankhoi.backend.service.ILikeService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/likes")
 public class LikeController {
-    private final LikeService likeService;
+    private final ILikeService ILikeService;
 
-    public LikeController(LikeService likeService) {
-        this.likeService = likeService;
+    public LikeController(ILikeService ILikeService) {
+        this.ILikeService = ILikeService;
     }
 
     @PostMapping("/toggle")
     public APIResponse<LikeResponse> toggleLike(@RequestBody LikeRequest likeRequest) {
         return APIResponse.<LikeResponse>builder()
-                .result(likeService.toggleLike(likeRequest))
+                .result(ILikeService.toggleLike(likeRequest))
                 .build();
     }
 
@@ -26,7 +26,7 @@ public class LikeController {
     public APIResponse<Boolean> isLiked(@RequestParam String postId) {
         LikeRequest likeRequest = new LikeRequest(postId);
         return APIResponse.<Boolean>builder()
-                .result(likeService.isLiked(likeRequest))
+                .result(ILikeService.isLiked(likeRequest))
                 .build();
     }
 
@@ -34,7 +34,7 @@ public class LikeController {
     public APIResponse<Long> countLikes(@RequestParam String postId) {
         LikeRequest likeRequest = new LikeRequest(postId);
         return APIResponse.<Long>builder()
-                .result(likeService.countLikes(likeRequest))
+                .result(ILikeService.countLikes(likeRequest))
                 .build();
     }
 }

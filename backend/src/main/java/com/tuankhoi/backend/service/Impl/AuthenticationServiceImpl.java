@@ -13,11 +13,11 @@ import com.tuankhoi.backend.dto.response.AuthenticationResponse;
 import com.tuankhoi.backend.dto.response.IntrospectResponse;
 import com.tuankhoi.backend.exception.AppException;
 import com.tuankhoi.backend.exception.ErrorCode;
-import com.tuankhoi.backend.entity.InvalidatedToken;
-import com.tuankhoi.backend.entity.User;
-import com.tuankhoi.backend.repository.InvalidatedTokenRepository;
-import com.tuankhoi.backend.repository.UserRepository;
-import com.tuankhoi.backend.service.AuthenticationService;
+import com.tuankhoi.backend.model.entity.InvalidatedToken;
+import com.tuankhoi.backend.model.entity.User;
+import com.tuankhoi.backend.repository.Jpa.InvalidatedTokenRepository;
+import com.tuankhoi.backend.repository.Jpa.IUserRepository;
+import com.tuankhoi.backend.service.IAuthenticationService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -42,8 +42,8 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class AuthenticationServiceImpl implements AuthenticationService {
-    UserRepository userRepository;
+public class AuthenticationServiceImpl implements IAuthenticationService {
+    IUserRepository IUserRepository;
     InvalidatedTokenRepository invalidatedTokenRepository;
     //    https://generate-random.org/encryption-key-generator?count=1&bytes=32&cipher=aes-256-cbc&string=&password=
 
@@ -80,7 +80,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        var user = userRepository.findByUserName(request.getUserName())
+        var user = IUserRepository.findByUserName(request.getUserName())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_USERNAME_PASSWORD_INVALID));
 
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
@@ -159,7 +159,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         invalidatedTokenRepository.save(invalidatedToken);
 
         var userID = signedJWT.getJWTClaimsSet().getSubject();
-        var user = userRepository.findById(userID).orElseThrow(
+        var user = IUserRepository.findById(userID).orElseThrow(
                 () -> new AppException(ErrorCode.UNAUTHENTICATED)
         );
         var token = generateToken(user);

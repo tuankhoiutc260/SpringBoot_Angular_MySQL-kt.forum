@@ -4,7 +4,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
@@ -18,8 +17,6 @@ public class CategoryResponse {
     String title;
 
     String description;
-
-//    List<SubCategoryResponse> subCategories;
 
     String createdBy;
 
