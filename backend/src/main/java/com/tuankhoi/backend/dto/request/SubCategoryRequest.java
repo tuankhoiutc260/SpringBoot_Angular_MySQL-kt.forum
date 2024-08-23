@@ -23,7 +23,7 @@ public class SubCategoryRequest {
     @NotBlank(message = "SUB_CATEGORY_DESCRIPTION_NOTBLANK")
     String description;
 
-    MultipartFile image;
+    MultipartFile coverImageFile;
 
     @NotNull(message = "CATEGORY_ID_NOTBLANK")
     String categoryId;

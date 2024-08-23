@@ -5,77 +5,92 @@
       {
         "title": "Hanoi",
         "description": "The capital city known for its rich history and vibrant culture.",
-        "coverImage": "src/main/resources/assets/images/SubCategory/img_HaNoi.jpg"
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724401120/kt-forum/kt-forum_img_HaNoi.jpg",
+        "cloudinaryImageId": "kt-forum/kt-forum_img_HaNoi"
       },
       {
         "title": "Ho Chi Minh City",
         "description": "The bustling economic hub with modern attractions and lively nightlife.",
-        "coverImage": "src/main/resources/assets/images/SubCategory/img_HoChiMinh.jpg"
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724401397/kt-forum/kt-forum_img_HoChiMinh.jpg",
+        "cloudinaryImageId": "kt-forum/kt-forum_img_HoChiMinh"
       },
       {
         "title": "Da Nang",
         "description": "A coastal city with beautiful beaches and scenic mountains.",
-        "coverImage": "src/main/resources/assets/images/SubCategory/img_DaNang.jpg"
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724401503/kt-forum/kt-forum_img_DaNang.jpg",
+        "cloudinaryImageId": "kt-forum/kt-forum_img_DaNang"
       },
       {
         "title": "Hoi An",
         "description": "A historic town famous for its well-preserved architecture and lantern-lit streets.",
-        "coverImage": "src/main/resources/assets/images/SubCategory/img_HoiAn.jpg"
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724401565/kt-forum/kt-forum_img_HoiAn.jpg",
+        "cloudinaryImageId": "kt-forum/kt-forum_img_HoiAn"
       },
       {
         "title": "Hue",
         "description": "The ancient capital with historical sites and royal heritage.",
-        "coverImage": "src/main/resources/assets/images/SubCategory/img_Hue.jpg"
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724401659/kt-forum/kt-forum_img_Hue.jpg",
+        "cloudinaryImageId": "kt-forum/kt-forum_img_Hue"
       },
       {
         "title": "Nha Trang",
         "description": "A resort city known for its stunning beaches and clear waters.",
-        "coverImage": "src/main/resources/assets/images/SubCategory/img_NhaTrang.jpg"
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724401693/kt-forum/kt-forum_img_NhaTrang.jpg",
+        "cloudinaryImageId": "kt-forum/kt-forum_img_NhaTrang"
       },
       {
         "title": "Phu Quoc",
         "description": "An island paradise with pristine beaches and tropical forests.",
-        "coverImage": "src/main/resources/assets/images/SubCategory/img_PhuQuoc.jpg"
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724401740/kt-forum/kt-forum_img_PhuQuoc.jpg",
+        "cloudinaryImageId": "kt-forum/kt-forum_img_PhuQuoc"
       },
       {
         "title": "Ha Long",
         "description": "Known for its stunning bay and limestone formations.",
-        "coverImage": "src/main/resources/assets/images/SubCategory/img_HaLong.jpg"
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724401925/kt-forum/kt-forum_img_HaLong.jpg",
+        "cloudinaryImageId": "kt-forum/kt-forum_img_HaLong"
       },
       {
         "title": "Sapa",
         "description": "A mountainous region with beautiful terraced fields and ethnic minority cultures.",
-        "coverImage": "src/main/resources/assets/images/SubCategory/img_SaPa.jpg"
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724402234/kt-forum/kt-forum_img_SaPa.jpg",
+        "cloudinaryImageId": "kt-forum/kt-forum_img_SaPa"
       },
       {
         "title": "Dalat",
         "description": "A cool-weather city known for its flowers, lakes, and French colonial architecture.",
-        "coverImage": "src/main/resources/assets/images/SubCategory/img_DaLat.jpg"
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724402481/kt-forum/kt-forum_img_DaLat.jpg",
+        "cloudinaryImageId": "kt-forum/kt-forum_img_DaLat"
       },
       {
         "title": "Can Tho",
         "description": "A city in the Mekong Delta known for its floating markets and waterways.",
-        "coverImage": "src/main/resources/assets/images/SubCategory/img_CanTho.jpg"
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724402532/kt-forum/kt-forum_img_CanTho.jpg",
+        "cloudinaryImageId": "kt-forum/kt-forum_img_CanTho"
       },
       {
         "title": "Vung Tau",
         "description": "A coastal city popular for its beaches and seafood.",
-        "coverImage": "src/main/resources/assets/images/SubCategory/img_VungTau.jpg"
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724402582/kt-forum/kt-forum_img_VungTau.jpg",
+        "cloudinaryImageId": "kt-forum/kt-forum_img_VungTau"
       },
       {
         "title": "Quy Nhon",
         "description": "A quiet beach town with untouched beaches and historical sites.",
-        "coverImage": "src/main/resources/assets/images/SubCategory/img_QuyNhon.jpg"
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724402617/kt-forum/kt-forum_img_QuyNhon.jpg",
+        "cloudinaryImageId": "kt-forum/kt-forum_img_QuyNhon"
       },
       {
         "title": "Mui Ne",
         "description": "Famous for its sand dunes and water sports.",
-        "coverImage": "src/main/resources/assets/images/SubCategory/img_MuiNe.jpg"
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724402639/kt-forum/kt-forum_img_MuiNe.jpg",
+        "cloudinaryImageId": "kt-forum/kt-forum_img_MuiNe"
       },
       {
         "title": "Hai Phong",
         "description": "An industrial port city with a blend of history and modernity.",
-        "coverImage": "src/main/resources/assets/images/SubCategory/img_HaiPhong.jpg"
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724402675/kt-forum/kt-forum_img_HaiPhong.jpg",
+        "cloudinaryImageId": "kt-forum/kt-forum_img_HaiPhong"
       }
     ],
     "description": "Explore Vietnam's top tourist destinations, from breathtaking natural landscapes to rich cultural sites, offering unique experiences for every traveler."
@@ -86,77 +101,92 @@
       {
         "title": "Paris",
         "description": "The capital of France, renowned for its art, fashion, and landmarks like the Eiffel Tower.",
-        "coverImage": "src/main/resources/assets/images/SubCategory/img_Paris.jpg"
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724402697/kt-forum/kt-forum_img_Paris.jpg",
+        "cloudinaryImageId": "kt-forum/kt-forum_img_Paris"
       },
       {
         "title": "New York",
         "description": "A vibrant city famous for its iconic skyline, Broadway shows, and diverse culture.",
-        "coverImage": "src/main/resources/assets/images/SubCategory/img_NewYork.jpg"
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724402794/kt-forum/kt-forum_img_NewYork.jpg",
+        "cloudinaryImageId": "kt-forum/kt-forum_img_NewYork"
       },
       {
         "title": "Tokyo",
         "description": "A bustling metropolis known for its technology, fashion, and traditional temples.",
-        "coverImage": "src/main/resources/assets/images/SubCategory/img_Tokyo.jpg"
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724402817/kt-forum/kt-forum_img_Tokyo.jpg",
+        "cloudinaryImageId": "kt-forum/kt-forum_img_Tokyo"
       },
       {
         "title": "London",
         "description": "The capital of the UK, known for its historic landmarks, museums, and cultural diversity.",
-        "coverImage": "src/main/resources/assets/images/SubCategory/img_London.jpg"
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724402839/kt-forum/kt-forum_img_LonDon.jpg",
+        "cloudinaryImageId": "kt-forum/kt-forum_img_LonDon"
       },
       {
         "title": "Rome",
         "description": "Italy's capital, rich in history with ancient ruins like the Colosseum and Vatican City.",
-        "coverImage": "src/main/resources/assets/images/SubCategory/img_Rome.jpg"
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724402861/kt-forum/kt-forum_img_Rome.jpg",
+        "cloudinaryImageId": "kt-forum/kt-forum_img_Rome"
       },
       {
         "title": "Barcelona",
         "description": "A city in Spain known for its unique architecture by Antoni Gaudí and vibrant street life.",
-        "coverImage": "src/main/resources/assets/images/SubCategory/img_Barcelona.jpg"
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724402883/kt-forum/kt-forum_img_Barcelona.jpg",
+        "cloudinaryImageId": "kt-forum/kt-forum_img_Barcelona"
       },
       {
         "title": "Sydney",
         "description": "An Australian city famous for its stunning harbor, Opera House, and beautiful beaches.",
-        "coverImage": "src/main/resources/assets/images/SubCategory/img_Sydney.jpg"
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724402910/kt-forum/kt-forum_img_Sydney.jpg",
+        "cloudinaryImageId": "kt-forum/kt-forum_img_Sydney"
       },
       {
         "title": "Dubai",
         "description": "A luxurious city in the UAE known for its modern architecture, shopping, and nightlife.",
-        "coverImage": "src/main/resources/assets/images/SubCategory/img_Dubai.jpg"
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724402935/kt-forum/kt-forum_img_Dubai.jpg",
+        "cloudinaryImageId": "kt-forum/kt-forum_img_Dubai"
       },
       {
         "title": "Istanbul",
         "description": "A city straddling Europe and Asia with rich history, including landmarks like the Hagia Sophia.",
-        "coverImage": "src/main/resources/assets/images/SubCategory/img_Istanbul.jpg"
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724402994/kt-forum/kt-forum_img_Istanbul.jpg",
+        "cloudinaryImageId": "kt-forum/kt-forum_img_Istanbul"
       },
       {
         "title": "Bangkok",
         "description": "Thailand's capital, famous for its vibrant street life, temples, and bustling markets.",
-        "coverImage": "src/main/resources/assets/images/SubCategory/img_Bangkok.jpg"
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724403045/kt-forum/kt-forum_img_Bangkok.jpg",
+        "cloudinaryImageId": "kt-forum/kt-forum_img_Bangkok"
       },
       {
         "title": "Singapore",
         "description": "A city-state known for its cleanliness, modern skyline, and diverse cultural influences.",
-        "coverImage": "src/main/resources/assets/images/SubCategory/img_Singapore.jpg"
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724403116/kt-forum/kt-forum_img_Singapore.jpg",
+        "cloudinaryImageId": "kt-forum/kt-forum_img_Singapore"
       },
       {
         "title": "Rio de Janeiro",
         "description": "A Brazilian city famous for its carnival, beaches, and the iconic Christ the Redeemer statue.",
-        "coverImage": "src/main/resources/assets/images/SubCategory/img_RiodeJaneiro.jpg"
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724403141/kt-forum/kt-forum_img_RiodeJaneiro.jpg",
+        "cloudinaryImageId": "kt-forum/kt-forum_img_RiodeJaneiro"
       },
       {
         "title": "Amsterdam",
         "description": "The capital of the Netherlands, known for its canals, museums, and historic buildings.",
-        "coverImage": "src/main/resources/assets/images/SubCategory/img_Amsterdam.jpg"
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724403201/kt-forum/kt-forum_img_Amsterdam.jpg",
+        "cloudinaryImageId": "kt-forum/kt-forum_img_Amsterdam"
       },
       {
         "title": "Prague",
         "description": "The capital of the Czech Republic, famous for its well-preserved medieval architecture.",
-        "coverImage": "src/main/resources/assets/images/SubCategory/img_Prague.jpg"
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724403226/kt-forum/kt-forum_img_Prague.jpg",
+        "cloudinaryImageId": "kt-forum/kt-forum_img_Prague"
       },
       {
         "title": "Cape Town",
         "description": "A city in South Africa known for its stunning landscapes, including Table Mountain and beautiful beaches.",
-        "coverImage": "src/main/resources/assets/images/SubCategory/img_CapeTown.jpg"
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724403244/kt-forum/kt-forum_img_CapeTown.jpg",
+        "cloudinaryImageId": "kt-forum/kt-forum_img_CapeTown"
       }
     ],
     "description": "Discover the most iconic and breathtaking destinations across the globe. From historic landmarks and vibrant cities to natural wonders and serene beaches, these spots offer unforgettable experiences for travelers seeking adventure, culture, and beauty."

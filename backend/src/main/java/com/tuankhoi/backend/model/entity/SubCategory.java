@@ -7,7 +7,6 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
@@ -34,9 +33,11 @@ public class SubCategory {
     @Column
     String description;
 
-    @Lob
-    @Column(columnDefinition = "MEDIUMBLOB")
-    String coverImage;
+    @Column
+    String imageUrl;
+
+    @Column
+    String cloudinaryImageId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     Category category;

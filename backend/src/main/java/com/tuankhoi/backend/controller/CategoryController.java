@@ -36,8 +36,10 @@ public class CategoryController {
 
     @GetMapping("")
     public APIResponse<List<CategoryResponse>> getAll() {
+        List<CategoryResponse> allCategoriesResponse = categoryService.getAll();
         return APIResponse.<List<CategoryResponse>>builder()
-                .result(categoryService.getAll())
+                .result(allCategoriesResponse)
+                .totalRecords(allCategoriesResponse.size())
                 .build();
     }
 
@@ -57,8 +59,10 @@ public class CategoryController {
 
     @GetMapping("/search")
     public APIResponse<List<CategoryResponse>> search(@RequestParam String query) {
+        List<CategoryResponse> categoriesSearched = categoryService.search(query);
         return APIResponse.<List<CategoryResponse>>builder()
-                .result(categoryService.search(query))
+                .result(categoriesSearched)
+                .totalRecords(categoriesSearched.size())
                 .build();
     }
 }

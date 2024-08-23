@@ -18,7 +18,9 @@ public class SubCategoryResponse {
 
     String description;
 
-    String coverImage;
+    String imageUrl;
+
+    String cloudinaryImageId;
 
     String createdBy;
 
@@ -27,6 +29,4 @@ public class SubCategoryResponse {
     String lastModifiedBy;
 
     LocalDateTime lastModifiedDate;
-
-    Integer totalPosts;
 }

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ICommentRepository extends JpaRepository<Comment, Long> {
+public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findByPostIdAndParentCommentIsNullOrderByCreatedDateDesc(String postId, Pageable pageable);
 
     @Query("SELECT c FROM Comment c WHERE c.parentComment.id = :commentId ORDER BY c.createdDate ASC")

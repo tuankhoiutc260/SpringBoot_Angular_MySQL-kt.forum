@@ -71,6 +71,10 @@ public enum ErrorCode {
 
     TOKEN_NOTBLANK(7001, "Token cannot be blank", HttpStatus.BAD_REQUEST),
 
+    FILE_SIZE_EXCEEDED(8001, "Max file size is 2MB", HttpStatus.BAD_REQUEST),
+    INVALID_FILE_TYPE(8002, "Only jpg, png, gif, bmp files are allowed", HttpStatus.BAD_REQUEST),
+    UPLOAD_FAILED(8003, "Failed to upload file", HttpStatus.INTERNAL_SERVER_ERROR),
+
     DATA_INITIALIZATION_FAILED(9001, "Data initialization failed", HttpStatus.INTERNAL_SERVER_ERROR),
     ;
     private int code;

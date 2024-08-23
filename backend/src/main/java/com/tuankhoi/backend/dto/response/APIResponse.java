@@ -19,5 +19,5 @@ public class APIResponse <T>{
 
     T result;
 
-    Long totalRecords;
+    Integer totalRecords;
 }

@@ -4,11 +4,11 @@ import com.tuankhoi.backend.dto.request.RoleRequest;
 import com.tuankhoi.backend.dto.response.RoleResponse;
 import com.tuankhoi.backend.exception.AppException;
 import com.tuankhoi.backend.exception.ErrorCode;
-import com.tuankhoi.backend.mapper.IRoleMapper;
+import com.tuankhoi.backend.mapper.RoleMapper;
 import com.tuankhoi.backend.model.entity.Permission;
 import com.tuankhoi.backend.model.entity.Role;
-import com.tuankhoi.backend.repository.Jpa.IPermissionRepository;
-import com.tuankhoi.backend.repository.Jpa.IRoleRepository;
+import com.tuankhoi.backend.repository.Jpa.PermissionRepository;
+import com.tuankhoi.backend.repository.Jpa.RoleRepository;
 import com.tuankhoi.backend.service.IRoleService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -29,24 +29,24 @@ import java.util.Set;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
 public class RoleServiceImpl implements IRoleService {
-    IRoleRepository IRoleRepository;
-    IPermissionRepository IPermissionRepository;
-    IRoleMapper IRoleMapper;
+    RoleRepository RoleRepository;
+    PermissionRepository PermissionRepository;
+    RoleMapper RoleMapper;
 
     @PostAuthorize("hasRole('ADMIN')")
     @Override
     public RoleResponse create(RoleRequest roleRequest) {
         try {
-            Role newRole = IRoleMapper.toRole(roleRequest);
+            Role newRole = RoleMapper.toRole(roleRequest);
             Set<Permission> permissions = new HashSet<>();
             for (int permissionRequestId : roleRequest.getPermissions()) {
-                Permission permission = IPermissionRepository.findById(permissionRequestId).orElseThrow(()
+                Permission permission = PermissionRepository.findById(permissionRequestId).orElseThrow(()
                         -> new AppException(ErrorCode.PERMISSION_NOTFOUND));
                 permissions.add(permission);
             }
             newRole.setPermissions(permissions);
-            Role savedRole = IRoleRepository.save(newRole);
-            return IRoleMapper.toRoleResponse(savedRole);
+            Role savedRole = RoleRepository.save(newRole);
+            return RoleMapper.toRoleResponse(savedRole);
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
             throw new IllegalArgumentException("Failed to create Role due to database constraint: " + e.getMessage(), e);
         }
@@ -55,17 +55,17 @@ public class RoleServiceImpl implements IRoleService {
     @PostAuthorize("hasRole('ADMIN')")
     @Override
     public RoleResponse findByRoleId(Integer roleId) {
-        return IRoleRepository.findById(roleId)
-                .map(IRoleMapper::toRoleResponse)
+        return RoleRepository.findById(roleId)
+                .map(RoleMapper::toRoleResponse)
                 .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND));
     }
 
     @PostAuthorize("hasRole('ADMIN')")
     @Override
     public List<RoleResponse> findAll() {
-        return IRoleRepository.findAll(Sort.by("id"))
+        return RoleRepository.findAll(Sort.by("id"))
                 .stream()
-                .map(IRoleMapper::toRoleResponse)
+                .map(RoleMapper::toRoleResponse)
                 .toList();
     }
 
@@ -73,17 +73,17 @@ public class RoleServiceImpl implements IRoleService {
     @Override
     public RoleResponse update(Integer roleId, RoleRequest roleRequest) {
         try {
-            Role existingRole = IRoleRepository.findById(roleId)
+            Role existingRole = RoleRepository.findById(roleId)
                     .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND));
             Set<Permission> permissions = new HashSet<>();
             for (int permissionRequestId : roleRequest.getPermissions()) {
-                Permission permission = IPermissionRepository.findById(permissionRequestId).orElseThrow(()
+                Permission permission = PermissionRepository.findById(permissionRequestId).orElseThrow(()
                         -> new AppException(ErrorCode.PERMISSION_NOTFOUND));
                 permissions.add(permission);
             }
             existingRole.setPermissions(permissions);
-            IRoleMapper.updateRole(existingRole, roleRequest);
-            return IRoleMapper.toRoleResponse(IRoleRepository.save(existingRole));
+            RoleMapper.updateRole(existingRole, roleRequest);
+            return RoleMapper.toRoleResponse(RoleRepository.save(existingRole));
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
             throw new IllegalArgumentException("Failed to update role due to database constraint: " + e.getMessage());
         }
@@ -93,9 +93,9 @@ public class RoleServiceImpl implements IRoleService {
     @Override
     public void deleteByRoleId(Integer roleId) {
         try {
-            Role roleToDelete = IRoleRepository.findById(roleId)
+            Role roleToDelete = RoleRepository.findById(roleId)
                     .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND));
-            IRoleRepository.delete(roleToDelete);
+            RoleRepository.delete(roleToDelete);
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
             throw new IllegalArgumentException("Failed to delete role due to database constraint", e);
         }

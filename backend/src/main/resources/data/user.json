@@ -4,69 +4,79 @@
     "email": "john.doe@example.com",
     "password": "password123",
     "fullName": "John Doe",
-    "image": "src/main/resources/assets/images/User/img_user_john_doe.jpg"
+    "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724403340/kt-forum/kt-forum_img_user_john_doe.jpg",
+    "cloudinaryImageId": "kt-forum/kt-forum_img_user_john_doe"
   },
   {
     "userName": "jane_smith",
     "email": "jane.smith@example.com",
     "password": "password123",
     "fullName": "Jane Smith",
-    "image": "src/main/resources/assets/images/User/img_user_jane_smith.jpg"
+    "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724403375/kt-forum/kt-forum_img_user_jane_smith.jpg",
+    "cloudinaryImageId": "kt-forum/kt-forum_img_user_jane_smith"
   },
   {
     "userName": "alice_johnson",
     "email": "alice.johnson@example.com",
     "password": "password123",
     "fullName": "Alice Johnson",
-    "image": "src/main/resources/assets/images/User/img_user_alice_johnson.jpg"
+    "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724403407/kt-forum/kt-forum_img_user_alice_johnson.jpg",
+    "cloudinaryImageId": "kt-forum/kt-forum_img_user_alice_johnson"
   },
   {
     "userName": "bob_brown",
     "email": "bob.brown@example.com",
     "password": "password123",
     "fullName": "Bob Brown",
-    "image": "src/main/resources/assets/images/User/img_user_bob_brown.jpg"
+    "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724403428/kt-forum/kt-forum_img_user_bob_brown.jpg",
+    "cloudinaryImageId": "kt-forum/kt-forum_img_user_bob_brown"
   },
   {
     "userName": "charlie_davis",
     "email": "charlie.davis@example.com",
     "password": "password123",
     "fullName": "Charlie Davis",
-    "image": "src/main/resources/assets/images/User/img_user_charlie_davis.jpg"
+    "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724403464/kt-forum/kt-forum_img_user_charlie_davis.jpg",
+    "cloudinaryImageId": "kt-forum/kt-forum_img_user_charlie_davis"
   },
   {
     "userName": "danielle_miller",
     "email": "danielle.miller@example.com",
     "password": "password123",
     "fullName": "Danielle Miller",
-    "image": "src/main/resources/assets/images/User/img_user_danielle_miller.jpg"
+    "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724403484/kt-forum/kt-forum_img_user_danielle_miller.jpg",
+    "cloudinaryImageId": "kt-forum/kt-forum_img_user_danielle_miller"
   },
   {
     "userName": "emily_wilson",
     "email": "emily.wilson@example.com",
     "password": "password123",
     "fullName": "Emily Wilson",
-    "image": "src/main/resources/assets/images/User/img_user_emily_wilson.jpg"
+    "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724403501/kt-forum/kt-forum_img_user_emily_wilson.jpg",
+    "cloudinaryImageId": "kt-forum/kt-forum_img_user_emily_wilson"
   },
   {
     "userName": "frank_thomas",
     "email": "frank.thomas@example.com",
     "password": "password123",
     "fullName": "Frank Thomas",
-    "image": "src/main/resources/assets/images/User/img_user_frank_thomas.jpg"
+    "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724403516/kt-forum/kt-forum_img_user_frank_thomas.jpg",
+    "cloudinaryImageId": "kt-forum/kt-forum_img_user_frank_thomas"
   },
   {
     "userName": "george_white",
     "email": "george.white@example.com",
     "password": "password123",
     "fullName": "George White",
-    "image": "src/main/resources/assets/images/User/img_user_george_white.jpg"
+    "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724403534/kt-forum/kt-forum_img_user_george_white.jpg",
+    "cloudinaryImageId": "kt-forum/kt-forum_img_user_george_white"
   },
   {
     "userName": "hannah_black",
     "email": "hannah.black@example.com",
     "password": "password123",
     "fullName": "Hannah Black",
-    "image": "src/main/resources/assets/images/User/img_user_hannah_black.jpg"
+    "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724403549/kt-forum/kt-forum_img_user_hannah_black.jpg",
+    "cloudinaryImageId": "kt-forum/kt-forum_img_user_hannah_black"
   }
 ]

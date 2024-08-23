@@ -3,7 +3,7 @@ package com.tuankhoi.backend.controller;
 import com.tuankhoi.backend.dto.request.PostRequest;
 import com.tuankhoi.backend.dto.response.APIResponse;
 import com.tuankhoi.backend.dto.response.PostResponse;
-import com.tuankhoi.backend.repository.Jpa.IPostRepository;
+import com.tuankhoi.backend.repository.Jpa.PostRepository;
 import com.tuankhoi.backend.service.IPostService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -15,11 +15,11 @@ import java.util.List;
 @RequestMapping("/api/v1/posts")
 public class PostController {
     private final IPostService IPostService;
-    private final IPostRepository IPostRepository;
+    private final PostRepository PostRepository;
 
-    public PostController(IPostService IPostService, IPostRepository IPostRepository) {
+    public PostController(IPostService IPostService, PostRepository PostRepository) {
         this.IPostService = IPostService;
-        this.IPostRepository = IPostRepository;
+        this.PostRepository = PostRepository;
     }
 
     @GetMapping("/id/{id}")
@@ -33,18 +33,21 @@ public class PostController {
     public APIResponse<List<PostResponse>> findBySubCategory(@PathVariable String subCategoryId,
                                                              @RequestParam(defaultValue = "0") int page,
                                                              @RequestParam(defaultValue = "10") int size) {
+        List<PostResponse> postResultList = IPostService.findBySubCategoryId(subCategoryId, page, size);
+
 
         return APIResponse.<List<PostResponse>>builder()
-                .result(IPostService.findBySubCategoryId(subCategoryId, page, size))
-                .totalRecords(IPostRepository.countBySubCategoryId(subCategoryId))
+                .result(postResultList)
+                .totalRecords(postResultList.size())
                 .build();
     }
 
     @GetMapping("/user-post/{userName}")
     public APIResponse<List<PostResponse>> findByCreatedBy(@PathVariable String userName) {
+        List<PostResponse> postResultList = IPostService.findByUserName(userName);
         return APIResponse.<List<PostResponse>>builder()
-                .result(IPostService.findByUserName(userName))
-                .totalRecords(IPostRepository.countByCreatedBy(userName))
+                .result(postResultList)
+                .totalRecords(postResultList.size())
                 .build();
     }
 

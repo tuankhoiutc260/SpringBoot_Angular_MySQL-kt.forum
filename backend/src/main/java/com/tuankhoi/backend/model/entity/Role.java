@@ -23,6 +23,6 @@ public class Role {
 
     String description;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     Set<Permission> permissions;
 }

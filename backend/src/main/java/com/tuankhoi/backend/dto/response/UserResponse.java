@@ -22,7 +22,9 @@ public class UserResponse {
 
     String fullName;
 
-    String image;
+    String imageUrl;
+
+    String cloudinaryImageId;
 
     boolean active = true;
 

@@ -50,14 +50,4 @@ public class Category {
 
     @LastModifiedDate
     LocalDateTime lastModifiedDate;
-
-    public void addSubCategory(SubCategory subCategory) {
-        subCategories.add(subCategory);
-        subCategory.setCategory(this);
-    }
-
-    public void removeSubCategory(SubCategory subCategory) {
-        subCategories.remove(subCategory);
-        subCategory.setCategory(null);
-    }
 }

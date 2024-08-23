@@ -36,9 +36,11 @@ public class User {
 
     String fullName;
 
-    @Lob
-    @Column(columnDefinition = "MEDIUMBLOB")
-    String image;
+    @Column
+    String imageUrl;
+
+    @Column
+    String cloudinaryImageId;
 
     boolean active = true;
 

@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
-public interface ILikeMapper {
+public interface LikeMapper {
     @Mapping(source = "postId", target = "post.id")
     Like toLike(LikeRequest likeRequest);
 

@@ -16,7 +16,7 @@ import com.tuankhoi.backend.exception.ErrorCode;
 import com.tuankhoi.backend.model.entity.InvalidatedToken;
 import com.tuankhoi.backend.model.entity.User;
 import com.tuankhoi.backend.repository.Jpa.InvalidatedTokenRepository;
-import com.tuankhoi.backend.repository.Jpa.IUserRepository;
+import com.tuankhoi.backend.repository.Jpa.UserRepository;
 import com.tuankhoi.backend.service.IAuthenticationService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +43,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthenticationServiceImpl implements IAuthenticationService {
-    IUserRepository IUserRepository;
+    UserRepository UserRepository;
     InvalidatedTokenRepository invalidatedTokenRepository;
     //    https://generate-random.org/encryption-key-generator?count=1&bytes=32&cipher=aes-256-cbc&string=&password=
 
@@ -80,7 +80,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 
     @Override
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        var user = IUserRepository.findByUserName(request.getUserName())
+        var user = UserRepository.findByUserName(request.getUserName())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_USERNAME_PASSWORD_INVALID));
 
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
@@ -159,7 +159,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
         invalidatedTokenRepository.save(invalidatedToken);
 
         var userID = signedJWT.getJWTClaimsSet().getSubject();
-        var user = IUserRepository.findById(userID).orElseThrow(
+        var user = UserRepository.findById(userID).orElseThrow(
                 () -> new AppException(ErrorCode.UNAUTHENTICATED)
         );
         var token = generateToken(user);

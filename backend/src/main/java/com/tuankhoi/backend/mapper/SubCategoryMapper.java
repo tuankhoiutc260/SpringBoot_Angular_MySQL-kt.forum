@@ -1,9 +1,8 @@
 package com.tuankhoi.backend.mapper;
 
-import com.tuankhoi.backend.dto.document.CategoryDocument;
-import com.tuankhoi.backend.dto.request.CategoryRequest;
-import com.tuankhoi.backend.dto.response.CategoryResponse;
-import com.tuankhoi.backend.model.entity.Category;
+import com.tuankhoi.backend.dto.document.SubCategoryDocument;
+import com.tuankhoi.backend.dto.request.SubCategoryRequest;
+import com.tuankhoi.backend.dto.response.SubCategoryResponse;
 import com.tuankhoi.backend.model.entity.SubCategory;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -15,53 +14,49 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
-public interface CategoryMapper {
+public interface SubCategoryMapper {
     // For JPA
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "imageUrl", ignore = true)
+    @Mapping(target = "cloudinaryImageId", ignore = true)
+//    @Mapping(target = "category.id", source = "categoryId")
+    @Mapping(target = "posts", ignore = true)
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdDate", ignore = true)
     @Mapping(target = "lastModifiedBy", ignore = true)
     @Mapping(target = "lastModifiedDate", ignore = true)
-    @Mapping(target = "subCategories", ignore = true)
-    Category toCategory(CategoryRequest categoryRequest);
+    SubCategory toSubCategory(SubCategoryRequest subCategoryRequest);
 
-    CategoryResponse toCategoryResponse(Category category);
+    SubCategoryResponse toSubCategoryResponse(SubCategory subCategory);
 
     // For Elasticsearch
-//    @Mapping(target = "subCategoryIds", source = "subCategories", qualifiedByName = "subCategoriesToIds")
-    @Mapping(target = "subCategoryIds", ignore = true)
+    @Mapping(target = "categoryId", source = "category.id")
     @Mapping(target = "createdDate", source = "createdDate", qualifiedByName = "localDateTimeToDate")
     @Mapping(target = "lastModifiedDate", source = "lastModifiedDate", qualifiedByName = "localDateTimeToDate")
-    CategoryDocument toCategoryDocument(Category category);
+    SubCategoryDocument toSubCategoryDocument(SubCategory subCategory);
 
-    @Mapping(target = "subCategories", ignore = true)
+    @Mapping(target = "category.id", source = "categoryId")
+    @Mapping(target = "posts", ignore = true)
     @Mapping(target = "createdDate", source = "createdDate", qualifiedByName = "dateToLocalDateTime")
     @Mapping(target = "lastModifiedDate", source = "lastModifiedDate", qualifiedByName = "dateToLocalDateTime")
-    Category fromCategoryDocument(CategoryDocument categoryDocument);
+    SubCategory toSubCategoryFromDocument(SubCategoryDocument subCategoryDocument);
 
-    CategoryResponse toCategoryResponseFromDocument(CategoryDocument categoryDocument);
+    @Mapping(target = "createdDate", source = "createdDate", qualifiedByName = "dateToLocalDateTime")
+    @Mapping(target = "lastModifiedDate", source = "lastModifiedDate", qualifiedByName = "dateToLocalDateTime")
+    SubCategoryResponse toSubCategoryResponseFromDocument(SubCategoryDocument subCategoryDocument);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "imageUrl", ignore = true)
+    @Mapping(target = "cloudinaryImageId", ignore = true)
+    @Mapping(target = "category.id", source = "categoryId")
+    @Mapping(target = "posts", ignore = true)
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdDate", ignore = true)
     @Mapping(target = "lastModifiedBy", ignore = true)
     @Mapping(target = "lastModifiedDate", ignore = true)
-    @Mapping(target = "subCategories", ignore = true)
-    void updateCategoryFromRequest(CategoryRequest categoryRequest, @MappingTarget Category category);
-
-    @Named("subCategoriesToIds")
-    default List<String> subCategoriesToIds(List<SubCategory> subCategories) {
-        if (subCategories == null) {
-            return null;
-        }
-        return subCategories.stream()
-                .map(SubCategory::getId)
-                .collect(Collectors.toList());
-    }
+    void updateSubCategoryFromRequest(SubCategoryRequest subCategoryRequest, @MappingTarget SubCategory subCategory);
 
     @Named("localDateTimeToDate")
     default Date localDateTimeToDate(LocalDateTime localDateTime) {

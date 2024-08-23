@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface IPostRepository extends JpaRepository<Post, String> {
+public interface PostRepository extends JpaRepository<Post, String> {
     @Query(value = """
             WITH top_liked_posts AS
             (

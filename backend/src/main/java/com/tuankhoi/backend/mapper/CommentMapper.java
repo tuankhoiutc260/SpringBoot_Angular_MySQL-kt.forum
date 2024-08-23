@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
-public interface ICommentMapper {
+public interface CommentMapper {
     @Mapping(target = "post.id", source = "postId")
     @Mapping(target = "parentComment.id", source = "parentCommentId")
     Comment toEntity(CommentRequest request);

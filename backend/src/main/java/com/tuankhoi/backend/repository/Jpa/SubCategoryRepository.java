@@ -7,8 +7,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-//@Repository
-public interface ISubCategoryRepository extends JpaRepository<SubCategory, String> {
+@Repository
+public interface SubCategoryRepository extends JpaRepository<SubCategory, String> {
     List<SubCategory> findByCategoryId(String categoryId, Pageable pageable);
+
     SubCategory findByTitle(String title);
 }

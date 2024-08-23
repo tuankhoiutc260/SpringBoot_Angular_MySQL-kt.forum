@@ -8,7 +8,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
-public interface IPostMapper {
+public interface PostMapper {
     @Mapping(target = "subCategory.id", source = "subCategoryId")
     Post toPost(PostRequest postRequest);
 

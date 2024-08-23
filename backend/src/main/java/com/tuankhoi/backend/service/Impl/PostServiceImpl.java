@@ -5,11 +5,11 @@ import com.tuankhoi.backend.dto.response.PostResponse;
 import com.tuankhoi.backend.model.entity.SubCategory;
 import com.tuankhoi.backend.exception.AppException;
 import com.tuankhoi.backend.exception.ErrorCode;
-import com.tuankhoi.backend.mapper.IPostMapper;
+import com.tuankhoi.backend.mapper.PostMapper;
 import com.tuankhoi.backend.model.entity.Post;
 //import com.tuankhoi.backend.repository.ElasticSearch.IElasticsearchPostRepository;
-import com.tuankhoi.backend.repository.Jpa.IPostRepository;
-import com.tuankhoi.backend.repository.Jpa.ISubCategoryRepository;
+import com.tuankhoi.backend.repository.Jpa.PostRepository;
+import com.tuankhoi.backend.repository.Jpa.SubCategoryRepository;
 import com.tuankhoi.backend.service.IPostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,9 +27,9 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class PostServiceImpl implements IPostService {
-    private final ISubCategoryRepository iSubCategoryRepository;
-    private final IPostRepository iPostRepository;
-    private final IPostMapper iPostMapper;
+    private final SubCategoryRepository subCategoryRepository;
+    private final PostRepository postRepository;
+    private final PostMapper postMapper;
 
 //    private final IElasticsearchPostRepository iElasticsearchPostRepository;
 
@@ -38,9 +38,9 @@ public class PostServiceImpl implements IPostService {
     public PostResponse create(PostRequest postRequest) {
         try {
             log.warn(postRequest.toString());
-            Post newPost = iPostMapper.toPost(postRequest);
-            Post savedPost = iPostRepository.save(newPost);
-            return iPostMapper.toPostResponseWithCountLikes(savedPost);
+            Post newPost = postMapper.toPost(postRequest);
+            Post savedPost = postRepository.save(newPost);
+            return postMapper.toPostResponseWithCountLikes(savedPost);
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
             log.error("Failed to create post due to database constraint: {}", e.getMessage(), e);
             throw new IllegalArgumentException("Failed to create post due to database constraint: " + e.getMessage(), e);
@@ -55,39 +55,39 @@ public class PostServiceImpl implements IPostService {
     public List<PostResponse> findAll() {
 
 
-        return iPostRepository.findAll(Sort.by(Sort.Order.asc("createdDate")))
+        return postRepository.findAll(Sort.by(Sort.Order.asc("createdDate")))
                 .stream()
-                .map(iPostMapper::toPostResponseWithCountLikes)
+                .map(postMapper::toPostResponseWithCountLikes)
                 .toList();
     }
 
     @Override
     public List<PostResponse> findTop10ByOrderByLikesDesc() {
-        return iPostRepository.findTop10ByOrderByLikesDesc().stream().map(iPostMapper::toPostResponseWithCountLikes).toList();
+        return postRepository.findTop10ByOrderByLikesDesc().stream().map(postMapper::toPostResponseWithCountLikes).toList();
     }
 
     @Override
     public PostResponse findById(String postId) {
-        return iPostRepository.findById(postId)
-                .map(iPostMapper::toPostResponseWithCountLikes)
+        return postRepository.findById(postId)
+                .map(postMapper::toPostResponseWithCountLikes)
                 .orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));
     }
 
     @Override
     public List<PostResponse> findBySubCategoryId(String subCategoryId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        SubCategory existingSubCategory = iSubCategoryRepository.findById(subCategoryId)
+        SubCategory existingSubCategory = subCategoryRepository.findById(subCategoryId)
                 .orElseThrow(() -> new AppException(ErrorCode.SUB_CATEGORY_NOTFOUND));
 
-        List<Post> postList = iPostRepository.findBySubCategoryIdOrderByCreatedDateAsc(existingSubCategory.getId(), pageable);
-        return postList.stream().map(iPostMapper::toPostResponseWithCountLikes).toList();
+        List<Post> postList = postRepository.findBySubCategoryIdOrderByCreatedDateAsc(existingSubCategory.getId(), pageable);
+        return postList.stream().map(postMapper::toPostResponseWithCountLikes).toList();
     }
 
     @Override
     public List<PostResponse> findByUserName(String userName) {
-        return iPostRepository.findByCreatedBy(userName)
+        return postRepository.findByCreatedBy(userName)
                 .stream()
-                .map(iPostMapper::toPostResponseWithCountLikes)
+                .map(postMapper::toPostResponseWithCountLikes)
                 .toList();
     }
 
@@ -100,9 +100,9 @@ public class PostServiceImpl implements IPostService {
 
     @Override
     public List<PostResponse> findPostsLiked(String userName) {
-        return iPostRepository.findPostsLiked(userName)
+        return postRepository.findPostsLiked(userName)
                 .stream()
-                .map(iPostMapper::toPostResponseWithCountLikes)
+                .map(postMapper::toPostResponseWithCountLikes)
                 .toList();
     }
 
@@ -112,11 +112,11 @@ public class PostServiceImpl implements IPostService {
         try {
 //            MultipartFile imageFile = postRequest.getImage();
 //            String base64Image = imageFile != null ? Base64.getEncoder().encodeToString(imageFile.getBytes()) : null;
-            Post existingPost = iPostRepository.findById(id)
+            Post existingPost = postRepository.findById(id)
                     .orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));
 //            existingPost.setImage(base64Image);
-            iPostMapper.updatePost(existingPost, postRequest);
-            return iPostMapper.toPostResponseWithCountLikes(iPostRepository.save(existingPost));
+            postMapper.updatePost(existingPost, postRequest);
+            return postMapper.toPostResponseWithCountLikes(postRepository.save(existingPost));
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
             throw new AppException(ErrorCode.DATA_INTEGRITY_VIOLATION, "Failed to update post due to database constraint: " + e.getMessage(), e);
         } catch (AppException e) {
@@ -131,9 +131,9 @@ public class PostServiceImpl implements IPostService {
     @Override
     public void deleteByPostId(String postId) {
         try {
-            Post postToDelete = iPostRepository.findById(postId)
+            Post postToDelete = postRepository.findById(postId)
                     .orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));
-            iPostRepository.delete(postToDelete);
+            postRepository.delete(postToDelete);
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
             throw new IllegalArgumentException("Failed to delete post due to database constraint", e);
         } catch (Exception e) {
@@ -144,9 +144,9 @@ public class PostServiceImpl implements IPostService {
     @Override
     public void incrementViewCount(String postId) {
         try {
-            Post post = iPostRepository.findById(postId).orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));
+            Post post = postRepository.findById(postId).orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));
             post.setViewCount(post.getViewCount() + 1);
-            iPostRepository.save(post);
+            postRepository.save(post);
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
             throw new IllegalArgumentException("Failed to increase view count", e);
         }

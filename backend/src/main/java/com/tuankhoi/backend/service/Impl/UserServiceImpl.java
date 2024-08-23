@@ -5,12 +5,11 @@ import com.tuankhoi.backend.dto.response.UserResponse;
 import com.tuankhoi.backend.enums.RoleEnum;
 import com.tuankhoi.backend.exception.AppException;
 import com.tuankhoi.backend.exception.ErrorCode;
-import com.tuankhoi.backend.mapper.IUserMapper;
+import com.tuankhoi.backend.mapper.UserMapper;
 import com.tuankhoi.backend.model.entity.User;
-import com.tuankhoi.backend.repository.Jpa.IRoleRepository;
-import com.tuankhoi.backend.repository.Jpa.IUserRepository;
-import com.tuankhoi.backend.service.IUserService;
-import com.tuankhoi.backend.untils.ImageUtil;
+import com.tuankhoi.backend.repository.Jpa.RoleRepository;
+import com.tuankhoi.backend.repository.Jpa.UserRepository;
+import com.tuankhoi.backend.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -26,58 +25,54 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.nio.file.NoSuchFileException;
 import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
-public class UserServiceImpl implements IUserService {
-    IUserRepository IUserRepository;
+public class UserServiceImpl implements UserService {
+    UserRepository userRepository;
     PasswordEncoder passwordEncoder;
-    IUserMapper IUserMapper;
-    IRoleRepository IRoleRepository;
+    UserMapper userMapper;
+    RoleRepository RoleRepository;
 
     @NonFinal
     @Value("${default.avatar.image.path}")
-    private String defaultAvatarImagePath;
+    private String defaultUserImageUrl;
+
+    @NonFinal
+    @Value("${default.avatar.image.path}")
+    private String defaultCloudinaryUserImageId;
 
     @Override
     public UserResponse create(UserRequest userRequest) {
         try {
-            if (IUserRepository.findByUserName(userRequest.getUserName()).isPresent())
+            if (userRepository.findByUserName(userRequest.getUserName()).isPresent())
                 throw new AppException(ErrorCode.USER_EXISTED);
-            if (IUserRepository.findByEmail(userRequest.getEmail()).isPresent())
+            if (userRepository.findByEmail(userRequest.getEmail()).isPresent())
                 throw new AppException(ErrorCode.USER_EMAIL_EXISTED);
-            User newUser = IUserMapper.toUser(userRequest);
-            newUser.setPassword(passwordEncoder.encode(userRequest.getPassword()));
-            String base64Image;
-            try {
-                base64Image = ImageUtil.getImageAsBase64(defaultAvatarImagePath);
-            } catch (NoSuchFileException e) {
-                throw new RuntimeException("Default avatar image file not found: " + e.getMessage(), e);
-            }
 
-            newUser.setImage(base64Image);
-            if (userRequest.getRole() == null)
-                newUser.setRole(IRoleRepository.findByName(RoleEnum.USER.name()).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND)));
+            User newUser = userMapper.toUser(userRequest);
+            newUser.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+            newUser.setImageUrl(defaultUserImageUrl);
+            newUser.setCloudinaryImageId(defaultCloudinaryUserImageId);
+
+            if (userRequest.getRoleId() == null)
+                newUser.setRole(RoleRepository.findByName(RoleEnum.USER.name()).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND)));
             else
-                newUser.setRole(IRoleRepository.findById(userRequest.getRole()).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND)));
-            return IUserMapper.toUserResponse(IUserRepository.save(newUser));
+                newUser.setRole(RoleRepository.findById(userRequest.getRoleId()).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND)));
+
+            return userMapper.toUserResponse(userRepository.save(newUser));
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
             throw new IllegalArgumentException("Failed to create user due to database constraint: " + e.getMessage(), e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 
-//    @PostAuthorize("hasRole('ADMIN')")
     @Override
     public UserResponse findByUserId(String userId) {
-        return IUserRepository.findById(userId)
-                .map(IUserMapper::toUserResponse)
+        return userRepository.findById(userId)
+                .map(userMapper::toUserResponse)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
     }
 
@@ -89,30 +84,25 @@ public class UserServiceImpl implements IUserService {
         return findByUserName(userName);
     }
 
-//    @PostAuthorize("hasRole('ADMIN')")
     @Override
     public UserResponse findByEmail(String username) {
-        return IUserRepository.findByEmail(username)
-                .map(IUserMapper::toUserResponse)
+        return userRepository.findByEmail(username)
+                .map(userMapper::toUserResponse)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
     }
 
-//    @PostAuthorize("hasRole('ADMIN')")
     @Override
     public UserResponse findByUserName(String userName) {
-        return IUserRepository
-                .findByUserName(userName)
-                .map(IUserMapper::toUserResponse)
+        return userRepository.findByUserName(userName)
+                .map(userMapper::toUserResponse)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
     }
 
-//    @PostAuthorize("hasRole('ADMIN')")
-//    @PreAuthorize("hasAuthority('CREATE_POST')")
     @Override
     public List<UserResponse> findAll() {
-        return IUserRepository.findAll(Sort.by("id"))
+        return userRepository.findAll(Sort.by("id"))
                 .stream()
-                .map(IUserMapper::toUserResponse)
+                .map(userMapper::toUserResponse)
                 .toList();
     }
 
@@ -120,26 +110,25 @@ public class UserServiceImpl implements IUserService {
     @Override
     public UserResponse update(String userId, UserRequest userRequest) {
         try {
-            User existingUser = IUserRepository.findById(userId)
+            User existingUser = userRepository.findById(userId)
                     .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
             existingUser.setPassword(passwordEncoder.encode(userRequest.getPassword()));
-            existingUser.setRole(IRoleRepository.findById(userRequest.getRole()).orElseThrow(()
+            existingUser.setRole(RoleRepository.findById(userRequest.getRoleId()).orElseThrow(()
                     -> new AppException(ErrorCode.ROLE_NOTFOUND)));
-            IUserMapper.updateUser(existingUser, userRequest);
-            User user = IUserRepository.save(existingUser);
-            return IUserMapper.toUserResponse(user);
+            userMapper.updateUserFromRequest(userRequest, existingUser);
+            User user = userRepository.save(existingUser);
+            return userMapper.toUserResponse(user);
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
             throw new IllegalArgumentException("Failed to update user due to database constraint: " + e.getMessage(), e);
         }
     }
 
-//    @PostAuthorize("hasRole('ADMIN')")
     @Override
     public void deleteByUserId(String userId) {
         try {
-            User userToDelete = IUserRepository.findById(userId)
+            User userToDelete = userRepository.findById(userId)
                     .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
-            IUserRepository.delete(userToDelete);
+            userRepository.delete(userToDelete);
         } catch (EntityNotFoundException e) {
             throw e;
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {

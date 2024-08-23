@@ -5,11 +5,11 @@ import com.tuankhoi.backend.dto.response.CommentResponse;
 import com.tuankhoi.backend.dto.websocket.WebSocketMessage;
 import com.tuankhoi.backend.exception.AppException;
 import com.tuankhoi.backend.exception.ErrorCode;
-import com.tuankhoi.backend.mapper.ICommentMapper;
+import com.tuankhoi.backend.mapper.CommentMapper;
 import com.tuankhoi.backend.model.entity.Comment;
 import com.tuankhoi.backend.model.entity.Post;
-import com.tuankhoi.backend.repository.Jpa.ICommentRepository;
-import com.tuankhoi.backend.repository.Jpa.IPostRepository;
+import com.tuankhoi.backend.repository.Jpa.CommentRepository;
+import com.tuankhoi.backend.repository.Jpa.PostRepository;
 import com.tuankhoi.backend.service.ICommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,28 +27,28 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class CommentServiceImpl implements ICommentService {
-    private final ICommentRepository ICommentRepository;
-    private final IPostRepository IPostRepository;
-    private final ICommentMapper ICommentMapper;
+    private final CommentRepository CommentRepository;
+    private final PostRepository PostRepository;
+    private final CommentMapper CommentMapper;
     private final SimpMessagingTemplate messagingTemplate;
 
     @Override
     public CommentResponse create(CommentRequest commentRequest) {
-        Post existingPost = IPostRepository.findById(commentRequest.getPostId())
+        Post existingPost = PostRepository.findById(commentRequest.getPostId())
                 .orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));
 
-        Comment newComment = ICommentMapper.toEntity(commentRequest);
+        Comment newComment = CommentMapper.toEntity(commentRequest);
         newComment.setPost(existingPost);
 
         if (commentRequest.getParentCommentId() != null) {
-            Comment parentComment = ICommentRepository.findById(commentRequest.getParentCommentId())
+            Comment parentComment = CommentRepository.findById(commentRequest.getParentCommentId())
                     .orElseThrow(() -> new AppException(ErrorCode.PARENT_COMMENT_NOTFOUND));
             newComment.setParentComment(parentComment);
         } else {
             newComment.setParentComment(null);
         }
-        Comment savedComment = ICommentRepository.save(newComment);
-        CommentResponse commentResponse = ICommentMapper.toResponse(savedComment);
+        Comment savedComment = CommentRepository.save(newComment);
+        CommentResponse commentResponse = CommentMapper.toResponse(savedComment);
 
         WebSocketMessage addCommentMessage = WebSocketMessage.builder()
                 .type("NEW_COMMENT")
@@ -60,33 +60,33 @@ public class CommentServiceImpl implements ICommentService {
 
     @Override
     public CommentResponse findByCommentId(Long commentId) {
-        return ICommentRepository.findById(commentId)
-                .map(ICommentMapper:: toResponse)
+        return CommentRepository.findById(commentId)
+                .map(CommentMapper:: toResponse)
                 .orElseThrow(() -> new AppException(ErrorCode.COMMENT_NOT_FOUND));
     }
 
     @Override
     public List<CommentResponse> findAllCommentAndReplyByPostId(String postId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        List<Comment> commentList = ICommentRepository.findAllByPostIdOrderByCreatedDateDesc(postId, pageable);
-        return commentList.stream().map(ICommentMapper::toResponse).collect(Collectors.toList());
+        List<Comment> commentList = CommentRepository.findAllByPostIdOrderByCreatedDateDesc(postId, pageable);
+        return commentList.stream().map(CommentMapper::toResponse).collect(Collectors.toList());
     }
 
     @Override
     public List<CommentResponse> findRepliesByCommentId(Long commentId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        List<Comment> commentList = ICommentRepository.findRepliesByCommentId(commentId, pageable);
-        return commentList.stream().map(ICommentMapper::toResponse).collect(Collectors.toList());
+        List<Comment> commentList = CommentRepository.findRepliesByCommentId(commentId, pageable);
+        return commentList.stream().map(CommentMapper::toResponse).collect(Collectors.toList());
     }
 
     @Override
     public CommentResponse update(Long commentId, CommentRequest commentRequest) {
         try {
-            Comment existingComment = ICommentRepository.findById(commentId)
+            Comment existingComment = CommentRepository.findById(commentId)
                     .orElseThrow(() -> new AppException(ErrorCode.COMMENT_NOT_FOUND));
             existingComment.setContent(commentRequest.getContent());
-            Comment updatedComment = ICommentRepository.save(existingComment);
-            CommentResponse commentResponse = ICommentMapper.toResponse(updatedComment);
+            Comment updatedComment = CommentRepository.save(existingComment);
+            CommentResponse commentResponse = CommentMapper.toResponse(updatedComment);
 //            messagingTemplate.convertAndSend("/topic/comments/" + existingComment.getPost().getId() + "/update", commentResponse);
             WebSocketMessage updateCommentMessage = WebSocketMessage.builder()
                     .type("UPDATE_COMMENT")
@@ -106,10 +106,10 @@ public class CommentServiceImpl implements ICommentService {
     @Override
     public void deleteByCommentId(Long commentId) {
         try {
-            Comment commentToDelete = ICommentRepository.findById(commentId)
+            Comment commentToDelete = CommentRepository.findById(commentId)
                     .orElseThrow(() -> new AppException(ErrorCode.COMMENT_NOT_FOUND));
             String postId = commentToDelete.getPost().getId();
-            ICommentRepository.delete(commentToDelete);
+            CommentRepository.delete(commentToDelete);
 //            messagingTemplate.convertAndSend("/topic/comments/" + postId + "/delete", commentId);
             WebSocketMessage deleteCommentMessage = WebSocketMessage.builder()
                     .type("DELETE_COMMENT")

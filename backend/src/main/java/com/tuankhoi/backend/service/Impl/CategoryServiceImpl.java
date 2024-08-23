@@ -77,7 +77,7 @@ public class CategoryServiceImpl implements CategoryService {
             CategoryDocument categoryDocument = categoryMapper.toCategoryDocument(updatedCategory);
             indexCategory(categoryDocument);
 
-            return categoryMapper.toCategoryResponse(categoryRepository.save(existingCategory));
+            return categoryMapper.toCategoryResponse(updatedCategory);
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
             throw new IllegalArgumentException("Failed to update Category due to database constraint: " + e.getMessage());
         } catch (Exception e) {
@@ -85,6 +85,18 @@ public class CategoryServiceImpl implements CategoryService {
             throw new IllegalStateException("Failed to index Category in Elasticsearch: " + e.getMessage(), e);
         }
     }
+
+//    Category existingCategory = categoryRepository.findById(categoryID)
+//            .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOTFOUND));
+//
+//            categoryMapper.updateCategoryFromRequest(categoryRequest, existingCategory);
+//    Category updatedCategory = categoryRepository.save(existingCategory);
+//
+//    CategoryDocument categoryDocument = categoryMapper.toCategoryDocument(updatedCategory);
+//
+//    CategoryDocument existingCategoryDocument = categoryElasticsearchRepository.findById(categoryID)
+//            .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOTFOUND));
+//    indexCategory(existingCategoryDocument);
 
     @PreAuthorize("hasRole('ADMIN')")
     @Override

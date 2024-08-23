@@ -24,7 +24,6 @@ public class UserRequest {
 
     @Size(min = 8, message = "USER_PASSWORD_INVALID")
     @NotBlank(message = "USER_PASSWORD_NOTBLANK")
-
     String password;
 
     @Email(message = "USER_EMAIL_INVALID")
@@ -33,9 +32,9 @@ public class UserRequest {
 
     String fullName;
 
-    MultipartFile image;
+    MultipartFile imageFile;
 
     boolean active = true;
 
-    Integer role;
+    Integer roleId;
 }

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public interface IUserService {
+public interface UserService {
     UserResponse create(UserRequest userRequest);
 
     UserResponse findByUserId(String userId);

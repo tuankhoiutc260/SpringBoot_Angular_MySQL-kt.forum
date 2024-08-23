@@ -2,9 +2,14 @@ package com.tuankhoi.backend.config;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tuankhoi.backend.dto.document.CategoryDocument;
 import com.tuankhoi.backend.exception.AppException;
 import com.tuankhoi.backend.exception.ErrorCode;
+import com.tuankhoi.backend.mapper.CategoryMapper;
+import com.tuankhoi.backend.mapper.SubCategoryMapper;
 import com.tuankhoi.backend.model.entity.*;
+import com.tuankhoi.backend.repository.Elasticsearch.CategoryElasticsearchRepository;
+import com.tuankhoi.backend.repository.Elasticsearch.SubCategoryElasticsearchRepository;
 import com.tuankhoi.backend.repository.Jpa.*;
 import com.tuankhoi.backend.untils.ImageUtil;
 import lombok.AccessLevel;
@@ -32,14 +37,20 @@ import java.util.stream.Collectors;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ApplicationInitConfig {
     PasswordEncoder passwordEncoder;
-    IRoleRepository IRoleRepository;
-    IPermissionRepository IPermissionRepository;
-    IUserRepository IUserRepository;
-    CategoryRepository CategoryRepository;
-    ISubCategoryRepository ISubCategoryRepository;
-    IPostRepository IPostRepository;
-    ICommentRepository ICommentRepository;
+    RoleRepository roleRepository;
+    PermissionRepository permissionRepository;
+    UserRepository userRepository;
+    CategoryRepository categoryRepository;
+    SubCategoryRepository subCategoryRepository;
+    PostRepository postRepository;
+    CommentRepository commentRepository;
     ObjectMapper objectMapper;
+
+    CategoryMapper categoryMapper;
+    SubCategoryMapper subCategoryMapper;
+
+    CategoryElasticsearchRepository categoryElasticsearchRepository;
+    SubCategoryElasticsearchRepository subCategoryElasticsearchRepository;
 
 
     @NonFinal
@@ -50,9 +61,9 @@ public class ApplicationInitConfig {
     public ApplicationRunner applicationRunner() {
         return args -> {
             initializeData("data/permission.json", new TypeReference<List<Permission>>() {
-            }, IPermissionRepository);
+            }, permissionRepository);
             initializeData("data/role.json", new TypeReference<List<Role>>() {
-            }, IRoleRepository);
+            }, roleRepository);
 
             initializeUsers();
             createAdminUser();
@@ -86,17 +97,19 @@ public class ApplicationInitConfig {
     }
 
     private void initializeUsers() {
-        if (IUserRepository.count() == 0) {
+        if (userRepository.count() == 0) {
             try (InputStream inputStream = new ClassPathResource("data/user.json").getInputStream()) {
                 List<User> userList = objectMapper.readValue(inputStream, new TypeReference<List<User>>() {
                 });
 
                 userList.forEach(user -> {
                     user.setPassword(passwordEncoder.encode(user.getPassword()));
-                    user.setImage(encodeImage(user.getImage()));
+                    user.setImageUrl(user.getImageUrl());
+                    user.setCloudinaryImageId(user.getCloudinaryImageId());
+                    user.setRole(roleRepository.findById(2).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND)));
                 });
 
-                IUserRepository.saveAll(userList);
+                userRepository.saveAll(userList);
                 log.info("Virtual data for Users created and saved to database");
             } catch (IOException e) {
                 throw new AppException(ErrorCode.DATA_INITIALIZATION_FAILED, "Unable to save Users", e);
@@ -107,26 +120,31 @@ public class ApplicationInitConfig {
     }
 
     private void initializeCategories() {
-        if (ISubCategoryRepository.count() == 0) {
+        if (subCategoryRepository.count() == 0) {
             try (InputStream inputStream = new ClassPathResource("data/category.json").getInputStream()) {
-                List<Map<String, Object>> data = objectMapper.readValue(inputStream, new TypeReference<List<Map<String, Object>>>() {
+                List<Map<String, Object>> categoryData = objectMapper.readValue(inputStream, new TypeReference<List<Map<String, Object>>>() {
                 });
 
-                data.forEach(categoryMap -> {
-                    Category category = CategoryRepository.save(Category.builder()
+                categoryData.forEach(categoryMap -> {
+                    Category category = categoryRepository.save(Category.builder()
                             .title((String) categoryMap.get("title"))
                             .description((String) categoryMap.get("description"))
                             .build());
+
+                    categoryElasticsearchRepository.save(categoryMapper.toCategoryDocument(category));
 
                     List<Map<String, String>> subCategories = (List<Map<String, String>>) categoryMap.get("subCategories");
                     subCategories.forEach(subCategoryMap -> {
                         SubCategory subCategory = SubCategory.builder()
                                 .title(subCategoryMap.get("title"))
                                 .description(subCategoryMap.get("description"))
-                                .coverImage(encodeImage(subCategoryMap.get("coverImage")))
+                                .imageUrl(subCategoryMap.get("imageUrl"))
+                                .cloudinaryImageId(subCategoryMap.get("cloudinaryImageId"))
                                 .category(category)
                                 .build();
-                        ISubCategoryRepository.save(subCategory);
+                        subCategoryRepository.save(subCategory);
+
+                        subCategoryElasticsearchRepository.save(subCategoryMapper.toSubCategoryDocument(subCategory));
                     });
                 });
 
@@ -140,14 +158,14 @@ public class ApplicationInitConfig {
     }
 
     private void initializePosts() {
-        if (IPostRepository.count() == 0) {
+        if (postRepository.count() == 0) {
             try (InputStream inputStream = new ClassPathResource("data/post.json").getInputStream()) {
                 List<Post> postList = objectMapper.readValue(inputStream, new TypeReference<List<Post>>() {
                 });
 
-                Map<String, User> userMap = IUserRepository.findAll().stream()
+                Map<String, User> userMap = userRepository.findAll().stream()
                         .collect(Collectors.toMap(User::getUserName, Function.identity()));
-                Map<String, SubCategory> subCategoryMap = ISubCategoryRepository.findAll().stream()
+                Map<String, SubCategory> subCategoryMap = subCategoryRepository.findAll().stream()
                         .collect(Collectors.toMap(SubCategory::getTitle, Function.identity()));
 
                 postList.forEach(post -> {
@@ -158,7 +176,7 @@ public class ApplicationInitConfig {
                     post.setSubCategory(existingSubCategory);
                 });
 
-                IPostRepository.saveAll(postList);
+                postRepository.saveAll(postList);
                 log.info("Virtual data for Posts created and saved to database");
             } catch (IOException e) {
                 throw new AppException(ErrorCode.DATA_INITIALIZATION_FAILED, "Unable to save Posts", e);
@@ -169,14 +187,14 @@ public class ApplicationInitConfig {
     }
 
     private void initializeComments() {
-        if (ICommentRepository.count() == 0) {
+        if (commentRepository.count() == 0) {
             try (InputStream inputStream = new ClassPathResource("data/comment.json").getInputStream()) {
                 List<Comment> commentList = objectMapper.readValue(inputStream, new TypeReference<List<Comment>>() {
                 });
 
-                Map<String, User> userMap = IUserRepository.findAll().stream()
+                Map<String, User> userMap = userRepository.findAll().stream()
                         .collect(Collectors.toMap(User::getUserName, Function.identity()));
-                Map<String, Post> postMap = IPostRepository.findAll().stream()
+                Map<String, Post> postMap = postRepository.findAll().stream()
                         .collect(Collectors.toMap(Post::getTitle, Function.identity()));
 
                 commentList.forEach(comment -> {
@@ -186,7 +204,7 @@ public class ApplicationInitConfig {
                     comment.setPost(existingPost);
                 });
 
-                ICommentRepository.saveAll(commentList);
+                commentRepository.saveAll(commentList);
                 log.info("Virtual data for Comments created and saved to database");
             } catch (IOException e) {
                 throw new AppException(ErrorCode.DATA_INITIALIZATION_FAILED, "Unable to save Comments", e);
@@ -197,19 +215,19 @@ public class ApplicationInitConfig {
     }
 
     private void createAdminUser() {
-        IRoleRepository.findByName("ADMIN").ifPresentOrElse(
+        roleRepository.findByName("ADMIN").ifPresentOrElse(
                 adminRole -> {
-                    if (IUserRepository.findByUserName("admin").isEmpty()) {
+                    if (userRepository.findByUserName("admin").isEmpty()) {
                         User user = User.builder()
                                 .email("admin@gmail.com")
                                 .userName("admin")
                                 .password(passwordEncoder.encode("admin"))
                                 .fullName("Admin")
-                                .image(encodeImage(avatarAdminImagePath))
+//                                .image(encodeImage(avatarAdminImagePath))
                                 .role(adminRole)
                                 .active(true)
                                 .build();
-                        IUserRepository.save(user);
+                        userRepository.save(user);
                         log.info("Admin user has been created with default Email: admin@gmail.com and Password: admin");
                     } else {
                         log.info("Admin user already exists, skipping creation.");
