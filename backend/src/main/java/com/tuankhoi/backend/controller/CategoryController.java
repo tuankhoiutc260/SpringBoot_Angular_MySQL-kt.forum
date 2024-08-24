@@ -27,10 +27,10 @@ public class CategoryController {
                 .build();
     }
 
-    @GetMapping("/{categoryID}")
-    public APIResponse<CategoryResponse> getByCategoryId(@PathVariable String categoryID) {
+    @GetMapping("/{categoryId}")
+    public APIResponse<CategoryResponse> getById(@PathVariable String categoryId) {
         return APIResponse.<CategoryResponse>builder()
-                .result(categoryService.getById(categoryID))
+                .result(categoryService.getById(categoryId))
                 .build();
     }
 
@@ -43,16 +43,16 @@ public class CategoryController {
                 .build();
     }
 
-    @PutMapping("/{categoryID}")
-    public APIResponse<CategoryResponse> update(@PathVariable String categoryID, @RequestBody CategoryRequest categoryRequest) {
+    @PutMapping("/{categoryId}")
+    public APIResponse<CategoryResponse> update(@PathVariable String categoryId, @RequestBody CategoryRequest categoryRequest) {
         return APIResponse.<CategoryResponse>builder()
-                .result(categoryService.update(categoryID, categoryRequest))
+                .result(categoryService.update(categoryId, categoryRequest))
                 .build();
     }
 
-    @DeleteMapping("/{categoryID}")
-    public APIResponse<Void> deleteByCategoryId(@PathVariable String categoryID) {
-        categoryService.deleteById(categoryID);
+    @DeleteMapping("/{categoryId}")
+    public APIResponse<Void> deleteById(@PathVariable String categoryId) {
+        categoryService.deleteById(categoryId);
         return APIResponse.<Void>builder()
                 .build();
     }

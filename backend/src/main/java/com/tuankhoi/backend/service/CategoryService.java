@@ -20,6 +20,4 @@ public interface CategoryService {
     List<CategoryResponse> search(String query);
 
     void indexCategory(CategoryDocument categoryDocument);
-
-//    List<CategoryDocument> searchByCriteria(SearchCriteria criteria);
 }

@@ -35,11 +35,11 @@ import java.util.stream.Collectors;
 @Slf4j
 public class CategoryServiceImpl implements CategoryService {
     CategoryRepository categoryRepository;
+    CategoryElasticsearchRepository categoryElasticsearchRepository;
+
     CategoryMapper categoryMapper;
 
-    CategoryElasticsearchRepository categoryElasticsearchRepository;
     ElasticsearchOperations elasticsearchOperations;
-
 
     @PreAuthorize("hasRole('ADMIN')")
     @Override
@@ -81,22 +81,9 @@ public class CategoryServiceImpl implements CategoryService {
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
             throw new IllegalArgumentException("Failed to update Category due to database constraint: " + e.getMessage());
         } catch (Exception e) {
-            // Xử lý lỗi liên quan đến Elasticsearch
             throw new IllegalStateException("Failed to index Category in Elasticsearch: " + e.getMessage(), e);
         }
     }
-
-//    Category existingCategory = categoryRepository.findById(categoryID)
-//            .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOTFOUND));
-//
-//            categoryMapper.updateCategoryFromRequest(categoryRequest, existingCategory);
-//    Category updatedCategory = categoryRepository.save(existingCategory);
-//
-//    CategoryDocument categoryDocument = categoryMapper.toCategoryDocument(updatedCategory);
-//
-//    CategoryDocument existingCategoryDocument = categoryElasticsearchRepository.findById(categoryID)
-//            .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOTFOUND));
-//    indexCategory(existingCategoryDocument);
 
     @PreAuthorize("hasRole('ADMIN')")
     @Override
@@ -119,19 +106,6 @@ public class CategoryServiceImpl implements CategoryService {
                 .map(categoryMapper::toCategoryResponse)
                 .toList();
     }
-
-//    @Override
-//    public List<CategoryResponse> search(String query) {
-//        Criteria criteria = Criteria.where("title").contains(query);
-//
-//        Query searchQuery = new CriteriaQuery(criteria);
-//
-//        return elasticsearchTemplate.search(searchQuery, CategoryDocument.class)
-//                .stream()
-//                .map(hit -> categoryMapper.fromCategoryDocument(hit.getContent()))
-//                .map(categoryMapper::toCategoryResponse)
-//                .collect(Collectors.toList());
-//    }
 
     @Override
     public List<CategoryResponse> search(String query) {

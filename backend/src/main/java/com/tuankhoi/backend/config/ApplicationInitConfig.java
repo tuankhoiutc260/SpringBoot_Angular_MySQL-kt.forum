@@ -142,8 +142,8 @@ public class ApplicationInitConfig {
                                 .cloudinaryImageId(subCategoryMap.get("cloudinaryImageId"))
                                 .category(category)
                                 .build();
-                        subCategoryRepository.save(subCategory);
 
+                        subCategoryRepository.save(subCategory);
                         subCategoryElasticsearchRepository.save(subCategoryMapper.toSubCategoryDocument(subCategory));
                     });
                 });

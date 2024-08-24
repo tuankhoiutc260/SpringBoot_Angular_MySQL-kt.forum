@@ -21,7 +21,7 @@ public interface SubCategoryMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "imageUrl", ignore = true)
     @Mapping(target = "cloudinaryImageId", ignore = true)
-//    @Mapping(target = "category.id", source = "categoryId")
+    @Mapping(target = "category.id", source = "categoryId")
     @Mapping(target = "posts", ignore = true)
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdDate", ignore = true)

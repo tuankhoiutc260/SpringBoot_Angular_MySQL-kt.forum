@@ -45,8 +45,6 @@ public enum ErrorCode {
     POST_ID_NOTBLANK(3011, "Post ID cannot be blank", HttpStatus.BAD_REQUEST),
 
 
-
-
     // PERMISSION
     PERMISSION_EXISTED(4001, "Permission existed", HttpStatus.BAD_REQUEST),
     PERMISSION_NOTFOUND(4002, "Permission not found", HttpStatus.NOT_FOUND),
@@ -65,7 +63,9 @@ public enum ErrorCode {
     CATEGORY_IS_REQUIRED(6003, "Category is required", HttpStatus.BAD_REQUEST),
     SUB_CATEGORY_TITLE_NOTBLANK(6004, "Title of sub category cannot be blank", HttpStatus.BAD_REQUEST),
     SUB_CATEGORY_DESCRIPTION_NOTBLANK(6005, "Description of sub category cannot be blank", HttpStatus.BAD_REQUEST),
-    CATEGORY_ID_NOTBLANK(6006, "Category ID cannot be blank", HttpStatus.BAD_REQUEST),
+    //    CATEGORY_ID_NOTBLANK(6006, "Category ID cannot be blank", HttpStatus.BAD_REQUEST),
+    INVALID_CATEGORY_ID(6006, "Category ID is invalid or missing", HttpStatus.BAD_REQUEST),
+
     CATEGORY_NOTFOUND(6007, "Category not found", HttpStatus.NOT_FOUND),
     SUB_CATEGORY_NOTFOUND(6008, "Sub category not found", HttpStatus.NOT_FOUND),
 
