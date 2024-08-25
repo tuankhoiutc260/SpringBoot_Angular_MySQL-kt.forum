@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class LikeResponse {
+public class PostLikeResponse {
     Long id;
 
     LocalDateTime createdDate;

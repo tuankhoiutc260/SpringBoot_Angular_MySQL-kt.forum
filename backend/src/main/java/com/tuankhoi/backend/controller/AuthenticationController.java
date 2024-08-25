@@ -8,7 +8,10 @@ import com.tuankhoi.backend.dto.response.APIResponse;
 import com.tuankhoi.backend.dto.request.AuthenticationRequest;
 import com.tuankhoi.backend.dto.response.AuthenticationResponse;
 import com.tuankhoi.backend.dto.response.IntrospectResponse;
-import com.tuankhoi.backend.service.IAuthenticationService;
+import com.tuankhoi.backend.service.AuthenticationService;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,16 +21,14 @@ import java.text.ParseException;
 
 @RestController
 @RequestMapping("/api/v1/auth")
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthenticationController {
-    private final IAuthenticationService IAuthenticationService;
-
-    public AuthenticationController(IAuthenticationService IAuthenticationService) {
-        this.IAuthenticationService = IAuthenticationService;
-    }
+    AuthenticationService authenticationService;
 
     @PostMapping("/login")
     public APIResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
-        var result = IAuthenticationService.authenticate(request);
+        var result = authenticationService.authenticate(request);
         return APIResponse.<AuthenticationResponse>builder()
                 .result(result)
                 .build();
@@ -36,7 +37,7 @@ public class AuthenticationController {
     @PostMapping("/introspect")
     public APIResponse<IntrospectResponse> authenticate(@RequestBody IntrospectRequest request)
             throws ParseException, JOSEException {
-        var result = IAuthenticationService.introspect(request);
+        var result = authenticationService.introspect(request);
         return APIResponse.<IntrospectResponse>builder()
                 .result(result)
                 .build();
@@ -45,7 +46,7 @@ public class AuthenticationController {
     @PostMapping("/logout")
     public APIResponse<Void> logout(@RequestBody LogoutRequest request)
             throws ParseException, JOSEException {
-        IAuthenticationService.logout(request);
+        authenticationService.logout(request);
         return APIResponse.<Void>builder()
                 .build();
     }
@@ -53,7 +54,7 @@ public class AuthenticationController {
     @PostMapping("/refresh-token")
     public APIResponse<AuthenticationResponse> refreshToken(@RequestBody RefreshRequest refreshRequest)
             throws ParseException, JOSEException {
-        var result = IAuthenticationService.refreshToken(refreshRequest);
+        var result = authenticationService.refreshToken(refreshRequest);
         return APIResponse.<AuthenticationResponse>builder()
                 .result(result)
                 .build();

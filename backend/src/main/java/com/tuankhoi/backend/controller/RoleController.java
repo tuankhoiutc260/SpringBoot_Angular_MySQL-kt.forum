@@ -3,54 +3,54 @@ package com.tuankhoi.backend.controller;
 import com.tuankhoi.backend.dto.request.RoleRequest;
 import com.tuankhoi.backend.dto.response.APIResponse;
 import com.tuankhoi.backend.dto.response.RoleResponse;
-import com.tuankhoi.backend.service.IRoleService;
+import com.tuankhoi.backend.service.RoleService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@Slf4j
 @RestController
 @RequestMapping("/api/v1/roles")
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class RoleController {
-    IRoleService IRoleService;
+    RoleService roleService;
 
     @GetMapping("/{roleId}")
-    public APIResponse<RoleResponse> findByRoleId(@PathVariable int roleId) {
+    public APIResponse<RoleResponse> getById(@PathVariable int roleId) {
         return APIResponse.<RoleResponse>builder()
-                .result(IRoleService.findByRoleId(roleId))
+                .result(roleService.getById(roleId))
                 .build();
     }
 
     @GetMapping("")
     public APIResponse<List<RoleResponse>> findAll() {
+        List<RoleResponse> roleResponseList = roleService.getAll();
         return APIResponse.<List<RoleResponse>>builder()
-                .result(IRoleService.findAll())
+                .result(roleResponseList)
+                .totalRecords(roleResponseList.size())
                 .build();
     }
 
     @PostMapping
     public APIResponse<RoleResponse> create(@RequestBody RoleRequest roleRequest) {
         return APIResponse.<RoleResponse>builder()
-                .result(IRoleService.create(roleRequest))
+                .result(roleService.create(roleRequest))
                 .build();
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{roleId}")
     public APIResponse<RoleResponse> update(@PathVariable int roleId, @RequestBody RoleRequest roleRequest) {
         return APIResponse.<RoleResponse>builder()
-                .result(IRoleService.update(roleId, roleRequest))
+                .result(roleService.update(roleId, roleRequest))
                 .build();
     }
 
-    @DeleteMapping("/{id}")
-    public APIResponse<Void> deleteByRoleId(@PathVariable int roleId) {
-        IRoleService.deleteByRoleId(roleId);
+    @DeleteMapping("/{roleId}")
+    public APIResponse<Void> deleteById(@PathVariable int roleId) {
+        roleService.deleteById(roleId);
         return APIResponse.<Void>builder()
                 .build();
     }

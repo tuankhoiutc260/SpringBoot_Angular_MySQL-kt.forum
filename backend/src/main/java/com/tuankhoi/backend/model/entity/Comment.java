@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -38,6 +39,7 @@ public class Comment {
     Post post;
 
     @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL)
+    @Builder.Default
     List<Comment> replies = new ArrayList<>();
 
     @CreatedBy
@@ -47,6 +49,9 @@ public class Comment {
     @CreatedDate
     @Column(updatable = false)
     LocalDateTime createdDate;
+
+    @LastModifiedBy
+    String lastModifiedBy;
 
     @LastModifiedDate
     @Column(name = "last_modified_date")

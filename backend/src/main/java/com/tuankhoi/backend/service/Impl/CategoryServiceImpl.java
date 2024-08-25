@@ -14,11 +14,9 @@ import com.tuankhoi.backend.service.CategoryService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
 
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
@@ -32,7 +30,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@Slf4j
 public class CategoryServiceImpl implements CategoryService {
     CategoryRepository categoryRepository;
     CategoryElasticsearchRepository categoryElasticsearchRepository;
@@ -48,12 +45,14 @@ public class CategoryServiceImpl implements CategoryService {
             Category newCategory = categoryMapper.toCategory(categoryRequest);
             Category savedCategory = categoryRepository.save(newCategory);
 
-            CategoryDocument categoryDocument = categoryMapper.toCategoryDocument(savedCategory);
+            CategoryDocument categoryDocument = categoryMapper.toCategoryDocument(newCategory);
             indexCategory(categoryDocument);
 
             return categoryMapper.toCategoryResponse(savedCategory);
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
-            throw new IllegalArgumentException("Failed to create Category due to database constraint: " + e.getMessage(), e);
+            throw new IllegalArgumentException("Failed to Create Category due to database constraint: " + e.getMessage(), e);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to Create Category", e);
         }
     }
 
@@ -79,9 +78,9 @@ public class CategoryServiceImpl implements CategoryService {
 
             return categoryMapper.toCategoryResponse(updatedCategory);
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
-            throw new IllegalArgumentException("Failed to update Category due to database constraint: " + e.getMessage());
+            throw new IllegalArgumentException("Failed to Update Category due to database constraint: " + e.getMessage());
         } catch (Exception e) {
-            throw new IllegalStateException("Failed to index Category in Elasticsearch: " + e.getMessage(), e);
+            throw new RuntimeException("Failed to Update Category", e);
         }
     }
 
@@ -95,16 +94,18 @@ public class CategoryServiceImpl implements CategoryService {
             categoryRepository.deleteById(categoryToDelete.getId());
             categoryElasticsearchRepository.deleteById(categoryToDelete.getId());
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
-            throw new IllegalArgumentException("Failed to delete Category due to database constraint", e);
+            throw new IllegalArgumentException("Failed to Delete Category due to database constraint", e);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to Delete Category", e);
         }
     }
 
     @Override
     public List<CategoryResponse> getAll() {
-        return categoryRepository.findAll(Sort.by("id"))
+        return categoryRepository.findAll()
                 .stream()
                 .map(categoryMapper::toCategoryResponse)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -121,13 +122,18 @@ public class CategoryServiceImpl implements CategoryService {
 
         SearchHits<CategoryDocument> searchHits = elasticsearchOperations.search(searchQuery, CategoryDocument.class);
 
-        return searchHits.getSearchHits().stream()
+        return searchHits.getSearchHits()
+                .stream()
                 .map(hit -> categoryMapper.toCategoryResponseFromDocument(hit.getContent()))
                 .collect(Collectors.toList());
     }
 
     @Override
     public void indexCategory(CategoryDocument categoryDocument) {
-        categoryElasticsearchRepository.save(categoryDocument);
+        try {
+            categoryElasticsearchRepository.save(categoryDocument);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to Index Category in Elasticsearch: ", e);
+        }
     }
 }

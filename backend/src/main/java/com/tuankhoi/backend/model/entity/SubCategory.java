@@ -43,6 +43,7 @@ public class SubCategory {
     Category category;
 
     @OneToMany(mappedBy = "subCategory", cascade = CascadeType.ALL)
+    @Builder.Default
     List<Post> posts = new ArrayList<>();
 
     @CreatedBy

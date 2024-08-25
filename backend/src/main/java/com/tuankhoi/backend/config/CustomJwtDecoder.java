@@ -2,7 +2,7 @@ package com.tuankhoi.backend.config;
 
 import com.nimbusds.jose.JOSEException;
 import com.tuankhoi.backend.dto.request.IntrospectRequest;
-import com.tuankhoi.backend.service.IAuthenticationService;
+import com.tuankhoi.backend.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
@@ -22,14 +22,14 @@ public class CustomJwtDecoder implements JwtDecoder {
     private String signerKey;
 
     @Autowired
-    private IAuthenticationService IAuthenticationService;
+    private AuthenticationService AuthenticationService;
 
     private NimbusJwtDecoder nimbusJwtDecoder = null;
 
     @Override
     public Jwt decode(String token) throws JwtException {
         try {
-            var response = IAuthenticationService.introspect(IntrospectRequest
+            var response = AuthenticationService.introspect(IntrospectRequest
                     .builder()
                     .token(token)
                     .build());

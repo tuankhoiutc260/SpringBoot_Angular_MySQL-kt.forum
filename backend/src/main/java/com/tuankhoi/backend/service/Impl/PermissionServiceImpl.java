@@ -7,8 +7,7 @@ import com.tuankhoi.backend.exception.ErrorCode;
 import com.tuankhoi.backend.mapper.PermissionMapper;
 import com.tuankhoi.backend.model.entity.Permission;
 import com.tuankhoi.backend.repository.Jpa.PermissionRepository;
-import com.tuankhoi.backend.service.IPermissionService;
-import jakarta.persistence.EntityNotFoundException;
+import com.tuankhoi.backend.service.PermissionService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -22,39 +21,41 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class PermissionServiceImpl implements IPermissionService {
-    PermissionRepository PermissionRepository;
-    PermissionMapper PermissionMapper;
+public class PermissionServiceImpl implements PermissionService {
+    PermissionRepository permissionRepository;
+    PermissionMapper permissionMapper;
 
     @PostAuthorize("hasRole('ADMIN')")
     @Override
     public PermissionResponse create(PermissionRequest permissionRequest) {
         try {
-            if (PermissionRepository.findByName(permissionRequest.getName()).isPresent())
+            if (permissionRepository.findByName(permissionRequest.getName()).isPresent())
                 throw new AppException(ErrorCode.PERMISSION_EXISTED);
-            Permission newPermission = PermissionMapper.toPermission(permissionRequest);
-            return PermissionMapper.toPermissionResponse(PermissionRepository.save(newPermission));
+            Permission newPermission = permissionMapper.toPermission(permissionRequest);
+
+            return permissionMapper.toPermissionResponse(permissionRepository.save(newPermission));
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
-            throw new IllegalArgumentException("Failed to create permission due to database constraint: " + e.getMessage(), e);
+            throw new IllegalArgumentException("Failed to Create Permission due to database constraint: " + e.getMessage(), e);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to Create Permission", e);
         }
     }
 
     @PostAuthorize("hasRole('ADMIN')")
     @Override
-    public PermissionResponse findByName(String permissionName) {
-        return PermissionRepository
+    public PermissionResponse getByName(String permissionName) {
+        return permissionRepository
                 .findByName(permissionName)
-                .map(PermissionMapper::toPermissionResponse)
+                .map(permissionMapper::toPermissionResponse)
                 .orElseThrow(() -> new AppException(ErrorCode.PERMISSION_NOTFOUND));
     }
 
     @PostAuthorize("hasRole('ADMIN')")
     @Override
-    public List<PermissionResponse> findAll() {
-        var permissionList = PermissionRepository.findAll();
-        return permissionList
+    public List<PermissionResponse> getAll() {
+        return permissionRepository.findAll()
                 .stream()
-                .map(PermissionMapper::toPermissionResponse)
+                .map(permissionMapper::toPermissionResponse)
                 .toList();
     }
 
@@ -62,28 +63,30 @@ public class PermissionServiceImpl implements IPermissionService {
     @Override
     public PermissionResponse update(Integer permissionRequestId, PermissionRequest permissionRequest) {
         try {
-            Permission existingPermission = PermissionRepository.findById(permissionRequestId).orElseThrow(()->
+            Permission existingPermission = permissionRepository.findById(permissionRequestId).orElseThrow(() ->
                     new AppException(ErrorCode.PERMISSION_NOTFOUND));
-            PermissionMapper.updatePermission(existingPermission, permissionRequest);
-            return PermissionMapper.toPermissionResponse(PermissionRepository.save(existingPermission));
+            permissionMapper.updatePermissionFromRequest(permissionRequest, existingPermission);
+
+            return permissionMapper.toPermissionResponse(permissionRepository.save(existingPermission));
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
-            throw new IllegalArgumentException("Failed to update permission due to database constraint: " + e.getMessage(), e);
+            throw new IllegalArgumentException("Failed to Update Permission due to database constraint: " + e.getMessage(), e);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to Update Permission", e);
         }
     }
 
     @PostAuthorize("hasRole('ADMIN')")
     @Override
-    public void deleteByPermissionId(Integer permissionId) {
+    public void deleteById(Integer permissionId) {
         try {
-            Permission permissionToDelete = PermissionRepository.findById(permissionId)
+            Permission permissionToDelete = permissionRepository.findById(permissionId)
                     .orElseThrow(() -> new AppException(ErrorCode.PERMISSION_NOTFOUND));
-            PermissionRepository.delete(permissionToDelete);
-        } catch (EntityNotFoundException e) {
-            throw e;
+
+            permissionRepository.delete(permissionToDelete);
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
-            throw new IllegalArgumentException("Failed to delete permission due to database constraint", e);
+            throw new IllegalArgumentException("Failed to Delete Permission due to database constraint", e);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to delete permission", e);
+            throw new RuntimeException("Failed to Delete Permission", e);
         }
     }
 }

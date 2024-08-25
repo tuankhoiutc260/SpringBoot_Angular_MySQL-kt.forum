@@ -17,7 +17,7 @@ import com.tuankhoi.backend.model.entity.InvalidatedToken;
 import com.tuankhoi.backend.model.entity.User;
 import com.tuankhoi.backend.repository.Jpa.InvalidatedTokenRepository;
 import com.tuankhoi.backend.repository.Jpa.UserRepository;
-import com.tuankhoi.backend.service.IAuthenticationService;
+import com.tuankhoi.backend.service.AuthenticationService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -42,8 +42,8 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class AuthenticationServiceImpl implements IAuthenticationService {
-    UserRepository UserRepository;
+public class AuthenticationServiceImpl implements AuthenticationService {
+    UserRepository userRepository;
     InvalidatedTokenRepository invalidatedTokenRepository;
     //    https://generate-random.org/encryption-key-generator?count=1&bytes=32&cipher=aes-256-cbc&string=&password=
 
@@ -67,7 +67,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
         boolean isValid = true;
 
         try {
-            verifyToken(token,false);
+            verifyToken(token, false);
         } catch (AppException e) {
             isValid = false;
         }
@@ -80,7 +80,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 
     @Override
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        var user = UserRepository.findByUserName(request.getUserName())
+        var user = userRepository.findByUserName(request.getUserName())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_USERNAME_PASSWORD_INVALID));
 
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
@@ -140,7 +140,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
                     .build();
 
             invalidatedTokenRepository.save(invalidatedToken);
-        } catch (AppException exception){
+        } catch (AppException exception) {
             log.info("Token already expired");
         }
     }
@@ -159,7 +159,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
         invalidatedTokenRepository.save(invalidatedToken);
 
         var userID = signedJWT.getJWTClaimsSet().getSubject();
-        var user = UserRepository.findById(userID).orElseThrow(
+        var user = userRepository.findById(userID).orElseThrow(
                 () -> new AppException(ErrorCode.UNAUTHENTICATED)
         );
         var token = generateToken(user);

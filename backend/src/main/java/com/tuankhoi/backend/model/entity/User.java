@@ -42,6 +42,8 @@ public class User {
     @Column
     String cloudinaryImageId;
 
+    @Column
+    @Builder.Default
     boolean active = true;
 
     @CreatedBy

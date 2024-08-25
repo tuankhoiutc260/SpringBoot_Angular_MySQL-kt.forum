@@ -3,7 +3,7 @@ package com.tuankhoi.backend.controller;
 import com.tuankhoi.backend.dto.request.PermissionRequest;
 import com.tuankhoi.backend.dto.response.APIResponse;
 import com.tuankhoi.backend.dto.response.PermissionResponse;
-import com.tuankhoi.backend.service.IPermissionService;
+import com.tuankhoi.backend.service.PermissionService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -16,32 +16,34 @@ import java.util.List;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class PermissionController {
-    IPermissionService IPermissionService;
+    PermissionService permissionService;
 
     @PostMapping("")
     public APIResponse<PermissionResponse> create(@RequestBody PermissionRequest permissionRequest) {
         return APIResponse.<PermissionResponse>builder()
-                .result(IPermissionService.create(permissionRequest))
+                .result(permissionService.create(permissionRequest))
                 .build();
     }
 
     @GetMapping("")
-    public APIResponse<List<PermissionResponse>> findAll() {
+    public APIResponse<List<PermissionResponse>> getAll() {
+        List<PermissionResponse> permissionResponseList = permissionService.getAll();
         return APIResponse.<List<PermissionResponse>>builder()
-                .result(IPermissionService.findAll())
+                .result(permissionResponseList)
+                .totalRecords(permissionResponseList.size())
                 .build();
     }
 
     @PutMapping("/{id}")
     public APIResponse<PermissionResponse> update(@PathVariable Integer id, @RequestBody PermissionRequest permissionRequest) {
         return APIResponse.<PermissionResponse>builder()
-                .result(IPermissionService.update(id, permissionRequest))
+                .result(permissionService.update(id, permissionRequest))
                 .build();
     }
 
     @DeleteMapping("/{permissionId}")
-    public APIResponse<Void> deleteByPermissionId(@PathVariable Integer permissionId) {
-        IPermissionService.deleteByPermissionId(permissionId);
+    public APIResponse<Void> deleteById(@PathVariable Integer permissionId) {
+        permissionService.deleteById(permissionId);
         return APIResponse.<Void>builder()
                 .build();
     }

@@ -7,16 +7,14 @@ import com.tuankhoi.backend.service.SubCategoryService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@Slf4j
 @RestController
 @RequestMapping("/api/v1/sub-categories")
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SubCategoryController {
     SubCategoryService subCategoryService;
 
@@ -36,33 +34,18 @@ public class SubCategoryController {
 
     @GetMapping("/category/{categoryID}")
     public APIResponse<List<SubCategoryResponse>> getByCategoryId(@PathVariable String categoryID,
-                                                           @RequestParam(defaultValue = "0") int page,
-                                                           @RequestParam(defaultValue = "50") int size) {
-
+                                                                  @RequestParam(defaultValue = "0") int page,
+                                                                  @RequestParam(defaultValue = "50") int size) {
         List<SubCategoryResponse> subCategoryResponseList = subCategoryService.getByCategoryId(categoryID, page, size);
-
         return APIResponse.<List<SubCategoryResponse>>builder()
                 .result(subCategoryResponseList)
                 .totalRecords(subCategoryResponseList.size())
                 .build();
     }
 
-//    @GetMapping("/{subcategoryId}/cover-image")
-//    public ResponseEntity<byte[]> getSubCategoryCoverImage(@PathVariable String subcategoryId) {
-//        SubCategoryResponse subCategory = iSubCategoryService.findBySubCategoryId(subcategoryId);
-//        if (subCategory != null && subCategory.getCoverImage() != null) {
-//            byte[] imageBytes = Base64.getDecoder().decode(subCategory.getCoverImage());
-//            HttpHeaders headers = new HttpHeaders();
-//            headers.setContentType(MediaType.IMAGE_JPEG);
-//            return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
-//        }
-//        return ResponseEntity.notFound().build();
-//    }
-
     @GetMapping("")
-    public APIResponse<List<SubCategoryResponse>> findAll() {
+    public APIResponse<List<SubCategoryResponse>> getAll() {
         List<SubCategoryResponse> subCategoryResponseList = subCategoryService.getAll();
-
         return APIResponse.<List<SubCategoryResponse>>builder()
                 .result(subCategoryResponseList)
                 .totalRecords(subCategoryResponseList.size())
@@ -70,7 +53,7 @@ public class SubCategoryController {
     }
 
     @PutMapping("/{subCategoryId}")
-    public APIResponse<SubCategoryResponse> update(@PathVariable String subCategoryId, @RequestBody SubCategoryRequest subCategoryRequest) {
+    public APIResponse<SubCategoryResponse> update(@PathVariable String subCategoryId, @ModelAttribute SubCategoryRequest subCategoryRequest) {
         return APIResponse.<SubCategoryResponse>builder()
                 .result(subCategoryService.update(subCategoryId, subCategoryRequest))
                 .build();
@@ -84,11 +67,25 @@ public class SubCategoryController {
     }
 
     @GetMapping("/search")
-    public APIResponse<List<SubCategoryResponse>> search(@RequestParam String query) {
-        List<SubCategoryResponse> categorySearchedList = subCategoryService.search(query);
+    public APIResponse<List<SubCategoryResponse>> search(@RequestParam String query,
+                                                         @RequestParam(defaultValue = "0") int page,
+                                                         @RequestParam(defaultValue = "10") int size) {
+        List<SubCategoryResponse> subCategorySearchedList = subCategoryService.search(query, page, size);
         return APIResponse.<List<SubCategoryResponse>>builder()
-                .result(categorySearchedList)
-                .totalRecords(categorySearchedList.size())
+                .result(subCategorySearchedList)
+                .totalRecords(subCategorySearchedList.size())
                 .build();
     }
+
+    //    @GetMapping("/{subcategoryId}/cover-image")
+//    public ResponseEntity<byte[]> getSubCategoryCoverImage(@PathVariable String subcategoryId) {
+//        SubCategoryResponse subCategory = iSubCategoryService.findBySubCategoryId(subcategoryId);
+//        if (subCategory != null && subCategory.getCoverImage() != null) {
+//            byte[] imageBytes = Base64.getDecoder().decode(subCategory.getCoverImage());
+//            HttpHeaders headers = new HttpHeaders();
+//            headers.setContentType(MediaType.IMAGE_JPEG);
+//            return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
+//        }
+//        return ResponseEntity.notFound().build();
+//    }
 }

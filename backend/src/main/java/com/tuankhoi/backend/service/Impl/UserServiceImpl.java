@@ -15,7 +15,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
-import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -30,12 +29,11 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@Slf4j
 public class UserServiceImpl implements UserService {
     UserRepository userRepository;
     PasswordEncoder passwordEncoder;
     UserMapper userMapper;
-    RoleRepository RoleRepository;
+    RoleRepository roleRepository;
 
     @NonFinal
     @Value("${default.avatar.image.path}")
@@ -59,18 +57,20 @@ public class UserServiceImpl implements UserService {
             newUser.setCloudinaryImageId(defaultCloudinaryUserImageId);
 
             if (userRequest.getRoleId() == null)
-                newUser.setRole(RoleRepository.findByName(RoleEnum.USER.name()).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND)));
+                newUser.setRole(roleRepository.findByName(RoleEnum.USER.name()).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND)));
             else
-                newUser.setRole(RoleRepository.findById(userRequest.getRoleId()).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND)));
+                newUser.setRole(roleRepository.findById(userRequest.getRoleId()).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND)));
 
             return userMapper.toUserResponse(userRepository.save(newUser));
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
-            throw new IllegalArgumentException("Failed to create user due to database constraint: " + e.getMessage(), e);
+            throw new IllegalArgumentException("Failed to Create User due to database constraint: " + e.getMessage(), e);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to Create User", e);
         }
     }
 
     @Override
-    public UserResponse findByUserId(String userId) {
+    public UserResponse getById(String userId) {
         return userRepository.findById(userId)
                 .map(userMapper::toUserResponse)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
@@ -81,25 +81,25 @@ public class UserServiceImpl implements UserService {
     public UserResponse getMyInfo() {
         var context = SecurityContextHolder.getContext();
         String userName = context.getAuthentication().getName();
-        return findByUserName(userName);
+        return getByUserName(userName);
     }
 
     @Override
-    public UserResponse findByEmail(String username) {
+    public UserResponse getByEmail(String username) {
         return userRepository.findByEmail(username)
                 .map(userMapper::toUserResponse)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
     }
 
     @Override
-    public UserResponse findByUserName(String userName) {
+    public UserResponse getByUserName(String userName) {
         return userRepository.findByUserName(userName)
                 .map(userMapper::toUserResponse)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
     }
 
     @Override
-    public List<UserResponse> findAll() {
+    public List<UserResponse> getAll() {
         return userRepository.findAll(Sort.by("id"))
                 .stream()
                 .map(userMapper::toUserResponse)
@@ -113,18 +113,20 @@ public class UserServiceImpl implements UserService {
             User existingUser = userRepository.findById(userId)
                     .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
             existingUser.setPassword(passwordEncoder.encode(userRequest.getPassword()));
-            existingUser.setRole(RoleRepository.findById(userRequest.getRoleId()).orElseThrow(()
+            existingUser.setRole(roleRepository.findById(userRequest.getRoleId()).orElseThrow(()
                     -> new AppException(ErrorCode.ROLE_NOTFOUND)));
             userMapper.updateUserFromRequest(userRequest, existingUser);
             User user = userRepository.save(existingUser);
             return userMapper.toUserResponse(user);
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
-            throw new IllegalArgumentException("Failed to update user due to database constraint: " + e.getMessage(), e);
+            throw new IllegalArgumentException("Failed to update User due to database constraint: " + e.getMessage(), e);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to Update User", e);
         }
     }
 
     @Override
-    public void deleteByUserId(String userId) {
+    public void deleteById(String userId) {
         try {
             User userToDelete = userRepository.findById(userId)
                     .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
@@ -132,9 +134,9 @@ public class UserServiceImpl implements UserService {
         } catch (EntityNotFoundException e) {
             throw e;
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
-            throw new IllegalArgumentException("Failed to delete user due to database constraint", e);
+            throw new IllegalArgumentException("Failed to delete User due to database constraint", e);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to delete user", e);
+            throw new RuntimeException("Failed to Delete User", e);
         }
     }
 }

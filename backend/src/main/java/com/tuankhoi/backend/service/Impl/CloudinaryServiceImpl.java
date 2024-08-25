@@ -1,7 +1,6 @@
 package com.tuankhoi.backend.service.Impl;
 
 import com.cloudinary.Cloudinary;
-import com.cloudinary.utils.ObjectUtils;
 import com.tuankhoi.backend.dto.response.CloudinaryResponse;
 import com.tuankhoi.backend.exception.AppException;
 import com.tuankhoi.backend.exception.ErrorCode;
@@ -16,7 +15,6 @@ import java.util.Map;
 public class CloudinaryServiceImpl implements CloudinaryService {
     @Autowired
     private Cloudinary cloudinary;
-
 
     @Override
     public CloudinaryResponse uploadFile(MultipartFile file, String fileName) {
@@ -35,6 +33,14 @@ public class CloudinaryServiceImpl implements CloudinaryService {
 
     @Override
     public void deleteImage(String publicId) {
-
+        try {
+            Map result = cloudinary.uploader().destroy(publicId, Map.of());
+            String status = (String) result.get("result");
+            if (!"ok".equals(status)) {
+                throw new AppException(ErrorCode.DELETE_FAILED);
+            }
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.DELETE_FAILED);
+        }
     }
 }

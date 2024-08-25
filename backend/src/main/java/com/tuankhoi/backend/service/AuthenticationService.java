@@ -13,7 +13,7 @@ import org.springframework.security.core.Authentication;
 
 import java.text.ParseException;
 
-public interface IAuthenticationService {
+public interface AuthenticationService {
     AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest);
 
     IntrospectResponse introspect(IntrospectRequest introspectRequest) throws JOSEException, ParseException;

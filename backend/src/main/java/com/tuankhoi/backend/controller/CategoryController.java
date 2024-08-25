@@ -7,16 +7,14 @@ import com.tuankhoi.backend.service.CategoryService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@Slf4j
 @RestController
 @RequestMapping("/api/v1/categories")
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CategoryController {
     CategoryService categoryService;
 
@@ -36,10 +34,10 @@ public class CategoryController {
 
     @GetMapping("")
     public APIResponse<List<CategoryResponse>> getAll() {
-        List<CategoryResponse> allCategoriesResponse = categoryService.getAll();
+        List<CategoryResponse> categoriesResponseList = categoryService.getAll();
         return APIResponse.<List<CategoryResponse>>builder()
-                .result(allCategoriesResponse)
-                .totalRecords(allCategoriesResponse.size())
+                .result(categoriesResponseList)
+                .totalRecords(categoriesResponseList.size())
                 .build();
     }
 
@@ -59,10 +57,10 @@ public class CategoryController {
 
     @GetMapping("/search")
     public APIResponse<List<CategoryResponse>> search(@RequestParam String query) {
-        List<CategoryResponse> categoriesSearched = categoryService.search(query);
+        List<CategoryResponse> categorySearchedList = categoryService.search(query);
         return APIResponse.<List<CategoryResponse>>builder()
-                .result(categoriesSearched)
-                .totalRecords(categoriesSearched.size())
+                .result(categorySearchedList)
+                .totalRecords(categorySearchedList.size())
                 .build();
     }
 }

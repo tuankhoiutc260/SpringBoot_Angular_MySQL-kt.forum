@@ -9,11 +9,13 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface RoleMapper {
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "permissions", ignore = true)
     Role toRole(RoleRequest roleRequest);
 
     RoleResponse toRoleResponse(Role role);
 
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "permissions", ignore = true)
-    void updateRole(@MappingTarget Role role, RoleRequest roleRequest);
+    void updateRoleFromRequest(RoleRequest roleRequest, @MappingTarget Role role);
 }

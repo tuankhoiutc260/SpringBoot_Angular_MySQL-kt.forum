@@ -6,9 +6,11 @@ import com.tuankhoi.backend.dto.document.CategoryDocument;
 import com.tuankhoi.backend.exception.AppException;
 import com.tuankhoi.backend.exception.ErrorCode;
 import com.tuankhoi.backend.mapper.CategoryMapper;
+import com.tuankhoi.backend.mapper.PostMapper;
 import com.tuankhoi.backend.mapper.SubCategoryMapper;
 import com.tuankhoi.backend.model.entity.*;
 import com.tuankhoi.backend.repository.Elasticsearch.CategoryElasticsearchRepository;
+import com.tuankhoi.backend.repository.Elasticsearch.PostElasticsearchRepository;
 import com.tuankhoi.backend.repository.Elasticsearch.SubCategoryElasticsearchRepository;
 import com.tuankhoi.backend.repository.Jpa.*;
 import com.tuankhoi.backend.untils.ImageUtil;
@@ -37,6 +39,8 @@ import java.util.stream.Collectors;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ApplicationInitConfig {
     PasswordEncoder passwordEncoder;
+    ObjectMapper objectMapper;
+
     RoleRepository roleRepository;
     PermissionRepository permissionRepository;
     UserRepository userRepository;
@@ -44,13 +48,14 @@ public class ApplicationInitConfig {
     SubCategoryRepository subCategoryRepository;
     PostRepository postRepository;
     CommentRepository commentRepository;
-    ObjectMapper objectMapper;
 
     CategoryMapper categoryMapper;
     SubCategoryMapper subCategoryMapper;
+    PostMapper postMapper;
 
     CategoryElasticsearchRepository categoryElasticsearchRepository;
     SubCategoryElasticsearchRepository subCategoryElasticsearchRepository;
+    PostElasticsearchRepository postElasticsearchRepository;
 
 
     @NonFinal
@@ -110,7 +115,7 @@ public class ApplicationInitConfig {
                 });
 
                 userRepository.saveAll(userList);
-                log.info("Virtual data for Users created and saved to database");
+                log.info("Data from data/user.json has been successfully initialized");
             } catch (IOException e) {
                 throw new AppException(ErrorCode.DATA_INITIALIZATION_FAILED, "Unable to save Users", e);
             }
@@ -148,7 +153,7 @@ public class ApplicationInitConfig {
                     });
                 });
 
-                log.info("Virtual data for Categories and SubCategories created and saved to database");
+                log.info("Data from data/category.json has been successfully initialized");
             } catch (IOException e) {
                 throw new AppException(ErrorCode.DATA_INITIALIZATION_FAILED, "Unable to save Categories", e);
             }
@@ -177,7 +182,8 @@ public class ApplicationInitConfig {
                 });
 
                 postRepository.saveAll(postList);
-                log.info("Virtual data for Posts created and saved to database");
+                postElasticsearchRepository.saveAll(postList.stream().map(postMapper::toPostDocument).toList());
+                log.info("Data from data/post.json has been successfully initialized");
             } catch (IOException e) {
                 throw new AppException(ErrorCode.DATA_INITIALIZATION_FAILED, "Unable to save Posts", e);
             }
@@ -205,7 +211,7 @@ public class ApplicationInitConfig {
                 });
 
                 commentRepository.saveAll(commentList);
-                log.info("Virtual data for Comments created and saved to database");
+                log.info("Data from data/comment.json has been successfully initialized");
             } catch (IOException e) {
                 throw new AppException(ErrorCode.DATA_INITIALIZATION_FAILED, "Unable to save Comments", e);
             }

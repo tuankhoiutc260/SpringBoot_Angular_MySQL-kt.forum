@@ -34,6 +34,7 @@ public class UserRequest {
 
     MultipartFile imageFile;
 
+    @Builder.Default
     boolean active = true;
 
     Integer roleId;

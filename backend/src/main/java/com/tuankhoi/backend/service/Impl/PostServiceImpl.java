@@ -1,5 +1,7 @@
 package com.tuankhoi.backend.service.Impl;
 
+import co.elastic.clients.elasticsearch._types.query_dsl.MultiMatchQuery;
+import com.tuankhoi.backend.dto.document.PostDocument;
 import com.tuankhoi.backend.dto.request.PostRequest;
 import com.tuankhoi.backend.dto.response.PostResponse;
 import com.tuankhoi.backend.model.entity.SubCategory;
@@ -7,138 +9,153 @@ import com.tuankhoi.backend.exception.AppException;
 import com.tuankhoi.backend.exception.ErrorCode;
 import com.tuankhoi.backend.mapper.PostMapper;
 import com.tuankhoi.backend.model.entity.Post;
-//import com.tuankhoi.backend.repository.ElasticSearch.IElasticsearchPostRepository;
+import com.tuankhoi.backend.repository.Elasticsearch.PostElasticsearchRepository;
 import com.tuankhoi.backend.repository.Jpa.PostRepository;
 import com.tuankhoi.backend.repository.Jpa.SubCategoryRepository;
-import com.tuankhoi.backend.service.IPostService;
+import com.tuankhoi.backend.service.PostService;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.elasticsearch.client.elc.NativeQuery;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
-@Slf4j
-public class PostServiceImpl implements IPostService {
-    private final SubCategoryRepository subCategoryRepository;
-    private final PostRepository postRepository;
-    private final PostMapper postMapper;
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 
-//    private final IElasticsearchPostRepository iElasticsearchPostRepository;
+public class PostServiceImpl implements PostService {
+    SubCategoryRepository subCategoryRepository;
 
-    //    @PostAuthorize("@userServiceImpl.findById(returnObject.createdBy).userName == authentication.name")
+    PostRepository postRepository;
+    PostElasticsearchRepository postElasticsearchRepository;
+
+    PostMapper postMapper;
+
+    ElasticsearchOperations elasticsearchOperations;
+
+    //    @PostAuthorize("@userServiceImpl.getById(returnObject.createdBy).userName == authentication.name")
     @Override
     public PostResponse create(PostRequest postRequest) {
         try {
             log.warn(postRequest.toString());
             Post newPost = postMapper.toPost(postRequest);
             Post savedPost = postRepository.save(newPost);
-            return postMapper.toPostResponseWithCountLikes(savedPost);
+
+            PostDocument postDocument = postMapper.toPostDocument(newPost);
+            indexPost(postDocument);
+
+            return postMapper.toPostResponse(savedPost);
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
-            log.error("Failed to create post due to database constraint: {}", e.getMessage(), e);
-            throw new IllegalArgumentException("Failed to create post due to database constraint: " + e.getMessage(), e);
+            throw new IllegalArgumentException("Failed to Create Post due to database constraint: " + e.getMessage(), e);
         } catch (Exception e) {
-            log.error("Failed to create post: {}", e.getMessage(), e);
-            throw new RuntimeException("Failed to create post: " + e.getMessage(), e);
+            throw new RuntimeException("Failed to Create Post: " + e.getMessage(), e);
         }
     }
 
-
     @Override
-    public List<PostResponse> findAll() {
-
-
-        return postRepository.findAll(Sort.by(Sort.Order.asc("createdDate")))
-                .stream()
-                .map(postMapper::toPostResponseWithCountLikes)
-                .toList();
-    }
-
-    @Override
-    public List<PostResponse> findTop10ByOrderByLikesDesc() {
-        return postRepository.findTop10ByOrderByLikesDesc().stream().map(postMapper::toPostResponseWithCountLikes).toList();
-    }
-
-    @Override
-    public PostResponse findById(String postId) {
+    public PostResponse getById(String postId) {
         return postRepository.findById(postId)
-                .map(postMapper::toPostResponseWithCountLikes)
-                .orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));
+                .map(postMapper::toPostResponse)
+                .orElseThrow(() -> new AppException(ErrorCode.SUB_CATEGORY_NOTFOUND));
     }
 
     @Override
-    public List<PostResponse> findBySubCategoryId(String subCategoryId, int page, int size) {
+    public List<PostResponse> getBySubCategoryId(String subCategoryId, int page, int size) {
+        if (subCategoryId == null || subCategoryId.trim().isEmpty()) {
+            throw new AppException(ErrorCode.INVALID_SUB_CATEGORY_ID);
+        }
+
         Pageable pageable = PageRequest.of(page, size);
-        SubCategory existingSubCategory = subCategoryRepository.findById(subCategoryId)
+
+        SubCategory existingPSubCategory = subCategoryRepository.findById(subCategoryId)
                 .orElseThrow(() -> new AppException(ErrorCode.SUB_CATEGORY_NOTFOUND));
 
-        List<Post> postList = postRepository.findBySubCategoryIdOrderByCreatedDateAsc(existingSubCategory.getId(), pageable);
-        return postList.stream().map(postMapper::toPostResponseWithCountLikes).toList();
+        List<Post> postResponseList = postRepository
+                .findBySubCategoryId(existingPSubCategory.getId(), pageable);
+
+        return postResponseList.stream()
+                .map(postMapper::toPostResponse)
+                .collect(Collectors.toList());
     }
 
-    @Override
-    public List<PostResponse> findByUserName(String userName) {
-        return postRepository.findByCreatedBy(userName)
-                .stream()
-                .map(postMapper::toPostResponseWithCountLikes)
-                .toList();
-    }
-
-//    @Override
-//    public PostResponse findByTitle(String title) {
-//        return iPostRepository.findByTitleContaining(title)
-//                .map(iPostMapper::toPostResponseWithCountLikes)
-//                .orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));
-//    }
-
-    @Override
-    public List<PostResponse> findPostsLiked(String userName) {
-        return postRepository.findPostsLiked(userName)
-                .stream()
-                .map(postMapper::toPostResponseWithCountLikes)
-                .toList();
-    }
-
-    @PostAuthorize("@IUserServiceImpl.findById(returnObject.createdBy).userName == authentication.name or hasRole('ADMIN')")
+//    @PostAuthorize("@userServiceImpl.getById(returnObject.createdBy).userName == authentication.name or hasRole('ADMIN')")
     @Override
     public PostResponse update(String id, PostRequest postRequest) {
+        log.warn(postRequest.toString());
         try {
-//            MultipartFile imageFile = postRequest.getImage();
-//            String base64Image = imageFile != null ? Base64.getEncoder().encodeToString(imageFile.getBytes()) : null;
             Post existingPost = postRepository.findById(id)
                     .orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));
-//            existingPost.setImage(base64Image);
-            postMapper.updatePost(existingPost, postRequest);
-            return postMapper.toPostResponseWithCountLikes(postRepository.save(existingPost));
+
+            postMapper.updatePostFromRequest(postRequest, existingPost);
+            Post updatedPost = postRepository.save(existingPost);
+
+            PostDocument postDocument = postMapper.toPostDocument(updatedPost);
+            indexPost(postDocument);
+
+            return postMapper.toPostResponse(updatedPost);
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
-            throw new AppException(ErrorCode.DATA_INTEGRITY_VIOLATION, "Failed to update post due to database constraint: " + e.getMessage(), e);
-        } catch (AppException e) {
-            throw e;
+            throw new AppException(ErrorCode.DATA_INTEGRITY_VIOLATION, "Failed to Update Post due to database constraint: " + e.getMessage(), e);
         } catch (Exception e) {
-            throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION, "Failed to update post: " + e.getMessage(), e);
+            throw new RuntimeException("Failed to Update Post", e);
         }
     }
 
-    //    @PostAuthorize("@userServiceImpl.findByUserName(returnObject.createdBy).userName == authentication.name or hasRole('ADMIN')")
-    @PostAuthorize("hasRole('ADMIN') ")
+//    @PostAuthorize("@userServiceImpl.getByUserName(returnObject.createdBy).userName == authentication.name or hasRole('ADMIN')")
     @Override
-    public void deleteByPostId(String postId) {
+    public void deleteById(String postId) {
         try {
             Post postToDelete = postRepository.findById(postId)
                     .orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));
-            postRepository.delete(postToDelete);
+
+            postRepository.deleteById(postToDelete.getId());
+            postElasticsearchRepository.deleteById(postToDelete.getId());
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
-            throw new IllegalArgumentException("Failed to delete post due to database constraint", e);
+            throw new IllegalArgumentException("Failed to Delete Post due to database constraint", e);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to delete post", e);
+            throw new RuntimeException("Failed to Delete Post", e);
         }
+    }
+
+    @Override
+    public List<PostResponse> getAll() {
+        return postRepository.findAll()
+                .stream()
+                .map(postMapper::toPostResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PostResponse> search(String query) {
+        MultiMatchQuery multiMatchQuery = new MultiMatchQuery.Builder()
+                .query(query)
+                .fields("title", "content")
+                .fuzziness("AUTO")
+                .build();
+
+        NativeQuery searchQuery = NativeQuery.builder()
+                .withQuery(q -> q.multiMatch(multiMatchQuery))
+                .build();
+
+        SearchHits<PostDocument> searchHits = elasticsearchOperations.search(searchQuery, PostDocument.class);
+        return searchHits.getSearchHits().stream()
+                .map(hit -> {
+                    PostDocument postDocument = hit.getContent();
+                    Post post = postRepository.findById(postDocument.getId()).orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));
+                    return postMapper.toPostResponse(post);
+                })
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -147,8 +164,20 @@ public class PostServiceImpl implements IPostService {
             Post post = postRepository.findById(postId).orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));
             post.setViewCount(post.getViewCount() + 1);
             postRepository.save(post);
+
+            PostDocument postDocument = postElasticsearchRepository.findById(postId).orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));
+            postElasticsearchRepository.save(postDocument);
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
             throw new IllegalArgumentException("Failed to increase view count", e);
+        }
+    }
+
+    @Override
+    public void indexPost(PostDocument postDocument) {
+        try {
+            postElasticsearchRepository.save(postDocument);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to Index Post in Elasticsearch: ", e);
         }
     }
 }

@@ -11,15 +11,15 @@ public interface SubCategoryService {
 
     SubCategoryResponse getById(String subCategoryID);
 
-    SubCategoryResponse update(String subCategoryId, SubCategoryRequest subCategoryRequest);
-
-    void deleteById(String subCategoryId);
-
     List<SubCategoryResponse> getByCategoryId(String categoryId, int page, int size);
 
     List<SubCategoryResponse> getAll();
 
-    void indexSubCategory(SubCategoryDocument subCategoryDocument);
+    SubCategoryResponse update(String subCategoryId, SubCategoryRequest subCategoryRequest);
 
-    List<SubCategoryResponse> search(String query);
+    void deleteById(String subCategoryId);
+
+    List<SubCategoryResponse> search(String query, int page, int size);
+
+    void indexSubCategory(SubCategoryDocument subCategoryDocument);
 }

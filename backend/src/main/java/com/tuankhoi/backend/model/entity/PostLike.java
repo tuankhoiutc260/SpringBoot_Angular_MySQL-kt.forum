@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Like {
+public class PostLike {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;

@@ -26,6 +26,7 @@ public class UserResponse {
 
     String cloudinaryImageId;
 
+    @Builder.Default
     boolean active = true;
 
     String createdBy;

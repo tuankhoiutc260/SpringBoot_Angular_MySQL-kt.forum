@@ -5,14 +5,14 @@ import com.tuankhoi.backend.dto.response.RoleResponse;
 
 import java.util.List;
 
-public interface IRoleService {
+public interface RoleService {
     RoleResponse create(RoleRequest roleRequest);
 
-    RoleResponse findByRoleId(Integer roleId);
+    RoleResponse getById(Integer roleId);
 
-    List<RoleResponse> findAll();
+    List<RoleResponse> getAll();
 
     RoleResponse update(Integer roleId, RoleRequest roleRequest);
 
-    void deleteByRoleId(Integer roleId);
+    void deleteById(Integer roleId);
 }

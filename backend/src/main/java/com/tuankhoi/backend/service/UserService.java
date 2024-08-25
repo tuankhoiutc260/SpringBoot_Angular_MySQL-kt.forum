@@ -10,17 +10,17 @@ import java.util.List;
 public interface UserService {
     UserResponse create(UserRequest userRequest);
 
-    UserResponse findByUserId(String userId);
+    UserResponse getById(String userId);
 
-    UserResponse findByEmail(String username);
+    UserResponse getByEmail(String username);
 
-    UserResponse findByUserName(String userName);
+    UserResponse getByUserName(String userName);
 
     UserResponse getMyInfo();
 
-    List<UserResponse> findAll();
+    List<UserResponse> getAll();
 
     UserResponse update(String userId, UserRequest userRequest);
 
-    void deleteByUserId(String userId);
+    void deleteById(String userId);
 }

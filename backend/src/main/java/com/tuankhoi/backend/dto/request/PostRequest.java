@@ -13,11 +13,10 @@ import lombok.experimental.FieldDefaults;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PostRequest {
-//    MultipartFile image;
-
     @NotBlank(message = "POST_TITLE_NOTBLANK")
     @Size(max = 255, message = "POST_TITLE_INVALID")
     String title;

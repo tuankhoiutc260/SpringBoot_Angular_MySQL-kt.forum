@@ -2,6 +2,7 @@ package com.tuankhoi.backend.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Getter
 @Setter
@@ -10,13 +11,14 @@ import lombok.*;
 @Entity
 @Table(name = "permission")
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Permission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    Integer id;
 
     @Column(unique = true, nullable = false)
-    private String name;
+    String name;
 
-    private String description;
+    String description;
 }

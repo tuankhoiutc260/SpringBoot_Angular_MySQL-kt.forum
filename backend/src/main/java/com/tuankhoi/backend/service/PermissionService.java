@@ -5,14 +5,14 @@ import com.tuankhoi.backend.dto.response.PermissionResponse;
 
 import java.util.List;
 
-public interface IPermissionService {
+public interface PermissionService {
     PermissionResponse create(PermissionRequest permissionRequest);
 
-    PermissionResponse findByName(String permissionName);
+    PermissionResponse getByName(String permissionName);
 
-    List<PermissionResponse> findAll();
+    List<PermissionResponse> getAll();
 
     PermissionResponse update(Integer permissionRequestId, PermissionRequest permissionRequest);
 
-    void deleteByPermissionId(Integer permissionId);
+    void deleteById(Integer permissionId);
 }

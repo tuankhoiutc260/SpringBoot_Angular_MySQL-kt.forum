@@ -51,10 +51,14 @@ public class Post {
     LocalDateTime lastModifiedDate;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
-    Set<Like> likes = new HashSet<>();
+    @Builder.Default
+    Set<PostLike> postLikes = new HashSet<>();
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+    @Builder.Default
     Set<Comment> comments = new HashSet<>();
 
-    Integer viewCount;
+    @Column
+    @Builder.Default
+    int viewCount = 0;
 }

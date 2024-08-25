@@ -14,7 +14,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class LikeRequest {
+public class PostLikeRequest {
     @NotBlank(message = "POST_ID_NOTBLANK")
     String postId;
 }

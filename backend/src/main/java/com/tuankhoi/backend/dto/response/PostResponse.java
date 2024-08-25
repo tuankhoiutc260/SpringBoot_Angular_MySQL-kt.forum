@@ -4,8 +4,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -16,13 +14,11 @@ import java.util.Set;
 public class PostResponse {
     String id;
 
-//    String image;
-
     String title;
 
     String content;
 
-//    Set<String> tags = new HashSet<>();
+    String subCategoryId;
 
     LocalDateTime createdDate;
 
@@ -32,13 +28,9 @@ public class PostResponse {
 
     String lastModifiedBy;
 
-    Set<LikeResponse> likes;
+    int likeCount;
 
-    Integer countLikes;
-
-    int totalComments;
+    int commentCount;
 
     int viewCount;
-
-//    Set<CommentResponse> comments;
 }
