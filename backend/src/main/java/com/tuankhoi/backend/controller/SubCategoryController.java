@@ -4,6 +4,8 @@ import com.tuankhoi.backend.dto.request.SubCategoryRequest;
 import com.tuankhoi.backend.dto.response.APIResponse;
 import com.tuankhoi.backend.dto.response.SubCategoryResponse;
 import com.tuankhoi.backend.service.SubCategoryService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -14,9 +16,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/sub-categories")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Tag(name = "Sub Category Controller")
 public class SubCategoryController {
     SubCategoryService subCategoryService;
 
+    @Operation(summary = "Create new sub-category", description = "Create a new sub-category.")
     @PostMapping
     public APIResponse<SubCategoryResponse> create(@ModelAttribute SubCategoryRequest subCategoryRequest) {
         return APIResponse.<SubCategoryResponse>builder()
@@ -24,6 +28,7 @@ public class SubCategoryController {
                 .build();
     }
 
+    @Operation(summary = "Get sub-category by ID", description = "Retrieve a sub-category by its ID.")
     @GetMapping("/{subCategoryID}")
     public APIResponse<SubCategoryResponse> getById(@PathVariable String subCategoryID) {
         return APIResponse.<SubCategoryResponse>builder()
@@ -31,6 +36,7 @@ public class SubCategoryController {
                 .build();
     }
 
+    @Operation(summary = "Get sub-categories by category ID", description = "Retrieve all sub-categories under a specific category ID.")
     @GetMapping("/category/{categoryID}")
     public APIResponse<Page<SubCategoryResponse>> getByCategoryId(@PathVariable String categoryID,
                                                                   @RequestParam(defaultValue = "0") int page,
@@ -41,6 +47,7 @@ public class SubCategoryController {
                 .build();
     }
 
+    @Operation(summary = "Get all sub-categories", description = "Retrieve a list of all sub-categories.")
     @GetMapping("")
     public APIResponse<Page<SubCategoryResponse>> getAll(@RequestParam(defaultValue = "0") int page,
                                                          @RequestParam(defaultValue = "10") int size) {
@@ -50,6 +57,7 @@ public class SubCategoryController {
                 .build();
     }
 
+    @Operation(summary = "Update sub-category", description = "Update a sub-category by its ID.")
     @PutMapping("/{subCategoryId}")
     public APIResponse<SubCategoryResponse> update(@PathVariable String subCategoryId,
                                                    @ModelAttribute SubCategoryRequest subCategoryRequest) {
@@ -58,6 +66,7 @@ public class SubCategoryController {
                 .build();
     }
 
+    @Operation(summary = "Delete sub-category", description = "Delete a sub-category by its ID.")
     @DeleteMapping("/{subcategoryId}")
     public APIResponse<Void> deleteById(@PathVariable String subcategoryId) {
         subCategoryService.deleteById(subcategoryId);
@@ -65,6 +74,7 @@ public class SubCategoryController {
                 .build();
     }
 
+    @Operation(summary = "Search sub-categories", description = "Search sub-categories based on criteria.")
     @GetMapping("/search")
     public APIResponse<Page<SubCategoryResponse>> search(@RequestParam String query,
                                                          @RequestParam(defaultValue = "0") int page,

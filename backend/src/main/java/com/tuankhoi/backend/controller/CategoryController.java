@@ -4,6 +4,8 @@ import com.tuankhoi.backend.dto.request.CategoryRequest;
 import com.tuankhoi.backend.dto.response.APIResponse;
 import com.tuankhoi.backend.dto.response.CategoryResponse;
 import com.tuankhoi.backend.service.CategoryService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -14,9 +16,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/categories")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Tag(name = "Category Controller")
 public class CategoryController {
     CategoryService categoryService;
 
+    @Operation(summary = "Create new category", description = "Create a new category.")
     @PostMapping
     public APIResponse<CategoryResponse> create(@RequestBody CategoryRequest categoryRequest) {
         return APIResponse.<CategoryResponse>builder()
@@ -24,6 +28,7 @@ public class CategoryController {
                 .build();
     }
 
+    @Operation(summary = "Get category by ID", description = "Retrieve a category by its ID.")
     @GetMapping("/{categoryId}")
     public APIResponse<CategoryResponse> getById(@PathVariable String categoryId) {
         return APIResponse.<CategoryResponse>builder()
@@ -31,6 +36,7 @@ public class CategoryController {
                 .build();
     }
 
+    @Operation(summary = "Get all categories", description = "Retrieve a list of all categories.")
     @GetMapping("")
     public APIResponse<Page<CategoryResponse>> getAll(@RequestParam(defaultValue = "0") int page,
                                                       @RequestParam(defaultValue = "10") int size) {
@@ -40,6 +46,7 @@ public class CategoryController {
                 .build();
     }
 
+    @Operation(summary = "Update category", description = "Update a category by its ID.")
     @PutMapping("/{categoryId}")
     public APIResponse<CategoryResponse> update(@PathVariable String categoryId,
                                                 @RequestBody CategoryRequest categoryRequest) {
@@ -48,6 +55,7 @@ public class CategoryController {
                 .build();
     }
 
+    @Operation(summary = "Delete category", description = "Delete a category by its ID.")
     @DeleteMapping("/{categoryId}")
     public APIResponse<Void> deleteById(@PathVariable String categoryId) {
         categoryService.deleteById(categoryId);
@@ -55,6 +63,7 @@ public class CategoryController {
                 .build();
     }
 
+    @Operation(summary = "Search categories", description = "Search categories based on criteria.")
     @GetMapping("/search")
     public APIResponse<Page<CategoryResponse>> search(@RequestParam String query,
                                                       @RequestParam(defaultValue = "0") int page,

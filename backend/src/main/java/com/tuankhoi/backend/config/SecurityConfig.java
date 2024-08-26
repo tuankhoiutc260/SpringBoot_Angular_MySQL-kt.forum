@@ -32,9 +32,9 @@ import java.util.Optional;
 @Slf4j
 public class SecurityConfig implements WebMvcConfigurer {
     private final String[] PUBLIC_ENDPOINTS_FOR_GET = {
-
-
-
+            "/swagger-ui.html",
+            "/swagger-ui/**",
+            "/v3/api-docs/**"
     };
 
     private final String[] PUBLIC_ENDPOINTS = {
@@ -55,12 +55,6 @@ public class SecurityConfig implements WebMvcConfigurer {
 
     private final String[] PUBLIC_ENDPOINTS_FOR_POST = {
                 "/api/v1/auth/login",
-    //            "/api/v1/auth/logout",
-    //            "/api/v1/auth/refresh-token",
-    //            "/api/comments/post/**",
-    //            "/api/comments",
-    //            "/ws/**",
-    //            "/ws",
 
 
     };

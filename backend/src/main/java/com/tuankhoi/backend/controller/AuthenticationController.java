@@ -9,6 +9,8 @@ import com.tuankhoi.backend.dto.request.AuthenticationRequest;
 import com.tuankhoi.backend.dto.response.AuthenticationResponse;
 import com.tuankhoi.backend.dto.response.IntrospectResponse;
 import com.tuankhoi.backend.service.AuthenticationService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -23,9 +25,11 @@ import java.text.ParseException;
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Tag(name = "Authentication Controller")
 public class AuthenticationController {
     AuthenticationService authenticationService;
 
+    @Operation(summary = "Login user", description = "Authenticate a user and return a token.")
     @PostMapping("/login")
     public APIResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
         var result = authenticationService.authenticate(request);
@@ -34,6 +38,7 @@ public class AuthenticationController {
                 .build();
     }
 
+    @Operation(summary = "Introspect token", description = "Check the validity of an authentication token.")
     @PostMapping("/introspect")
     public APIResponse<IntrospectResponse> authenticate(@RequestBody IntrospectRequest request)
             throws ParseException, JOSEException {
@@ -43,6 +48,7 @@ public class AuthenticationController {
                 .build();
     }
 
+    @Operation(summary = "Logout user", description = "Logout the authenticated user.")
     @PostMapping("/logout")
     public APIResponse<Void> logout(@RequestBody LogoutRequest request)
             throws ParseException, JOSEException {
@@ -51,6 +57,7 @@ public class AuthenticationController {
                 .build();
     }
 
+    @Operation(summary = "Refresh token", description = "Refresh the authentication token.")
     @PostMapping("/refresh-token")
     public APIResponse<AuthenticationResponse> refreshToken(@RequestBody RefreshRequest refreshRequest)
             throws ParseException, JOSEException {

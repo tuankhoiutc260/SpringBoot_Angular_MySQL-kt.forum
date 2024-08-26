@@ -4,6 +4,8 @@ import com.tuankhoi.backend.dto.request.UserRequest;
 import com.tuankhoi.backend.dto.response.APIResponse;
 import com.tuankhoi.backend.dto.response.UserResponse;
 import com.tuankhoi.backend.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -15,9 +17,19 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Tag(name = "User Controller")
 public class UserController {
     UserService userService;
 
+    @Operation(summary = "Create new user", description = "Create a new user.")
+    @PostMapping
+    public APIResponse<UserResponse> create(@ModelAttribute @Valid UserRequest userRequest) {
+        return APIResponse.<UserResponse>builder()
+                .result(userService.create(userRequest))
+                .build();
+    }
+
+    @Operation(summary = "Get user by ID", description = "Retrieve a user by their user ID.")
     @GetMapping("/id/{userId}")
     public APIResponse<UserResponse> getById(@PathVariable String userId) {
         return APIResponse.<UserResponse>builder()
@@ -25,6 +37,7 @@ public class UserController {
                 .build();
     }
 
+    @Operation(summary = "Get user by username", description = "Retrieve a user by their username.")
     @GetMapping("/username/{userName}")
     public APIResponse<UserResponse> getByUserName(@PathVariable String userName) {
         return APIResponse.<UserResponse>builder()
@@ -32,6 +45,7 @@ public class UserController {
                 .build();
     }
 
+    @Operation(summary = "Get my information", description = "Retrieve the authenticated user's information.")
     @GetMapping("/my-info")
     public APIResponse<UserResponse> getMyInfo() {
         return APIResponse.<UserResponse>builder()
@@ -39,6 +53,7 @@ public class UserController {
                 .build();
     }
 
+    @Operation(summary = "Get all users", description = "Retrieve a list of all users.")
     @GetMapping("")
     public APIResponse<Page<UserResponse>> getAll(@RequestParam(defaultValue = "0") int page,
                                                   @RequestParam(defaultValue = "10") int size) {
@@ -48,13 +63,7 @@ public class UserController {
                 .build();
     }
 
-    @PostMapping
-    public APIResponse<UserResponse> create(@ModelAttribute @Valid UserRequest userRequest) {
-        return APIResponse.<UserResponse>builder()
-                .result(userService.create(userRequest))
-                .build();
-    }
-
+    @Operation(summary = "Update user", description = "Update a user's details by user ID.")
     @PutMapping("/{userId}")
     public APIResponse<UserResponse> update(@PathVariable String userId,
                                             @ModelAttribute UserRequest userRequest) {
@@ -63,6 +72,7 @@ public class UserController {
                 .build();
     }
 
+    @Operation(summary = "Delete user", description = "Delete a user by user ID.")
     @DeleteMapping("/{userId}")
     public APIResponse<Void> deleteById(@PathVariable String userId) {
         userService.deleteById(userId);
