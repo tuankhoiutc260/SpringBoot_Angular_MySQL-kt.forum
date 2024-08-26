@@ -7,9 +7,8 @@ import com.tuankhoi.backend.service.PermissionService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/permissions")
@@ -26,18 +25,19 @@ public class PermissionController {
     }
 
     @GetMapping("")
-    public APIResponse<List<PermissionResponse>> getAll() {
-        List<PermissionResponse> permissionResponseList = permissionService.getAll();
-        return APIResponse.<List<PermissionResponse>>builder()
-                .result(permissionResponseList)
-                .totalRecords(permissionResponseList.size())
+    public APIResponse<Page<PermissionResponse>> getAll(@RequestParam(defaultValue = "0") int page,
+                                                        @RequestParam(defaultValue = "5") int size) {
+        Page<PermissionResponse> permissionResponsePage = permissionService.getAll(page, size);
+        return APIResponse.<Page<PermissionResponse>>builder()
+                .result(permissionResponsePage)
                 .build();
     }
 
-    @PutMapping("/{id}")
-    public APIResponse<PermissionResponse> update(@PathVariable Integer id, @RequestBody PermissionRequest permissionRequest) {
+    @PutMapping("/{permissionId}")
+    public APIResponse<PermissionResponse> update(@PathVariable Integer permissionId,
+                                                  @RequestBody PermissionRequest permissionRequest) {
         return APIResponse.<PermissionResponse>builder()
-                .result(permissionService.update(id, permissionRequest))
+                .result(permissionService.update(permissionId, permissionRequest))
                 .build();
     }
 

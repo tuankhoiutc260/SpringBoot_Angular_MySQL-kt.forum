@@ -11,7 +11,7 @@ public class WebSocketController {
     @MessageMapping("/comment")
     @SendTo("/topic/comments")
     public WebSocketMessage handleComment(WebSocketMessage message) {
-        // Xử lý logic nếu cần
+
         return message;
     }
 }

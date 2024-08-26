@@ -1,5 +1,6 @@
 package com.tuankhoi.backend.service.Impl;
 
+import co.elastic.clients.elasticsearch._types.ElasticsearchException;
 import co.elastic.clients.elasticsearch._types.query_dsl.MultiMatchQuery;
 import com.tuankhoi.backend.dto.request.SubCategoryRequest;
 import com.tuankhoi.backend.dto.response.CloudinaryResponse;
@@ -16,14 +17,15 @@ import com.tuankhoi.backend.repository.Jpa.SubCategoryRepository;
 import com.tuankhoi.backend.service.CloudinaryService;
 import com.tuankhoi.backend.service.SubCategoryService;
 import com.tuankhoi.backend.untils.FileUploadUtil;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.apache.commons.io.FilenameUtils;
 import org.hibernate.exception.ConstraintViolationException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
@@ -33,6 +35,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.CacheEvict;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,7 +45,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SubCategoryServiceImpl implements SubCategoryService {
-    private static final Logger logger = LoggerFactory.getLogger(SubCategoryServiceImpl.class);
+    static final String ELASTICSEARCH_TITLE_FIELD = "title";
+    static final String ELASTICSEARCH_DESCRIPTION_FIELD = "description";
 
     CategoryRepository categoryRepository;
     SubCategoryRepository subCategoryRepository;
@@ -52,15 +57,15 @@ public class SubCategoryServiceImpl implements SubCategoryService {
 
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
+    @CacheEvict(value = "subCategories", allEntries = true)
     @Override
-    public SubCategoryResponse create(SubCategoryRequest subCategoryRequest) {
-        try {
-            logger.info("Creating new SubCategory: {}", subCategoryRequest.getTitle());
-            Category category = categoryRepository.findById(subCategoryRequest.getCategoryId())
-                    .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOTFOUND));
+    public SubCategoryResponse create(@Valid SubCategoryRequest subCategoryRequest) {
+        Category existingCategory = categoryRepository.findById(subCategoryRequest.getCategoryId())
+                .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOTFOUND));
 
+        try {
             SubCategory newSubCategory = subCategoryMapper.toSubCategory(subCategoryRequest);
-            newSubCategory.setCategory(category);
+            newSubCategory.setCategory(existingCategory);
 
             var imageFile = subCategoryRequest.getCoverImageFile();
             FileUploadUtil.assertAllowed(imageFile, FileUploadUtil.IMAGE_PATTERN);
@@ -73,28 +78,26 @@ public class SubCategoryServiceImpl implements SubCategoryService {
 
             indexSubCategory(subCategoryMapper.toSubCategoryDocument(savedSubCategory));
 
-            logger.info("Successfully created SubCategory: {}", savedSubCategory.getId());
             return subCategoryMapper.toSubCategoryResponse(savedSubCategory);
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
-            logger.error("Failed to create SubCategory due to database constraint", e);
             throw new AppException(ErrorCode.DATABASE_CONSTRAINT_VIOLATION, "Failed to Create Sub Category due to database constraint: " + e.getMessage());
         } catch (Exception e) {
-            logger.error("Failed to create SubCategory", e);
             throw new AppException(ErrorCode.UNKNOWN_ERROR, "Failed to Create Sub Category: " + e.getMessage());
         }
     }
 
+    @Cacheable(value = "subCategories", key = "#subCategoryID")
     @Override
     public SubCategoryResponse getById(String subCategoryID) {
-        logger.info("Fetching SubCategory by ID: {}", subCategoryID);
         return subCategoryRepository.findById(subCategoryID)
                 .map(subCategoryMapper::toSubCategoryResponse)
-                .orElseThrow(() -> new AppException(ErrorCode.SUB_CATEGORY_NOTFOUND));
+                .orElseThrow(() -> {
+                    return new AppException(ErrorCode.SUB_CATEGORY_NOTFOUND);
+                });
     }
 
     @Override
-    public List<SubCategoryResponse> getByCategoryId(String categoryId, int page, int size) {
-        logger.info("Fetching SubCategories for Category ID: {}, Page: {}, Size: {}", categoryId, page, size);
+    public Page<SubCategoryResponse> getByCategoryId(String categoryId, int page, int size) {
         if (categoryId == null || categoryId.trim().isEmpty()) {
             throw new AppException(ErrorCode.INVALID_CATEGORY_ID);
         }
@@ -107,29 +110,28 @@ public class SubCategoryServiceImpl implements SubCategoryService {
         Category existingCategory = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOTFOUND));
 
-        List<SubCategory> subCategoryList = subCategoryRepository
+        Page<SubCategory> subCategoryPage = subCategoryRepository
                 .findByCategoryId(existingCategory.getId(), pageable);
 
-        return subCategoryList.stream()
-                .map(subCategoryMapper::toSubCategoryResponse)
-                .collect(Collectors.toList());
+        return subCategoryPage.map(subCategoryMapper::toSubCategoryResponse);
     }
 
+    @Cacheable(value = "allSubCategories")
     @Override
-    public List<SubCategoryResponse> getAll() {
-        logger.info("Fetching all SubCategories");
-        return subCategoryRepository.findAll()
-                .stream()
-                .map(subCategoryMapper::toSubCategoryResponse)
-                .toList();
+    public Page<SubCategoryResponse> getAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<SubCategory> subCategoryPage = subCategoryRepository.findAll(pageable);
+
+        return subCategoryPage.map(subCategoryMapper::toSubCategoryResponse);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
+    @CacheEvict(value = {"subCategories", "allSubCategories"}, allEntries = true)
     @Override
-    public SubCategoryResponse update(String subCategoryRequestID, SubCategoryRequest subCategoryRequest) {
-        logger.info("Updating SubCategory: {}", subCategoryRequestID);
-        SubCategory existingSubCategory = subCategoryRepository.findById(subCategoryRequestID)
+    public SubCategoryResponse update(String subCategoryId, @Valid SubCategoryRequest subCategoryRequest) {
+        SubCategory existingSubCategory = subCategoryRepository.findById(subCategoryId)
                 .orElseThrow(() -> new AppException(ErrorCode.SUB_CATEGORY_NOTFOUND));
 
         try {
@@ -152,49 +154,41 @@ public class SubCategoryServiceImpl implements SubCategoryService {
 
             indexSubCategory(subCategoryMapper.toSubCategoryDocument(updatedSubCategory));
 
-            logger.info("Successfully updated SubCategory: {}", updatedSubCategory.getId());
             return subCategoryMapper.toSubCategoryResponse(updatedSubCategory);
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
-            logger.error("Failed to update SubCategory due to database constraint", e);
-            throw new AppException(ErrorCode.DATABASE_CONSTRAINT_VIOLATION, "Failed to update Sub Category due to database constraint: " + e.getMessage());
+            throw new AppException(ErrorCode.DATABASE_CONSTRAINT_VIOLATION, "Failed to Update Sub Category due to database constraint: " + e.getMessage());
         } catch (Exception e) {
-            logger.error("Failed to update SubCategory", e);
-            throw new AppException(ErrorCode.UNKNOWN_ERROR, "Failed to update Sub Category: " + e.getMessage());
+            throw new AppException(ErrorCode.UNKNOWN_ERROR, "Failed to Update Sub Category: " + e.getMessage());
         }
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
+    @CacheEvict(value = {"subCategories", "allSubCategories"}, allEntries = true)
     @Override
-    public void deleteById(String subCategoryRequestId) {
-        logger.info("Deleting SubCategory: {}", subCategoryRequestId);
-        try {
-            SubCategory subCategoryToDelete = subCategoryRepository.findById(subCategoryRequestId)
-                    .orElseThrow(() -> new AppException(ErrorCode.SUB_CATEGORY_NOTFOUND));
+    public void deleteById(String subCategoryId) {
+        SubCategory subCategoryToDelete = subCategoryRepository.findById(subCategoryId)
+                .orElseThrow(() -> new AppException(ErrorCode.SUB_CATEGORY_NOTFOUND));
 
+        try {
             if (subCategoryToDelete.getCloudinaryImageId() != null) {
                 cloudinaryService.deleteImage(subCategoryToDelete.getCloudinaryImageId());
             }
 
             subCategoryRepository.deleteById(subCategoryToDelete.getId());
             deleteSubCategoryFromElasticsearch(subCategoryToDelete.getId());
-
-            logger.info("Successfully deleted SubCategory: {}", subCategoryRequestId);
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
-            logger.error("Failed to delete SubCategory due to database constraint", e);
             throw new AppException(ErrorCode.DATABASE_CONSTRAINT_VIOLATION, "Failed to Delete Sub Category due to database constraint: " + e.getMessage());
         } catch (Exception e) {
-            logger.error("Failed to delete SubCategory", e);
             throw new AppException(ErrorCode.UNKNOWN_ERROR, "Failed to Delete Sub Category: " + e.getMessage());
         }
     }
 
     @Override
-    public List<SubCategoryResponse> search(String query, int page, int size) {
-        logger.info("Searching SubCategories with query: {}, Page: {}, Size: {}", query, page, size);
+    public Page<SubCategoryResponse> search(String query, int page, int size) {
         MultiMatchQuery multiMatchQuery = new MultiMatchQuery.Builder()
                 .query(query)
-                .fields("title", "description")
+                .fields(ELASTICSEARCH_TITLE_FIELD, ELASTICSEARCH_DESCRIPTION_FIELD)
                 .fuzziness("AUTO")
                 .build();
 
@@ -205,9 +199,13 @@ public class SubCategoryServiceImpl implements SubCategoryService {
 
         SearchHits<SubCategoryDocument> searchHits = elasticsearchOperations.search(searchQuery, SubCategoryDocument.class);
 
-        return searchHits.getSearchHits().stream()
+        List<SubCategoryResponse> subCategoryResponseList = searchHits.getSearchHits().stream()
                 .map(hit -> subCategoryMapper.toSubCategoryResponseFromDocument(hit.getContent()))
                 .collect(Collectors.toList());
+
+        long totalHits = searchHits.getTotalHits();
+        Pageable pageable = PageRequest.of(page, size);
+        return new PageImpl<>(subCategoryResponseList, pageable, totalHits);
     }
 
     @Async
@@ -215,20 +213,22 @@ public class SubCategoryServiceImpl implements SubCategoryService {
     public void indexSubCategory(SubCategoryDocument subCategoryDocument) {
         try {
             subCategoryElasticsearchRepository.save(subCategoryDocument);
-            logger.info("Successfully indexed SubCategory: {}", subCategoryDocument.getId());
-        } catch (Exception e) {
-            logger.error("Failed to index SubCategory: {}", subCategoryDocument.getId(), e);
+        } catch (ElasticsearchException e) {
             throw new AppException(ErrorCode.ELASTICSEARCH_INDEXING_ERROR, "Failed to Index Sub Category in Elasticsearch: " + e.getMessage());
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.UNKNOWN_ERROR, "Failed to Index Sub Category in Elasticsearch: " + e.getMessage());
         }
     }
 
     @Async
-    public void deleteSubCategoryFromElasticsearch(String id) {
+    @Override
+    public void deleteSubCategoryFromElasticsearch(String subCategoryId) {
         try {
-            subCategoryElasticsearchRepository.deleteById(id);
-            logger.info("Successfully deleted SubCategory from Elasticsearch: {}", id);
+            subCategoryElasticsearchRepository.deleteById(subCategoryId);
+        } catch (ElasticsearchException e) {
+            throw new AppException(ErrorCode.ELASTICSEARCH_ERROR, "Failed to Delete Sub Category from Elasticsearch: " + e.getMessage());
         } catch (Exception e) {
-            logger.error("Failed to delete SubCategory from Elasticsearch: {}", id, e);
+            throw new AppException(ErrorCode.UNKNOWN_ERROR, "Failed to Delete Sub Category from Elasticsearch: " + e.getMessage());
         }
     }
 }

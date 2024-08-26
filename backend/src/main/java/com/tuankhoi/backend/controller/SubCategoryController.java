@@ -7,9 +7,8 @@ import com.tuankhoi.backend.service.SubCategoryService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/sub-categories")
@@ -33,27 +32,27 @@ public class SubCategoryController {
     }
 
     @GetMapping("/category/{categoryID}")
-    public APIResponse<List<SubCategoryResponse>> getByCategoryId(@PathVariable String categoryID,
+    public APIResponse<Page<SubCategoryResponse>> getByCategoryId(@PathVariable String categoryID,
                                                                   @RequestParam(defaultValue = "0") int page,
-                                                                  @RequestParam(defaultValue = "50") int size) {
-        List<SubCategoryResponse> subCategoryResponseList = subCategoryService.getByCategoryId(categoryID, page, size);
-        return APIResponse.<List<SubCategoryResponse>>builder()
-                .result(subCategoryResponseList)
-                .totalRecords(subCategoryResponseList.size())
+                                                                  @RequestParam(defaultValue = "10") int size) {
+        Page<SubCategoryResponse> subCategoryResponsePage = subCategoryService.getByCategoryId(categoryID, page, size);
+        return APIResponse.<Page<SubCategoryResponse>>builder()
+                .result(subCategoryResponsePage)
                 .build();
     }
 
     @GetMapping("")
-    public APIResponse<List<SubCategoryResponse>> getAll() {
-        List<SubCategoryResponse> subCategoryResponseList = subCategoryService.getAll();
-        return APIResponse.<List<SubCategoryResponse>>builder()
-                .result(subCategoryResponseList)
-                .totalRecords(subCategoryResponseList.size())
+    public APIResponse<Page<SubCategoryResponse>> getAll(@RequestParam(defaultValue = "0") int page,
+                                                         @RequestParam(defaultValue = "10") int size) {
+        Page<SubCategoryResponse> subCategoryResponsePage = subCategoryService.getAll(page, size);
+        return APIResponse.<Page<SubCategoryResponse>>builder()
+                .result(subCategoryResponsePage)
                 .build();
     }
 
     @PutMapping("/{subCategoryId}")
-    public APIResponse<SubCategoryResponse> update(@PathVariable String subCategoryId, @ModelAttribute SubCategoryRequest subCategoryRequest) {
+    public APIResponse<SubCategoryResponse> update(@PathVariable String subCategoryId,
+                                                   @ModelAttribute SubCategoryRequest subCategoryRequest) {
         return APIResponse.<SubCategoryResponse>builder()
                 .result(subCategoryService.update(subCategoryId, subCategoryRequest))
                 .build();
@@ -67,17 +66,16 @@ public class SubCategoryController {
     }
 
     @GetMapping("/search")
-    public APIResponse<List<SubCategoryResponse>> search(@RequestParam String query,
+    public APIResponse<Page<SubCategoryResponse>> search(@RequestParam String query,
                                                          @RequestParam(defaultValue = "0") int page,
                                                          @RequestParam(defaultValue = "10") int size) {
-        List<SubCategoryResponse> subCategorySearchedList = subCategoryService.search(query, page, size);
-        return APIResponse.<List<SubCategoryResponse>>builder()
-                .result(subCategorySearchedList)
-                .totalRecords(subCategorySearchedList.size())
+        Page<SubCategoryResponse> subCategoryResponsePage = subCategoryService.search(query, page, size);
+        return APIResponse.<Page<SubCategoryResponse>>builder()
+                .result(subCategoryResponsePage)
                 .build();
     }
 
-    //    @GetMapping("/{subcategoryId}/cover-image")
+//    @GetMapping("/{subcategoryId}/cover-image")
 //    public ResponseEntity<byte[]> getSubCategoryCoverImage(@PathVariable String subcategoryId) {
 //        SubCategoryResponse subCategory = iSubCategoryService.findBySubCategoryId(subcategoryId);
 //        if (subCategory != null && subCategory.getCoverImage() != null) {

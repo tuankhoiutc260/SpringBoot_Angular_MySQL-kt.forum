@@ -7,9 +7,8 @@ import com.tuankhoi.backend.service.CategoryService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/categories")
@@ -33,16 +32,17 @@ public class CategoryController {
     }
 
     @GetMapping("")
-    public APIResponse<List<CategoryResponse>> getAll() {
-        List<CategoryResponse> categoriesResponseList = categoryService.getAll();
-        return APIResponse.<List<CategoryResponse>>builder()
-                .result(categoriesResponseList)
-                .totalRecords(categoriesResponseList.size())
+    public APIResponse<Page<CategoryResponse>> getAll(@RequestParam(defaultValue = "0") int page,
+                                                      @RequestParam(defaultValue = "10") int size) {
+        Page<CategoryResponse> categoryResponsePage = categoryService.getAll(page, size);
+        return APIResponse.<Page<CategoryResponse>>builder()
+                .result(categoryResponsePage)
                 .build();
     }
 
     @PutMapping("/{categoryId}")
-    public APIResponse<CategoryResponse> update(@PathVariable String categoryId, @RequestBody CategoryRequest categoryRequest) {
+    public APIResponse<CategoryResponse> update(@PathVariable String categoryId,
+                                                @RequestBody CategoryRequest categoryRequest) {
         return APIResponse.<CategoryResponse>builder()
                 .result(categoryService.update(categoryId, categoryRequest))
                 .build();
@@ -56,13 +56,12 @@ public class CategoryController {
     }
 
     @GetMapping("/search")
-    public APIResponse<List<CategoryResponse>> search(@RequestParam String query) {
-        List<CategoryResponse> categorySearchedList = categoryService.search(query);
-        return APIResponse.<List<CategoryResponse>>builder()
-                .result(categorySearchedList)
-                .totalRecords(categorySearchedList.size())
+    public APIResponse<Page<CategoryResponse>> search(@RequestParam String query,
+                                                      @RequestParam(defaultValue = "0") int page,
+                                                      @RequestParam(defaultValue = "10") int size) {
+        Page<CategoryResponse> categoryResponsePage = categoryService.search(query, page, size);
+        return APIResponse.<Page<CategoryResponse>>builder()
+                .result(categoryResponsePage)
                 .build();
     }
 }
-
-

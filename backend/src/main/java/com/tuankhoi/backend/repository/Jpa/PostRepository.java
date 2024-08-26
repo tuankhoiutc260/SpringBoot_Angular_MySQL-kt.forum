@@ -2,6 +2,7 @@ package com.tuankhoi.backend.repository.Jpa;
 
 import com.tuankhoi.backend.dto.document.PostDocument;
 import com.tuankhoi.backend.model.entity.Post;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,7 +12,7 @@ import java.util.List;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, String> {
-    List<Post> findBySubCategoryId(String subCategoryId, Pageable pageable);
+    Page<Post> findBySubCategoryId(String subCategoryId, Pageable pageable);
 
 //    @Query(value = """
 //            WITH top_liked_posts AS

@@ -7,9 +7,8 @@ import com.tuankhoi.backend.service.CommentService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/comments")
@@ -33,29 +32,28 @@ public class CommentController {
     }
 
     @GetMapping("/post/{postId}")
-    public APIResponse<List<CommentResponse>> getAllCommentAndReplyByPostId(@PathVariable String postId,
-                                                                     @RequestParam(defaultValue = "0") int page,
-                                                                     @RequestParam(defaultValue = "10") int size){
-        List<CommentResponse> commentResponseList = commentService.getAllCommentAndReplyByPostId(postId, page, size);
-        return APIResponse.<List<CommentResponse>>builder()
-                .result(commentResponseList)
-                .totalRecords(commentResponseList.size())
+    public APIResponse<Page<CommentResponse>> getAllCommentAndReplyByPostId(@PathVariable String postId,
+                                                                            @RequestParam(defaultValue = "0") int page,
+                                                                            @RequestParam(defaultValue = "10") int size){
+        Page<CommentResponse> commentResponsePage = commentService.getAllCommentAndReplyByPostId(postId, page, size);
+        return APIResponse.<Page<CommentResponse>>builder()
+                .result(commentResponsePage)
                 .build();
     }
 
     @GetMapping("/{commentId}/replies")
-    public APIResponse<List<CommentResponse>> getRepliesByCommentId(@PathVariable Long commentId,
-                                                                      @RequestParam(defaultValue = "0") int page,
-                                                                      @RequestParam(defaultValue = "5") int size) {
-        List<CommentResponse> commentResponseList = commentService.getRepliesByCommentId(commentId, page, size);
-        return APIResponse.<List<CommentResponse>>builder()
-                .result(commentResponseList)
-                .totalRecords(commentResponseList.size())
+    public APIResponse<Page<CommentResponse>> getRepliesByCommentId(@PathVariable Long commentId,
+                                                                    @RequestParam(defaultValue = "0") int page,
+                                                                    @RequestParam(defaultValue = "5") int size) {
+        Page<CommentResponse> commentResponsePage = commentService.getRepliesByCommentId(commentId, page, size);
+        return APIResponse.<Page<CommentResponse>>builder()
+                .result(commentResponsePage)
                 .build();
     }
 
     @PutMapping("/{commentId}")
-    public APIResponse<CommentResponse> update(@PathVariable Long commentId, @RequestBody CommentRequest commentRequest) {
+    public APIResponse<CommentResponse> update(@PathVariable Long commentId,
+                                               @RequestBody CommentRequest commentRequest) {
         return APIResponse.<CommentResponse>builder()
                 .result(commentService.update(commentId, commentRequest))
                 .build();

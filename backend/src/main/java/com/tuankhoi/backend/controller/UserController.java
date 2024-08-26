@@ -8,9 +8,8 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -41,11 +40,11 @@ public class UserController {
     }
 
     @GetMapping("")
-    public APIResponse<List<UserResponse>> getAll() {
-        List<UserResponse> userResponseList = userService.getAll();
-        return APIResponse.<List<UserResponse>>builder()
-                .result(userResponseList)
-                .totalRecords(userResponseList.size())
+    public APIResponse<Page<UserResponse>> getAll(@RequestParam(defaultValue = "0") int page,
+                                                  @RequestParam(defaultValue = "10") int size) {
+        Page<UserResponse> userResponsePage = userService.getAll(page, size);
+        return APIResponse.<Page<UserResponse>>builder()
+                .result(userResponsePage)
                 .build();
     }
 
@@ -57,7 +56,8 @@ public class UserController {
     }
 
     @PutMapping("/{userId}")
-    public APIResponse<UserResponse> update(@PathVariable String userId, @ModelAttribute UserRequest userRequest) {
+    public APIResponse<UserResponse> update(@PathVariable String userId,
+                                            @ModelAttribute UserRequest userRequest) {
         return APIResponse.<UserResponse>builder()
                 .result(userService.update(userId, userRequest))
                 .build();

@@ -17,13 +17,12 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -36,12 +35,13 @@ public class CommentServiceImpl implements CommentService {
 
     SimpMessagingTemplate messagingTemplate;
 
+    @Transactional
     @Override
     public CommentResponse create(CommentRequest commentRequest) {
-        try {
-            Post existingPost = postRepository.findById(commentRequest.getPostId())
-                    .orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));
+        Post existingPost = postRepository.findById(commentRequest.getPostId())
+                .orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));
 
+        try {
             Comment newComment = commentMapper.toComment(commentRequest);
             newComment.setPost(existingPost);
 
@@ -64,9 +64,9 @@ public class CommentServiceImpl implements CommentService {
 
             return commentResponse;
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
-            throw new IllegalArgumentException("Failed to Create Comment due to database constraint: " + e.getMessage(), e);
+            throw new AppException(ErrorCode.DATABASE_CONSTRAINT_VIOLATION, "Failed to Create Comment due to database constraint: " + e.getMessage(), e);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to Create Comment", e);
+            throw new AppException(ErrorCode.UNKNOWN_ERROR, "Failed to Create Comment", e);
         }
     }
 
@@ -78,17 +78,21 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<CommentResponse> getAllCommentAndReplyByPostId(String postId, int page, int size) {
+    public Page<CommentResponse> getAllCommentAndReplyByPostId(String postId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        List<Comment> commentList = commentRepository.findAllByPostIdOrderByCreatedDateDesc(postId, pageable);
-        return commentList.stream().map(commentMapper::toCommentResponse).collect(Collectors.toList());
+
+        Page<Comment> commentPage = commentRepository.findAllByPostIdOrderByCreatedDateDesc(postId, pageable);
+
+        return commentPage.map(commentMapper::toCommentResponse);
     }
 
     @Override
-    public List<CommentResponse> getRepliesByCommentId(Long commentId, int page, int size) {
+    public Page<CommentResponse> getRepliesByCommentId(Long commentId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        List<Comment> commentList = commentRepository.findRepliesByCommentId(commentId, pageable);
-        return commentList.stream().map(commentMapper::toCommentResponse).collect(Collectors.toList());
+
+        Page<Comment> commentPage = commentRepository.findRepliesByCommentId(commentId, pageable);
+
+        return commentPage.map(commentMapper::toCommentResponse);
     }
 
     @Override
@@ -110,15 +114,17 @@ public class CommentServiceImpl implements CommentService {
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
             throw new AppException(ErrorCode.DATA_INTEGRITY_VIOLATION, "Failed to Update Comment due to database constraint: " + e.getMessage(), e);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to Update Comment", e);
+            throw new AppException(ErrorCode.UNKNOWN_ERROR, "Failed to Update Comment", e);
         }
     }
 
+    @Transactional
     @Override
     public void deleteById(Long commentId) {
+        Comment commentToDelete = commentRepository.findById(commentId)
+                .orElseThrow(() -> new AppException(ErrorCode.COMMENT_NOT_FOUND));
+
         try {
-            Comment commentToDelete = commentRepository.findById(commentId)
-                    .orElseThrow(() -> new AppException(ErrorCode.COMMENT_NOT_FOUND));
             String postId = commentToDelete.getPost().getId();
             commentRepository.delete(commentToDelete);
 
@@ -128,9 +134,9 @@ public class CommentServiceImpl implements CommentService {
                     .build();
             messagingTemplate.convertAndSend("/topic/comments/" + postId + "/delete", deleteCommentMessage);
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
-            throw new IllegalArgumentException("Failed to Delete Comment due to database constraint", e);
+            throw new AppException(ErrorCode.DATABASE_CONSTRAINT_VIOLATION, "Failed to Delete Comment due to database constraint", e);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to Delete Comment", e);
+            throw new AppException(ErrorCode.UNKNOWN_ERROR, "Failed to Delete Comment", e);
         }
     }
 }

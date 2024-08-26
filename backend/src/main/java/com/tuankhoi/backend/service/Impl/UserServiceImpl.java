@@ -18,13 +18,13 @@ import lombok.experimental.NonFinal;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -45,12 +45,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse create(UserRequest userRequest) {
-        try {
-            if (userRepository.findByUserName(userRequest.getUserName()).isPresent())
-                throw new AppException(ErrorCode.USER_EXISTED);
-            if (userRepository.findByEmail(userRequest.getEmail()).isPresent())
-                throw new AppException(ErrorCode.USER_EMAIL_EXISTED);
+        if (userRepository.findByUserName(userRequest.getUserName()).isPresent())
+            throw new AppException(ErrorCode.USER_EXISTED);
+        if (userRepository.findByEmail(userRequest.getEmail()).isPresent())
+            throw new AppException(ErrorCode.USER_EMAIL_EXISTED);
 
+        try {
             User newUser = userMapper.toUser(userRequest);
             newUser.setPassword(passwordEncoder.encode(userRequest.getPassword()));
             newUser.setImageUrl(defaultUserImageUrl);
@@ -63,9 +63,9 @@ public class UserServiceImpl implements UserService {
 
             return userMapper.toUserResponse(userRepository.save(newUser));
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
-            throw new IllegalArgumentException("Failed to Create User due to database constraint: " + e.getMessage(), e);
+            throw new AppException(ErrorCode.DATABASE_CONSTRAINT_VIOLATION, "Failed to Create User due to database constraint: " + e.getMessage(), e);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to Create User", e);
+            throw new AppException(ErrorCode.UNKNOWN_ERROR,"Failed to Create User", e);
         }
     }
 
@@ -99,11 +99,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserResponse> getAll() {
-        return userRepository.findAll(Sort.by("id"))
-                .stream()
-                .map(userMapper::toUserResponse)
-                .toList();
+    public Page<UserResponse> getAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<User> userPage = userRepository.findAll(pageable);
+
+        return userPage.map(userMapper::toUserResponse);
     }
 
     @PostAuthorize("hasRole('ADMIN')")
@@ -119,9 +120,9 @@ public class UserServiceImpl implements UserService {
             User user = userRepository.save(existingUser);
             return userMapper.toUserResponse(user);
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
-            throw new IllegalArgumentException("Failed to update User due to database constraint: " + e.getMessage(), e);
+            throw new AppException(ErrorCode.DATABASE_CONSTRAINT_VIOLATION, "Failed to Update User due to database constraint: " + e.getMessage(), e);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to Update User", e);
+            throw new AppException(ErrorCode.UNKNOWN_ERROR,"Failed to Update User", e);
         }
     }
 
@@ -134,9 +135,9 @@ public class UserServiceImpl implements UserService {
         } catch (EntityNotFoundException e) {
             throw e;
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
-            throw new IllegalArgumentException("Failed to delete User due to database constraint", e);
+            throw new AppException(ErrorCode.DATABASE_CONSTRAINT_VIOLATION, "Failed to Delete User due to database constraint", e);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to Delete User", e);
+            throw new AppException(ErrorCode.UNKNOWN_ERROR,"Failed to Delete User", e);
         }
     }
 }

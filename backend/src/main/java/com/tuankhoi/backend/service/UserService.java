@@ -2,9 +2,8 @@ package com.tuankhoi.backend.service;
 
 import com.tuankhoi.backend.dto.request.UserRequest;
 import com.tuankhoi.backend.dto.response.UserResponse;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public interface UserService {
@@ -18,7 +17,7 @@ public interface UserService {
 
     UserResponse getMyInfo();
 
-    List<UserResponse> getAll();
+    Page<UserResponse> getAll(int page, int size);
 
     UserResponse update(String userId, UserRequest userRequest);
 

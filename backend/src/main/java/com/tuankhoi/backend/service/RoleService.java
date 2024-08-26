@@ -2,15 +2,14 @@ package com.tuankhoi.backend.service;
 
 import com.tuankhoi.backend.dto.request.RoleRequest;
 import com.tuankhoi.backend.dto.response.RoleResponse;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public interface RoleService {
     RoleResponse create(RoleRequest roleRequest);
 
     RoleResponse getById(Integer roleId);
 
-    List<RoleResponse> getAll();
+    Page<RoleResponse> getAll(int page, int size);
 
     RoleResponse update(Integer roleId, RoleRequest roleRequest);
 

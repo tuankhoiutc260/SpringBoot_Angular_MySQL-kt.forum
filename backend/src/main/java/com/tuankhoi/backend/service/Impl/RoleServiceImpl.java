@@ -15,12 +15,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Service
@@ -49,9 +50,9 @@ public class RoleServiceImpl implements RoleService {
 
             return roleMapper.toRoleResponse(savedRole);
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
-            throw new IllegalArgumentException("Failed to Create Role due to database constraint: " + e.getMessage(), e);
+            throw new AppException(ErrorCode.DATABASE_CONSTRAINT_VIOLATION, "Failed to Create Role due to database constraint: " + e.getMessage(), e);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to Create Role", e);
+            throw new AppException(ErrorCode.UNKNOWN_ERROR, "Failed to Create Role", e);
         }
     }
 
@@ -65,20 +66,21 @@ public class RoleServiceImpl implements RoleService {
 
     @PostAuthorize("hasRole('ADMIN')")
     @Override
-    public List<RoleResponse> getAll() {
-        return roleRepository.findAll(Sort.by("id"))
-                .stream()
-                .map(roleMapper::toRoleResponse)
-                .toList();
+    public Page<RoleResponse> getAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Role> rolePage = roleRepository.findAll(pageable);
+
+        return rolePage.map(roleMapper::toRoleResponse);
     }
 
     @PostAuthorize("hasRole('ADMIN')")
     @Override
     public RoleResponse update(Integer roleId, RoleRequest roleRequest) {
-        try {
-            Role existingRole = roleRepository.findById(roleId)
-                    .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND));
+        Role existingRole = roleRepository.findById(roleId)
+                .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND));
 
+        try {
             Set<Permission> permissions = new HashSet<>();
             for (int permissionRequestId : roleRequest.getPermissions()) {
                 Permission permission = permissionRepository.findById(permissionRequestId).orElseThrow(()
@@ -91,24 +93,24 @@ public class RoleServiceImpl implements RoleService {
 
             return roleMapper.toRoleResponse(roleRepository.save(existingRole));
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
-            throw new IllegalArgumentException("Failed to Update Role due to database constraint: " + e.getMessage());
+            throw new AppException(ErrorCode.DATABASE_CONSTRAINT_VIOLATION,"Failed to Update Role due to database constraint: " + e.getMessage());
         } catch (Exception e) {
-            throw new RuntimeException("Failed to Update Role", e);
+            throw new AppException(ErrorCode.UNKNOWN_ERROR,"Failed to Update Role", e);
         }
     }
 
     @PostAuthorize("hasRole('ADMIN')")
     @Override
     public void deleteById(Integer roleId) {
-        try {
-            Role roleToDelete = roleRepository.findById(roleId)
-                    .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND));
+        Role roleToDelete = roleRepository.findById(roleId)
+                .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND));
 
+        try {
             roleRepository.delete(roleToDelete);
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
-            throw new IllegalArgumentException("Failed to Delete Role due to database constraint", e);
+            throw new AppException(ErrorCode.DATABASE_CONSTRAINT_VIOLATION, "Failed to Delete Role due to database constraint", e);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to Delete Role", e);
+            throw new AppException(ErrorCode.UNKNOWN_ERROR,"Failed to Delete Role", e);
         }
     }
 }

@@ -7,9 +7,8 @@ import com.tuankhoi.backend.service.RoleService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/roles")
@@ -26,11 +25,11 @@ public class RoleController {
     }
 
     @GetMapping("")
-    public APIResponse<List<RoleResponse>> findAll() {
-        List<RoleResponse> roleResponseList = roleService.getAll();
-        return APIResponse.<List<RoleResponse>>builder()
-                .result(roleResponseList)
-                .totalRecords(roleResponseList.size())
+    public APIResponse<Page<RoleResponse>> getAll(@RequestParam(defaultValue = "0") int page,
+                                                  @RequestParam(defaultValue = "10") int size) {
+        Page<RoleResponse> roleResponsePage = roleService.getAll(page, size);
+        return APIResponse.<Page<RoleResponse>>builder()
+                .result(roleResponsePage)
                 .build();
     }
 
@@ -42,7 +41,8 @@ public class RoleController {
     }
 
     @PutMapping("/{roleId}")
-    public APIResponse<RoleResponse> update(@PathVariable int roleId, @RequestBody RoleRequest roleRequest) {
+    public APIResponse<RoleResponse> update(@PathVariable int roleId,
+                                            @RequestBody RoleRequest roleRequest) {
         return APIResponse.<RoleResponse>builder()
                 .result(roleService.update(roleId, roleRequest))
                 .build();

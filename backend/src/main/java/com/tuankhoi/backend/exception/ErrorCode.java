@@ -83,6 +83,7 @@ public enum ErrorCode {
 
     // Elasticsearch related errors (11xxx)
     ELASTICSEARCH_INDEXING_ERROR(11001, "Failed to index in Elasticsearch", HttpStatus.INTERNAL_SERVER_ERROR),
+    ELASTICSEARCH_ERROR(1005, "Error interacting with Elasticsearch", HttpStatus.INTERNAL_SERVER_ERROR),
 
     // Pagination related errors (12xxx)
     INVALID_PAGINATION_PARAMETERS(12001, "Invalid pagination parameters", HttpStatus.BAD_REQUEST);
