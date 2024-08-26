@@ -1,4 +1,4 @@
-package com.tuankhoi.backend.config;
+package com.tuankhoi.backend.configuration;
 
 import com.nimbusds.jose.JOSEException;
 import com.tuankhoi.backend.dto.request.IntrospectRequest;

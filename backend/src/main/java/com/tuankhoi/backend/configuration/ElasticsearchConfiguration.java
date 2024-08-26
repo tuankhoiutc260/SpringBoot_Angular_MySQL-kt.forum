@@ -1,17 +1,16 @@
-package com.tuankhoi.backend.config;
+package com.tuankhoi.backend.configuration;
 
 import org.apache.http.conn.ssl.TrustAllStrategy;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.elasticsearch.client.ClientConfiguration;
-import org.springframework.data.elasticsearch.client.elc.ElasticsearchConfiguration;
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 
 import javax.net.ssl.SSLContext;
 
 @Configuration
 @EnableElasticsearchRepositories(basePackages = "com.tuankhoi.backend.repository.Elasticsearch")
-public class ElasticsearchConfig extends ElasticsearchConfiguration {
+public class ElasticsearchConfiguration extends org.springframework.data.elasticsearch.client.elc.ElasticsearchConfiguration {
 
     @Override
     public ClientConfiguration clientConfiguration() {

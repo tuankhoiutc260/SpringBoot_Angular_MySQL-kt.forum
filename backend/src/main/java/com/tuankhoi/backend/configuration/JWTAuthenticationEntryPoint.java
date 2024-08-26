@@ -1,4 +1,4 @@
-package com.tuankhoi.backend.config;
+package com.tuankhoi.backend.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tuankhoi.backend.dto.response.APIResponse;

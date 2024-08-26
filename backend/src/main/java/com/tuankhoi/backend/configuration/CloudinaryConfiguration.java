@@ -1,4 +1,4 @@
-package com.tuankhoi.backend.config;
+package com.tuankhoi.backend.configuration;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class CloudinaryConfig {
+public class CloudinaryConfiguration {
     @Value("${cloudinary.apiKey}")
     private String cloudinaryApiKey;
 

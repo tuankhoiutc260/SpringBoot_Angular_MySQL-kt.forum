@@ -17,6 +17,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -48,6 +51,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
+    @CacheEvict(value = "categories", allEntries = true)
     @Override
     public CategoryResponse create(CategoryRequest categoryRequest) {
         try {
@@ -64,12 +68,15 @@ public class CategoryServiceImpl implements CategoryService {
         }
     }
 
+    @Cacheable(value = "category", key = "#categoryId")
     @Override
     public CategoryResponse getById(String categoryId) {
         return categoryRepository.findById(categoryId)
                 .map(categoryMapper::toCategoryResponse)
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOTFOUND));
     }
+
+    @Cacheable(value = "categories", key = "#page + '-' + #size")
     @Override
     public Page<CategoryResponse> getAll(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -81,6 +88,10 @@ public class CategoryServiceImpl implements CategoryService {
 
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "category", key = "#categoryId"),
+            @CacheEvict(value = "categories", allEntries = true)
+    })
     @Override
     public CategoryResponse update(String categoryID, CategoryRequest categoryRequest) {
         Category existingCategory = categoryRepository.findById(categoryID)
@@ -102,6 +113,10 @@ public class CategoryServiceImpl implements CategoryService {
 
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "category", key = "#categoryId"),
+            @CacheEvict(value = "categories", allEntries = true)
+    })
     @Override
     public void deleteById(String categoryRequestID) {
         Category categoryToDelete = categoryRepository.findById(categoryRequestID)
@@ -117,6 +132,7 @@ public class CategoryServiceImpl implements CategoryService {
         }
     }
 
+    @Cacheable(value = "categorySearch", key = "#query + '-' + #page + '-' + #size")
     @Override
     public Page<CategoryResponse> search(String query, int page, int size) {
         MultiMatchQuery multiMatchQuery = new MultiMatchQuery.Builder()

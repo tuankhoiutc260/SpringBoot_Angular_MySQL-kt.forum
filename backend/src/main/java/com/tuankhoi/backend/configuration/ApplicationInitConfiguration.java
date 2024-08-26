@@ -1,8 +1,7 @@
-package com.tuankhoi.backend.config;
+package com.tuankhoi.backend.configuration;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tuankhoi.backend.dto.document.CategoryDocument;
 import com.tuankhoi.backend.exception.AppException;
 import com.tuankhoi.backend.exception.ErrorCode;
 import com.tuankhoi.backend.mapper.CategoryMapper;
@@ -37,7 +36,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class ApplicationInitConfig {
+public class ApplicationInitConfiguration {
     PasswordEncoder passwordEncoder;
     ObjectMapper objectMapper;
 

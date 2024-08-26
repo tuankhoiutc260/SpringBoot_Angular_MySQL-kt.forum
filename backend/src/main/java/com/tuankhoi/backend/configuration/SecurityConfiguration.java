@@ -1,4 +1,4 @@
-package com.tuankhoi.backend.config;
+package com.tuankhoi.backend.configuration;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,18 +19,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.util.Arrays;
 import java.util.Optional;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 @Slf4j
-public class SecurityConfig implements WebMvcConfigurer {
+public class SecurityConfiguration implements WebMvcConfigurer {
     private final String[] PUBLIC_ENDPOINTS_FOR_GET = {
             "/swagger-ui.html",
             "/swagger-ui/**",

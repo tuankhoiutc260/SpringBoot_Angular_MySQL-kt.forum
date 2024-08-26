@@ -1,4 +1,4 @@
-package com.tuankhoi.backend.config;
+package com.tuankhoi.backend.configuration;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.socket.WebSocketMessage;
