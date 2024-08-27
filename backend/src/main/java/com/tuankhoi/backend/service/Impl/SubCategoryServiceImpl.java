@@ -23,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.apache.commons.io.FilenameUtils;
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -57,7 +58,11 @@ public class SubCategoryServiceImpl implements SubCategoryService {
 
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
-    @CacheEvict(value = "subCategories", allEntries = true)
+    @Caching(evict = {
+            @CacheEvict(value = "subCategory", allEntries = true),
+            @CacheEvict(value = "subCategories", allEntries = true),
+            @CacheEvict(value = "subCategorySearch", allEntries = true)
+    })
     @Override
     public SubCategoryResponse create(@Valid SubCategoryRequest subCategoryRequest) {
         Category existingCategory = categoryRepository.findById(subCategoryRequest.getCategoryId())
@@ -86,16 +91,15 @@ public class SubCategoryServiceImpl implements SubCategoryService {
         }
     }
 
-    @Cacheable(value = "subCategories", key = "#subCategoryID")
+    @Cacheable(value = "subCategory", key = "#subCategoryId", unless = "#result == null")
     @Override
-    public SubCategoryResponse getById(String subCategoryID) {
-        return subCategoryRepository.findById(subCategoryID)
+    public SubCategoryResponse getById(String subCategoryId) {
+        return subCategoryRepository.findById(subCategoryId)
                 .map(subCategoryMapper::toSubCategoryResponse)
-                .orElseThrow(() -> {
-                    return new AppException(ErrorCode.SUB_CATEGORY_NOTFOUND);
-                });
+                .orElseThrow(() -> new AppException(ErrorCode.SUB_CATEGORY_NOTFOUND));
     }
 
+    @Cacheable(value = "subCategories", key = "'categoryId:' + #categoryId", unless = "#result.isEmpty()")
     @Override
     public Page<SubCategoryResponse> getByCategoryId(String categoryId, int page, int size) {
         if (categoryId == null || categoryId.trim().isEmpty()) {
@@ -116,19 +120,24 @@ public class SubCategoryServiceImpl implements SubCategoryService {
         return subCategoryPage.map(subCategoryMapper::toSubCategoryResponse);
     }
 
-    @Cacheable(value = "allSubCategories")
+    @Cacheable(value = "subCategories", key = "'all:page:' + #page + ',size:' + #size", unless = "#result.getContent().isEmpty()")
     @Override
     public Page<SubCategoryResponse> getAll(int page, int size) {
+        System.out.println("get");
+
         Pageable pageable = PageRequest.of(page, size);
-
         Page<SubCategory> subCategoryPage = subCategoryRepository.findAll(pageable);
-
         return subCategoryPage.map(subCategoryMapper::toSubCategoryResponse);
     }
 
+
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
-    @CacheEvict(value = {"subCategories", "allSubCategories"}, allEntries = true)
+    @Caching(evict = {
+            @CacheEvict(value = "subCategory", key = "#subCategoryId"),
+            @CacheEvict(value = "subCategories", allEntries = true),
+            @CacheEvict(value = "subCategorySearch", allEntries = true)
+    })
     @Override
     public SubCategoryResponse update(String subCategoryId, @Valid SubCategoryRequest subCategoryRequest) {
         SubCategory existingSubCategory = subCategoryRepository.findById(subCategoryId)
@@ -164,7 +173,11 @@ public class SubCategoryServiceImpl implements SubCategoryService {
 
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
-    @CacheEvict(value = {"subCategories", "allSubCategories"}, allEntries = true)
+    @Caching(evict = {
+            @CacheEvict(value = "subCategory", key = "#subCategoryId"),
+            @CacheEvict(value = "subCategories", allEntries = true),
+            @CacheEvict(value = "subCategorySearch", allEntries = true)
+    })
     @Override
     public void deleteById(String subCategoryId) {
         SubCategory subCategoryToDelete = subCategoryRepository.findById(subCategoryId)
@@ -184,6 +197,7 @@ public class SubCategoryServiceImpl implements SubCategoryService {
         }
     }
 
+    @Cacheable(value = "subCategorySearch", key = "'query:' + #query + ',page:' + #page + ',size:' + #size", unless = "#result.isEmpty()")
     @Override
     public Page<SubCategoryResponse> search(String query, int page, int size) {
         MultiMatchQuery multiMatchQuery = new MultiMatchQuery.Builder()

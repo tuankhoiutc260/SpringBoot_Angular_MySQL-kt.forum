@@ -18,6 +18,9 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -36,7 +39,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-
 public class PostServiceImpl implements PostService {
     static final String ELASTICSEARCH_TITLE_FIELD = "title";
     static final String ELASTICSEARCH_CONTENT_FIELD = "content";
@@ -48,6 +50,11 @@ public class PostServiceImpl implements PostService {
     ElasticsearchOperations elasticsearchOperations;
 
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "post", allEntries = true),
+            @CacheEvict(value = "posts", allEntries = true),
+            @CacheEvict(value = "postSearch", allEntries = true)
+    })
     @Override
     public PostResponse create(PostRequest postRequest) {
         try {
@@ -64,6 +71,7 @@ public class PostServiceImpl implements PostService {
         }
     }
 
+    @Cacheable(value = "post", key = "#postId", unless = "#result == null")
     @Override
     public PostResponse getById(String postId) {
         return postRepository.findById(postId)
@@ -71,6 +79,7 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new AppException(ErrorCode.SUB_CATEGORY_NOTFOUND));
     }
 
+    @Cacheable(value = "posts", key = "'subCategoryId:' + #subCategoryId + ',page:' + #page + ',size:' + #size", unless = "#result.isEmpty()")
     @Override
     public Page<PostResponse> getBySubCategoryId(String subCategoryId, int page, int size) {
         if (subCategoryId == null || subCategoryId.trim().isEmpty()) {
@@ -91,19 +100,23 @@ public class PostServiceImpl implements PostService {
         return postPage.map(postMapper::toPostResponse);
     }
 
+    @Cacheable(value = "posts", key = "'all:page:' + #page + ',size:' + #size", unless = "#result.isEmpty()")
     @Override
     public Page<PostResponse> getAll(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-
         Page<Post> postPage = postRepository.findAll(pageable);
-
         return postPage.map(postMapper::toPostResponse);
     }
 
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "post", key = "#postId"),
+            @CacheEvict(value = "posts", allEntries = true),
+            @CacheEvict(value = "postSearch", allEntries = true)
+    })
     @Override
-    public PostResponse update(String id, PostRequest postRequest) {
-        Post existingPost = postRepository.findById(id)
+    public PostResponse update(String postId, PostRequest postRequest) {
+        Post existingPost = postRepository.findById(postId)
                 .orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));
 
         try {
@@ -121,21 +134,28 @@ public class PostServiceImpl implements PostService {
     }
 
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "post", key = "#postId"),
+            @CacheEvict(value = "posts", allEntries = true),
+            @CacheEvict(value = "postSearch", allEntries = true)
+    })
     @Override
     public void deleteById(String postId) {
-        Post postToDelete = postRepository.findById(postId)
-                .orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));
+        if (!postRepository.existsById(postId)) {
+            throw new AppException(ErrorCode.POST_NOTFOUND);
+        }
 
         try {
-            postRepository.deleteById(postToDelete.getId());
-            deletePostFromElasticsearch(postToDelete.getId());
+            postRepository.deleteById(postId);
+            deletePostFromElasticsearch(postId);
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
             throw new AppException(ErrorCode.DATABASE_CONSTRAINT_VIOLATION, "Failed to Delete Post due to database constraint", e);
         } catch (Exception e) {
-            throw new AppException(ErrorCode.UNKNOWN_ERROR, "Failed to Delete Post", e);
+            throw new AppException(ErrorCode.UNKNOWN_ERROR, "Failed to Delete Post: " + e.getMessage());
         }
     }
 
+    @Cacheable(value = "postSearch", key = "'query:' + #query + ',page:' + #page + ',size:' + #size", unless = "#result.isEmpty()")
     @Override
     public Page<PostResponse> search(String query, int page, int size) {
         MultiMatchQuery multiMatchQuery = new MultiMatchQuery.Builder()
@@ -159,6 +179,10 @@ public class PostServiceImpl implements PostService {
         return new PageImpl<>(postResponseList, pageable, totalHits);
     }
 
+    @Caching(evict = {
+            @CacheEvict(value = "post", key = "#postId"),
+            @CacheEvict(value = "posts", allEntries = true)
+    })
     @Override
     public void incrementViewCount(String postId) {
         try {
@@ -167,6 +191,7 @@ public class PostServiceImpl implements PostService {
             postRepository.save(post);
 
             PostDocument postDocument = postElasticsearchRepository.findById(postId).orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));
+            postDocument.setViewCount(post.getViewCount());
             postElasticsearchRepository.save(postDocument);
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
             throw new IllegalArgumentException("Failed to increase view count", e);

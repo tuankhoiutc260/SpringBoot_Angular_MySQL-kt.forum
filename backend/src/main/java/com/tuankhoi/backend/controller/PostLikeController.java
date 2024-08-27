@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,8 +23,9 @@ public class PostLikeController {
     @Operation(summary = "Toggle post like", description = "Toggle the like status of a post for the authenticated user.")
     @PostMapping("/toggle")
     public APIResponse<PostLikeResponse> toggleLike(@RequestBody PostLikeRequest postLikeRequest) {
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
         return APIResponse.<PostLikeResponse>builder()
-                .result(postLikeService.toggleLike(postLikeRequest))
+                .result(postLikeService.toggleLike(postLikeRequest, userId))
                 .build();
     }
 

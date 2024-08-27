@@ -41,4 +41,7 @@ public class PostDocument {
 
     @Field(type = FieldType.Date, format = DateFormat.date_hour_minute_second_millis)
     LocalDateTime lastModifiedDate;
+
+    @Builder.Default
+    int viewCount = 0;;
 }

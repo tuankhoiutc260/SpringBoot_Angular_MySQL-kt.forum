@@ -15,6 +15,9 @@ import com.tuankhoi.backend.service.PostLikeService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -32,6 +35,7 @@ public class PostLikeServiceImpl implements PostLikeService {
     PostRepository postRepository;
     PostLikeMapper postLikeMapper;
 
+    @Cacheable(value = "postLikeCount", key = "#postLikeRequest.postId", unless = "#result == 0")
     @Override
     public Long countLikes(PostLikeRequest postLikeRequest) {
         Post existingPost = postRepository.findById(postLikeRequest.getPostId()).orElseThrow(()->new AppException(ErrorCode.POST_NOTFOUND));
@@ -39,6 +43,7 @@ public class PostLikeServiceImpl implements PostLikeService {
     }
 
     @PostAuthorize("hasRole('ADMIN') or hasRole('USER') or hasRole('STAFF')")
+    @Cacheable(value = "postLikeStatus", key = "#postLikeRequest.postId + '_' + authentication.name")
     @Override
     public Boolean isLiked(PostLikeRequest postLikeRequest) {
         Post existingPost = postRepository.findById(postLikeRequest.getPostId()).orElseThrow(()->new AppException(ErrorCode.POST_NOTFOUND));
@@ -55,20 +60,29 @@ public class PostLikeServiceImpl implements PostLikeService {
     }
 
     @PostAuthorize("hasRole('ADMIN') or hasRole('USER') or hasRole('STAFF')")
+    @Caching(evict = {
+            @CacheEvict(value = "postLikeCount", key = "#postLikeRequest.postId"),
+            @CacheEvict(value = "postLikeStatus", key = "#postLikeRequest.postId + '_' + #userId"),
+            @CacheEvict(value = "post", key = "#postLikeRequest.postId"),
+            @CacheEvict(value = "posts", allEntries = true),
+            @CacheEvict(value = "postSearch", allEntries = true)
+    })
     @Override
-    public PostLikeResponse toggleLike(PostLikeRequest postLikeRequest) {
+    public PostLikeResponse toggleLike(PostLikeRequest postLikeRequest, String userId) {
         Post existingPost = postRepository.findById(postLikeRequest.getPostId())
                 .orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Optional<User> existingUser = userRepository.findById(authentication.getName());
+
+        Optional<User> existingUser = userRepository.findById(userId);
         if (existingUser.isEmpty()) {
             throw new AppException(ErrorCode.USER_NOTFOUND);
         }
+
         Optional<PostLike> isLiked = likeRepository.findByUserIdAndPostId(existingUser.get().getId(), existingPost.getId());
         if (isLiked.isPresent()) {
             likeRepository.delete(isLiked.get());
             return null;
         }
+
         PostLike postLike = new PostLike();
         postLike.setUser(existingUser.get());
         postLike.setPost(existingPost);

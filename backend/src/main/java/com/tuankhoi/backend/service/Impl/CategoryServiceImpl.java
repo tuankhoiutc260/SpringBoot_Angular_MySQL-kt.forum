@@ -15,7 +15,6 @@ import com.tuankhoi.backend.service.CategoryService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -28,7 +27,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
-
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -41,8 +39,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CategoryServiceImpl implements CategoryService {
-    static final String ELASTICSEARCH_TITLE_FIELD = "title";
-    static final String ELASTICSEARCH_DESCRIPTION_FIELD = "description";
+    private static final String ELASTICSEARCH_TITLE_FIELD = "title";
+    private static final String ELASTICSEARCH_DESCRIPTION_FIELD = "description";
 
     CategoryRepository categoryRepository;
     CategoryElasticsearchRepository categoryElasticsearchRepository;
@@ -51,14 +49,18 @@ public class CategoryServiceImpl implements CategoryService {
 
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
-    @CacheEvict(value = "categories", allEntries = true)
+    @Caching(evict = {
+            @CacheEvict(value = "category", allEntries = true),
+            @CacheEvict(value = "categories", allEntries = true),
+            @CacheEvict(value = "categorySearch", allEntries = true)
+    })
     @Override
     public CategoryResponse create(CategoryRequest categoryRequest) {
         try {
             Category newCategory = categoryMapper.toCategory(categoryRequest);
             Category savedCategory = categoryRepository.save(newCategory);
 
-            indexCategory(categoryMapper.toCategoryDocument(newCategory));
+            indexCategory(categoryMapper.toCategoryDocument(savedCategory));
 
             return categoryMapper.toCategoryResponse(savedCategory);
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
@@ -68,7 +70,7 @@ public class CategoryServiceImpl implements CategoryService {
         }
     }
 
-    @Cacheable(value = "category", key = "#categoryId")
+    @Cacheable(value = "category", key = "#categoryId", unless = "#result == null")
     @Override
     public CategoryResponse getById(String categoryId) {
         return categoryRepository.findById(categoryId)
@@ -76,13 +78,11 @@ public class CategoryServiceImpl implements CategoryService {
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOTFOUND));
     }
 
-    @Cacheable(value = "categories", key = "#page + '-' + #size")
+    @Cacheable(value = "categories", key = "'all:page:' + #page + ',size:' + #size", unless = "#result.isEmpty()")
     @Override
     public Page<CategoryResponse> getAll(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-
         Page<Category> categoryPage = categoryRepository.findAll(pageable);
-
         return categoryPage.map(categoryMapper::toCategoryResponse);
     }
 
@@ -90,11 +90,12 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     @Caching(evict = {
             @CacheEvict(value = "category", key = "#categoryId"),
-            @CacheEvict(value = "categories", allEntries = true)
+            @CacheEvict(value = "categories", allEntries = true),
+            @CacheEvict(value = "categorySearch", allEntries = true)
     })
     @Override
-    public CategoryResponse update(String categoryID, CategoryRequest categoryRequest) {
-        Category existingCategory = categoryRepository.findById(categoryID)
+    public CategoryResponse update(String categoryId, CategoryRequest categoryRequest) {
+        Category existingCategory = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOTFOUND));
 
         try {
@@ -107,7 +108,7 @@ public class CategoryServiceImpl implements CategoryService {
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
             throw new AppException(ErrorCode.DATABASE_CONSTRAINT_VIOLATION, "Failed to Update Category due to database constraint: " + e.getMessage());
         } catch (Exception e) {
-            throw new AppException(ErrorCode.UNKNOWN_ERROR, "Failed to Update Category" + e.getMessage());
+            throw new AppException(ErrorCode.UNKNOWN_ERROR, "Failed to Update Category: " + e.getMessage());
         }
     }
 
@@ -115,16 +116,18 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     @Caching(evict = {
             @CacheEvict(value = "category", key = "#categoryId"),
-            @CacheEvict(value = "categories", allEntries = true)
+            @CacheEvict(value = "categories", allEntries = true),
+            @CacheEvict(value = "categorySearch", allEntries = true)
     })
     @Override
-    public void deleteById(String categoryRequestID) {
-        Category categoryToDelete = categoryRepository.findById(categoryRequestID)
-                .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOTFOUND));
+    public void deleteById(String categoryId) {
+        if (!categoryRepository.existsById(categoryId)) {
+            throw new AppException(ErrorCode.CATEGORY_NOTFOUND);
+        }
 
         try {
-            categoryRepository.deleteById(categoryToDelete.getId());
-            deleteCategoryFromElasticsearch(categoryToDelete.getId());
+            categoryRepository.deleteById(categoryId);
+            deleteCategoryFromElasticsearch(categoryId);
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
             throw new AppException(ErrorCode.DATABASE_CONSTRAINT_VIOLATION, "Failed to Delete Category due to database constraint", e);
         } catch (Exception e) {
@@ -132,7 +135,7 @@ public class CategoryServiceImpl implements CategoryService {
         }
     }
 
-    @Cacheable(value = "categorySearch", key = "#query + '-' + #page + '-' + #size")
+    @Cacheable(value = "categorySearch", key = "'query:' + #query + ',page:' + #page + ',size:' + #size", unless = "#result.isEmpty()")
     @Override
     public Page<CategoryResponse> search(String query, int page, int size) {
         MultiMatchQuery multiMatchQuery = new MultiMatchQuery.Builder()
@@ -143,17 +146,16 @@ public class CategoryServiceImpl implements CategoryService {
 
         NativeQuery searchQuery = NativeQuery.builder()
                 .withQuery(q -> q.multiMatch(multiMatchQuery))
+                .withPageable(PageRequest.of(page, size))
                 .build();
 
         SearchHits<CategoryDocument> searchHits = elasticsearchOperations.search(searchQuery, CategoryDocument.class);
 
-        List<CategoryResponse> subCategoryResponses = searchHits.getSearchHits().stream()
+        List<CategoryResponse> categoryResponses = searchHits.getSearchHits().stream()
                 .map(hit -> categoryMapper.toCategoryResponseFromDocument(hit.getContent()))
                 .collect(Collectors.toList());
 
-        long totalHits = searchHits.getTotalHits();
-        Pageable pageable = PageRequest.of(page, size);
-        return new PageImpl<>(subCategoryResponses, pageable, totalHits);
+        return new PageImpl<>(categoryResponses, PageRequest.of(page, size), searchHits.getTotalHits());
     }
 
     @Override
@@ -169,13 +171,13 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Async
     @Override
-    public void deleteCategoryFromElasticsearch(String categoryID) {
+    public void deleteCategoryFromElasticsearch(String categoryId) {
         try {
-            categoryElasticsearchRepository.deleteById(categoryID);
+            categoryElasticsearchRepository.deleteById(categoryId);
         } catch (ElasticsearchException e) {
-            throw new AppException(ErrorCode.ELASTICSEARCH_ERROR, "Failed to delete Sub Category from Elasticsearch: " + e.getMessage());
+            throw new AppException(ErrorCode.ELASTICSEARCH_ERROR, "Failed to delete Category from Elasticsearch: " + e.getMessage());
         } catch (Exception e) {
-            throw new AppException(ErrorCode.UNKNOWN_ERROR, "Failed to delete Sub Category from Elasticsearch: " + e.getMessage());
+            throw new AppException(ErrorCode.UNKNOWN_ERROR, "Failed to delete Category from Elasticsearch: " + e.getMessage());
         }
     }
 }

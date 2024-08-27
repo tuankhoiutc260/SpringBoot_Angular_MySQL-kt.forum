@@ -8,5 +8,5 @@ public interface PostLikeService {
 
     Boolean isLiked(PostLikeRequest postLikeRequest);
 
-    PostLikeResponse toggleLike(PostLikeRequest postLikeRequest);
+    PostLikeResponse toggleLike(PostLikeRequest postLikeRequest, String userId);
 }

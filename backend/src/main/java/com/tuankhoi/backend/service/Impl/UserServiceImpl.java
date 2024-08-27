@@ -17,6 +17,9 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -43,6 +46,7 @@ public class UserServiceImpl implements UserService {
     @Value("${default.avatar.image.path}")
     private String defaultCloudinaryUserImageId;
 
+    @CacheEvict(value = {"user", "userByEmail", "userByUserName", "allUsers"}, allEntries = true)
     @Override
     public UserResponse create(UserRequest userRequest) {
         if (userRepository.findByUserName(userRequest.getUserName()).isPresent())
@@ -69,6 +73,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Cacheable(value = "user", key = "#userId", unless = "#result == null")
     @Override
     public UserResponse getById(String userId) {
         return userRepository.findById(userId)
@@ -84,6 +89,7 @@ public class UserServiceImpl implements UserService {
         return getByUserName(userName);
     }
 
+    @Cacheable(value = "userByEmail", key = "#email", unless = "#result == null")
     @Override
     public UserResponse getByEmail(String username) {
         return userRepository.findByEmail(username)
@@ -91,6 +97,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
     }
 
+    @Cacheable(value = "userByUserName", key = "#userName", unless = "#result == null")
     @Override
     public UserResponse getByUserName(String userName) {
         return userRepository.findByUserName(userName)
@@ -98,16 +105,19 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
     }
 
+    @Cacheable(value = "allUsers", key = "'page:' + #page + ',size:' + #size", unless = "#result.isEmpty()")
     @Override
     public Page<UserResponse> getAll(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-
         Page<User> userPage = userRepository.findAll(pageable);
-
         return userPage.map(userMapper::toUserResponse);
     }
 
     @PostAuthorize("hasRole('ADMIN')")
+    @Caching(evict = {
+            @CacheEvict(value = "user", key = "#userId"),
+            @CacheEvict(value = {"userByEmail", "userByUserName", "allUsers"}, allEntries = true)
+    })
     @Override
     public UserResponse update(String userId, UserRequest userRequest) {
         try {
@@ -126,6 +136,10 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Caching(evict = {
+            @CacheEvict(value = "user", key = "#userId"),
+            @CacheEvict(value = {"userByEmail", "userByUserName", "allUsers"}, allEntries = true)
+    })
     @Override
     public void deleteById(String userId) {
         try {

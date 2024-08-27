@@ -16,6 +16,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -36,6 +39,11 @@ public class CommentServiceImpl implements CommentService {
     SimpMessagingTemplate messagingTemplate;
 
     @Transactional
+    @CacheEvict(value = {"comment", "comments"}, allEntries = true)
+    @Caching(evict = {
+            @CacheEvict(value = "comment", allEntries = true),
+            @CacheEvict(value = "comments", allEntries = true),
+    })
     @Override
     public CommentResponse create(CommentRequest commentRequest) {
         Post existingPost = postRepository.findById(commentRequest.getPostId())
@@ -71,35 +79,40 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Cacheable(value = "comment", key = "#commentId", unless = "#result == null")
     public CommentResponse getById(Long commentId) {
         return commentRepository.findById(commentId)
                 .map(commentMapper::toCommentResponse)
                 .orElseThrow(() -> new AppException(ErrorCode.COMMENT_NOT_FOUND));
     }
 
+    @Cacheable(value = "comments", key = "'all:postId:' + #postId + ',page:' + #page + ',size:' + #size", unless = "#result.isEmpty()")
     @Override
     public Page<CommentResponse> getAllCommentAndReplyByPostId(String postId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-
         Page<Comment> commentPage = commentRepository.findAllByPostIdOrderByCreatedDateDesc(postId, pageable);
-
         return commentPage.map(commentMapper::toCommentResponse);
     }
 
+    @Cacheable(value = "commentReplies", key = "'commentId:' + #commentId + ',page: ' + #page + ',size:' + #size", unless = "#result.isEmpty()")
     @Override
     public Page<CommentResponse> getRepliesByCommentId(Long commentId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-
         Page<Comment> commentPage = commentRepository.findRepliesByCommentId(commentId, pageable);
-
         return commentPage.map(commentMapper::toCommentResponse);
     }
 
+    @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "comment", key = "#commentId"),
+            @CacheEvict(value = "comments", allEntries = true),
+    })
     @Override
     public CommentResponse update(Long commentId, CommentRequest commentRequest) {
+        Comment existingComment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new AppException(ErrorCode.COMMENT_NOT_FOUND));
+
         try {
-            Comment existingComment = commentRepository.findById(commentId)
-                    .orElseThrow(() -> new AppException(ErrorCode.COMMENT_NOT_FOUND));
             existingComment.setContent(commentRequest.getContent());
             Comment updatedComment = commentRepository.save(existingComment);
             CommentResponse commentResponse = commentMapper.toCommentResponse(updatedComment);
@@ -119,6 +132,10 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "comment", key = "#commentId"),
+            @CacheEvict(value = "comments", allEntries = true),
+    })
     @Override
     public void deleteById(Long commentId) {
         Comment commentToDelete = commentRepository.findById(commentId)
@@ -126,7 +143,7 @@ public class CommentServiceImpl implements CommentService {
 
         try {
             String postId = commentToDelete.getPost().getId();
-            commentRepository.delete(commentToDelete);
+            commentRepository.deleteById(commentId);
 
             WebSocketMessage deleteCommentMessage = WebSocketMessage.builder()
                     .type("DELETE_COMMENT")

@@ -56,7 +56,6 @@ public class ApplicationInitConfiguration {
     SubCategoryElasticsearchRepository subCategoryElasticsearchRepository;
     PostElasticsearchRepository postElasticsearchRepository;
 
-
     @NonFinal
     @Value("${avatar.admin.image.path}")
     private String avatarAdminImagePath;
