@@ -1,5 +1,5 @@
 # Stage 1: Build the application
-FROM maven:3.9.8-amazoncorretto-21 AS build
+FROM maven:3.9.9-amazoncorretto-17 AS build
 
 # Set the working directory
 WORKDIR /app
@@ -12,7 +12,7 @@ COPY src ./src
 RUN mvn package -DskipTests
 
 # Stage 2: Create the final image
-FROM amazoncorretto:21.0.4
+FROM amazoncorretto:17.0.12
 
 # Set the working directory
 WORKDIR /app

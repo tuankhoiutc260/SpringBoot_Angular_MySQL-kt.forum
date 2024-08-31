@@ -1,6 +1,7 @@
 package com.tuankhoi.backend.service.Impl;
 
 import com.tuankhoi.backend.dto.request.UserRequest;
+import com.tuankhoi.backend.dto.response.CloudinaryResponse;
 import com.tuankhoi.backend.dto.response.UserResponse;
 import com.tuankhoi.backend.enums.RoleEnum;
 import com.tuankhoi.backend.exception.AppException;
@@ -9,12 +10,14 @@ import com.tuankhoi.backend.mapper.UserMapper;
 import com.tuankhoi.backend.model.entity.User;
 import com.tuankhoi.backend.repository.Jpa.RoleRepository;
 import com.tuankhoi.backend.repository.Jpa.UserRepository;
+import com.tuankhoi.backend.service.CloudinaryService;
 import com.tuankhoi.backend.service.UserService;
-import jakarta.persistence.EntityNotFoundException;
+import com.tuankhoi.backend.untils.FileUploadUtil;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
+import org.apache.commons.io.FilenameUtils;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
@@ -37,14 +40,15 @@ public class UserServiceImpl implements UserService {
     PasswordEncoder passwordEncoder;
     UserMapper userMapper;
     RoleRepository roleRepository;
+    CloudinaryService cloudinaryService;
 
     @NonFinal
-    @Value("${default.avatar.image.path}")
-    private String defaultUserImageUrl;
+    @Value("${image.url.default}")
+    private String imageUrlDefault;
 
     @NonFinal
-    @Value("${default.avatar.image.path}")
-    private String defaultCloudinaryUserImageId;
+    @Value("${image.id.default}")
+    private String imageIdDefault;
 
     @CacheEvict(value = {"user", "userByEmail", "userByUserName", "allUsers"}, allEntries = true)
     @Override
@@ -57,8 +61,8 @@ public class UserServiceImpl implements UserService {
         try {
             User newUser = userMapper.toUser(userRequest);
             newUser.setPassword(passwordEncoder.encode(userRequest.getPassword()));
-            newUser.setImageUrl(defaultUserImageUrl);
-            newUser.setCloudinaryImageId(defaultCloudinaryUserImageId);
+            newUser.setImageUrl(imageUrlDefault);
+            newUser.setCloudinaryImageId(imageIdDefault);
 
             if (userRequest.getRoleId() == null)
                 newUser.setRole(roleRepository.findByName(RoleEnum.USER.name()).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND)));
@@ -86,13 +90,15 @@ public class UserServiceImpl implements UserService {
     public UserResponse getMyInfo() {
         var context = SecurityContextHolder.getContext();
         String userName = context.getAuthentication().getName();
-        return getByUserName(userName);
+        return userRepository.findByUserName(userName)
+                .map(userMapper::toUserResponse)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
     }
 
     @Cacheable(value = "userByEmail", key = "#email", unless = "#result == null")
     @Override
-    public UserResponse getByEmail(String username) {
-        return userRepository.findByEmail(username)
+    public UserResponse getByEmail(String email) {
+        return userRepository.findByEmail(email)
                 .map(userMapper::toUserResponse)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
     }
@@ -120,12 +126,28 @@ public class UserServiceImpl implements UserService {
     })
     @Override
     public UserResponse update(String userId, UserRequest userRequest) {
+        User existingUser = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
+
         try {
-            User existingUser = userRepository.findById(userId)
-                    .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
             existingUser.setPassword(passwordEncoder.encode(userRequest.getPassword()));
             existingUser.setRole(roleRepository.findById(userRequest.getRoleId()).orElseThrow(()
                     -> new AppException(ErrorCode.ROLE_NOTFOUND)));
+
+            if (userRequest.getImageFile() != null && !userRequest.getImageFile().isEmpty()) {
+                var imageFile = userRequest.getImageFile();
+                FileUploadUtil.assertAllowed(imageFile, FileUploadUtil.IMAGE_PATTERN);
+                String imageFileName = FileUploadUtil.getFileName(FilenameUtils.getBaseName(imageFile.getOriginalFilename()));
+
+                if (existingUser.getCloudinaryImageId() != null) {
+                    cloudinaryService.deleteImage(existingUser.getCloudinaryImageId());
+                }
+
+                CloudinaryResponse cloudinaryResponse = cloudinaryService.uploadFile(imageFile, imageFileName);
+                existingUser.setImageUrl(cloudinaryResponse.getUrl());
+                existingUser.setCloudinaryImageId(cloudinaryResponse.getPublicId());
+            }
+
             userMapper.updateUserFromRequest(userRequest, existingUser);
             User user = userRepository.save(existingUser);
             return userMapper.toUserResponse(user);
@@ -142,12 +164,14 @@ public class UserServiceImpl implements UserService {
     })
     @Override
     public void deleteById(String userId) {
+        User userToDelete = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
         try {
-            User userToDelete = userRepository.findById(userId)
-                    .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
+            if (userToDelete.getCloudinaryImageId() != null) {
+                cloudinaryService.deleteImage(userToDelete.getCloudinaryImageId());
+            }
+
             userRepository.delete(userToDelete);
-        } catch (EntityNotFoundException e) {
-            throw e;
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
             throw new AppException(ErrorCode.DATABASE_CONSTRAINT_VIOLATION, "Failed to Delete User due to database constraint", e);
         } catch (Exception e) {

@@ -12,7 +12,6 @@ import com.tuankhoi.backend.repository.Elasticsearch.CategoryElasticsearchReposi
 import com.tuankhoi.backend.repository.Elasticsearch.PostElasticsearchRepository;
 import com.tuankhoi.backend.repository.Elasticsearch.SubCategoryElasticsearchRepository;
 import com.tuankhoi.backend.repository.Jpa.*;
-import com.tuankhoi.backend.untils.ImageUtil;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -57,8 +56,12 @@ public class ApplicationInitConfiguration {
     PostElasticsearchRepository postElasticsearchRepository;
 
     @NonFinal
-    @Value("${avatar.admin.image.path}")
-    private String avatarAdminImagePath;
+    @Value("${image.url.admin}")
+    private String imageUrlAdmin;
+
+    @NonFinal
+    @Value("${image.id.admin}")
+    private String imageIdAdmin;
 
     @Bean
     public ApplicationRunner applicationRunner() {
@@ -74,15 +77,6 @@ public class ApplicationInitConfiguration {
             initializePosts();
             initializeComments();
         };
-    }
-
-    private String encodeImage(String imagePath) {
-        try {
-            return ImageUtil.getImageAsBase64(imagePath);
-        } catch (IOException e) {
-            log.error("Unable to encode image {}: {}", imagePath, e.getMessage());
-            return null;
-        }
     }
 
     private <T> void initializeData(String resourcePath, TypeReference<List<T>> typeReference, JpaRepository<T, ?> repository) {
@@ -227,7 +221,8 @@ public class ApplicationInitConfiguration {
                                 .userName("admin")
                                 .password(passwordEncoder.encode("admin"))
                                 .fullName("Admin")
-//                                .image(encodeImage(avatarAdminImagePath))
+                                .imageUrl(imageUrlAdmin)
+                                .cloudinaryImageId(imageIdAdmin)
                                 .role(adminRole)
                                 .active(true)
                                 .build();

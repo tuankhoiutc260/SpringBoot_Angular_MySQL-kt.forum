@@ -23,33 +23,47 @@
 #spring.data.redis.port=6379
 #
 server:
-    port: 8080
+  port: 8080
 
 spring:
-    application:
-name:backend
-datasource:
-driver-class-name:"com.mysql.cj.jdbc.Driver"
-url:${DBMS_CONNECTION:jdbc:mysql://localhost:3306/springboot-ktforum?createDatabaseIfNotExist=true}
-username:${DBMS_USERNAME:root}
-password:${DBMS_PASSWORD:123456}
-jpa:
-hibernate:
-ddl-auto:update
-#    jpa:
-#      show-sql: true
-data:
-redis:
-host:localhost
-port:6379
-elasticsearch:
-uris:https://localhost:9200
+  application:
+    name: backend
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/springboot-ktforum?createDatabaseIfNotExist=true}
+    username: ${SPRING_DATASOURCE_USERNAME:root}
+    password: ${SPRING_DATASOURCE_PASSWORD:123456}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    # Uncomment the following line if you want to see SQL queries in logs
+    # show-sql: true
+
+  data:
+    redis:
+      host: ${SPRING_DATA_REDIS_HOST:localhost}
+      port: 6379
+
+  elasticsearch:
+    uris: ${SPRING_ELASTICSEARCH_URIS:http://localhost:9200}
+#    username: ${SPRING_ELASTIC_USERNAME:elastic}
+#    password: ${SPRING_ELASTIC_PASSWORD:Tuankhoi05}
+
+
 jwt:
-valid-duration:120000
-refreshable-duration:240000
+  valid-duration: 120000
+  refreshable-duration: 240000
+
 openapi:
-dev-url:http://localhost:8080
-avatar:
-image-path:
-default:src/main/resources/assets/images/img_avatar_default_user.jpg
-admin:src/main/resources/assets/images/img_avatar_user_admin.jpg
+  dev-url: http://localhost:8080
+
+image:
+  url:
+    admin: https://res.cloudinary.com/dk7o7rlks/image/upload/v1725080957/kt-forum/kt-forum_img_user_admin.jpg
+    default: https://res.cloudinary.com/dk7o7rlks/image/upload/v1725081005/kt-forum/kt-forum_img_user_default.jpg
+
+  id:
+    admin: kt-forum/kt-forum_img_user_admin
+    default: kt-forum/kt-forum_img_user_default
