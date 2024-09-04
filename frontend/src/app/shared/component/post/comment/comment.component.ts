@@ -1,24 +1,36 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { CommentResponse } from "../../../../api/model/response/comment-response";
-import { ConfirmationService, MessageService } from "primeng/api";
 import { PostResponse } from "../../../../api/model/response/post-response";
+import { AuthService } from "../../../../core/service/auth.service";
 
 @Component({
   selector: 'app-comment',
   templateUrl: './comment.component.html',
   styleUrls: ['./comment.component.scss'],
-  providers: [MessageService, ConfirmationService]
 })
 
-export class CommentComponent {
+export class CommentComponent implements OnInit {
   @Input() commentResponse!: CommentResponse;
   @Input() postOfComment!: PostResponse;
 
-  @Output() showReplyForm = new EventEmitter<boolean>();
+  @Output() reply = new EventEmitter<CommentResponse>();
+  @Output() delete = new EventEmitter<void>();
 
-  @Input() isReplyFormVisible: boolean = false;
-  
-  toggleReplyForm() {
-    this.showReplyForm.emit(!this.isReplyFormVisible);
+  userLoginId: string | null = null;
+
+  constructor(
+    private authService: AuthService
+  ) { }
+
+  ngOnInit(): void {
+    this.userLoginId = this.authService.getUserID()
+  }
+
+  onReplyComment(commentResponse: CommentResponse) {
+    this.reply.emit(commentResponse);
+  }
+
+  onDeleteComment() {
+    this.delete.emit();
   }
 }

@@ -2,7 +2,7 @@
   <div class="flex flex-column align-items-center gap-2">
     <ng-container *ngIf="postResponse?.createdBy">
       <ng-container *ngIf="(postResponse.createdBy | userIdToUser | async) as user">
-        <img class="border-circle" [src]="user.image | dataUriToBlob" alt="" style="width: 56px; height: 56px;">
+        <img class="border-circle" [src]="user.imageUrl " alt="" style="width: 56px; height: 56px;">
         <small class="text-center"><b>{{user.fullName}}</b></small>
       </ng-container>
     </ng-container>
@@ -19,18 +19,18 @@
       {{ minRead }} mins read
     </small>
     <span class="post-content">{{postResponse.content | htmlToPlaintext}}</span>
-    <div class="flex gap-6">
+    <div class="flex gap-6 sub-title">
       <div class="flex gap-2 align-items-center">
         <span>{{postResponse.viewCount}}</span>
         <i class="pi pi-eye"></i>
       </div>
-      <!-- <div class="flex gap-2 align-items-center">
-        <span>{{postResponse.countLikes ? postResponse.countLikes : 0}}</span>
-        <i class="pi pi-heart"></i>
-      </div> -->
       <div class="flex gap-2 align-items-center">
-        <span>{{postResponse.totalComments ? postResponse.totalComments : 0}}</span>
-        <span>{{postResponse.totalComments > 0 ? 'Replies' : 'Reply'}}</span>
+        <span>{{postResponse.likeCount ? postResponse.likeCount : 0}}</span>
+        <i class="pi pi-heart"></i>
+      </div>
+      <div class="flex gap-2 align-items-center">
+        <span>{{postResponse.commentCount ? postResponse.commentCount : 0}}</span>
+        <span>{{postResponse.commentCount > 0 ? 'Replies' : 'Reply'}}</span>
       </div>
     </div>
   </div>

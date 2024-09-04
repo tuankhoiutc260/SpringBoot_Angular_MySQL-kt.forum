@@ -8,9 +8,9 @@ import { UserApiService } from '../../api/service/rest-api/user-api.service';
 export class UserIdToFullNamePipe implements PipeTransform {
   constructor(private userApiService: UserApiService) { }
 
-  transform(id: string): Observable<string | undefined> {
-    return this.userApiService.findById(id).pipe(
-      map(apiResponse => apiResponse.result?.fullName)
+  transform(userId: string): Observable<string | undefined> {
+    return this.userApiService.getById(userId).pipe(
+      map(userResponse => userResponse.fullName)
     );
   }
 }

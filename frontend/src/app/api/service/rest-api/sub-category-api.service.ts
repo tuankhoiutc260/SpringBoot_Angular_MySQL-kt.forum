@@ -1,46 +1,80 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { environment } from '../../../../enviroments/environment';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { environment } from '../../../../environments/environment';
 import { SubCategoryRequest } from '../../model/request/sub-category-request';
 import { ApiResponse } from '../../model/response/api-response';
 import { SubCategoryResponse } from '../../model/response/sub-category-response';
+import { PagedResponse } from '../../model/response/paged-response';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SubCategoryApiService {
-  private apiUrl = `${environment.apiUrl}/sub-categories`;
+  private readonly apiUrl = `${environment.apiUrl}/sub-categories`;
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient
+  ) { }
 
-  create(subCategoryRequest: SubCategoryRequest): Observable<ApiResponse<SubCategoryResponse>> {
+  create(subCategoryRequest: SubCategoryRequest): Observable<SubCategoryResponse> {
     return this.http.post<ApiResponse<SubCategoryResponse>>(this.apiUrl, subCategoryRequest)
+      .pipe(
+        map(apiResponse => apiResponse.result!),
+        catchError(this.handleError)
+      );
   }
 
-  findById(subCategoryRequestId: string): Observable<ApiResponse<SubCategoryResponse>> {
-    const url = `${this.apiUrl}/${subCategoryRequestId}`;
-    return this.http.get<ApiResponse<SubCategoryResponse>>(url);
+  getById(subCategoryId: string): Observable<SubCategoryResponse> {
+    return this.http.get<ApiResponse<SubCategoryResponse>>(`${this.apiUrl}/${subCategoryId}`)
+      .pipe(
+        map(apiResponse => apiResponse.result!),
+        catchError(this.handleError)
+      );
   }
 
-  findByCategoryId(categoryRequestId: string, page:number, size: number): Observable<ApiResponse<SubCategoryResponse[]>> {
-    const url = `${this.apiUrl}/category/${categoryRequestId}`;
-    // return this.http.get<ApiResponse<SubCategoryResponse[]>>(url);
-    return this.http.get<ApiResponse<SubCategoryResponse[]>>(`${this.apiUrl}/category/${categoryRequestId}?page=${page}&size=${size}`);
+  getByCategoryId(categoryId: string, page: number, size: number): Observable<PagedResponse<SubCategoryResponse[]>> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
 
+    return this.http.get<ApiResponse<PagedResponse<SubCategoryResponse[]>>>(`${this.apiUrl}/category/${categoryId}`, { params })
+      .pipe(
+        map(apiResponse => apiResponse.result!),
+        catchError(this.handleError)
+      );
   }
 
-  findAll(): Observable<ApiResponse<SubCategoryResponse[]>> {
-    return this.http.get<ApiResponse<SubCategoryResponse[]>>(this.apiUrl);
+  getAll(page: number, size: number): Observable<PagedResponse<SubCategoryResponse[]>> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    return this.http.get<ApiResponse<PagedResponse<SubCategoryResponse[]>>>(this.apiUrl, { params })
+      .pipe(
+        map(apiResponse => apiResponse.result!),
+        catchError(this.handleError)
+      );
   }
 
-  update(subCategoryRequestId: string, subSubCategoryRequest: SubCategoryRequest): Observable<ApiResponse<SubCategoryResponse>> {
-    const url = `${this.apiUrl}/${subCategoryRequestId}`;
-    return this.http.put<ApiResponse<SubCategoryResponse>>(url, subSubCategoryRequest);
+  update(subCategoryId: string, subCategoryRequest: SubCategoryRequest): Observable<SubCategoryResponse> {
+    return this.http.put<ApiResponse<SubCategoryResponse>>(`${this.apiUrl}/${subCategoryId}`, subCategoryRequest)
+      .pipe(
+        map(apiResponse => apiResponse.result!),
+        catchError(this.handleError)
+      );
   }
 
-  delete(subCategoryRequestId: string): Observable<ApiResponse<SubCategoryResponse>> {
-    const url = `${this.apiUrl}/${subCategoryRequestId}`;
-    return this.http.delete<ApiResponse<SubCategoryResponse>>(url);
+  deleteById(subCategoryId: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${subCategoryId}`)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  private handleError(error: HttpErrorResponse): Observable<never> {
+    console.error('An error occurred:', error);
+    return throwError(() => new Error(error.message || 'Server error'));
   }
 }

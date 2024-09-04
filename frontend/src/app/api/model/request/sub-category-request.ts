@@ -1,6 +1,6 @@
 export interface SubCategoryRequest {
     title: string;
     description: string;
-    image?: File | null;
+    coverImageFile: File | null;
     categoryId: string;
 }

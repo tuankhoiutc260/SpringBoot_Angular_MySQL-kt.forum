@@ -1,11 +1,11 @@
-import { FormControl } from '@angular/forms';
+import { AbstractControl, ValidationErrors } from '@angular/forms';
 
-export function passwordMatchValidator(control: FormControl): { [s: string]: boolean } | null {
-  const password = control.root.get('password'); 
+export function passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
+  const passwordControl = control.root.get('password'); 
   const rePassword = control.value;
 
-  if (password && rePassword !== password.value) {
-    return { 'passwordMismatch': true };
+  if (passwordControl && rePassword !== passwordControl.value) {
+    return { passwordMismatch: true };
   }
-  return {};
+  return null;
 }

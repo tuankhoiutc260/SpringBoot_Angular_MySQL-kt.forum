@@ -24,19 +24,23 @@
 
 .btn-a {
   cursor: pointer;
-  font-weight: bold;
   color: #65676B;
 }
 
 .btn-a:hover {
   cursor: pointer;
+
   text-decoration: underline;
 }
 
 .sub-title{
   color: #65676B;
-
 }
+
+// .sub-title:hover{
+//   text-decoration: underline;
+
+// }
 
 .flex-1 {
   flex: 1;

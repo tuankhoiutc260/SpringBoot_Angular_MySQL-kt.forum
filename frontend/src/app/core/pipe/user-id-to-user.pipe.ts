@@ -10,9 +10,9 @@ export class UserIdToUserPipe implements PipeTransform {
 
   constructor(private userApiService: UserApiService) { }
 
-  transform(id: string): Observable<UserResponse | undefined> {
-    return this.userApiService.findById(id).pipe(
-      map(apiResponse => apiResponse.result)
+  transform(userId: string): Observable<UserResponse | undefined> {
+    return this.userApiService.getById(userId).pipe(
+      map(userResponse => userResponse)
     );
   }
 }

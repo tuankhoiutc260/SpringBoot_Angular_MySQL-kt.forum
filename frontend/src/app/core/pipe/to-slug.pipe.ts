@@ -4,7 +4,6 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'toSlug'
 })
 export class ToSlugPipe implements PipeTransform {
-
   transform(value: string): string {
     return value
     .toLowerCase()

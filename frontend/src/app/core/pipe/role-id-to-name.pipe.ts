@@ -8,9 +8,9 @@ import { RoleApiService } from '../../api/service/rest-api/role-api.service';
 export class RoleIdToNamePipe implements PipeTransform {
   constructor(private roleApiService: RoleApiService) { }
 
-  transform(id: number): Observable<string | undefined> {
-    return this.roleApiService.findById(id).pipe(
-      map(apiResponse => apiResponse.result?.name)
+  transform(roleId: number): Observable<string | undefined> {
+    return this.roleApiService.getById(roleId).pipe(
+      map(roleResponse => roleResponse.name)
     );
   }
 }

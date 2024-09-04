@@ -1,30 +1,36 @@
 <div class="flex flex-column m-auto col-12 sm:col-12 md:col-10 lg:col-8">
-  <ng-container *ngIf="postResponse$ | async as postResponse">
-    <app-post class="cursor-pointer" [postResponse]="postResponse"></app-post>
-    <p-divider></p-divider>
-    <app-comment-form *ngIf="postId" [postId]="postId" [parentCommentId]="null"></app-comment-form>
+    <ng-container *ngIf="postResponse$ | async as postResponse">
+      <app-post class="cursor-pointer" [postResponse]="postResponse"></app-post>
 
-    <p-divider></p-divider>
+      <p-divider></p-divider>
 
-    <div class="flex flex-column gap-3">
-      <ng-container *ngIf="commentResponseList$ | async as commentResponseList">
-        <ng-container *ngFor="let commentResponse of commentResponseList; trackBy: trackByCommentId">
-          <app-comment [commentResponse]="commentResponse" [postOfComment]="postResponse"
-            (showReplyForm)="handleReplyFormVisibility($event, commentResponse.id!)"
-            [isReplyFormVisible]="isReplyFormVisible(commentResponse.id!)">
-          </app-comment>
+      <ng-container *ngIf="commentResponsePage$ | async as commentResponsePage">
+        <ng-container *ngIf="commentResponsePage.page.totalElements > 0">
+          <div class="flex flex-column gap-3">
+            <ng-container *ngFor="let commentResponse of commentResponsePage.content; trackBy: trackByCommentId">
+              <app-comment [commentResponse]="commentResponse" [postOfComment]="postResponse"
+                (reply)="handleReplyComment($event)" (delete)="onDeleteComment(commentResponse.id)"></app-comment>
+            </ng-container>
 
-          <app-comment-form *ngIf="isReplyFormVisible(commentResponse.id!)" [parentCommentId]="commentResponse.id!"
-            [comment]="commentResponse" [postId]="commentResponse.postId!" (commentAdded)="onCommentAdded($event)">
-            >
-          </app-comment-form>
+            <p-paginator *ngIf="commentResponsePage.page.totalElements > COMMENTS_PAGE_SIZE"
+              [first]="(commentsCurrentPage) * COMMENTS_PAGE_SIZE" [rows]="COMMENTS_PAGE_SIZE"
+              [totalRecords]="commentResponsePage.page.totalElements" (onPageChange)="onPageChange($event)">
+            </p-paginator>
+          </div>
         </ng-container>
-        <p-paginator [rows]="commentsPageSize" [totalRecords]="postResponse.totalComments" (onPageChange)="onPageChange($event)"
-      >
-      </p-paginator>
+        <p-divider *ngIf="commentResponsePage.page.totalElements > 0"></p-divider>
+
+        <ng-container *ngIf="commentResponsePage.page.totalElements <= 0">
+          <p class="text-center">No comments available.</p>
+        </ng-container>
       </ng-container>
-    </div>
 
-
-  </ng-container>
+      <div #commentForm>
+        <app-comment-form *ngIf="postId$ | async as postId" [postId]="postId" [repliedComment]="repliedComment"
+          (cancelReply)="handleCancelReply()" (commentAdded)="handleCommentAdded()">
+        </app-comment-form>
+      </div>
+    </ng-container>
 </div>
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>

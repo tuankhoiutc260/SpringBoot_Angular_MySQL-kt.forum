@@ -27,10 +27,10 @@
                             <p-button (click)="activateSignUp(true)" [routerLink]="['./login']" label="Sign Up"
                                 aria-label="Sign Up"></p-button>
                         </div>
-                        <div class="flex align-items-center gap-2 cursor-pointer" *ngIf="userLoginInfo.userName"
+                        <div class="flex align-items-center gap-2 cursor-pointer" *ngIf="userLoginInfo?.userName"
                             (click)="userMenu.toggle($event)" role="button" aria-haspopup="true" aria-expanded="false">
                             <span class="user-full-name">{{ userLoginInfo.fullName }}</span>
-                            <img *ngIf="userLoginInfo.image" [src]="userLoginInfo.image | dataUriToBlob"
+                            <img *ngIf="userLoginInfo.imageUrl" [src]="userLoginInfo.imageUrl"
                                 style="width: 28px; height: 28px; border-radius: 50%;"
                                 alt="{{ userLoginInfo.fullName }}">
                             <p-menu #userMenu id="user-menu" [model]="userMenuItems" [popup]="true"
@@ -56,11 +56,11 @@
                                     <button pRipple
                                       class="relative overflow-hidden w-full p-link flex align-items-center p-2 pl-3 text-color hover:surface-200 border-noround flex gap-2"
                                       aria-label="User Info">
-                                      <img *ngIf="userLoginInfo.image" [src]="userLoginInfo.image | dataUriToBlob"
+                                      <img *ngIf="userLoginInfo.imageUrl" [src]="userLoginInfo.imageUrl"
                                         style="width: 28px; height: 28px; border-radius: 50%;" alt="{{ userLoginInfo.fullName }}">
                                       <span class="inline-flex flex-column gap-2">
                                         <span class="font-bold">{{ userLoginInfo.fullName }}</span>
-                                        <span class="text-sm">{{ userLoginInfo.role?.name }}</span>
+                                        <span class="text-sm">{{ userLoginInfo.role.name }}</span>
                                       </span>
                                     </button>
                                   </ng-template>
@@ -79,3 +79,5 @@
     (isDialogVisibleChange)="isDialogVisible = $event"
     [postResponse]="newPost"
 ></app-create-update-post>
+
+<p-toast />

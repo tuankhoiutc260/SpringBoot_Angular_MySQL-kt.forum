@@ -11,8 +11,8 @@ export class CommentIdToCommentPipe implements PipeTransform {
   constructor(private commentApiService: CommentApiService) { }
 
   transform(commentId: number): Observable<CommentResponse | undefined> {
-    return this.commentApiService.findByCommentId(commentId).pipe(
-      map(apiResponse => apiResponse.result)
+    return this.commentApiService.getById(commentId).pipe(
+      map(commentResponse => commentResponse)
     );
   }
 }

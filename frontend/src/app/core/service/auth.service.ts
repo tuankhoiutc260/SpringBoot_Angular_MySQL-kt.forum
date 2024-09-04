@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { UserApiService } from '../../api/service/rest-api/user-api.service';
-import { ApiResponse } from '../../api/model/response/api-response';
 import { UserResponse } from '../../api/model/response/user-response';
 import { getRoleFromToken, getSubFromToken } from '../utils/jwt-helper';
 
@@ -69,19 +68,6 @@ export class AuthService {
     window.localStorage.removeItem("password");
   }
 
-  // Check if user is authenticated
-  // canActive(): boolean {
-  //   return !!this.getToken();
-  // }
-
-  // getRole(): string {
-  //   const token = this.getToken();
-  //   if (token) {
-  //     const decodedToken: any = jwtDecode(token);
-  //     return decodedToken.scope || 'ROLE_USER';
-  //   }
-  //   return 'ROLE_ANONYMOUS';
-  // }
   getRole(): string | null {
     const token = localStorage.getItem('auth_token');
     if (!token) {
@@ -90,7 +76,6 @@ export class AuthService {
     return getRoleFromToken(token);
   }
   
-
   getUserID(): string | null {
     const token = localStorage.getItem('auth_token');
     if (!token) {
@@ -108,13 +93,13 @@ export class AuthService {
   fetchAndSetUserLoginInfo(): void {
     const userName = this.getCurrentUserName();
     if (userName) {
-      this.userApiService.findByUserName(userName).subscribe({
-        next: (apiResponse: ApiResponse<UserResponse>) => {
-          const userLoginInfo = apiResponse.result;
+      this.userApiService.getByUserName(userName).subscribe({
+        next: (apiResponse) => {
+          const userLoginInfo = apiResponse;
           if (userLoginInfo) {
             this.userLoginInfoSubject.next(userLoginInfo);
           } else {
-            console.error('No result found in response:', apiResponse.message);
+            console.error('No result found in response:', apiResponse);
           }
         },
         error: (error) => {

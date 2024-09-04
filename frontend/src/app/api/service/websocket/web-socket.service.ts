@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Client } from '@stomp/stompjs';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { environment } from '../../../../enviroments/environment';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'

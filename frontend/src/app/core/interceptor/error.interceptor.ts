@@ -12,7 +12,7 @@ export class ErrorInterceptor implements HttpInterceptor {
     private authService: AuthService
   ) { }
 
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const token = this.authService.getToken();
     if (token) {
       return next.handle(request).pipe(
@@ -31,8 +31,7 @@ export class ErrorInterceptor implements HttpInterceptor {
         })
       );
     }
-    return next.handle(request)
+    
+    return next.handle(request);
   }
-
-
 }

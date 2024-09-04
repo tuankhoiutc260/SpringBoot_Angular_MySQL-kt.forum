@@ -8,9 +8,9 @@ import { UserApiService } from '../../api/service/rest-api/user-api.service';
 export class UserIdToUserImagePipe implements PipeTransform {
   constructor(private userApiService: UserApiService) { }
 
-  transform(id: string): Observable<string | undefined> {
-    return this.userApiService.findById(id).pipe(
-      map(apiResponse => apiResponse.result?.image)
+  transform(userId: string): Observable<string | undefined> {
+    return this.userApiService.getById(userId).pipe(
+      map(userResponse => userResponse.imageUrl)
     );
   }
 }

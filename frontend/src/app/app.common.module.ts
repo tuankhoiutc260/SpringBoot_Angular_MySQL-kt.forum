@@ -9,7 +9,6 @@ import { PostListComponent } from './shared/component/post/post-list/post-list.c
 import { PostComponent } from './shared/component/post/post/post.component';
 import { FeedComponent } from './shared/component/page/feed/feed.component';
 import { PostDetailsComponent } from './shared/component/post/post-details/post-details.component';
-import { InteractComponent } from './shared/component/post/interact/interact.component';
 import { ProfileComponent } from './shared/component/page/profile/profile.component';
 import { CreateUpdatePostComponent } from './shared/component/post/create-update-post/create-update-post.component';
 import { CommentFormComponent } from './shared/component/post/comment-form/comment-form.component';
@@ -43,7 +42,6 @@ import { SubCategoryComponent } from './shared/component/category/sub-category/s
         PostListComponent,
         PostComponent,
         PostDetailsComponent,
-        InteractComponent,
         CreateUpdatePostComponent,
         CommentComponent,
         CommentFormComponent,
@@ -65,7 +63,6 @@ import { SubCategoryComponent } from './shared/component/category/sub-category/s
         PostListComponent,
         PostComponent,
         PostDetailsComponent,
-        InteractComponent,
         CreateUpdatePostComponent,
         CommentComponent,
         CommentFormComponent,
@@ -77,7 +74,7 @@ import { SubCategoryComponent } from './shared/component/category/sub-category/s
 })
 
 export class AppCommonModule {
-    static forRoot(): ModuleWithProviders<any> {
+    static forRoot(): ModuleWithProviders<AppCommonModule> {
         return {
             ngModule: AppCommonModule,
             providers: [],

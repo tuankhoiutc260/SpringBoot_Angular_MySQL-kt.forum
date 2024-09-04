@@ -1,22 +1,24 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { catchError, map, Observable, throwError } from 'rxjs';
 import { ApiResponse } from '../../model/response/api-response';
 import { CommentResponse } from '../../model/response/comment-response';
 import { CommentRequest } from '../../model/request/comment-request';
-import { environment } from '../../../../enviroments/environment';
+import { environment } from '../../../../environments/environment'; 
 import { WebSocketService } from '../websocket/web-socket.service';
 import { WebSocketMessage } from '../../model/entity/web-socket-message';
+import { PagedResponse } from '../../model/response/paged-response';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CommentApiService {
-  private apiUrl = `${environment.apiUrl}/comments`;
-  constructor(private http: HttpClient,
+  private readonly apiUrl = `${environment.apiUrl}/comments`;
+
+  constructor(
+    private http: HttpClient,
     private webSocketService: WebSocketService
-  ) {
-  }
+  ) { }
 
   onNewComment(postId: string): Observable<WebSocketMessage<CommentResponse>> {
     return this.webSocketService.listen(`/topic/comments/${postId}`);
@@ -30,32 +32,64 @@ export class CommentApiService {
     return this.webSocketService.listen(`/topic/comments/${postId}/delete`);
   }
 
-  addComment(commentRequest: CommentRequest): Observable<ApiResponse<CommentResponse>> {
-    return this.http.post<ApiResponse<CommentResponse>>(this.apiUrl, commentRequest);
+  create(commentRequest: CommentRequest): Observable<CommentResponse> {
+    return this.http.post<ApiResponse<CommentResponse>>(this.apiUrl, commentRequest)
+      .pipe(
+        map(apiResponse => apiResponse.result!),
+        catchError(this.handleError)
+      );
   }
 
-  findByCommentId(commentId: number): Observable<ApiResponse<CommentResponse>> {
-    return this.http.get<ApiResponse<CommentResponse>>(`${this.apiUrl}/id/${commentId}`);
+  getById(commentId: number): Observable<CommentResponse> {
+    return this.http.get<ApiResponse<CommentResponse>>(`${this.apiUrl}/id/${commentId}`)
+      .pipe(
+        map(apiResponse => apiResponse.result!),
+        catchError(this.handleError)
+      );
   }
 
-  getCommentsByPostId(postId: string, page: number, size: number): Observable<ApiResponse<CommentResponse[]>> {
-    return this.http.get<ApiResponse<CommentResponse[]>>(`${this.apiUrl}/post/${postId}?page=${page}&size=${size}`);
+  getAllCommentAndReplyByPostId(postId: string, page: number, size: number): Observable<PagedResponse<CommentResponse[]>> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    return this.http.get<ApiResponse<PagedResponse<CommentResponse[]>>>(`${this.apiUrl}/post/${postId}`, { params })
+      .pipe(
+        map(apiResponse => apiResponse.result!),
+        catchError(this.handleError)
+      );
   }
 
-  getRepliesByCommentId(commentId: number, page: number, size: number): Observable<ApiResponse<CommentResponse[]>> {
-    return this.http.get<ApiResponse<CommentResponse[]>>(`${this.apiUrl}/${commentId}/replies?page=${page}&size=${size}`);
+  getRepliesByCommentId(commentId: number, page: number, size: number): Observable<PagedResponse<CommentResponse[]>> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    return this.http.get<ApiResponse<PagedResponse<CommentResponse[]>>>(`${this.apiUrl}/${commentId}/replies`, { params })
+      .pipe(
+        map(apiResponse => apiResponse.result!),
+        catchError(this.handleError)
+      );
   }
 
-  getAllRepliesByCommentId(commentId: number, page: number, size: number): Observable<ApiResponse<CommentResponse[]>> {
-    return this.http.get<ApiResponse<CommentResponse[]>>(`${this.apiUrl}/${commentId}/all-replies?page=${page}&size=${size}`);
+  update(commentId: number, commentRequest: CommentRequest): Observable<CommentResponse> {
+    return this.http.put<ApiResponse<CommentResponse>>(`${this.apiUrl}/${commentId}`, commentRequest)
+      .pipe(
+        map(apiResponse => apiResponse.result!),
+        catchError(this.handleError)
+      );
   }
 
-  updateComment(commentId: number, comment: CommentRequest): Observable<ApiResponse<CommentResponse>> {
-    return this.http.put<ApiResponse<CommentResponse>>(`${this.apiUrl}/${commentId}`, comment);
+  deleteById(commentId: number): Observable<void> {
+    return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${commentId}`)
+      .pipe(
+        map(apiResponse => apiResponse.result!),
+        catchError(this.handleError)
+      );
   }
 
-  delete(commentId: number): Observable<ApiResponse<void>> {
-    const deleteUrl = `${this.apiUrl}/${commentId}`;
-    return this.http.delete<ApiResponse<void>>(deleteUrl);
+  private handleError(error: HttpErrorResponse): Observable<never> {
+    console.error('An error occurred:', error);
+    return throwError(() => new Error(error.message || 'Server error'));
   }
 }

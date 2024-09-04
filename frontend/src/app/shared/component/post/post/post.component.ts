@@ -4,11 +4,11 @@ import { PostResponse } from '../../../../api/model/response/post-response';
 @Component({
   selector: 'app-post',
   templateUrl: './post.component.html',
-  styleUrls: ['./post.component.scss'] // Sửa 'styleUrl' thành 'styleUrls'
+  styleUrls: ['./post.component.scss'] 
 })
 export class PostComponent implements OnInit {
   @Input() postResponse!: PostResponse;
-  minRead: number = 0;
+  minRead = 0;
 
   ngOnInit(): void {
     if (this.postResponse && this.postResponse.content) {

@@ -13,7 +13,7 @@ import { UserResponse } from '../api/model/response/user-response';
 
 export class UserComponent implements OnInit, OnDestroy {
   @ViewChild('header', { static: false }) header!: ElementRef;
-  defaultUserLoginInfo: UserResponse = {};
+  defaultUserLoginInfo!: UserResponse;
   userLoginInfo: UserResponse | null = null;
   private subscription: Subscription = new Subscription();
   userName: string = '';

@@ -5,7 +5,8 @@ export interface SubCategory {
     id: string;
     title: string;
     description: string;
-    coverImage: string;
+    imageUrl: string;
+    cloudinaryImageId: string;
     category: Category
     posts: Post[]
     createdBy: string | Date

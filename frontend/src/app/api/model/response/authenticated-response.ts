@@ -1,4 +1,4 @@
 export interface AuthenticationResponse {
-    token?: string;
-    authenticated?: boolean;
+    token: string;
+    authenticated: boolean;
 }

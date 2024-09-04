@@ -1,9 +1,9 @@
 export interface UserRequest {
-    userName?: string;
-    password?: string;
-    email?: string;
+    userName: string;
+    password: string;
+    email: string;
     fullName?: string;
-    image?: File | null;
+    imageFile?: File | null;
     active?: boolean;
-    role?: number
+    roleId?: number;
 }

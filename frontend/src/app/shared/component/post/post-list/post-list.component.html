@@ -1,47 +1,54 @@
-<div class="post-list-container flex flex-column gap- align-items-center">
-    <ng-container *ngIf="subCategoryId | subCategoryIdToSubCategory | async as subCategory">
+<ng-container *ngIf="subCategoryId | subCategoryIdToSubCategory | async as subCategory">
+    <div class="post-list-container flex flex-column gap-4 align-items-center">
         <div class="post-list-banner">
-            <div class="banner-image" *ngIf="subCategory.coverImage">
-                <img [src]="subCategory.coverImage | dataUriToBlob" alt="Banner">
+            <div class="banner-image" *ngIf="subCategory.imageUrl">
+                <img [src]="subCategory.imageUrl" alt="Banner">
             </div>
-            <div class="banner-title">
-                <ng-container *ngIf="subCategory.title">
-                    <span>{{subCategory.title}}</span>
-                </ng-container>
+
+            <div class="banner-title" *ngIf="subCategory.title">
+                <span>{{subCategory.title}}</span>
             </div>
         </div>
 
-        <!-- <div class="post-list-content w-full flex justify-content-center"> -->
-            <div class=" w-full flex justify-content-center">
-            <ng-container *ngIf="postResponseList$ | async as postResponseList">
-                <div *ngIf="postResponseList.length > 0; else noPosts">
+        <div class="w-full flex flex-column gap-2 justify-content-center align-items-center">
+            <p-button outlined="true" (click)="onCreatePost()">Create Post</p-button>
+
+            <ng-container *ngIf="postResponsePage$ | async as postResponsePage; else loading">
+                <div class="w-full flex flex-column align-items-center"
+                    *ngIf="postResponsePage.page.totalElements > 0; else noPosts">
+
                     <div class="flex flex-column gap-3 post-list-container m-auto col-12 sm:col-12 md:col-10 lg:col-8"
-                        *ngFor="let postResponse of postResponseList">
-                        <app-post class="cursor-pointer" 
-                            [postResponse]="postResponse"
+                        *ngFor="let postResponse of postResponsePage.content; trackBy: trackByPostId">
+                        <app-post class="cursor-pointer" [postResponse]="postResponse"
                             [routerLink]="['/category', categoryTitleSlug, 'subcategory', subCategoryTitleSlug, 'post', postResponse.title | toSlug, postResponse.id]">
                         </app-post>
                     </div>
-            
-                    <p-paginator [first]="(postsCurrentPage - 1) * postsPageSize"
-                        [rows]="postsPageSize" 
-                        [totalRecords]="subCategory.totalPosts"
-                        (onPageChange)="onPageChange($event)">
+
+                    <p-paginator *ngIf="postResponsePage.page.totalElements > POSTS_PAGE_SIZE" [first]="(postsCurrentPage) * POSTS_PAGE_SIZE" [rows]="POSTS_PAGE_SIZE"
+                        [totalRecords]="postResponsePage.page.totalElements" (onPageChange)="onPageChange($event)">
                     </p-paginator>
                 </div>
-            
+
                 <ng-template #noPosts>
-                    <div class="m-auto col-12 sm:col-12 md:col-10 lg:col-8 flex flex-column align-items-center" >
+                    <div class="m-auto col-12 sm:col-12 md:col-10 lg:col-8 flex flex-column align-items-center">
                         <p>No posts available.</p>
-                        <p-button (click)="onCreatePost()">Create Post</p-button>
                     </div>
                 </ng-template>
             </ng-container>
-        </div>
-    </ng-container>
-</div>
 
-<app-create-update-post [isDialogVisible]="isDialogVisible"
-    (isDialogVisibleChange)="isDialogVisible = $event"></app-create-update-post>
-<!-- <p-toast/>
-<p-confirmDialog /> -->
+            <ng-template #loading>
+                <div *ngIf="isLoading$ | async" class="loading-spinner">
+                    Loading...
+                </div>
+            </ng-template>
+
+            <div *ngIf="error$ | async as errorMessage" class="error-message">
+                {{ errorMessage }}
+            </div>
+        </div>
+    </div>
+
+    <app-create-update-post [isDialogVisible]="isDialogVisible" (isDialogVisibleChange)="isDialogVisible = $event"
+        [subCategoryId]="subCategoryId">
+    </app-create-update-post>
+</ng-container>

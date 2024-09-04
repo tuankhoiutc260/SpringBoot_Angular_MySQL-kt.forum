@@ -1,7 +1,6 @@
 export interface PostRequest {
-    image?: File | null;
-    title?: string;
-    content?: string;
-    tags?: string[];
+    title: string;
+    content: string;
+    subCategoryId: string;
 }
 

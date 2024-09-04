@@ -1,31 +1,30 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { PostApiService } from '../../../../api/service/rest-api/post-api.service';
 import { PostResponse } from '../../../../api/model/response/post-response';
-import { ApiResponse } from '../../../../api/model/response/api-response';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, of, Subject } from 'rxjs';
-import { catchError, map, takeUntil, switchMap } from 'rxjs/operators';
+import { of, Subject, BehaviorSubject } from 'rxjs';
+import { catchError, map, takeUntil, switchMap, distinctUntilChanged, shareReplay, finalize } from 'rxjs/operators';
+import { PagedResponse } from '../../../../api/model/response/paged-response';
 
 @Component({
   selector: 'app-post-list',
   templateUrl: './post-list.component.html',
-  styleUrl: './post-list.component.scss',
+  styleUrls: ['./post-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PostListComponent implements OnInit, OnDestroy {
-  totalPosts: number = 0;
-  postsPageSize: number = 10;
-  postsCurrentPage: number = 1;
-
   subCategoryId!: string;
   subCategoryTitleSlug!: string;
   categoryTitleSlug!: string;
 
-  postResponseList$!: Observable<PostResponse[]>
-
-  isDialogVisible: boolean = false;
-
+  isDialogVisible = false;
+  readonly POSTS_PAGE_SIZE = 10;
+  postsCurrentPage = 0;
+  postResponsePage$ = new BehaviorSubject<PagedResponse<PostResponse[]> | null>(null);
 
   private destroy$ = new Subject<void>();
+  isLoading$ = new BehaviorSubject<boolean>(false);
+  error$ = new BehaviorSubject<string | null>(null);
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -34,56 +33,80 @@ export class PostListComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.setupRouteSubscription();
+  }
+
+  private setupRouteSubscription() {
     this.activatedRoute.params.pipe(
       takeUntil(this.destroy$),
+      distinctUntilChanged((prev, curr) =>
+        prev['categoryTitleSlug'] === curr['categoryTitleSlug'] &&
+        prev['subcategoryTitleSlug'] === curr['subcategoryTitleSlug'] &&
+        prev['subcategoryId'] === curr['subcategoryId']
+      ),
       switchMap(params => {
         this.subCategoryId = params['subcategoryId'];
-        this.subCategoryTitleSlug = params['subcategorySlug'];
-        this.categoryTitleSlug = params['categorySlug'];
-        
-        return this.activatedRoute.queryParams;
-      })
-    ).subscribe(queryParams => {
-      this.postsCurrentPage = queryParams['page'] ? parseInt(queryParams['page']) : 1;
-      this.getPostsBySubCategoryId();
+        this.subCategoryTitleSlug = params['subcategoryTitleSlug'];
+        this.categoryTitleSlug = params['categoryTitleSlug'];
+
+        return this.activatedRoute.queryParams.pipe(
+          map(queryParams => {
+            this.postsCurrentPage = queryParams['page'] ? parseInt(queryParams['page']) : 0;
+            return queryParams;
+          })
+        );
+      }),
+      shareReplay(1)
+    ).subscribe(() => {
+      this.getPostsBySubCategoryId(this.subCategoryId);
     });
   }
 
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
+  getPostsBySubCategoryId(subCategoryId: string) {
+    this.isLoading$.next(true);
+    this.error$.next(null);
 
-  getPostsBySubCategoryId() {
-    const apiPage = this.postsCurrentPage - 1;
-    this.postResponseList$ = this.postApiService.findBySubCategoryId(this.subCategoryId, apiPage, this.postsPageSize)
+    this.postApiService.getBySubCategoryId(subCategoryId, this.postsCurrentPage, this.POSTS_PAGE_SIZE)
       .pipe(
-        map((apiResponse: ApiResponse<PostResponse[]>) => {
-          return apiResponse.result || [];
-        }),
+        map(postResponsePage => postResponsePage),
         catchError(error => {
           console.error("Error fetching Posts", error);
-          return of([]);
-        })
-      );
+          this.error$.next("Failed to load posts. Please try again later.");
+          return of({ content: [], page: { size: 0, number: 0, totalElements: 0, totalPages: 0 } });
+        }),
+        finalize(() => this.isLoading$.next(false)),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(postsPage => {
+        this.postResponsePage$.next(postsPage);
+      });
   }
 
   onPageChange(event: any) {
-    this.postsCurrentPage = event.page + 1; 
+    this.postsCurrentPage = event.page;
     this.updateUrlAndFetchPosts();
   }
 
-  onCreatePost(){
-    this.isDialogVisible = true;
-  }
-
-  private updateUrlAndFetchPosts() {
+  updateUrlAndFetchPosts() {
     this.router.navigate([], {
       relativeTo: this.activatedRoute,
       queryParams: { page: this.postsCurrentPage },
       queryParamsHandling: 'merge'
     }).then(() => {
-      this.getPostsBySubCategoryId();
+      this.getPostsBySubCategoryId(this.subCategoryId);
     });
+  }
+
+  onCreatePost() {
+    this.isDialogVisible = true;
+  }
+
+  trackByPostId(index: number, postResponse: PostResponse): string {
+    return postResponse.id;
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

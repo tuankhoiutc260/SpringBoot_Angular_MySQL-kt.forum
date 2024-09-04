@@ -1,3 +1,3 @@
 export interface IntrospectRequest {
-    token?: string;
+    token: string;
 }

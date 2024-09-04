@@ -1,4 +1,4 @@
 export interface WebSocketMessage<T> {
-  type: string;
-  payload: T;
-}
+    type: string;
+    payload: T;
+  }

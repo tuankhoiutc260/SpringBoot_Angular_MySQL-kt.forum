@@ -6,5 +6,4 @@ import { Component } from '@angular/core';
   styleUrls: ['./feed.component.scss']
 })
 export class FeedComponent {
-
 }

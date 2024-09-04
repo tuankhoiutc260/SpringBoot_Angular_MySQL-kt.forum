@@ -1,5 +1,5 @@
 export interface RoleRequest {
-    name?: string;
-    description?: string;
-    permissions?: number[];
+    name: string;
+    description: string;
+    permissions: number[];
 }

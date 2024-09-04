@@ -10,8 +10,8 @@ export class UserNameToUserIdPipe implements PipeTransform {
   constructor(private userApiService: UserApiService) { }
 
   transform(userName: string): Observable<string | undefined> {
-    return this.userApiService.findByUserName(userName).pipe(
-      map(apiResponse => apiResponse.result?.id)
+    return this.userApiService.getByUserName(userName).pipe(
+      map(userResponse => userResponse.id)
     );
   }
 }

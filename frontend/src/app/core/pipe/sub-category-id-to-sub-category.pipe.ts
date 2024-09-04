@@ -11,8 +11,8 @@ export class SubCategoryIdToSubCategoryPipe implements PipeTransform {
   constructor(private subCategoryApiService: SubCategoryApiService) { }
 
   transform(subCategoryId: string): Observable<SubCategoryResponse | undefined> {
-    return this.subCategoryApiService.findById(subCategoryId).pipe(
-      map(apiResponse => apiResponse.result)
+    return this.subCategoryApiService.getById(subCategoryId).pipe(
+      map(subCategoryResponse => subCategoryResponse)
     );
   }
 }

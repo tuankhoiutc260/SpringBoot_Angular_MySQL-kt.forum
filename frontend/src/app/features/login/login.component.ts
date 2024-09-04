@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -8,12 +7,10 @@ import { passwordMatchValidator } from '../../core/validator/password-match-vali
 import { AuthApiService } from '../../api/service/rest-api/auth-api.service';
 import { UserApiService } from '../../api/service/rest-api/user-api.service';
 import { AuthService } from '../../core/service/auth.service';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, catchError, map, Subject, takeUntil, tap, throwError } from 'rxjs';
 import { AuthenticationRequest } from '../../api/model/request/authentication-request';
 import { UserRequest } from '../../api/model/request/user-request';
-import { ApiResponse } from '../../api/model/response/api-response';
 import { AuthenticationResponse } from '../../api/model/response/authenticated-response';
-import { UserResponse } from '../../api/model/response/user-response';
 
 @Component({
   selector: 'app-login',
@@ -21,9 +18,11 @@ import { UserResponse } from '../../api/model/response/user-response';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  userResponse: UserResponse = {};
-  userRequest: UserRequest = {};
-  usersResponse: UserResponse[] = [];
+  message$ = new BehaviorSubject<string>('');
+  isSignUpActive = false;
+
+  isSignUpActive$ = new BehaviorSubject<boolean>(false);
+  private destroy$ = new Subject<void>();
 
   signInForm = new FormGroup({
     userName: new FormControl('', Validators.required),
@@ -38,29 +37,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     terms: new FormControl(false, Validators.requiredTrue)
   });
 
-  visible: boolean = false;
-
-  loginRequest: AuthenticationRequest = {
-    userName: '',
-    password: ''
-  };
-
-  message: string = '';
-
-  isSignUpActive: boolean = false;
-  
-  private subscription: Subscription = new Subscription();
-
-  toggleActive() {
-    this.isSignUpActive = !this.isSignUpActive;
-  }
-
-  getSignUpActive(){
-    this.authService.isSignUpActive$.subscribe(value => {
-      this.isSignUpActive = value;
-    });
-  }
-
   constructor(
     private authApiService: AuthApiService,
     private authService: AuthService,
@@ -73,84 +49,109 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.getSignUpActive()
   }
 
+  toggleActive() {
+    this.isSignUpActive = !this.isSignUpActive;
+
+    this.signInForm.markAsUntouched();
+    this.signInForm.updateValueAndValidity();
+  }
+
+  getSignUpActive() {
+    this.authService.isSignUpActive$.subscribe(value => {
+      this.isSignUpActive = value;
+    });
+  }
+
   ngOnInit(): void {
+    this.subscribeToQueryParams();
+    this.subscribeToSignUpStatus();
+  }
+
+  private subscribeToQueryParams(): void {
     this.activatedRoute.queryParams.subscribe(params => {
-      this.message = params['message']
-    })
+      this.message$.next(params['message'] || '');
+    });
   }
 
-  onLoadPage() {
-    setTimeout(() => {
-      window.location.reload();
-    }, 2000);
+  private subscribeToSignUpStatus(): void {
+    this.authService.isSignUpActive$.subscribe(value => {
+      this.isSignUpActive$.next(value);
+    });
   }
-
-  showMessage(severityRequest: string, summaryRequest: string, detailRequest: string) {
-    this.messageService.add({ severity: severityRequest, summary: summaryRequest, detail: detailRequest });
-  }
-
-  userLoginInfo: UserResponse | null = null;
 
   onSignIn() {
     if (this.signInForm.valid) {
-      this.loginRequest = {
-        userName: this.signInForm.value.userName!,
-        password: this.signInForm.value.password!
-      }
+      const loginRequest: AuthenticationRequest = this.signInForm.value as AuthenticationRequest;
+
       this.authService.removeToken();
       this.authService.removeCurrentUserName();
-      const sub = this.authApiService.login(this.loginRequest).subscribe({
-        next: (apiResponse: ApiResponse<AuthenticationResponse>) => {
-          this.showMessage('info', 'Confirmed', 'Sign in successfully!')
-          this.authService.setToken(apiResponse.result?.token!);
-          this.authService.setCurrentUserName(this.loginRequest.userName!);
-          setTimeout(() => {
-            this.router.navigate(['/'])
-          }, 2000)
-        },
-        error: (httpErrorResponse: HttpErrorResponse) => {
-          this.showMessage('error', 'Error', httpErrorResponse.error.message)
-        }
-      });
-      this.subscription.add(sub);
+
+      this.authApiService.login(loginRequest)
+        .pipe(
+          map(authenticationResponse => this.handleLoginSuccess(authenticationResponse)),
+          catchError(error => {
+            console.error('Error fetching Post:', error);
+            this.handleError('Failed to Login')
+            return throwError(() => new Error(error.message || 'Server error'));
+          }),
+          takeUntil(this.destroy$)
+        ).subscribe()
     }
-    else{
+    else {
       this.signInForm.markAllAsTouched();
-      this.showMessage('error', 'Error', 'Please fill out the form correctly before submitting.')
+      this.handleError('Please fill out the form correctly before submitting')
     }
   }
 
   onSignUp() {
     if (this.signUpForm.valid) {
-      this.userRequest = {
-        email: this.signUpForm.value.email!,
-        userName: this.signUpForm.value.userName!,
-        password: this.signUpForm.value.password!
-      };
+      const userRequest: UserRequest = this.signUpForm.value as UserRequest;
+
       this.authService.removeToken();
       this.authService.removeCurrentUserName();
-      const sub = this.userApiService.create(this.userRequest).subscribe({
-        next: () => {
-          this.showMessage('info', 'Confirmed', 'Sign up successfully, please Sign in again!')
-          this.onLoadPage();
-        },
-        error: (httpErrorResponse: HttpErrorResponse) => {
-          const errorMessage = httpErrorResponse.error.message;
-          this.showMessage('error', 'Error', errorMessage)
-        }
-      });
-      this.subscription.add(sub);
+
+      this.userApiService.create(userRequest).pipe(
+        tap(() => this.handleSignUpSuccess()),
+        catchError(error => {
+          console.error('Error creating user:', error);
+          this.handleError('Failed to Sign Up');
+          return throwError(() => new Error(error.message || 'Server error'));
+        }),
+        takeUntil(this.destroy$)
+      ).subscribe()
     } else {
+
       this.signUpForm.markAllAsTouched();
-      this.showMessage('error', 'Error', 'Please fill out the form correctly before submitting.')
+      this.handleError('Please fill out the form correctly before submitting')
     }
   }
 
+  private handleError(errorMessage: string): void {
+    this.messageService.add({ severity: 'error', summary: 'Error', detail: errorMessage });
+  }
 
- 
-  ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+  private handleSuccess(successMessage: string): void {
+    this.messageService.add({ severity: 'success', summary: 'Success', detail: successMessage });
+  }
+
+  private handleLoginSuccess(authenticationResponse: AuthenticationResponse) {
+    this.handleSuccess('Sign in successfully!')
+    this.authService.setToken(authenticationResponse.token!);
+    this.authService.setCurrentUserName(this.signInForm.value.userName!);
+    setTimeout(() => {
+      this.router.navigate(['/']);
+    }, 2000);
+  }
+
+  private handleSignUpSuccess(): void {
+    this.handleSuccess('Sign up successfully, please Sign in again!')
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

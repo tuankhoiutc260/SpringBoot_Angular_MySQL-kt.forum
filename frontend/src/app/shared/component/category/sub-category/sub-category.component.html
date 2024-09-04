@@ -1,7 +1,7 @@
 <div class="sub-container-card">
   <div class="card-image">
     <img defaultImage="assets/images/img-placeholder.png"
-      [lazyLoad]="subCategoryResponse.coverImage | dataUriToBlob" [alt]="subCategoryResponse.title"
+      [lazyLoad]="subCategoryResponse.imageUrl" [alt]="subCategoryResponse.title"
       class="w-full border-round" [offset]="100" />
   </div>
   <div class="card-content flex flex-column text-center justify-content-between gap-2 p-3">
@@ -12,7 +12,7 @@
       {{ subCategoryResponse.description }}
     </div>
     <div class="mt-2 text-sm text-500">
-      Posts: {{ subCategoryResponse.totalPosts }}
+      Posts: {{ subCategoryResponse.postCount }}
     </div>
   </div>
   <div class="view-discussions flex flex-column text-center gap-2">

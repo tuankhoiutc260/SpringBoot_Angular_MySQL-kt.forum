@@ -1,3 +1,3 @@
 export interface IntrospectResponse {
-    vaild?: boolean;
+    vaild: boolean;
 }
