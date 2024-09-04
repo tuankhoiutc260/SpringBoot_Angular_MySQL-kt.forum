@@ -99,7 +99,7 @@ public class SubCategoryServiceImpl implements SubCategoryService {
                 .orElseThrow(() -> new AppException(ErrorCode.SUB_CATEGORY_NOTFOUND));
     }
 
-    @Cacheable(value = "subCategories", key = "'categoryId:' + #categoryId", unless = "#result.isEmpty()")
+    @Cacheable(value = "subCategories", key = "'page:' + #page + ',size:'+ #size + ',categoryId:' + #categoryId", unless = "#result.isEmpty()")
     @Override
     public Page<SubCategoryResponse> getByCategoryId(String categoryId, int page, int size) {
         if (categoryId == null || categoryId.trim().isEmpty()) {

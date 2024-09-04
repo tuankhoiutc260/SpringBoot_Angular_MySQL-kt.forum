@@ -12,7 +12,7 @@ import java.util.List;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, String> {
-    Page<Post> findBySubCategoryId(String subCategoryId, Pageable pageable);
+    Page<Post> findBySubCategoryIdOrderByCreatedDateAsc(String subCategoryId, Pageable pageable);
 
 //    @Query(value = """
 //            WITH top_liked_posts AS

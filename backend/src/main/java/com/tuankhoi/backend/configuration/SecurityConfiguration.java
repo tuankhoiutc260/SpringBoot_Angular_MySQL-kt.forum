@@ -67,6 +67,7 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                 request
                         .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS_FOR_POST).permitAll()
                         .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS_FOR_GET).permitAll()
+                        .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
                         .requestMatchers("/ws/**").permitAll()
                         .anyRequest().authenticated());
 

@@ -10,9 +10,11 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
@@ -23,7 +25,7 @@ public class UserController {
 
     @Operation(summary = "Create new user", description = "Create a new user.")
     @PostMapping
-    public APIResponse<UserResponse> create(@ModelAttribute @Valid UserRequest userRequest) {
+    public APIResponse<UserResponse> create(@ModelAttribute UserRequest userRequest) {
         return APIResponse.<UserResponse>builder()
                 .result(userService.create(userRequest))
                 .build();
@@ -67,6 +69,8 @@ public class UserController {
     @PutMapping("/{userId}")
     public APIResponse<UserResponse> update(@PathVariable String userId,
                                             @ModelAttribute UserRequest userRequest) {
+        log.info(userRequest.toString());
+
         return APIResponse.<UserResponse>builder()
                 .result(userService.update(userId, userRequest))
                 .build();

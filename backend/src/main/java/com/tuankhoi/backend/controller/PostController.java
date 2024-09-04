@@ -85,7 +85,7 @@ public class PostController {
     }
 
     @Operation(summary = "Increment post view count", description = "Increment the view count of a post by its ID.")
-    @PutMapping("/{postId}/view")
+    @PutMapping("/{postId}/views")
     public APIResponse<Void> incrementViewCount(@PathVariable String postId) {
         postService.incrementViewCount(postId);
         return APIResponse.<Void>builder()

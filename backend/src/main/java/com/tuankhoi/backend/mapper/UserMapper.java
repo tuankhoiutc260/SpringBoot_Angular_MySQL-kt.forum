@@ -20,6 +20,8 @@ public interface UserMapper {
     @Mapping(target = "role.id", source = "roleId")
     User toUser(UserRequest userUpdateRequest);
 
+    @Mapping(target = "imageUrl", ignore = true)
+    @Mapping(target = "cloudinaryImageId", ignore = true)
     UserResponse toUserResponse(User user);
 
     @Mapping(target = "id", ignore = true)

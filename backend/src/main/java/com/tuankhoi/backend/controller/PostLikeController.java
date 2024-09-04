@@ -30,18 +30,16 @@ public class PostLikeController {
     }
 
     @Operation(summary = "Check if post is liked", description = "Check if a post is liked by the authenticated user.")
-    @GetMapping("/is-liked")
-    public APIResponse<Boolean> isLiked(@RequestParam String postId) {
-        PostLikeRequest postLikeRequest = new PostLikeRequest(postId);
+    @PostMapping("/is-liked")
+    public APIResponse<Boolean> isLiked(@RequestBody PostLikeRequest postLikeRequest) {
         return APIResponse.<Boolean>builder()
                 .result(postLikeService.isLiked(postLikeRequest))
                 .build();
     }
 
     @Operation(summary = "Count likes on post", description = "Count the total number of likes on a post.")
-    @GetMapping("/count-likes")
-    public APIResponse<Long> countLikes(@RequestParam String postId) {
-        PostLikeRequest postLikeRequest = new PostLikeRequest(postId);
+    @PostMapping("/count-likes")
+    public APIResponse<Long> countLikes(@RequestBody PostLikeRequest postLikeRequest) {
         return APIResponse.<Long>builder()
                 .result(postLikeService.countLikes(postLikeRequest))
                 .build();

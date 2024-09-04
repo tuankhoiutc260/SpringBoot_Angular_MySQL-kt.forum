@@ -29,19 +29,19 @@ public class SubCategoryController {
     }
 
     @Operation(summary = "Get sub-category by ID", description = "Retrieve a sub-category by its ID.")
-    @GetMapping("/{subCategoryID}")
-    public APIResponse<SubCategoryResponse> getById(@PathVariable String subCategoryID) {
+    @GetMapping("/{subCategoryId}")
+    public APIResponse<SubCategoryResponse> getById(@PathVariable String subCategoryId) {
         return APIResponse.<SubCategoryResponse>builder()
-                .result(subCategoryService.getById(subCategoryID))
+                .result(subCategoryService.getById(subCategoryId))
                 .build();
     }
 
     @Operation(summary = "Get sub-categories by category ID", description = "Retrieve all sub-categories under a specific category ID.")
-    @GetMapping("/category/{categoryID}")
-    public APIResponse<Page<SubCategoryResponse>> getByCategoryId(@PathVariable String categoryID,
+    @GetMapping("/category/{categoryId}")
+    public APIResponse<Page<SubCategoryResponse>> getByCategoryId(@PathVariable String categoryId,
                                                                   @RequestParam(defaultValue = "0") int page,
                                                                   @RequestParam(defaultValue = "10") int size) {
-        Page<SubCategoryResponse> subCategoryResponsePage = subCategoryService.getByCategoryId(categoryID, page, size);
+        Page<SubCategoryResponse> subCategoryResponsePage = subCategoryService.getByCategoryId(categoryId, page, size);
         return APIResponse.<Page<SubCategoryResponse>>builder()
                 .result(subCategoryResponsePage)
                 .build();

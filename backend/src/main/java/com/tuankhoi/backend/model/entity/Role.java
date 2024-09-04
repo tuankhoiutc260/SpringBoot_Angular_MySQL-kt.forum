@@ -10,6 +10,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @Entity
 @Table(name = "role")
 @Builder
@@ -24,5 +25,6 @@ public class Role {
     String description;
 
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ToString.Exclude
     Set<Permission> permissions;
 }

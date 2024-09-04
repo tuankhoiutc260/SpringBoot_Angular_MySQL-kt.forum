@@ -27,24 +27,21 @@ public class SubCategoryDocument {
     @Field(type = FieldType.Keyword)
     String description;
 
-    @Field(type = FieldType.Keyword)
     String imageUrl;
 
-    @Field(type = FieldType.Keyword)
     String cloudinaryImageId;
 
-    @Field(type = FieldType.Keyword)
     String categoryId;
 
-    @Field(type = FieldType.Keyword)
     String createdBy;
 
     @Field(type = FieldType.Date, format = DateFormat.date_hour_minute_second_millis)
     LocalDateTime createdDate;
 
-    @Field(type = FieldType.Keyword)
     String lastModifiedBy;
 
     @Field(type = FieldType.Date, format = DateFormat.date_hour_minute_second_millis)
     LocalDateTime lastModifiedDate;
+
+    int postCount;
 }

@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

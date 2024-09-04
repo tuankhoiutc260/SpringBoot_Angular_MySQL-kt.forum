@@ -1,5 +1,6 @@
 package com.tuankhoi.backend.dto.document;
 
+import jakarta.persistence.Id;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.elasticsearch.annotations.DateFormat;
@@ -18,7 +19,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Document(indexName = "category")
 public class CategoryDocument {
-    @Field(type = FieldType.Keyword)
+    @Id
     String id;
 
     @Field(type = FieldType.Text)
@@ -27,16 +28,13 @@ public class CategoryDocument {
     @Field(type = FieldType.Text)
     String description;
 
-    @Field(type = FieldType.Keyword)
     List<String> subCategoryIds;
 
-    @Field(type = FieldType.Keyword)
     String createdBy;
 
     @Field(type = FieldType.Date, format = DateFormat.date_hour_minute_second_millis)
     LocalDateTime createdDate;
 
-    @Field(type = FieldType.Keyword)
     String lastModifiedBy;
 
     @Field(type = FieldType.Date, format = DateFormat.date_hour_minute_second_millis)

@@ -20,6 +20,14 @@ import org.springframework.web.bind.annotation.*;
 public class RoleController {
     RoleService roleService;
 
+    @Operation(summary = "Create new role", description = "Create a new role.")
+    @PostMapping
+    public APIResponse<RoleResponse> create(@RequestBody RoleRequest roleRequest) {
+        return APIResponse.<RoleResponse>builder()
+                .result(roleService.create(roleRequest))
+                .build();
+    }
+
     @Operation(summary = "Get role by ID", description = "Retrieve a role by its ID.")
     @GetMapping("/{roleId}")
     public APIResponse<RoleResponse> getById(@PathVariable int roleId) {
@@ -35,14 +43,6 @@ public class RoleController {
         Page<RoleResponse> roleResponsePage = roleService.getAll(page, size);
         return APIResponse.<Page<RoleResponse>>builder()
                 .result(roleResponsePage)
-                .build();
-    }
-
-    @Operation(summary = "Create new role", description = "Create a new role.")
-    @PostMapping
-    public APIResponse<RoleResponse> create(@RequestBody RoleRequest roleRequest) {
-        return APIResponse.<RoleResponse>builder()
-                .result(roleService.create(roleRequest))
                 .build();
     }
 

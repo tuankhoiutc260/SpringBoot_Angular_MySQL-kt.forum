@@ -27,16 +27,13 @@ public class PostDocument {
     @Field(type = FieldType.Text, analyzer = "standard")
     String content;
 
-    @Field(type = FieldType.Keyword)
     String subCategoryId;
 
-    @Field(type = FieldType.Keyword)
     String createdBy;
 
     @Field(type = FieldType.Date, format = DateFormat.date_hour_minute_second_millis)
     LocalDateTime createdDate;
 
-    @Field(type = FieldType.Keyword)
     String lastModifiedBy;
 
     @Field(type = FieldType.Date, format = DateFormat.date_hour_minute_second_millis)
@@ -44,4 +41,6 @@ public class PostDocument {
 
     @Builder.Default
     int viewCount = 0;;
+
+    int commentCount;
 }

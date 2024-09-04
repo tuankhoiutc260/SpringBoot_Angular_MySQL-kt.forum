@@ -17,6 +17,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,6 +33,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -73,7 +75,7 @@ public class UserServiceImpl implements UserService {
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
             throw new AppException(ErrorCode.DATABASE_CONSTRAINT_VIOLATION, "Failed to Create User due to database constraint: " + e.getMessage(), e);
         } catch (Exception e) {
-            throw new AppException(ErrorCode.UNKNOWN_ERROR,"Failed to Create User", e);
+            throw new AppException(ErrorCode.UNKNOWN_ERROR, "Failed to Create User", e);
         }
     }
 
@@ -129,10 +131,18 @@ public class UserServiceImpl implements UserService {
         User existingUser = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
 
+        log.info(userRequest.toString());
+        log.info(existingUser.toString());
         try {
             existingUser.setPassword(passwordEncoder.encode(userRequest.getPassword()));
-            existingUser.setRole(roleRepository.findById(userRequest.getRoleId()).orElseThrow(()
-                    -> new AppException(ErrorCode.ROLE_NOTFOUND)));
+
+            if (userRequest.getRoleId() == null) {
+                existingUser.setRole(existingUser.getRole());
+                System.out.println("set role:" + existingUser.getRole().toString());
+            } else {
+                existingUser.setRole(roleRepository.findById(userRequest.getRoleId()).orElseThrow(()
+                        -> new AppException(ErrorCode.ROLE_NOTFOUND)));
+            }
 
             if (userRequest.getImageFile() != null && !userRequest.getImageFile().isEmpty()) {
                 var imageFile = userRequest.getImageFile();
@@ -154,7 +164,7 @@ public class UserServiceImpl implements UserService {
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
             throw new AppException(ErrorCode.DATABASE_CONSTRAINT_VIOLATION, "Failed to Update User due to database constraint: " + e.getMessage(), e);
         } catch (Exception e) {
-            throw new AppException(ErrorCode.UNKNOWN_ERROR,"Failed to Update User", e);
+            throw new AppException(ErrorCode.UNKNOWN_ERROR, "Failed to Update User", e);
         }
     }
 
@@ -175,7 +185,7 @@ public class UserServiceImpl implements UserService {
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
             throw new AppException(ErrorCode.DATABASE_CONSTRAINT_VIOLATION, "Failed to Delete User due to database constraint", e);
         } catch (Exception e) {
-            throw new AppException(ErrorCode.UNKNOWN_ERROR,"Failed to Delete User", e);
+            throw new AppException(ErrorCode.UNKNOWN_ERROR, "Failed to Delete User", e);
         }
     }
 }

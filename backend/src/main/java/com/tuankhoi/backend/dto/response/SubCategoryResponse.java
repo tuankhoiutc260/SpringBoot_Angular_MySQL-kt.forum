@@ -38,4 +38,6 @@ public class SubCategoryResponse implements Serializable {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     LocalDateTime lastModifiedDate;
+
+    int postCount;
 }

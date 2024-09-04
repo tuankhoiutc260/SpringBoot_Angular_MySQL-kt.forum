@@ -3,6 +3,7 @@ package com.tuankhoi.backend.dto.response;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.io.Serializable;
 import java.util.Set;
 
 @Getter
@@ -11,7 +12,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class RoleResponse {
+public class RoleResponse implements Serializable {
     Integer id;
 
     String name;

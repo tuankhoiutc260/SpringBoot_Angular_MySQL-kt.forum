@@ -90,7 +90,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Page<CommentResponse> getAllCommentAndReplyByPostId(String postId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Comment> commentPage = commentRepository.findAllByPostIdOrderByCreatedDateDesc(postId, pageable);
+        Page<Comment> commentPage = commentRepository.findAllByPostIdOrderByCreatedDateAsc(postId, pageable);
         return commentPage.map(commentMapper::toCommentResponse);
     }
 

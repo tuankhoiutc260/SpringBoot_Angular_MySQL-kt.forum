@@ -95,7 +95,7 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new AppException(ErrorCode.SUB_CATEGORY_NOTFOUND));
 
         Page<Post> postPage = postRepository
-                .findBySubCategoryId(existingPSubCategory.getId(), pageable);
+                .findBySubCategoryIdOrderByCreatedDateAsc(existingPSubCategory.getId(), pageable);
 
         return postPage.map(postMapper::toPostResponse);
     }
