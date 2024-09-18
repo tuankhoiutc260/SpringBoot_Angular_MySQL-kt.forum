@@ -31,13 +31,24 @@ spring:
   elasticsearch:
     uris: ${SPRING_ELASTICSEARCH_URIS:http://localhost:9200}
 
-#    username: ${SPRING_ELASTIC_USERNAME:elastic}
-#    password: ${SPRING_ELASTIC_PASSWORD:Tuankhoi05}
+  session:
+    store-type: redis
+    redis:
+      namespace: spring:sessio2
 
+  cache:
+    type: redis
+    redis:
+      namespace: app:cache
 
 jwt:
-  valid-duration: 120000
+  valid-access-token-duration: 86400
+  valid-refresh-token-duration: 172800
   refreshable-duration: 240000
+
+cookie:
+  max-age-default-duration: 3600
+  max-age-remember-me-duration: 7200
 
 openapi:
   dev-url: http://localhost:8080

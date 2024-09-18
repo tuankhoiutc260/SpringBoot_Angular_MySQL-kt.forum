@@ -20,7 +20,9 @@ public interface AuthenticationService {
 
     Authentication getAuthenticatedUser();
 
-    String generateToken(User user);
+    String generateAccessToken(User user);
+
+    String generateRefreshToken(User user);
 
     void logout(LogoutRequest logoutRequest) throws ParseException, JOSEException;
 

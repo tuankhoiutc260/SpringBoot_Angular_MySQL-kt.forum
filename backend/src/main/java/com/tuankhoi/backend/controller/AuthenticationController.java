@@ -9,6 +9,7 @@ import com.tuankhoi.backend.dto.request.AuthenticationRequest;
 import com.tuankhoi.backend.dto.response.AuthenticationResponse;
 import com.tuankhoi.backend.dto.response.IntrospectResponse;
 import com.tuankhoi.backend.service.AuthenticationService;
+import com.tuankhoi.backend.untils.CookieUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
@@ -16,8 +17,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.NonFinal;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,26 +31,13 @@ import java.text.ParseException;
 @Tag(name = "Authentication Controller")
 public class AuthenticationController {
     AuthenticationService authenticationService;
-
-    @NonFinal
-    @Value("${cookie.max-age-remember-me-duration}")
-    private int COOKIE_MAX_AGE_REMEMBER_ME_DURATION;
-
-    @NonFinal
-    @Value("${cookie.max-age-default-duration}")
-    private int COOKIE_MAX_AGE_DEFAULT_DURATION;
-
-    @NonFinal
-    @Value("${jwt.valid-duration}")
-    protected int JWT_VALID_DURATION;
+    CookieUtil cookieUtil;
 
     @Operation(summary = "Login user", description = "Authenticate a user and return a token.")
     @PostMapping("/login")
     public APIResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest authenticationRequest, HttpServletResponse httpServletResponse) {
         AuthenticationResponse authResponse = authenticationService.authenticate(authenticationRequest);
-
-        setTokenCookie(httpServletResponse, authResponse.getToken(), authenticationRequest.isRememberMe());
-
+        cookieUtil.setTokenCookie(httpServletResponse, authResponse.getAccessToken(), authResponse.getRefreshToken(), authenticationRequest.isRememberMe());
         return APIResponse.<AuthenticationResponse>builder()
                 .result(authResponse)
                 .build();
@@ -71,7 +57,7 @@ public class AuthenticationController {
     public APIResponse<Void> logout(@RequestBody LogoutRequest logoutRequest, HttpServletResponse httpServletResponse)
             throws ParseException, JOSEException {
         authenticationService.logout(logoutRequest);
-        clearTokenCookie(httpServletResponse);
+        cookieUtil.clearTokenCookie(httpServletResponse);
         return APIResponse.<Void>builder()
                 .build();
     }
@@ -83,23 +69,5 @@ public class AuthenticationController {
         return APIResponse.<AuthenticationResponse>builder()
                 .result(authenticationService.refreshToken(refreshRequest))
                 .build();
-    }
-
-    public void setTokenCookie(HttpServletResponse response, String token, boolean rememberMe) {
-        Cookie cookie = new Cookie("authToken", token);
-        cookie.setHttpOnly(true); // Không thể truy cập từ JavaScript
-        cookie.setSecure(true); // Cookie chỉ được gửi qua HTTPS
-        cookie.setPath("/"); // Đường dẫn cookie có hiệu lực
-        cookie.setMaxAge(rememberMe ? COOKIE_MAX_AGE_REMEMBER_ME_DURATION : COOKIE_MAX_AGE_DEFAULT_DURATION);
-        response.addCookie(cookie);
-    }
-
-    public void clearTokenCookie(HttpServletResponse response) {
-        Cookie cookie = new Cookie("authToken", null);
-        cookie.setHttpOnly(true);
-        cookie.setSecure(true);
-        cookie.setPath("/");
-        cookie.setMaxAge(0);
-        response.addCookie(cookie);
     }
 }

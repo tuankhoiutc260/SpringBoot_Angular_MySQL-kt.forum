@@ -46,14 +46,12 @@ public class SecurityConfiguration implements WebMvcConfigurer {
             "/api/comments",
             "/ws/**",
             "/ws",
-
-
     };
 
     private final String[] PUBLIC_ENDPOINTS_FOR_POST = {
-                "/api/v1/auth/login",
-
-
+            "/api/v1/auth/login",
+            "/api/v1/auth/refresh-token",
+            "/api/v1/auth/logout"
     };
 
     @Autowired
@@ -62,7 +60,6 @@ public class SecurityConfiguration implements WebMvcConfigurer {
     @Bean
     protected SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
-
         httpSecurity.authorizeHttpRequests(request ->
                 request
                         .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS_FOR_POST).permitAll()
@@ -78,6 +75,7 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                                         .jwtAuthenticationConverter(jwtAuthenticationConverter()))
                                 .authenticationEntryPoint(new JWTAuthenticationEntryPoint())
         );
+
         return httpSecurity.build();
     }
 

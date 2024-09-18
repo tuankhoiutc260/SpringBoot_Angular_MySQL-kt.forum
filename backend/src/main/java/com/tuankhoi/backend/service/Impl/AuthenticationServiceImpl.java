@@ -45,6 +45,8 @@ import java.util.UUID;
 public class AuthenticationServiceImpl implements AuthenticationService {
     UserRepository userRepository;
     InvalidatedTokenRepository invalidatedTokenRepository;
+
+//    PasswordEncoder passwordEncoder;
     //    https://generate-random.org/encryption-key-generator?count=1&bytes=32&cipher=aes-256-cbc&string=&password=
 
     @NonFinal
@@ -52,12 +54,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     protected String SIGNER_KEY;
 
     @NonFinal
-    @Value("${jwt.valid-duration}")
-    protected long VALID_DURATION;
+    @Value("${jwt.refreshable-duration}")
+    protected long JWT_REFRESHABLE_DURATION;
 
     @NonFinal
-    @Value("${jwt.refreshable-duration}")
-    protected long REFRESHABLE_DURATION;
+    @Value("${jwt.valid-access-token-duration}")
+    protected long JWT_VALID_ACCESS_TOKEN_DURATION;
+
+    @NonFinal
+    @Value("${jwt.valid-refresh-token-duration}")
+    protected long JWT_VALID_REFRESH_TOKEN_DURATION;
 
     @Override
     public IntrospectResponse introspect(IntrospectRequest introspectRequest)
@@ -82,25 +88,38 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         var user = userRepository.findByUserName(request.getUserName())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_USERNAME_PASSWORD_INVALID));
-
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+
         boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
 
         if (!authenticated)
             throw new AppException(ErrorCode.USER_USERNAME_PASSWORD_INVALID);
         else if (!user.isActive()) {
             throw new AppException(ErrorCode.ACCOUNT_INACTIVE);
-
         }
-        var token = generateToken(user);
-        return AuthenticationResponse.builder()
-                .token(token)
+
+        String accessToken = generateAccessToken(user);
+        String refreshToken = generateRefreshToken(user);
+
+        return AuthenticationResponse
+                .builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
                 .authenticated(true)
                 .build();
     }
 
     @Override
-    public String generateToken(User user) {
+    public String generateAccessToken(User user) {
+        return generateTokenWithExpiry(user, JWT_VALID_ACCESS_TOKEN_DURATION);
+    }
+
+    @Override
+    public String generateRefreshToken(User user) {
+        return generateTokenWithExpiry(user, JWT_VALID_REFRESH_TOKEN_DURATION);
+    }
+
+    public String generateTokenWithExpiry(User user, long expiryDurationInSeconds) {
         JWSHeader jwsHeader = new JWSHeader(JWSAlgorithm.HS512);
 
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
@@ -108,7 +127,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .issuer("tuankhoi.com")
                 .issueTime(new Date())
                 .expirationTime(new Date(
-                        Instant.now().plus(VALID_DURATION, ChronoUnit.SECONDS).toEpochMilli()
+                        Instant.now().plus(expiryDurationInSeconds, ChronoUnit.SECONDS).toEpochMilli()
                 ))
                 .jwtID(UUID.randomUUID().toString())
                 .claim("scope", buildScope(user))
@@ -126,6 +145,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new RuntimeException(e);
         }
     }
+
 
     @Override
     public void logout(LogoutRequest logoutRequest) throws ParseException, JOSEException {
@@ -162,11 +182,24 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var user = userRepository.findById(userID).orElseThrow(
                 () -> new AppException(ErrorCode.UNAUTHENTICATED)
         );
-        var token = generateToken(user);
+
+        String accessToken = generateAccessToken(user);
+        String refreshToken;
+
+        Date now = new Date();
+        long timeToExpiry = expiryTime.getTime() - now.getTime();
+        long oneDayInMillis = 12 * 60 * 60 * 1000;
+
+        if (timeToExpiry < oneDayInMillis) {
+            refreshToken = generateRefreshToken(user);
+        } else {
+            refreshToken = refreshRequest.getToken();
+        }
 
         return AuthenticationResponse
                 .builder()
-                .token(token)
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
                 .authenticated(true)
                 .build();
     }
@@ -178,7 +211,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         SignedJWT signedJWT = SignedJWT.parse(token);
 
         Date expiryTime = (isRefresh)
-                ? new Date(signedJWT.getJWTClaimsSet().getIssueTime().toInstant().plus(REFRESHABLE_DURATION, ChronoUnit.SECONDS).toEpochMilli())
+                ? new Date(signedJWT.getJWTClaimsSet().getIssueTime().toInstant().plus(JWT_REFRESHABLE_DURATION, ChronoUnit.SECONDS).toEpochMilli())
                 : signedJWT.getJWTClaimsSet().getExpirationTime();
 
         var verified = signedJWT.verify(verifier);
