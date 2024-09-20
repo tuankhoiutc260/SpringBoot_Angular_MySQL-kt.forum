@@ -20,18 +20,18 @@ public interface UserMapper {
     @Mapping(target = "role.id", source = "roleId")
     User toUser(UserRequest userUpdateRequest);
 
-    @Mapping(target = "imageUrl", ignore = true)
-    @Mapping(target = "cloudinaryImageId", ignore = true)
     UserResponse toUserResponse(User user);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "password", ignore = true)
     @Mapping(target = "imageUrl", ignore = true)
     @Mapping(target = "cloudinaryImageId", ignore = true)
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdDate", ignore = true)
     @Mapping(target = "lastModifiedBy", ignore = true)
     @Mapping(target = "lastModifiedDate", ignore = true)
-    @Mapping(target = "role.id", source = "roleId")
+//    @Mapping(target = "role.id", source = "roleId")
+//    @Mapping(target = "roleId", source = "role.id")
     void updateUserFromRequest(UserRequest userRequest, @MappingTarget User user);
 }
 

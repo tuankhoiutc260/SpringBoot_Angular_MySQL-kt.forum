@@ -11,6 +11,7 @@ import com.tuankhoi.backend.model.entity.SubCategory;
 import com.tuankhoi.backend.exception.AppException;
 import com.tuankhoi.backend.exception.ErrorCode;
 import com.tuankhoi.backend.mapper.SubCategoryMapper;
+import com.tuankhoi.backend.model.entity.User;
 import com.tuankhoi.backend.repository.Elasticsearch.SubCategoryElasticsearchRepository;
 import com.tuankhoi.backend.repository.Jpa.CategoryRepository;
 import com.tuankhoi.backend.repository.Jpa.SubCategoryRepository;
@@ -38,7 +39,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -72,12 +75,14 @@ public class SubCategoryServiceImpl implements SubCategoryService {
             SubCategory newSubCategory = subCategoryMapper.toSubCategory(subCategoryRequest);
             newSubCategory.setCategory(existingCategory);
 
-            var imageFile = subCategoryRequest.getCoverImageFile();
-            FileUploadUtil.assertAllowed(imageFile, FileUploadUtil.IMAGE_PATTERN);
-            String imageFileName = FileUploadUtil.getFileName(FilenameUtils.getBaseName(imageFile.getOriginalFilename()));
-            CloudinaryResponse cloudinaryResponse = cloudinaryService.uploadFile(imageFile, imageFileName);
-            newSubCategory.setImageUrl(cloudinaryResponse.getUrl());
-            newSubCategory.setCloudinaryImageId(cloudinaryResponse.getPublicId());
+            handleImage(newSubCategory, subCategoryRequest.getCoverImageFile());
+
+//            var imageFile = subCategoryRequest.getCoverImageFile();
+//            FileUploadUtil.assertAllowed(imageFile, FileUploadUtil.IMAGE_PATTERN);
+//            String imageFileName = FileUploadUtil.getFileName(FilenameUtils.getBaseName(imageFile.getOriginalFilename()));
+//            CloudinaryResponse cloudinaryResponse = cloudinaryService.uploadFile(imageFile, imageFileName);
+//            newSubCategory.setImageUrl(cloudinaryResponse.getUrl());
+//            newSubCategory.setCloudinaryImageId(cloudinaryResponse.getPublicId());
 
             SubCategory savedSubCategory = subCategoryRepository.save(newSubCategory);
 
@@ -89,6 +94,19 @@ public class SubCategoryServiceImpl implements SubCategoryService {
         } catch (Exception e) {
             throw new AppException(ErrorCode.UNKNOWN_ERROR, "Failed to Create Sub Category: " + e.getMessage());
         }
+    }
+
+    private void handleImage(SubCategory subCategory, MultipartFile imageFile) {
+        FileUploadUtil.assertAllowed(imageFile, FileUploadUtil.IMAGE_PATTERN);
+        String imageFileName = FileUploadUtil.getFileName(FilenameUtils.getBaseName(imageFile.getOriginalFilename()));
+
+        if (subCategory.getCloudinaryImageId() != null) {
+            cloudinaryService.deleteImage(subCategory.getCloudinaryImageId());
+        }
+
+        CloudinaryResponse cloudinaryResponse = cloudinaryService.uploadFile(imageFile, imageFileName);
+        subCategory.setImageUrl(cloudinaryResponse.getUrl());
+        subCategory.setCloudinaryImageId(cloudinaryResponse.getPublicId());
     }
 
     @Cacheable(value = "subCategory", key = "#subCategoryId", unless = "#result == null")
@@ -123,8 +141,6 @@ public class SubCategoryServiceImpl implements SubCategoryService {
     @Cacheable(value = "subCategories", key = "'all:page:' + #page + ',size:' + #size", unless = "#result.getContent().isEmpty()")
     @Override
     public Page<SubCategoryResponse> getAll(int page, int size) {
-        System.out.println("get");
-
         Pageable pageable = PageRequest.of(page, size);
         Page<SubCategory> subCategoryPage = subCategoryRepository.findAll(pageable);
         return subCategoryPage.map(subCategoryMapper::toSubCategoryResponse);
@@ -145,17 +161,18 @@ public class SubCategoryServiceImpl implements SubCategoryService {
 
         try {
             if (subCategoryRequest.getCoverImageFile() != null && !subCategoryRequest.getCoverImageFile().isEmpty()) {
-                var imageFile = subCategoryRequest.getCoverImageFile();
-                FileUploadUtil.assertAllowed(imageFile, FileUploadUtil.IMAGE_PATTERN);
-                String imageFileName = FileUploadUtil.getFileName(FilenameUtils.getBaseName(imageFile.getOriginalFilename()));
-
-                if (existingSubCategory.getCloudinaryImageId() != null) {
-                    cloudinaryService.deleteImage(existingSubCategory.getCloudinaryImageId());
-                }
-
-                CloudinaryResponse cloudinaryResponse = cloudinaryService.uploadFile(imageFile, imageFileName);
-                existingSubCategory.setImageUrl(cloudinaryResponse.getUrl());
-                existingSubCategory.setCloudinaryImageId(cloudinaryResponse.getPublicId());
+                handleImage(existingSubCategory, subCategoryRequest.getCoverImageFile());
+//                var imageFile = subCategoryRequest.getCoverImageFile();
+//                FileUploadUtil.assertAllowed(imageFile, FileUploadUtil.IMAGE_PATTERN);
+//                String imageFileName = FileUploadUtil.getFileName(FilenameUtils.getBaseName(imageFile.getOriginalFilename()));
+//
+//                if (existingSubCategory.getCloudinaryImageId() != null) {
+//                    cloudinaryService.deleteImage(existingSubCategory.getCloudinaryImageId());
+//                }
+//
+//                CloudinaryResponse cloudinaryResponse = cloudinaryService.uploadFile(imageFile, imageFileName);
+//                existingSubCategory.setImageUrl(cloudinaryResponse.getUrl());
+//                existingSubCategory.setCloudinaryImageId(cloudinaryResponse.getPublicId());
             }
 
             subCategoryMapper.updateSubCategoryFromRequest(subCategoryRequest, existingSubCategory);

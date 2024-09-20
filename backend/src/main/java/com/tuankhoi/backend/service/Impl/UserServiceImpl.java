@@ -7,6 +7,7 @@ import com.tuankhoi.backend.enums.RoleEnum;
 import com.tuankhoi.backend.exception.AppException;
 import com.tuankhoi.backend.exception.ErrorCode;
 import com.tuankhoi.backend.mapper.UserMapper;
+import com.tuankhoi.backend.model.entity.Role;
 import com.tuankhoi.backend.model.entity.User;
 import com.tuankhoi.backend.repository.Jpa.RoleRepository;
 import com.tuankhoi.backend.repository.Jpa.UserRepository;
@@ -32,6 +33,10 @@ import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @Slf4j
 @Service
@@ -121,51 +126,56 @@ public class UserServiceImpl implements UserService {
         return userPage.map(userMapper::toUserResponse);
     }
 
-    @PostAuthorize("hasRole('ADMIN')")
+//    @PostAuthorize("hasRole('ADMIN')")
     @Caching(evict = {
             @CacheEvict(value = "user", key = "#userId"),
             @CacheEvict(value = {"userByEmail", "userByUserName", "allUsers"}, allEntries = true)
     })
     @Override
+    @Transactional
     public UserResponse update(String userId, UserRequest userRequest) {
         User existingUser = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
 
-        log.info(userRequest.toString());
-        log.info(existingUser.toString());
+        log.info("Existing user: {}", existingUser);
         try {
-            existingUser.setPassword(passwordEncoder.encode(userRequest.getPassword()));
-
-            if (userRequest.getRoleId() == null) {
-                existingUser.setRole(existingUser.getRole());
-                System.out.println("set role:" + existingUser.getRole().toString());
-            } else {
-                existingUser.setRole(roleRepository.findById(userRequest.getRoleId()).orElseThrow(()
-                        -> new AppException(ErrorCode.ROLE_NOTFOUND)));
+            if (userRequest.getPassword() != null && !userRequest.getPassword().isEmpty()) {
+                existingUser.setPassword(passwordEncoder.encode(userRequest.getPassword()));
             }
 
+            if (userRequest.getRoleId() == null)
+                existingUser.setRole(roleRepository.findById(existingUser.getRole().getId()).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND)));
+            else
+                existingUser.setRole(roleRepository.findById(userRequest.getRoleId()).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND)));
+
             if (userRequest.getImageFile() != null && !userRequest.getImageFile().isEmpty()) {
-                var imageFile = userRequest.getImageFile();
-                FileUploadUtil.assertAllowed(imageFile, FileUploadUtil.IMAGE_PATTERN);
-                String imageFileName = FileUploadUtil.getFileName(FilenameUtils.getBaseName(imageFile.getOriginalFilename()));
-
-                if (existingUser.getCloudinaryImageId() != null) {
-                    cloudinaryService.deleteImage(existingUser.getCloudinaryImageId());
-                }
-
-                CloudinaryResponse cloudinaryResponse = cloudinaryService.uploadFile(imageFile, imageFileName);
-                existingUser.setImageUrl(cloudinaryResponse.getUrl());
-                existingUser.setCloudinaryImageId(cloudinaryResponse.getPublicId());
+                handleImageUpdate(existingUser, userRequest.getImageFile());
             }
 
             userMapper.updateUserFromRequest(userRequest, existingUser);
-            User user = userRepository.save(existingUser);
-            return userMapper.toUserResponse(user);
-        } catch (DataIntegrityViolationException | ConstraintViolationException e) {
+            User updatedUser = userRepository.save(existingUser);
+            log.info(updatedUser.toString());
+            return userMapper.toUserResponse(updatedUser);
+        } catch (DataIntegrityViolationException e) {
+            log.error("Data Integrity Violation:", e);
             throw new AppException(ErrorCode.DATABASE_CONSTRAINT_VIOLATION, "Failed to Update User due to database constraint: " + e.getMessage(), e);
         } catch (Exception e) {
+            log.error("Unknown Error while updating user:", e);
             throw new AppException(ErrorCode.UNKNOWN_ERROR, "Failed to Update User", e);
         }
+    }
+
+    private void handleImageUpdate(User user, MultipartFile imageFile) {
+        FileUploadUtil.assertAllowed(imageFile, FileUploadUtil.IMAGE_PATTERN);
+        String imageFileName = FileUploadUtil.getFileName(FilenameUtils.getBaseName(imageFile.getOriginalFilename()));
+
+//        if (user.getCloudinaryImageId() != null) {
+//            cloudinaryService.deleteImage(user.getCloudinaryImageId());
+//        }
+
+        CloudinaryResponse cloudinaryResponse = cloudinaryService.uploadFile(imageFile, imageFileName);
+        user.setImageUrl(cloudinaryResponse.getUrl());
+        user.setCloudinaryImageId(cloudinaryResponse.getPublicId());
     }
 
     @Caching(evict = {

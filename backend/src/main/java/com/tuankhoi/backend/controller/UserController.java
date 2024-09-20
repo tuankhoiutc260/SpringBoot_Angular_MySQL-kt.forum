@@ -6,7 +6,6 @@ import com.tuankhoi.backend.dto.response.UserResponse;
 import com.tuankhoi.backend.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -70,7 +69,6 @@ public class UserController {
     public APIResponse<UserResponse> update(@PathVariable String userId,
                                             @ModelAttribute UserRequest userRequest) {
         log.info(userRequest.toString());
-
         return APIResponse.<UserResponse>builder()
                 .result(userService.update(userId, userRequest))
                 .build();

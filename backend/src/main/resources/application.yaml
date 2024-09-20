@@ -42,11 +42,12 @@ spring:
       namespace: app:cache
 
 jwt:
-  valid-access-token-duration: 86400
-  valid-refresh-token-duration: 172800
+  valid-access-token-duration: 60
+  valid-refresh-token-duration: 20000
   refreshable-duration: 240000
 
 cookie:
+  access-token-name: accessToken
   max-age-default-duration: 3600
   max-age-remember-me-duration: 7200
 

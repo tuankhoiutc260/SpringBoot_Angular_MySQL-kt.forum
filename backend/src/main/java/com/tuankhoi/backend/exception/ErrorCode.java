@@ -21,6 +21,7 @@ public enum ErrorCode {
     UNAUTHORIZED(2002, "You do not have permission", HttpStatus.FORBIDDEN),
     ACCOUNT_INACTIVE(2003, "Your Account is not Active", HttpStatus.UNAUTHORIZED),
     TOKEN_NOTBLANK(2004, "Token cannot be blank", HttpStatus.BAD_REQUEST),
+    INVALID_TOKEN(2005, "Token is invalid or has expired", HttpStatus.UNAUTHORIZED),
 
     // User related errors (3xxx)
     USER_EMAIL_INVALID(3001, "Email should be valid", HttpStatus.BAD_REQUEST),

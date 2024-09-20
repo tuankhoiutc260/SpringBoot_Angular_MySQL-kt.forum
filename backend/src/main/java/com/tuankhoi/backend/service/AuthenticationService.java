@@ -4,8 +4,6 @@ import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jwt.SignedJWT;
 import com.tuankhoi.backend.dto.request.AuthenticationRequest;
 import com.tuankhoi.backend.dto.request.IntrospectRequest;
-import com.tuankhoi.backend.dto.request.LogoutRequest;
-import com.tuankhoi.backend.dto.request.RefreshRequest;
 import com.tuankhoi.backend.dto.response.AuthenticationResponse;
 import com.tuankhoi.backend.dto.response.IntrospectResponse;
 import com.tuankhoi.backend.model.entity.User;
@@ -24,9 +22,9 @@ public interface AuthenticationService {
 
     String generateRefreshToken(User user);
 
-    void logout(LogoutRequest logoutRequest) throws ParseException, JOSEException;
+    void logout() throws ParseException, JOSEException;
 
-    AuthenticationResponse refreshToken(RefreshRequest refreshRequest) throws ParseException, JOSEException;
+    AuthenticationResponse refreshAccessToken(String refreshTokenRequest) throws ParseException, JOSEException ;
 
     SignedJWT verifyToken(String token, boolean isRefresh) throws ParseException, JOSEException;
 

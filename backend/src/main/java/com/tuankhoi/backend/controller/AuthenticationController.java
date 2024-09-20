@@ -2,25 +2,17 @@ package com.tuankhoi.backend.controller;
 
 import com.nimbusds.jose.JOSEException;
 import com.tuankhoi.backend.dto.request.IntrospectRequest;
-import com.tuankhoi.backend.dto.request.LogoutRequest;
-import com.tuankhoi.backend.dto.request.RefreshRequest;
 import com.tuankhoi.backend.dto.response.APIResponse;
 import com.tuankhoi.backend.dto.request.AuthenticationRequest;
 import com.tuankhoi.backend.dto.response.AuthenticationResponse;
 import com.tuankhoi.backend.dto.response.IntrospectResponse;
 import com.tuankhoi.backend.service.AuthenticationService;
-import com.tuankhoi.backend.untils.CookieUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 
@@ -31,13 +23,11 @@ import java.text.ParseException;
 @Tag(name = "Authentication Controller")
 public class AuthenticationController {
     AuthenticationService authenticationService;
-    CookieUtil cookieUtil;
 
     @Operation(summary = "Login user", description = "Authenticate a user and return a token.")
     @PostMapping("/login")
-    public APIResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest authenticationRequest, HttpServletResponse httpServletResponse) {
+    public APIResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest authenticationRequest) {
         AuthenticationResponse authResponse = authenticationService.authenticate(authenticationRequest);
-        cookieUtil.setTokenCookie(httpServletResponse, authResponse.getAccessToken(), authResponse.getRefreshToken(), authenticationRequest.isRememberMe());
         return APIResponse.<AuthenticationResponse>builder()
                 .result(authResponse)
                 .build();
@@ -54,20 +44,19 @@ public class AuthenticationController {
 
     @Operation(summary = "Logout user", description = "Logout the authenticated user.")
     @PostMapping("/logout")
-    public APIResponse<Void> logout(@RequestBody LogoutRequest logoutRequest, HttpServletResponse httpServletResponse)
+    public APIResponse<Void> logout()
             throws ParseException, JOSEException {
-        authenticationService.logout(logoutRequest);
-        cookieUtil.clearTokenCookie(httpServletResponse);
+        authenticationService.logout();
         return APIResponse.<Void>builder()
                 .build();
     }
 
     @Operation(summary = "Refresh token", description = "Refresh the authentication token.")
     @PostMapping("/refresh-token")
-    public APIResponse<AuthenticationResponse> refreshToken(@RequestBody RefreshRequest refreshRequest)
+    public APIResponse<AuthenticationResponse> refreshToken(@CookieValue(name = "refreshToken") String refreshTokenRequest)
             throws ParseException, JOSEException {
         return APIResponse.<AuthenticationResponse>builder()
-                .result(authenticationService.refreshToken(refreshRequest))
+                .result(authenticationService.refreshAccessToken(refreshTokenRequest))
                 .build();
     }
 }
