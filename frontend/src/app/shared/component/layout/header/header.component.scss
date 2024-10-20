@@ -1,37 +1,131 @@
-:host ::ng-deep .p-menubar{
-    justify-content: space-around;
-}
-
 li {
     list-style: none;
 }
 
 a {
-    color: inherit;
+    color: #fff;
     text-decoration: none;
+    font-size: 12px;
 }
 
-:host ::ng-deep .p-menubar-end{
-margin-left: 0;}
+::ng-deep .p-menubar > *{
+    z-index: 1000;
+}
 
-.cont-header {
-    background: #fff;
+::ng-deep .p-menu {
+    padding: 0;
+    overflow: hidden;
+}
+
+::ng-deep .p-menu.p-menu-overlay,
+::ng-deep .p-menu .p-submenu-header {
+    background: rgba(23, 24, 37, .75);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    box-shadow: inset 0 0 0 1px hsla(0, 0%, 100%, .1), 0 2px 8px rgba(0, 0, 0, .3);
+}
+
+::ng-deep .p-menu .p-menuitem:not(.p-highlight):not(.p-disabled)>.p-menuitem-content:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.cont-account {
     position: relative;
-    height: 20% 
 }
 
-.logo {
-    font-family: "Merriweather", serif;
-    font-size: 3rem;
-    font-weight: bolder;
-    color: var(--color-red-4);
+p-menu {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1001;
 }
 
-.cont-account span{
-    transition: 0.2s ease;
+.navbar-menu,
+.cont-account {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    pointer-events: all;
+    height: 40px;
+    width: max-content;
+    border-radius: 20px;
+    background: rgba(23, 24, 37, .75);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    box-shadow: inset 0 0 0 1px hsla(0, 0%, 100%, .1), 0 2px 8px rgba(0, 0, 0, .3);
+
+    .navbar-menu-item,
+    span {
+        font-size: 12px;
+    }
 }
 
-.cont-account:hover .user-full-name{
-    color: var(--color-red-4);
-    font-weight: bold;
+::ng-deep .p-menubar {
+    background: transparent;
+    justify-content: space-around;
+    border: none;
+}
+
+::ng-deep .p-menubar .p-menubar-end {
+    margin: 0px;
+}
+
+::ng-deep .p-menubar .p-menubar-root-list{
+    background: rgb(17, 19, 33);
+    border-radius: 20px;
+    padding: 8px;
+    height: 40px;
+    gap: 8px;
+    border: 1px solid rgb(41, 43, 45);
+}
+
+::ng-deep .p-menubar .p-menuitem.p-highlight > .p-menuitem-content {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+::ng-deep .p-menubar .p-menubar-root-list > .p-menuitem:not(.p-highlight):not(.p-disabled) > .p-menuitem-content:hover{
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+}
+
+::ng-deep .p-menubar .p-menuitem:not(.p-highlight):not(.p-disabled) > .p-menuitem-content:hover{
+    background: rgba(255, 255, 255, 0.2);
+}
+
+::ng-deep .p-menubar .p-menubar-root-list > .p-menuitem > .p-menuitem-content .p-menuitem-link{
+    padding: 0;
+    line-height: 1;
+    font-size: 12px;
+    height: 24px;
+    padding: 0 12px;
+}
+
+::ng-deep .p-menubar .p-menuitem:not(.p-highlight):not(.p-disabled).p-focus > .p-menuitem-content{
+    background: transparent;
+    border-radius: 20px;
+}
+
+::ng-deep .p-menubar .p-menubar-button{
+    font-size: 1.5rem;
+    color: #fff;
+}
+
+::ng-deep .p-menubar .p-menubar-button:hover{
+    background: rgba(255, 255, 255, 0.2);
+}
+
+@media screen and (max-width: 960px) {
+    ::ng-deep .p-menubar .p-menubar-root-list {
+        height: auto;
+        border-radius: 5px;
+    }
+
+    ::ng-deep .p-menubar .p-menubar-root-list > .p-menuitem:not(.p-highlight):not(.p-disabled) > .p-menuitem-content:hover{
+        border-radius: 7px;
+    }
+
+    ::ng-deep .p-menubar .p-menubar-root-list > .p-menuitem > .p-menuitem-content{
+        padding: 10px;
+    }
 }

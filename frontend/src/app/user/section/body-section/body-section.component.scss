@@ -1,0 +1,30 @@
+h2::after {
+    content: "";
+    display: block;
+    width: 20%;
+    margin: 0 auto;
+    height: 4px;
+    background: linear-gradient(224.79deg, rgb(13, 169, 255) 12.13%, rgb(85, 50, 255) 92.93%);
+    margin-top: 10px;
+    box-shadow: 0px 0px 10px 5px rgba(13, 169, 255, 0.7),
+        0px 0px 15px 10px rgba(85, 50, 255, 0.7);
+}
+
+section{
+    position: relative;
+    z-index: 1;
+}
+
+section::before {
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 400px;
+    content: "";
+    height: 400px;
+    z-index: -1;
+    position: absolute;
+    border-top-left-radius: 2.4rem;
+    border-top-right-radius: 2.4rem;
+    background: radial-gradient(120% 120% at 50% 100%, transparent 40%, #63e 70%, #fff 100%);
+}

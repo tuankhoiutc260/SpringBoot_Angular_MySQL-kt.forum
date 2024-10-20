@@ -37,7 +37,11 @@ import { DividerModule } from 'primeng/divider';
 import { ImageModule } from 'primeng/image';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { SkeletonModule } from 'primeng/skeleton';
-
+import { BlockUIModule } from 'primeng/blockui';
+import { TabViewModule } from 'primeng/tabview';
+import { AnimateOnScrollModule } from 'primeng/animateonscroll';
+import { PanelMenuModule } from 'primeng/panelmenu';
+import { TabMenuModule } from 'primeng/tabmenu';
 
 @NgModule({
     exports: [
@@ -78,8 +82,12 @@ import { SkeletonModule } from 'primeng/skeleton';
         DividerModule,
         ImageModule,
         OverlayPanelModule,
-        SkeletonModule
-        
+        SkeletonModule,
+        BlockUIModule,
+        TabViewModule,
+        AnimateOnScrollModule,
+        PanelMenuModule,
+        TabMenuModule,
     ]
 })
 

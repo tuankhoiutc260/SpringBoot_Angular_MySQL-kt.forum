@@ -1,0 +1,20 @@
+.cont-banner {  
+  h1 img {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  h2 {
+    font-family: "Noto Sans", sans-serif;
+    font-weight: normal;
+  }
+
+  h1,
+  h2 {
+    margin-block: 0;
+  }
+
+  span {
+    color: var(--color-red-4);
+  }
+}

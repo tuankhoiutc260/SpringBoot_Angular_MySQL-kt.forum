@@ -19,7 +19,7 @@ export class PermissionApiService {
   ) { }
 
   create(permissionRequest: PermissionRequest): Observable<PermissionResponse> {
-    return this.http.post<ApiResponse<PermissionResponse>>(this.apiUrl, permissionRequest)
+    return this.http.post<ApiResponse<PermissionResponse>>(this.apiUrl, permissionRequest, { withCredentials: true })
       .pipe(
         map(apiResponse => apiResponse.result!),
         catchError(this.handleError)
@@ -31,7 +31,7 @@ export class PermissionApiService {
       .set('page', page.toString())
       .set('size', size.toString());
 
-    return this.http.get<ApiResponse<PagedResponse<PermissionResponse[]>>>(`${this.apiUrl}`, { params })
+    return this.http.get<ApiResponse<PagedResponse<PermissionResponse[]>>>(`${this.apiUrl}`, { params, withCredentials: true })
       .pipe(
         map(apiResponse => apiResponse.result!),
         catchError(this.handleError)
@@ -39,7 +39,7 @@ export class PermissionApiService {
   }
 
   update(permissionId: string, permissionRequest: PermissionRequest): Observable<PermissionResponse> {
-    return this.http.put<ApiResponse<PermissionResponse>>(`${this.apiUrl}/${permissionId}`, permissionRequest)
+    return this.http.put<ApiResponse<PermissionResponse>>(`${this.apiUrl}/${permissionId}`, permissionRequest, { withCredentials: true })
       .pipe(
         map(apiResponse => apiResponse.result!),
         catchError(this.handleError)
@@ -47,7 +47,7 @@ export class PermissionApiService {
   }
 
   deleteById(permissionId: string): Observable<void> {
-    return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${permissionId}`)
+    return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${permissionId}`, { withCredentials: true })
       .pipe(
         map(apiResponse => apiResponse.result!),
         catchError(this.handleError)
@@ -55,7 +55,15 @@ export class PermissionApiService {
   }
 
   private handleError(error: HttpErrorResponse): Observable<never> {
-    console.error('An error occurred:', error);
-    return throwError(() => new Error(error.message || 'Server error'));
+    let errorMessage = 'An unknown error occurred!';
+    if (error.error instanceof ErrorEvent) {
+      // Lỗi phía client
+      errorMessage = `Client-side error: ${error.error.message}`;
+    } else {
+      // Lỗi phía server
+      errorMessage = `Server-side error: ${error.status} ${error.message}`;
+    }
+    console.error('Error occurred:', errorMessage);
+    return throwError(() => new Error(errorMessage));
   }
 }

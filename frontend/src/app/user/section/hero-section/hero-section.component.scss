@@ -1,0 +1,144 @@
+.sc-hero {
+    background-image:
+        linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.304) 50%, rgba(2, 0, 36, 0.498) 100%),
+        url('/assets/images/bg-top.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-top: calc(-1 * var(--height-header));
+}
+
+.sc-hero-component {
+    height: 100vh;
+}
+
+.sc-hero-header {
+    height: 75%;
+}
+
+.sc-hero-footer {
+    height: 25%;
+    z-index: 10;
+}
+
+//
+.card {
+    padding: 50px 10px 20px 20px;
+    background: linear-gradient(0deg, rgba(86, 48, 255, 0.204) 20%, rgba(97, 179, 255, 0.3) 100%);
+    backdrop-filter: blur(2px);
+    border-radius: 16px;
+    position: relative;
+    margin-bottom: -100px;
+    height: max-content;
+
+    &::before {
+        position: absolute;
+        background: linear-gradient(0deg, rgba(86, 48, 255, 0.204) 20%, rgba(97, 179, 255, 0.3) 100%);
+        width: 100%;
+        height: 100%;
+        top: 32px;
+        left: -20px;
+        content: "";
+        border-radius: 16px;
+        border: 2px solid rgba(255, 255, 255, 0.01);
+        z-index: -1;
+    }
+}
+
+/* Đảm bảo các card có vị trí tương đối để pseudo-element được đặt chính xác */
+.card {
+    position: relative;
+    padding-right: 20px;
+    /* Khoảng cách để hiển thị số */
+}
+
+.flex-grow-1:nth-child(1) .card::after {
+    content: "🚀";
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    transform: translateX(calc(-50% - 20px)); 
+    font-size: 2rem;
+}
+
+
+.flex-grow-1:nth-child(2) .card::after {
+    content: "🏆";
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    transform: translateX(calc(-50% - 20px)); 
+    font-size: 2rem;
+}
+
+.flex-grow-1:nth-child(3) .card::after {
+    content: "📚";
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    transform: translateX(calc(-50% - 20px)); 
+    font-size: 2rem;
+}
+
+.flex-grow-1:nth-child(4) .card::after {
+    content: "🔍";
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    transform: translateX(calc(-50% - 20px)); 
+    font-size: 2rem;
+}
+
+.card:hover {
+    transition: all 0.3s ease 0s;
+    filter: brightness(130%);
+}
+
+//
+.scroller {
+    max-width: 80%;
+    overflow: hidden;
+    mask: linear-gradient(90deg, transparent, white 20%, white 80%, transparent);
+}
+
+.scroller__inner {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 1rem;
+    padding-block: 1rem;
+}
+
+.scroller[data-animated="true"] {
+    .scroller__inner {
+        width: max-content;
+        animation: scroll var(--duration, 40s) linear infinite;
+    }
+}
+
+@keyframes scroll {
+    to {
+        transform: translate(calc(-50%));
+    }
+}
+
+// Pause animation when user hovers over it
+@media (prefers-reduced-motion: no-preference) {
+    .scroller[data-animated="true"]:hover .scroller__inner {
+        animation-play-state: paused;
+    }
+}
+
+.tag-list {
+    margin: 0;
+    padding-inline: 0;
+    list-style: none;
+
+    li {
+        padding: 0.5rem 1rem;
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 0.5rem;
+        font-size: 1.2rem;
+        font-weight: 500;
+        white-space: nowrap;
+    }
+}

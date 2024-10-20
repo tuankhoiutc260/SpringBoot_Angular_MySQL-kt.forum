@@ -4,7 +4,7 @@ import { catchError, map, Observable, throwError } from 'rxjs';
 import { ApiResponse } from '../../model/response/api-response';
 import { CommentResponse } from '../../model/response/comment-response';
 import { CommentRequest } from '../../model/request/comment-request';
-import { environment } from '../../../../environments/environment'; 
+import { environment } from '../../../../environments/environment';
 import { WebSocketService } from '../websocket/web-socket.service';
 import { WebSocketMessage } from '../../model/entity/web-socket-message';
 import { PagedResponse } from '../../model/response/paged-response';
@@ -33,7 +33,7 @@ export class CommentApiService {
   }
 
   create(commentRequest: CommentRequest): Observable<CommentResponse> {
-    return this.http.post<ApiResponse<CommentResponse>>(this.apiUrl, commentRequest)
+    return this.http.post<ApiResponse<CommentResponse>>(this.apiUrl, commentRequest, { withCredentials: true })
       .pipe(
         map(apiResponse => apiResponse.result!),
         catchError(this.handleError)
@@ -41,7 +41,7 @@ export class CommentApiService {
   }
 
   getById(commentId: number): Observable<CommentResponse> {
-    return this.http.get<ApiResponse<CommentResponse>>(`${this.apiUrl}/id/${commentId}`)
+    return this.http.get<ApiResponse<CommentResponse>>(`${this.apiUrl}/id/${commentId}`, { withCredentials: true })
       .pipe(
         map(apiResponse => apiResponse.result!),
         catchError(this.handleError)
@@ -73,7 +73,7 @@ export class CommentApiService {
   }
 
   update(commentId: number, commentRequest: CommentRequest): Observable<CommentResponse> {
-    return this.http.put<ApiResponse<CommentResponse>>(`${this.apiUrl}/${commentId}`, commentRequest)
+    return this.http.put<ApiResponse<CommentResponse>>(`${this.apiUrl}/${commentId}`, commentRequest, { withCredentials: true })
       .pipe(
         map(apiResponse => apiResponse.result!),
         catchError(this.handleError)
@@ -81,7 +81,7 @@ export class CommentApiService {
   }
 
   deleteById(commentId: number): Observable<void> {
-    return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${commentId}`)
+    return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${commentId}`, { withCredentials: true })
       .pipe(
         map(apiResponse => apiResponse.result!),
         catchError(this.handleError)
@@ -89,7 +89,15 @@ export class CommentApiService {
   }
 
   private handleError(error: HttpErrorResponse): Observable<never> {
-    console.error('An error occurred:', error);
-    return throwError(() => new Error(error.message || 'Server error'));
+    let errorMessage = 'An unknown error occurred!';
+    if (error.error instanceof ErrorEvent) {
+      // Lỗi phía client
+      errorMessage = `Client-side error: ${error.error.message}`;
+    } else {
+      // Lỗi phía server
+      errorMessage = `Server-side error: ${error.status} ${error.message}`;
+    }
+    console.error('Error occurred:', errorMessage);
+    return throwError(() => new Error(errorMessage));
   }
 }

@@ -1,0 +1,23 @@
+:host ::ng-deep .p-inputtext {
+    padding: 0.75rem 0.75rem 2rem 0.75rem;
+    background: transparent !important;
+    border-color: var(--gray-600);
+    color: var(--gray-400);
+}
+
+.cont-comment-request {
+    position: relative;
+
+    .comment-request-length {
+        color: var(--gray-600);
+        position: absolute;
+        bottom: 0.5rem;
+        right: 0.5rem;
+    }
+}
+
+.btn-send-comment.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}

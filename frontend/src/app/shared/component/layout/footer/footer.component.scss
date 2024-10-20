@@ -4,11 +4,19 @@ ul{
 
 li{
     list-style: none;
+
+    &:hover{
+        color: var(--color-purple-primary);
+    }
 }
 
 a {
     color: inherit;
     text-decoration: none;
+}
+
+h2{
+    color: #63e;
 }
 
 .cont-footer{
@@ -29,8 +37,4 @@ a {
     cursor: pointer;
     margin-bottom: 0.5rem;
     transition: 0.2s ease;
-}
-
-.cont-footer li:hover{
-    color: var(--color-red-4);
 }

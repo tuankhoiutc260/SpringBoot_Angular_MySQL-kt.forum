@@ -1,0 +1,51 @@
+<div
+  class="post-details-component flex flex-column align-items-center justify-content-center border-round-3xl mr-3 ml-3 md:mr-5 md:ml-5"
+  *ngIf="postResponse$ | async as postResponse">
+  <div class="flex flex-column gap-3 w-12">
+    <nav class="hidden md:block">
+      <ol class="flex flex-wrap align-items-center gap-3 font-bold text-sm text-gray-500">
+        <li class="flex gap-3 aXlign-items-center cursor-pointer hover:text-gray-400">
+          <span [routerLink]="['/']">1. Home</span>
+        </li>
+
+        <li>
+          <i class="pi pi-angle-right flex align-content-center"></i>
+        </li>
+        
+        <li class="flex gap-3 align-items-center cursor-pointer hover:text-gray-400">
+          <span [routerLink]="['/', 
+          ((postResponse.subCategoryId | subCategoryIdToCategory | async)?.title ?? '') | toSlug,
+          (postResponse.subCategoryId | subCategoryIdToCategory | async)?.id,
+          ((postResponse.subCategoryId | subCategoryIdToSubCategory | async)?.title ?? '') | toSlug,
+          (postResponse.subCategoryId | subCategoryIdToSubCategory | async)?.id, 'posts']">2. Posts
+          </span>
+        </li>
+        <li>
+          <i class="pi pi-angle-double-right flex align-content-center"></i>
+        </li>
+        <li class="flex gap-3 align-items-center cursor-pointer text-gray-300">
+          <span>3. {{postResponse.title}}</span>
+        </li>
+      </ol>
+    </nav>
+
+    <div
+      class="block md:hidden w-max flex align-items-center gap-2 cursor-pointer text-sm text-gray-500 hover:text-gray-400 font-bold">
+      <i class="pi pi-angle-left"></i>
+      <a [routerLink]="['/', 
+      ((postResponse.subCategoryId | subCategoryIdToCategory | async)?.title ?? '') | toSlug,
+      (postResponse.subCategoryId | subCategoryIdToCategory | async)?.id,
+      ((postResponse.subCategoryId | subCategoryIdToSubCategory | async)?.title ?? '') | toSlug,
+      (postResponse.subCategoryId | subCategoryIdToSubCategory | async)?.id, 'posts']">
+        Posts
+      </a>
+    </div>
+
+    <app-post-details [postResponse]="postResponse" [isAuthenticatedStatus]="isAuthenticatedStatus"
+      [userLoginId]="userLoginId$ | async"></app-post-details>
+
+    <app-random-post-list></app-random-post-list>
+  </div>
+</div>
+
+<p-toast></p-toast>

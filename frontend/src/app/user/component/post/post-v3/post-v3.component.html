@@ -1,0 +1,44 @@
+<ng-container *ngIf="postResponse">
+    <ng-container *ngIf="(combinedData$ | async) as data">
+        <div [routerLink]="['/', data.category.title | toSlug, data.subCategory.title | toSlug, postResponse.title | toSlug, postResponse.id]"
+            class="post-v3-component primary-container flex flex-column align-items-center justify-content-center gap-2 align-items-center m-1 md:m-2 cursor-pointer">
+            <div class="post-title w-full text-center text-white">
+                <b>{{postResponse.title}}</b>
+            </div>
+
+            <div class="flex gap-2 text-white">
+                <small class="bg-white-alpha-10 p-2 border-round white-space-nowrap">
+                    {{data.category.title}}
+                </small>
+
+                <small class="bg-white-alpha-10 p-2 border-round white-space-nowrap">
+                    {{data.subCategory.title}}
+                </small>
+            </div>
+
+            <small>{{postResponse.createdDate | date:'dd/MM/yyyy - hh:mm:ss'}}</small>
+
+            <div class="flex gap-2 align-items-center">
+                <div class="flex gap-2 align-items-center">
+                    <i class="pi pi-eye"></i>
+                    <span>{{postResponse.viewCount}}</span>
+                </div>
+
+                <div class="flex gap-2 align-items-center">
+                    <i class="pi pi-heart-fill"></i>
+                    <span>{{postResponse.likeCount}}</span>
+                </div>
+
+                <div class="flex gap-2 align-items-center">
+                    <i class="pi pi-comment"></i>
+                    <span>{{postResponse.commentCount}}</span>
+                </div>
+            </div>
+
+            <div class="flex gap-2 align-items-center mt-2">
+                <p-avatar [image]="data.user.imageUrl" shape="circle" alt="User Image" />
+                <b class="post-author">{{data.user.fullName}}</b>
+            </div>
+        </div>
+    </ng-container>
+</ng-container>

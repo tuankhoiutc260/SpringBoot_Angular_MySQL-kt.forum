@@ -1,0 +1,9 @@
+<div class="profile-page-component flex gap-2 w-12 px-3">
+  <div class="profile-page flex w-12">
+    <app-profile *ngIf="isProfileActive" class="col-12" [userId]="userId$ | async"
+      [userResponse]="userResponse$ | async"></app-profile>
+  </div>
+</div>
+
+<p-toast></p-toast>
+

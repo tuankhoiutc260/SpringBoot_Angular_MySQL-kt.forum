@@ -1,0 +1,11 @@
+
+.replied-post-content{
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+::ng-deep .p-paginator {
+  background: transparent !important;
+}

@@ -10,4 +10,3 @@ export interface SubCategoryResponse {
   lastModifiedDate: string | Date;
   postCount: number;
 }
-

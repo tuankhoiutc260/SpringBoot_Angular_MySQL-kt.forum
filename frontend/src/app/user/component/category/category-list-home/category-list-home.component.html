@@ -1,0 +1,42 @@
+<div class="category-list-home-component flex flex-column">
+    <h2 class="text-center text-4xl font-bold">Top Trending Topics</h2>
+
+    <div class="flex flex-column justify-content-center sm:flex-row sm:flex-wrap md:flex-wrap">
+        <ng-container *ngIf="categoriesWithSubCategories$ | async as categories">
+            <ng-container *ngFor="let category of categories">
+                <div pAnimateOnScroll enterClass="zoomin" leaveClass="fadeout"
+                    class="category-item primary-container flex flex-column gap-4 cursor-pointer block pt-5 pr-4 pb-5 pl-4 border-round-3xl animation-duration-500">
+                    <div class="category-item_bg"
+                        [routerLink]="['/', category.title | toSlug, category.id, category.firstSubCategoryTitle | toSlug, category.firstSubCategoryId, 'posts']">
+                    </div>
+
+                    <div class="font-bold text-3xl relative z-2">
+                        {{category.title}}
+                    </div>
+
+                    <ng-container *ngIf="category.subCategoryResponsePaged$ | async as subCategories">
+                        <div class="sub-categories-container flex flex-wrap gap-2 mt-2">
+                            <ng-container *ngFor="let subCategory of subCategories.content">
+                                <div class="sub-category-item bg-black-alpha-30 hover:bg-white-alpha-10 p-2 border-round relative z-2"
+                                    [routerLink]="['/', category.title | toSlug, category.id, subCategory.title| toSlug, subCategory.id, 'posts']">
+                                    {{ subCategory.title }}
+                                </div>
+                            </ng-container>
+
+                            <div *ngIf="subCategories.page.totalElements > subCategories.content.length"
+                                class="bg-black-alpha-30 hover:bg-white-alpha-10 p-2 border-round relative z-2 text-sm"
+                                [routerLink]="['/', category.title | toSlug, category.id, category.firstSubCategoryTitle | toSlug, category.firstSubCategoryId, 'posts']">
+                                &#43; {{subCategories.page.totalElements - subCategories.content.length}}
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </ng-container>
+        </ng-container>
+    </div>
+
+    <a class="btn-loading text-center" (click)="loadMoreCategories()"
+        [routerLink]="['/', (firstCategoryTitle$ | async) | toSlug, firstCategoryId$ | async, (firstSubCategoryTitle$ | async) | toSlug, firstSubCategoryId$ | async, 'posts']">
+        Show more
+    </a>
+</div>

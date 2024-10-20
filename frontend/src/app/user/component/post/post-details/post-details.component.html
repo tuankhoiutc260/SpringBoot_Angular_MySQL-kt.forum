@@ -1,0 +1,148 @@
+<ng-container *ngIf="postResponse">
+  <ng-container *ngIf="(combinedData$ | async) as data">
+    <div class="post-details-header relative flex flex-column align-items-center gap-3 text-white p-3 z-1">
+      <div class="flex flex-column align-items-center gap-2">
+        <p-avatar [image]="data.user.imageUrl" size="large" shape="circle" />
+
+        <span [routerLink]="['/user', data.user.id]" class="text-lg font-bold cursor-pointer z-1">{{data.user.fullName}}</span>
+      </div>
+
+      <div class="divider"></div>
+
+      <span class="post-title text-3xl font-bold text-center">
+        {{postResponse.title}}
+      </span>
+
+      <div class="flex w-12 justify-content-between w-12 md:w-8 lg:w-6 xl:w-4 text-sm text-gray-400">
+        <div class="flex gap-2">
+          <span class="">{{ postResponse.createdDate | date:'dd MMM yyyy' }}</span>
+          <span>•</span>
+          <span>{{postResponse.content | toMinRead}} mins read</span>
+        </div>
+
+        <div class="flex gap-4 align-items-center mr-0 sm:mr-4">
+          <div class="flex gap-2 align-items-center">
+            <i class="pi pi-eye"></i>
+            <span>{{postResponse.viewCount}}</span>
+          </div>
+          <div class="flex gap-2 align-items-center">
+            <i class="pi pi-heart"></i>
+            <span>{{postResponse.likeCount ? postResponse.likeCount : 0}}</span>
+          </div>
+          <div class="flex gap-2 align-items-center">
+            <span>{{postResponse.commentCount ? postResponse.commentCount : 0}}</span>
+            <i class="pi pi-comments"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex flex-column gap-2">
+        <div class="flex flex-column gap-2">
+          <div class="flex gap-2 align-items-center text-sm text-gray-400">
+            <span>Topic:</span>
+            <p-tag [value]="data.category.title"></p-tag>
+            <i class="pi pi-angle-right"></i>
+            <p-tag [value]="data.subCategory.title"></p-tag>
+          </div>
+        </div>
+
+        <div class="flex gap-2 align-items-center">
+          <span class="text-sm text-gray-400">Tags:</span>
+          <div class="flex" *ngFor="let tag of postResponse.tags">
+            <p-tag [value]="tag" />
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="btn-function-container flex justify-content-center bg-black-alpha-20 border-circle"
+        *ngIf="postResponse.createdBy ===  userLoginId">
+        <div class="flex flex-column gap-1 justify-content-center align-items-center" (click)="op.toggle($event)">
+          <i
+            class="pi pi-ellipsis-v cursor-pointer p-2 hover:bg-white-alpha-10 transition-ease-in transition-duration-100"></i>
+        </div>
+
+        <p-overlayPanel #op>
+          <div class="flex flex-column gap-1">
+            <div class="btn-function" (click)="isCreateUpdatePostDialogVisible = true">
+              <div class="styles_icon">
+                <i class="pi pi-pen-to-square"></i>
+              </div>
+              <span class="style_title">Update Post</span>
+            </div>
+
+            <div class="btn-function" (click)="onDeletePost(postResponse.id)">
+              <div class="styles_icon">
+                <i class="pi pi-pen-to-square"></i>
+              </div>
+              <span class="style_title">Delete Post</span>
+            </div>
+          </div>
+        </p-overlayPanel>
+      </div>
+
+      <!-- <div class="text-white w-12 md:w-10" [innerHtml]="getSafeContent(postResponse.content)"></div> -->
+      <div class="text-white w-12 md:w-10" [innerHtml]="postResponse.content"></div>
+
+      <ng-container>
+        <div class="interact-container fixed flex flex-column gap-3 z-1 bg-white-alpha-20 p-2 border-round-lg">
+          <div
+            class="flex flex-column gap-1 justify-content-center align-items-center transition-ease-in-out transition-duration-100">
+            <i class="pi cursor-pointer border-circle border-1 p-2 md:p-3 hover:bg-white-alpha-90 transition-ease-in-out transition-duration-100"
+              [ngClass]="{
+          'text-red-500': isAuthenticatedStatus && (liked$ | async),
+          'text-white': !(isAuthenticatedStatus && (liked$ | async)),
+          'pi-heart-fill': isAuthenticatedStatus && (liked$ | async),
+          'pi-heart': !(isAuthenticatedStatus && (liked$ | async)),
+          'hover:text-red-500': !(isAuthenticatedStatus && (liked$ | async))
+        }" (click)="isAuthenticatedStatus ? onLikePost(postResponse.id) : isSignInDialogVisible = true">
+            </i>
+
+            <span class="text-xs">{{postResponse.likeCount ? postResponse.likeCount : 0}}</span>
+          </div>
+
+          <div class="flex flex-column gap-1 justify-content-center align-items-center">
+            <i class="pi pi-comments cursor-pointer border-circle	border-1 p-2 md:p-3 hover:text-gray-900 hover:bg-white-alpha-90 transition-ease-in-out transition-duration-100"
+              (click)="handleCommentPageChangeClicked()"></i>
+
+            <span class="text-xs">{{postResponse.commentCount ? postResponse.commentCount : 0}}</span>
+          </div>
+
+          <div class="flex flex-column gap-1 justify-content-center align-items-center">
+            <i
+              class="pi pi-facebook cursor-pointer border-circle	border-1 p-2 md:p-3 hover:text-blue-600	hover:bg-white-alpha-90 transition-ease-in-out transition-duration-100"></i>
+          </div>
+
+          <div class="flex flex-column gap-1 justify-content-center align-items-center">
+            <i
+              class="pi pi-linkedin cursor-pointer border-circle	border-1 p-2 md:p-3 hover:text-blue-500 hover:bg-white-alpha-90 transition-ease-in-out transition-duration-100"></i>
+          </div>
+
+          <div class="flex flex-column gap-1 justify-content-center align-items-center">
+            <i
+              class="pi pi-twitter cursor-pointer border-circle	border-1 p-2 md:p-3 hover:text-gray-800 hover:bg-white-alpha-90 transition-ease-in-out transition-duration-100"></i>
+          </div>
+        </div>
+      </ng-container>
+
+      <div class="divider"></div>
+
+      <app-comment id="app-comment" class="w-12 md:w-10 lg:w-8" [postId]="postResponse.id"
+        (isReplyClicked)="isSignInDialogVisible = true" (isSignInClicked)="isSignInDialogVisible = true"
+        (pageChangeClicked)="handleCommentPageChangeClicked()">
+      </app-comment>
+
+      <div class="divider"></div>
+    </div>
+  </ng-container>
+</ng-container>
+
+<p-toast></p-toast>
+<p-confirmDialog />
+
+<app-create-update-post [isDialogVisible]="isCreateUpdatePostDialogVisible" [isCreatePost]="false"
+  [postResponse]="postResponse" (isDialogVisibleChange)="isCreateUpdatePostDialogVisible = $event">
+</app-create-update-post>
+
+<app-login-dialog [isDialogVisible]="isSignInDialogVisible" (isDialogVisibleChange)="isSignInDialogVisible = $event">

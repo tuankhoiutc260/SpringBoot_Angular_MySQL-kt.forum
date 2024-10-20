@@ -1,0 +1,11 @@
+<div id="post-list-page" class="post-list-page flex flex-column gap-6 mr-3 ml-3 mt-0 md:mr-5 mb-0 md:ml-5">
+    <app-category></app-category>
+
+    <div class="divider"></div>
+
+    <app-post-list (pageChangeClicked)="handlePageChangeClicked()"></app-post-list>
+
+    <div class="divider"></div>
+
+    <app-random-post-list class="w-12"></app-random-post-list>    
+</div>

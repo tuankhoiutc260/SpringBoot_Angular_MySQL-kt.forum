@@ -5,8 +5,10 @@ import { SubCategory } from "./sub-category";
 export interface Post {
     id: string;
     title: string;
+    description: string;
     content: string;
     subCategory: SubCategory;
+    tags: string[];
     createdBy: string;
     createdDate: Date | string;
     lastModifiedBy: string;

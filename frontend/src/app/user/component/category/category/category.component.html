@@ -1,0 +1,69 @@
+<div class="category-component flex flex-column align-items-center">
+  <div class="pt-0 pr-2 pb-4 pl-2 md:pr-4 md:pb-5 md:pl-4 col-12 lg:col-10">
+    <nav class="hidden md:block mb-3 md:mb-0">
+      <ol class="flex flex-wrap align-items-center gap-3 font-bold text-sm text-gray-500">
+        <li class="flex gap-3 align-items-center cursor-pointer hover:text-gray-400">
+          <span [routerLink]="'/'">1. Home</span>
+        </li>
+        <li>
+          <i class="pi pi-angle-right flex align-content-center"></i>
+        </li>
+        <li class="flex gap-3 align-items-center text-gray-300">
+          <span>2. Post</span>
+        </li>
+      </ol>
+    </nav>
+
+    <div
+      class="block md:hidden w-max flex align-items-center gap-2 cursor-pointer text-sm text-gray-500 hover:text-gray-400 font-bold mb-3">
+      <i class="pi pi-angle-left"></i>
+      <a href="#">Home</a>
+    </div>
+
+    <div class="flex gap-2 align-items-center justify-content-between mb-2">
+      <div class="flex flex-column gap-2 p-2">
+        <span class="text-3xl md:text-6xl font-bold text-white">Explore</span>
+        <span class="text-2xl md:text-4xl font-semibold" style="color: rgb(192, 38, 211);">
+          Discuss and conquer new technology trends
+        </span>
+        <div class="text-lg md:text-xl flex gap-2 align-items-center ml-2">
+          <div class="text-sm md:text-base border-round p-2 font-bold"
+            style="background: rgb(74, 4, 78); color: rgb(232, 121, 249) ;">
+            <span>1230</span>
+          </div>
+          <span class="text-white text-sm md:text-base">Questions about <span
+              style="color: rgb(232, 121, 249)">Back-end</span>, <span
+              style="color: rgb(232, 121, 249)">Front-end</span>,
+            <span style="color: rgb(232, 121, 249)"> Devops</span>
+            and many other fields</span>
+        </div>
+      </div>
+      <img class="w-3 lg:w-2" src="assets/images/banner-category.svg" alt="">
+    </div>
+
+    <div class="category-list p-4">
+      <ng-container *ngIf="categoryResponsePage$ | async as categoryResponsePage">
+        <p-tabView class="w-full" [activeIndex]="categoryIndex" [scrollable]="true"
+          (onChange)="setActiveCategory(categoryResponsePage.content[$event.index].id, categoryResponsePage.content[$event.index].title)">
+          <p-tabPanel *ngFor="let category of categoryResponsePage.content" [header]="category.title">
+            <ng-container *ngIf="subCategoryResponsePage$ | async as subCategoryResponsePage">
+              <div class="flex flex-wrap">
+                <div class="sub-category-container" *ngFor="let subcategory of subCategoryResponsePage.content">
+                  <div
+                    [routerLink]="['/', category.title | toSlug, category.id, subcategory.title | toSlug, subcategory.id, 'posts']"
+                    [class.active]="(activeSubCategoryId$ | async) === subcategory.id"
+                    class="sub-category-card flex align-items-center gap-1 m-1 p-2 bg-black-alpha-20 border-round border-1 border-gray-400 hover:border-gray-300 font-medium text-sm font-bold text-gray-100 hover:text-gray-300 line-height-3 cursor-pointer transition-ease-in-out transition-duration-100">
+                    <img class="border-round-sm bg-white-alpha-50 p-1" [src]="subcategory.imageUrl" [alt]="subcategory.title"
+                      style="width: 1.5rem; height: 1.5rem;">
+                    <span>{{ subcategory.title }}</span>
+                    <span>({{ subcategory.postCount }})</span>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </p-tabPanel>
+        </p-tabView>
+      </ng-container>
+    </div>
+  </div>
+</div>

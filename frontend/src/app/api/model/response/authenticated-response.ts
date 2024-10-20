@@ -1,4 +1,6 @@
 export interface AuthenticationResponse {
-    token: string;
+    userId: string;
+    accessToken: string;
+    refreshToken: string;
     authenticated: boolean;
 }

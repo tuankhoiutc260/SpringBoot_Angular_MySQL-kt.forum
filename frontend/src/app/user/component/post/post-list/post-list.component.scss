@@ -1,0 +1,40 @@
+::ng-deep .p-paginator {
+  background: transparent !important;
+}
+
+.search-post ::ng-deep .p-inputtext {
+  background: rgba(23, 24, 37, 0.75);
+  border-color: var(--gray-700);
+  color: #fff;
+}
+
+::ng-deep .p-overlaypanel {
+  background: rgba(18, 20, 34, 1);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 1rem;
+  padding: 0.5rem;
+}
+
+::ng-deep .p-overlaypanel .p-overlaypanel-content {
+  padding: 0.5rem;
+}
+
+::ng-deep .p-overlaypanel:before {
+  border-bottom-color: rgba(23, 24, 37, .75)
+}
+
+::ng-deep .p-overlaypanel::after {
+  border-bottom-color: transparent;
+}
+
+::ng-deep .p-checkbox .p-checkbox-box.p-highlight {
+  background: linear-gradient(180deg, rgb(102, 50, 238) 0%, rgb(102, 90, 238) 50%, rgb(102, 110, 238) 100%);
+  border-color: var(--purple-400);
+}
+
+.search-filter i {
+  color: var(--gray-200);
+  border-radius: 5px;
+}

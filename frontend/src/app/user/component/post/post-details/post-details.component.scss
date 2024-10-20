@@ -1,0 +1,85 @@
+::ng-deep .p-panel .p-panel-content {
+  padding: 1.25;
+  border: none;
+  background: transparent;
+  color: inherit;
+  border-top: none;
+}
+
+::ng-deep .p-blockui.p-component-overlay {
+  border-radius: 0.5rem;
+}
+
+::ng-deep .p-component-overlay-enter {
+  background: rgba(150, 150, 150, 0.5) !important;
+  backdrop-filter: blur(1px);
+  -webkit-backdrop-filter: blur(1px);
+  border-radius: 10px;
+}
+
+::ng-deep .p-tag {
+  background: rgba(156, 163, 175, 0.2);
+  padding-left: .5rem;
+  padding-right: .5rem;
+  padding-bottom: .25rem;
+  padding-top: .25rem;
+  line-height: 1rem;
+  border-radius: .375rem;
+
+  span {
+    color: var(--gray-400);
+  }
+}
+
+.post-details-header::before {
+  top: 0;
+  left: 0;
+  content: "";
+  width: 100%;
+  height: 400px;
+  z-index: -1;
+  position: absolute;
+  border-top-left-radius: 2.4rem;
+  border-top-right-radius: 2.4rem;
+  background: radial-gradient(120% 120% at 50% 100%, transparent 40%, #63e 70%, #fff 100%);
+}
+
+.btn-function-container {
+  position: absolute;
+  right: 10px;
+
+  div{
+    pointer-events: all;
+    width: max-content;
+    border-radius: 50%;
+    background: rgba(23, 24, 37, 0.75);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    box-shadow: inset 0 0 0 1px hsla(0, 0%, 100%, 0.1), 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+}
+
+::ng-deep .p-overlaypanel {
+  background: rgba(18, 20, 34, 1);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 1rem;
+}
+
+::ng-deep .p-overlaypanel .p-overlaypanel-content {
+  padding: 0.5rem;
+}
+
+::ng-deep .p-overlaypanel:before {
+  border-bottom-color: rgba(23, 24, 37, .75)
+}
+
+::ng-deep .p-overlaypanel::after {
+  border-bottom-color: transparent;
+}
+
+.interact-container{
+  bottom: 5%;
+  right: 10px;
+}

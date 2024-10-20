@@ -1,0 +1,46 @@
+<p-dialog header="Tạo công nghệ mới" [modal]="true" [style]="{ width: '90rem' }" [visible]="false"
+    [breakpoints]="{ '768px': '100vw' }" [resizable]="false" [maximizable]="true">
+
+    <form (submit)="onSubmit()" [formGroup]="subCategoryDetailsForm" action="">
+        <div class="flex flex-column gap-2 mb-4">
+            <label for="post-category" class="font-bold text-white">Lĩnh vực</label>
+            <p-dropdown 
+              id="post-category" 
+              formControlName="categoryId"
+              [options]="(categoryResponsePage$ | async)?.content" 
+              [style]="{ 'width': '100%', 'border-color': 'var(--gray-500)' }" 
+              [filter]="true"
+              optionLabel="title" 
+              optionValue="id"
+              [appendTo]="'body'"
+              placeholder="Chọn lĩnh vực">
+            </p-dropdown>
+        </div>
+
+        <input pInputText id="post-title" class="w-full text-white" formControlName="title"
+        placeholder="Nhập tên chủ đề...">
+        
+        <input pInputText id="post-title" class="w-full text-white" formControlName="description"
+        placeholder="Nhập tên chủ đề...">
+
+        <div class=" flex justify-content-center mb-4 mt-1">
+            <div class=" container flex flex-column justify-content-center">
+                <div class="img-area cursor-pointer p-2 flex flex-column align-items-center justify-content-center"
+                    [class.active]="isActiveImage" data-img="Click to change new image" (click)="inputFile.click()">
+                    <input id="input" type="file" accept="image/*" hidden #inputFile (change)="onSelectFile($event)" />
+                    <i class="pi pi-cloud-upload text-6xl	 "></i>
+                    <h3>Upload image</h3>
+                    <p>Image size must be less than <span>2MB</span></p>
+                    <img *ngIf="imagePreview" [src]="imagePreview" alt="Image preview" class="img-preview" />
+                </div>
+            </div>
+            <div class="flex flex-column align-items-center">
+                <small *ngIf="!isImageValid" class="error-message">Only images are supported.</small>
+            </div>
+        </div>
+
+        <button>Submit</button>
+    </form>
+</p-dialog>
+
+<p-toast></p-toast>

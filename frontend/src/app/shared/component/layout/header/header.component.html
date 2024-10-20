@@ -1,83 +1,90 @@
-<div class="cont-header">
-    <p-menubar #contUser [model]="navBarMenuItems" aria-label="Main Navigation">
-        <ng-template pTemplate="start">
-            <div class="cont-nav-logo">
-                <a href="#" class="logo" aria-label="Homepage">kt.forum</a>
-            </div>
-        </ng-template>
-        <ng-template pTemplate="item" let-item let-root="root">
-            <a pRipple class="flex align-items-center p-menuitem-link" [attr.aria-label]="item.label">
-                <span [class]="item.icon"></span>
+<p-menubar [model]="navbarItems">
+    <ng-template pTemplate="start">
+        <img class="h-3rem md:h-4rem cursor-pointer" src="assets/images/logo.svg" alt="Logo"
+        [routerLink]="['/']">
+    </ng-template>
+
+    <ng-template pTemplate="item" let-item let-root="root">
+        <ng-container>
+            <a pRipple class="flex align-items-center p-menuitem-link">
+                <span [ngClass]="item.icon"></span>
                 <span class="ml-2">{{ item.label }}</span>
                 <p-badge *ngIf="item.badge" [ngClass]="{ 'ml-auto': !root, 'ml-2': root }"
                     [value]="item.badge"></p-badge>
-                <span *ngIf="item.shortcut"
-                    class="ml-auto border-1 surface-border border-round surface-100 text-xs p-1">
-                    {{item.shortcut}}</span>
-                <i *ngIf="item.items" [ngClass]="['pi', root ? 'pi-angle-down ml-2' : 'pi-angle-right ml-auto']"></i>
+                <span *ngIf="item.shortcut" class="ml-auto border-1 surface-border border-round text-xs p-1">
+                    {{ item.shortcut }}
+                </span>
+                <i *ngIf="item.items"
+                    [ngClass]="['pi', root ? 'pi-angle-down' : 'pi-angle-right', root ? 'ml-2' : 'ml-auto']"></i>
             </a>
-        </ng-template>
-        <ng-template pTemplate="end">
-            <div class="flex align-items-center gap-3">
-                <div class="cont-account">
-                    <div class="btn-function flex gap-2">
-                        <div class="flex gap-2" *ngIf="isUserLoginInfoEmpty()">
-                            <p-button (click)="activateSignUp(false)" [routerLink]="['./login']" label="Sign In"
-                                aria-label="Login"></p-button>
-                            <p-button (click)="activateSignUp(true)" [routerLink]="['./login']" label="Sign Up"
-                                aria-label="Sign Up"></p-button>
-                        </div>
-                        <div class="flex align-items-center gap-2 cursor-pointer" *ngIf="userLoginInfo?.userName"
-                            (click)="userMenu.toggle($event)" role="button" aria-haspopup="true" aria-expanded="false">
-                            <span class="user-full-name">{{ userLoginInfo.fullName }}</span>
-                            <img *ngIf="userLoginInfo.imageUrl" [src]="userLoginInfo.imageUrl"
-                                style="width: 28px; height: 28px; border-radius: 50%;"
-                                alt="{{ userLoginInfo.fullName }}">
-                            <p-menu #userMenu id="user-menu" [model]="userMenuItems" [popup]="true"
-                                styleClass="w-full md:w-15rem" aria-label="User Menu">
-                                <ng-template pTemplate="start">
-                                    <span class="inline-flex align-items-center gap-1 px-2 py-2"></span>
-                                </ng-template>
-                                <ng-template pTemplate="submenuheader" let-item>
-                                    <span class="text-primary font-bold">{{ item.label }}</span>
-                                </ng-template>
-                                <ng-template pTemplate="item" let-item>
-                                    <a pRipple class="flex align-items-center p-menuitem-link"
-                                        [attr.aria-label]="item.label">
-                                        <span [class]="item.icon"></span>
-                                        <span class="ml-2">{{ item.label }}</span>
-                                        <p-badge *ngIf="item.badge" class="ml-auto" [value]="item.badge"></p-badge>
-                                        <span *ngIf="item.shortcut"
-                                            class="ml-auto border-1 surface-border border-round surface-100 text-xs p-1">{{
-                                            item.shortcut }}</span>
-                                    </a>
-                                </ng-template>
-                                <ng-template pTemplate="end" class="cont-nav-end">
-                                    <button pRipple
-                                      class="relative overflow-hidden w-full p-link flex align-items-center p-2 pl-3 text-color hover:surface-200 border-noround flex gap-2"
-                                      aria-label="User Info">
-                                      <img *ngIf="userLoginInfo.imageUrl" [src]="userLoginInfo.imageUrl"
-                                        style="width: 28px; height: 28px; border-radius: 50%;" alt="{{ userLoginInfo.fullName }}">
-                                      <span class="inline-flex flex-column gap-2">
-                                        <span class="font-bold">{{ userLoginInfo.fullName }}</span>
-                                        <span class="text-sm">{{ userLoginInfo.role.name }}</span>
-                                      </span>
-                                    </button>
-                                  </ng-template>
-                                  
-                            </p-menu>
-                        </div>
-                    </div>
+        </ng-container>
+    </ng-template>
+
+    <ng-template pTemplate="end">
+        <div class="flex align-items-center gap-3">
+            <div class="flex justify-content-center align-items-center gap-2">
+                <div class="flex gap-2" *ngIf="!isAuthenticatedStatus; else authenticated">
+                    <p-button (click)="activateSignUp(false)" [routerLink]="['./login']" label="Sign In"
+                        aria-label="Login">
+                    </p-button>
+                    <p-button (click)="activateSignUp(true)" [routerLink]="['./login']" label="Sign Up"
+                        aria-label="Sign Up">
+                    </p-button>
                 </div>
+
+                <ng-template #authenticated>
+                    <ng-container *ngIf="currentUserId | userIdToUser | async as user">
+                        <div #userMenuTrigger
+                            class="cont-account flex gap-3 justify-content-center align-items-center px-3 py-2 text-white transition-ease-in transition-duration-100 hover:bg-white-alpha-10 cursor-pointer"
+                            (click)="toggleUserMenu($event)" role="button" aria-haspopup="true" aria-expanded="false"
+                            tabindex="0" aria-label="User Menu">
+                            <span class="user-full-name">{{ user.fullName }}</span>
+                            <img *ngIf="user.imageUrl" [src]="user.imageUrl"
+                                style="width: 28px; height: 28px; border-radius: 50%;" alt="{{ user.fullName }}">
+                        </div>
+
+                        <p-menu #userMenu id="user-menu" [model]="userMenuItems" [popup]="true" [baseZIndex]="1000"
+                            appendTo="body" styleClass="user-menu-custom" aria-label="User Menu"
+                            (onShow)="setUserMenuPosition()">
+                            <ng-template pTemplate="submenuheader" let-item>
+                                <span class="text-primary font-bold">{{ item.label }}</span>
+                            </ng-template>
+                            <ng-template pTemplate="item" let-item>
+                                <a pRipple class="flex items-center p-menuitem-link" [attr.aria-label]="item.label">
+                                    <span [class]="item.icon"></span>
+                                    <span class="ml-2">{{ item.label }}</span>
+                                    <p-badge *ngIf="item.badge" class="ml-auto" [value]="item.badge"></p-badge>
+                                    <span *ngIf="item.shortcut"
+                                        class="ml-auto border-1 surface-border border-round text-xs p-1">
+                                        {{ item.shortcut }}
+                                    </span>
+                                </a>
+                            </ng-template>
+                            <ng-template pTemplate="end" class="cont-nav-end">
+                                <button pRipple
+                                    class="relative overflow-hidden w-full p-link flex align-items-center p-2 pl-3 hover:bg-white-alpha-10 border-none flex gap-2"
+                                    aria-label="User Info">
+                                    <img *ngIf="user.imageUrl" [src]="user.imageUrl"
+                                        style="width: 28px; height: 28px; border-radius: 50%;"
+                                        alt="{{ user.fullName }}">
+                                    <div class="flex flex-column gap-2">
+                                        <span class="font-bold text-white">{{ user.fullName }}</span>
+                                        <span class="text-sm text-gray-400">Role: {{ user.role.name }}</span>
+                                    </div>
+                                </button>
+                            </ng-template>
+                        </p-menu>
+                    </ng-container>
+                </ng-template>
             </div>
-        </ng-template>
-    </p-menubar>
-</div>
+        </div>
+    </ng-template>
+</p-menubar>
 
-<app-create-update-post
-    [isDialogVisible]="isDialogVisible"
+<app-create-update-post 
+    [isDialogVisible]="isDialogVisible" 
     (isDialogVisibleChange)="isDialogVisible = $event"
-    [postResponse]="newPost"
-></app-create-update-post>
+    [postResponse]="newPost">
+</app-create-update-post>
 
-<p-toast />
+<p-toast></p-toast>

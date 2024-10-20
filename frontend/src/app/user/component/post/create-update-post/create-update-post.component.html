@@ -1,0 +1,93 @@
+<p-dialog [header]="isCreatePost ? 'Create Post' : 'Edit Post'" [modal]="true" [style]="{ width: '90rem' }"
+    [(visible)]="isDialogVisible" [breakpoints]="{ '768px': '100vw' }" [resizable]="false" [maximizable]="true"
+    (onHide)="onDialogHide()">
+    <ng-template pTemplate="content">
+        <form (ngSubmit)="onSubmit()" [formGroup]="postDetailsForm" class="h-full">
+            <div class="grid h-full">
+                <div class="col-12 md:col-8">
+                    <div class="flex flex-column gap-2 mb-4">
+                        <label for="post-title" class="font-bold text-white">Title</label>
+                        <input pInputText id="post-title" class="w-full text-white" formControlName="title"
+                            placeholder="Enter post title..." />
+                        <small class="text-red-500 text-center"
+                            *ngIf="postDetailsForm.get('title')?.invalid && postDetailsForm.get('title')?.touched">
+                            Title is required and must be a maximum of 250 characters
+                        </small>
+                    </div>
+
+                    <div class="flex flex-column gap-2">
+                        <label for="postContent" class="font-bold text-white">Content</label>
+                        <p-editor id="postContent" formControlName="content" [style]="{ 'height': '625px' }"
+                            placeholder="Enter post content"></p-editor>
+                        <small class="text-red-500 text-center"
+                            *ngIf="postDetailsForm.get('content')?.invalid && postDetailsForm.get('content')?.touched">
+                            Content is required and must be at least 500 characters
+                        </small>
+                    </div>
+                </div>
+
+                <div class="col-12 md:col-4 flex flex-column">
+                    <div class="flex flex-column gap-2 mb-4">
+                        <label for="post-description" class="font-bold text-white">Description</label>
+                        <textarea pInputTextarea id="post-description" class="text-white" formControlName="description"
+                            placeholder="Enter description content..."
+                            [style]="{ 'width': '100%', 'height': '150px', 'resize': 'none' }"></textarea>
+                        <small class="text-red-500 text-center"
+                            *ngIf="postDetailsForm.get('description')?.invalid && postDetailsForm.get('description')?.touched">
+                            Description is required and must be a maximum of 300 characters
+                        </small>
+                    </div>
+
+                    <div class="flex flex-column gap-2 mb-4">
+                        <label for="post-tags" class="font-bold text-white">Tags</label>
+                        <p-chips id="post-tags" formControlName="tags" [max]="3"
+                            placeholder="Enter tags and press Enter" [style]="{ 'width': '100%' }"
+                            [inputStyle]="{ 'width': '100%' }" class="text-white"></p-chips>
+                        <small class="text-red-500 text-center"
+                            *ngIf="postDetailsForm.get('tags')?.invalid && postDetailsForm.get('tags')?.touched">
+                            Enter at least 1 tag
+                        </small>
+                    </div>
+
+                    <div class="flex flex-column gap-2 mb-4">
+                        <label for="post-category" class="font-bold text-white">Category</label>
+                        <p-dropdown id="post-category" [options]="(categoryResponsePage$ | async)?.content"
+                            [(ngModel)]="selectedCategoryId" [ngModelOptions]="{ standalone: true }"
+                            [style]="{ 'width': '100%', 'border-color': 'var(--gray-500)' }" [filter]="true"
+                            optionLabel="title" optionValue="id" (onChange)="onCategoryChange($event)"
+                            [appendTo]="'body'" placeholder="Select category">
+                        </p-dropdown>
+                    </div>
+
+                    <div class="flex flex-column gap-2 mb-4">
+                        <label for="post-sub-category" class="font-bold text-white">Technology</label>
+                        <p-dropdown id="post-sub-category" [options]="(subCategoryResponsePage$ | async)?.content"
+                            formControlName="subCategoryId"
+                            [style]="{ 'width': '100%', 'border-color': 'var(--gray-500)' }" [filter]="true"
+                            optionLabel="title" optionValue="id" (onChange)="onSubCategoryChange($event)"
+                            placeholder="Select technology" [appendTo]="'body'">
+                        </p-dropdown>
+                        <small class="text-red-500 text-center"
+                            *ngIf="postDetailsForm.get('subCategoryId')?.invalid && postDetailsForm.get('subCategoryId')?.touched">
+                            Selecting technology is required
+                        </small>
+                    </div>
+
+                    <div class="mt-auto flex justify-content-between gap-2">
+                        <button pButton type="button" class="p-button-secondary gap-2 justify-content-center w-full"
+                            (click)="clearForm()">
+                            <i class="pi pi-times"></i>
+                            <span>Reset Form</span>
+                        </button>
+
+                        <button pButton type="submit" class="p-button-primary gap-2 justify-content-center w-full">
+                            <i class="pi pi-pen-to-square"></i>
+                            <span>{{ isCreatePost ? 'Post' : 'Update' }}</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </ng-template>
+</p-dialog>
+<p-toast></p-toast>

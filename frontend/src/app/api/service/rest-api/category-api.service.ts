@@ -18,7 +18,7 @@ export class CategoryApiService {
   ) { }
 
   create(categoryRequest: CategoryRequest): Observable<CategoryResponse> {
-    return this.http.post<ApiResponse<CategoryResponse>>(this.apiUrl, categoryRequest)
+    return this.http.post<ApiResponse<CategoryResponse>>(this.apiUrl, categoryRequest, { withCredentials: true })
       .pipe(
         map(apiResponse => apiResponse.result!),
         catchError(this.handleError)
@@ -26,7 +26,15 @@ export class CategoryApiService {
   }
 
   getById(categoryId: string): Observable<CategoryResponse> {
-    return this.http.get<ApiResponse<CategoryResponse>>(`${this.apiUrl}/${categoryId}`)
+    return this.http.get<ApiResponse<CategoryResponse>>(`${this.apiUrl}/category/${categoryId}`)
+      .pipe(
+        map(apiResponse => apiResponse.result!),
+        catchError(this.handleError)
+      );
+  }
+
+  getBySubCategoryId(subCategoryId: string): Observable<CategoryResponse> {
+    return this.http.get<ApiResponse<CategoryResponse>>(`${this.apiUrl}/sub-category/${subCategoryId}`)
       .pipe(
         map(apiResponse => apiResponse.result!),
         catchError(this.handleError)
@@ -38,7 +46,7 @@ export class CategoryApiService {
       .set('page', page.toString())
       .set('size', size.toString());
 
-    return this.http.get<ApiResponse<PagedResponse<CategoryResponse[]>>>(`${this.apiUrl}`, { params })
+    return this.http.get<ApiResponse<PagedResponse<CategoryResponse[]>>>(`${this.apiUrl}`, { params, withCredentials: true })
       .pipe(
         map(apiResponse => apiResponse.result!),
         catchError(this.handleError)
@@ -46,7 +54,7 @@ export class CategoryApiService {
   }
 
   update(categoryId: string, categoryRequest: CategoryRequest): Observable<CategoryResponse> {
-    return this.http.put<ApiResponse<CategoryResponse>>(`${this.apiUrl}/${categoryId}`, categoryRequest)
+    return this.http.put<ApiResponse<CategoryResponse>>(`${this.apiUrl}/${categoryId}`, categoryRequest, { withCredentials: true })
       .pipe(
         map(apiResponse => apiResponse.result!),
         catchError(this.handleError)
@@ -54,15 +62,35 @@ export class CategoryApiService {
   }
 
   deleteById(categoryId: string): Observable<void> {
-    return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${categoryId}`)
+    return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${categoryId}`, { withCredentials: true })
       .pipe(
-        map(apiResponse => apiResponse.result!), 
+        map(apiResponse => apiResponse.result!),
+        catchError(this.handleError)
+      );
+  }
+
+  search(query: string, page: number, size: number): Observable<PagedResponse<CategoryResponse[]>> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    return this.http.get<ApiResponse<PagedResponse<CategoryResponse[]>>>(`${this.apiUrl}/search/${query}`, { params })
+      .pipe(
+        map(apiResponse => apiResponse.result!),
         catchError(this.handleError)
       );
   }
 
   private handleError(error: HttpErrorResponse): Observable<never> {
-    console.error('An error occurred:', error);
-    return throwError(() => new Error(error.message || 'Server error'));
+    let errorMessage = 'An unknown error occurred!';
+    if (error.error instanceof ErrorEvent) {
+      // Lỗi phía client
+      errorMessage = `Client-side error: ${error.error.message}`;
+    } else {
+      // Lỗi phía server
+      errorMessage = `Server-side error: ${error.status} ${error.message}`;
+    }
+    console.error('Error occurred:', errorMessage);
+    return throwError(() => new Error(errorMessage));
   }
 }

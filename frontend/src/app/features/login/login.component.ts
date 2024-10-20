@@ -10,12 +10,12 @@ import { AuthService } from '../../core/service/auth.service';
 import { BehaviorSubject, catchError, map, Subject, takeUntil, tap, throwError } from 'rxjs';
 import { AuthenticationRequest } from '../../api/model/request/authentication-request';
 import { UserRequest } from '../../api/model/request/user-request';
-import { AuthenticationResponse } from '../../api/model/response/authenticated-response';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  styleUrl: './login.component.scss',
+  providers: [MessageService]
 })
 export class LoginComponent implements OnInit, OnDestroy {
   message$ = new BehaviorSubject<string>('');
@@ -82,13 +82,9 @@ export class LoginComponent implements OnInit, OnDestroy {
   onSignIn() {
     if (this.signInForm.valid) {
       const loginRequest: AuthenticationRequest = this.signInForm.value as AuthenticationRequest;
-
-      this.authService.removeToken();
-      this.authService.removeCurrentUserName();
-
       this.authApiService.login(loginRequest)
         .pipe(
-          map(authenticationResponse => this.handleLoginSuccess(authenticationResponse)),
+          map(authenticationResponse => this.handleLoginSuccess()),
           catchError(error => {
             console.error('Error fetching Post:', error);
             this.handleError('Failed to Login')
@@ -107,8 +103,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     if (this.signUpForm.valid) {
       const userRequest: UserRequest = this.signUpForm.value as UserRequest;
 
-      this.authService.removeToken();
-      this.authService.removeCurrentUserName();
+      // this.authService.removeAccessToken();
 
       this.userApiService.create(userRequest).pipe(
         tap(() => this.handleSignUpSuccess()),
@@ -134,10 +129,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.messageService.add({ severity: 'success', summary: 'Success', detail: successMessage });
   }
 
-  private handleLoginSuccess(authenticationResponse: AuthenticationResponse) {
+  private handleLoginSuccess() {
     this.handleSuccess('Sign in successfully!')
-    this.authService.setToken(authenticationResponse.token!);
-    this.authService.setCurrentUserName(this.signInForm.value.userName!);
+    this.authService.setCurrentUserId(this.signInForm.value.userName!);
     setTimeout(() => {
       this.router.navigate(['/']);
     }, 2000);

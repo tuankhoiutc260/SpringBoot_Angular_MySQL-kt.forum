@@ -1,0 +1,23 @@
+<form (ngSubmit)="onSubmit()" class="flex flex-column gap-2 align-items-center">
+  <div class="w-full cont-comment-request">
+    <textarea #commentContent rows="3" pInputTextarea [autoResize]="true" [(ngModel)]="commentRequest.content"
+      name="comment" maxlength="1000" class="w-full"
+      [placeholder]="replyComment ? ('Reply (' + ((replyComment.createdBy | userIdToUser | async)?.fullName) + '): ' + (replyComment.content | truncate:50)) : 'Type a comment ... '">
+      {{ updateComment ? updateComment.content : '' }}
+    </textarea>
+
+    <small class="comment-request-length">{{ commentRequest.content.length || 0 }}/1000</small>
+  </div>
+
+  <div class="flex gap-2">
+    <p-button class="border-round z-1" *ngIf="replyComment || updateComment" (click)="onCancelReply()" label="Cancel"
+      [text]="true" severity="secondary">
+    </p-button>
+
+    <div class="btn-send-comment btn-secondary px-5 py-3 z-1" (click)="onSubmit()" [class.active]=true
+      [ngClass]="{ 'disabled': !commentRequest.content || commentRequest.content.trim().length === 0 }">
+      
+      <span>Submit</span>
+    </div>
+  </div>
+</form>

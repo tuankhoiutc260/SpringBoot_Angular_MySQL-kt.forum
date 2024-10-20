@@ -1,0 +1,9 @@
+.post-component {
+  min-height: max-content !important;
+}
+
+.post-title {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

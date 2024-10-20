@@ -1,0 +1,30 @@
+<section #bodySection id="sc-body" class="sc-body flex flex-column align-items-center align-items-center justify-content-center gap-6 text-white m-3 md:m-5">
+    <app-category-list-home class="col-12 md:col-11 lg:col-10"></app-category-list-home>
+
+    <div class="divider"></div>
+
+    <div class="flex flex-column gap-6 xl:gap-0 xl:flex-row xl:grid col-12 md:col-11 lg:col-10">
+        <div class="flex flex-column gap-6 w-12 xl:w-8 xl:col-8">
+            <app-top-trending-posts pAnimateOnScroll enterClass="fadeinleft" leaveClass="fadeoutleft"
+                class="w-12 animation-duration-500 animation-ease-in-out"></app-top-trending-posts>
+
+                <div class="divider block xl:hidden"></div>
+
+            <app-most-recently-created-posts></app-most-recently-created-posts>
+        </div>
+
+        <div class="divider block xl:hidden"></div>
+
+        <div class="flex flex-column gap-6 md:flex-row xl:flex-column w-12 xl:w-4 xl:col-4">
+            <app-user-rank class="w-12 md:w-6 lg:w-12"></app-user-rank>
+
+            <div class="divider block md:hidden"></div>
+
+            <app-sub-category-rank class="w-12 md:w-6 lg:w-12"></app-sub-category-rank>
+        </div>  
+    </div>
+
+    <div class="divider"></div>
+
+    <app-random-post-list class="w-12"></app-random-post-list>
+</section>

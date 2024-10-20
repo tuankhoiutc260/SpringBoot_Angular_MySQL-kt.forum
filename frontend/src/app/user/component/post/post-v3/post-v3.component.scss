@@ -1,0 +1,12 @@
+.post-v3-component{
+    min-height: 174px !important;
+}
+
+.post-title {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+}

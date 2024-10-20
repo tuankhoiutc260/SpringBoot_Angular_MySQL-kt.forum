@@ -19,7 +19,7 @@ export class RoleApiService {
   ) { }
 
   create(roleRequest: RoleRequest): Observable<RoleResponse> {
-    return this.http.post<ApiResponse<RoleResponse>>(this.apiUrl, roleRequest)
+    return this.http.post<ApiResponse<RoleResponse>>(this.apiUrl, roleRequest, { withCredentials: true })
       .pipe(
         map(apiResponse => apiResponse.result!),
         catchError(this.handleError)
@@ -27,7 +27,7 @@ export class RoleApiService {
   }
 
   getById(roleId: number): Observable<RoleResponse> {
-    return this.http.get<ApiResponse<RoleResponse>>(`${this.apiUrl}/${roleId}`)
+    return this.http.get<ApiResponse<RoleResponse>>(`${this.apiUrl}/${roleId}`, { withCredentials: true })
       .pipe(
         map(apiResponse => apiResponse.result!),
         catchError(this.handleError)
@@ -39,7 +39,7 @@ export class RoleApiService {
       .set('page', page.toString())
       .set('size', size.toString());
 
-    return this.http.get<ApiResponse<PagedResponse<RoleResponse[]>>>(this.apiUrl, { params })
+    return this.http.get<ApiResponse<PagedResponse<RoleResponse[]>>>(this.apiUrl, { params, withCredentials: true })
       .pipe(
         map(apiResponse => apiResponse.result!),
         catchError(this.handleError)
@@ -47,7 +47,7 @@ export class RoleApiService {
   }
 
   update(roleId: number, roleRequest: RoleRequest): Observable<RoleResponse> {
-    return this.http.put<ApiResponse<RoleResponse>>(`${this.apiUrl}/${roleId}`, roleRequest)
+    return this.http.put<ApiResponse<RoleResponse>>(`${this.apiUrl}/${roleId}`, roleRequest, { withCredentials: true })
       .pipe(
         map(apiResponse => apiResponse.result!),
         catchError(this.handleError)
@@ -55,14 +55,22 @@ export class RoleApiService {
   }
 
   deleteById(roleId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${roleId}`)
+    return this.http.delete<void>(`${this.apiUrl}/${roleId}`, { withCredentials: true })
       .pipe(
         catchError(this.handleError)
       );
   }
 
   private handleError(error: HttpErrorResponse): Observable<never> {
-    console.error('An error occurred:', error);
-    return throwError(() => new Error(error.message || 'Server error'));
+    let errorMessage = 'An unknown error occurred!';
+    if (error.error instanceof ErrorEvent) {
+      // Lỗi phía client
+      errorMessage = `Client-side error: ${error.error.message}`;
+    } else {
+      // Lỗi phía server
+      errorMessage = `Server-side error: ${error.status} ${error.message}`;
+    }
+    console.error('Error occurred:', errorMessage);
+    return throwError(() => new Error(errorMessage));
   }
 }

@@ -1,0 +1,22 @@
+<div class="most-recently-created-posts-component flex flex-column gap-4">
+    <div pAnimateOnScroll enterClass="fadeinleft" leaveClass="fadeoutleft"
+        class="flex gap-4 align-items-center text-white text-2xl font-bold ml-4 animation-duration-500 animation-ease-in-out">
+        <i class="pi pi-bolt btn-primary p-2"></i>
+        <span>Newest Article</span>
+    </div>
+
+    <div class="top-trending-post-list flex flex-column gap-4" *ngIf="postResponseList$ | async as postResponseList">
+        <ng-container *ngFor="let postResponse of postResponseList">
+            <ng-container *ngIf="postResponse.subCategoryId | subCategoryIdToCategory | async as category">
+                <ng-container *ngIf="postResponse.subCategoryId | subCategoryIdToSubCategory | async as subCtegory">
+                    <app-post pAnimateOnScroll enterClass="fadeinleft" leaveClass="fadeoutleft"
+                        class=" animation-duration-500 animation-ease-in-out" [postResponse]="postResponse"
+                        [isCategoryShowed]="true">
+                    </app-post>
+                </ng-container>
+            </ng-container>
+        </ng-container>
+    </div>
+</div>
+
+<p-toast></p-toast>

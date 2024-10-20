@@ -1,0 +1,25 @@
+<div class="random-post-list-component flex justify-content-center">
+    <div class="flex flex-column gap-3 col-12 md:col-11 lg:col-10">
+        <div pAnimateOnScroll enterClass="scalein" leaveClass="fadeout"
+            class="flex gap-4 align-items-center text-white text-2xl font-bold ml-4 animation-duration-1000 animation-ease-in-out">
+            <i class="pi pi-bolt btn-primary p-2"></i>
+            <span>Other Posts</span>
+        </div>
+
+        <ng-container *ngIf="postResponseList$ | async as postResponseList">
+            <p-carousel class="animation-duration-1000 animation-ease-in-out" pAnimateOnScroll enterClass="scalein"
+                leaveClass="fadeout" [value]="postResponseList" [numVisible]="3" [numScroll]="3" [circular]="false"
+                [showIndicators]="true" [responsiveOptions]="responsiveOptions">
+                <ng-template let-postResponse pTemplate="item">
+                    <ng-container *ngIf="postResponse.subCategoryId | subCategoryIdToCategory | async as category">
+                        <ng-container
+                            *ngIf="postResponse.subCategoryId | subCategoryIdToSubCategory | async as subCategory">
+                            <app-post-v2 [postResponse]="postResponse"
+                                [routerLink]="['/', category.title | toSlug , subCategory.title | toSlug, postResponse.title | toSlug, postResponse.id]"></app-post-v2>
+                        </ng-container>
+                    </ng-container>
+                </ng-template>
+            </p-carousel>
+        </ng-container>
+    </div>
+</div>

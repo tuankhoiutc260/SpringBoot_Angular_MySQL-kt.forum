@@ -1,0 +1,146 @@
+<div class="profile-component flex flex-column gap-3 text-white">
+    <ng-container *ngIf="userResponse">
+        <div class="user-info px-4">
+            <div class="user-info-bg flex flex-column gap-2">
+                <div
+                    class="btn-function-container absolute flex justify-content-center bg-black-alpha-20 border-circle">
+                    <div class="flex flex-column gap-1 justify-content-center align-items-center"
+                        [pTooltip]="userId === (userLoginId$ | async) ? 'Edit profile' : 'View profile'"
+                        tooltipPosition="top" (click)="handleClick($event)">
+                        <i class="pi cursor-pointer p-2 hover:bg-white-alpha-10 transition-ease-in transition-duration-100 border-circle"
+                            [ngClass]="userId === (userLoginId$ | async) ? 'pi-ellipsis-v' : 'pi-eye'">
+                        </i>
+                    </div>
+
+                    <p-overlayPanel #op>
+                        <div class="flex flex-column gap-1">
+                            <div class="btn-function" (click)="isEditProfileDialogActive = true; op.toggle($event)">
+                                <div class="styles_icon">
+                                    <i class="pi pi-pen-to-square"></i>
+                                </div>
+                                <span class="style_title">Edit profile</span>
+                            </div>
+
+                            <div class="btn-function" (click)="isChangePasswordDialogActive = true; op.toggle($event)">
+                                <div class="styles_icon">
+                                    <i class="pi pi-pen-to-square"></i>
+                                </div>
+                                <span class="style_title">Change password</span>
+                            </div>
+                        </div>
+                    </p-overlayPanel>
+                </div>
+            </div>
+
+            <ng-container *ngIf="postCreatedByResponsePage$ | async as postCreatedByResponsePage">
+                <div class="user-info-details hidden sm:flex gap-2 justify-content-evenly align-items-center px-4">
+                    <ul class="flex justify-content-start md:justify-content-center w-5">
+                        <div class="w-max flex flex-column md:flex-row">
+                            <li class="px-4">
+                                <div
+                                    class="flex flex-row md:flex-column align-items-center justify-content-end md:justify-content-center gap-3">
+                                    <span class="text-gray-400 text-center">Total posts</span>
+                                    <span class="text-2xl">{{ postCreatedByResponsePage.page.totalElements }}</span>
+                                </div>
+                            </li>
+                            <li class="px-4 border-none md:border-x-1 border-gray-400">
+                                <div
+                                    class="flex flex-row md:flex-column align-items-center justify-content-end md:justify-content-center gap-3">
+                                    <span class="text-gray-400 text-center">Total views</span>
+                                    <span class="text-2xl">{{ getTotalViews(postCreatedByResponsePage.content) }}</span>
+                                </div>
+                            </li>
+                            <li class="px-4">
+                                <div
+                                    class="flex flex-row md:flex-column align-items-center justify-content-end md:justify-content-center gap-3">
+                                    <span class="text-gray-400 text-center">Total likes</span>
+                                    <span class="text-2xl">{{ getTotalLikes(postCreatedByResponsePage.content) }}</span>
+                                </div>
+                            </li>
+                        </div>
+                    </ul>
+
+                    <div class="user-info-body flex flex-column justify-content-center align-items-center gap-2 w-2">
+                        <p-image [src]="userResponse.imageUrl" [alt]="userResponse.fullName + ' Avatar'" width="100"
+                            height="100">
+                        </p-image>
+
+                        <span class="text-center">{{ userResponse.fullName }}</span>
+                    </div>
+
+                    <span class="user-about-me text-center px-4 w-5">{{userResponse.aboutMe}}</span>
+                </div>
+
+                <div
+                    class="user-info-details-mobile flex sm:hidden gap-2 justify-content-evenly align-items-center px-4">
+                    <div class="user-info-body flex flex-column justify-content-center align-items-center gap-2">
+                        <p-image [src]="userResponse.imageUrl" [alt]="userResponse.fullName + ' Avatar'" width="70"
+                            height="70">
+                        </p-image>
+
+                        <span class="text-center">{{ userResponse.fullName }}</span>
+                    </div>
+
+                    <ul class="flex align-items-center justify-content-center">
+                        <li class="px-3">
+                            <div class="flex flex-column align-items-center justify-content-center gap-3">
+                                <span class="text-gray-400 text-center">Total posts</span>
+                                <span class="text-2xl">{{ postCreatedByResponsePage.page.totalElements }}</span>
+                            </div>
+                        </li>
+                        <li class="px-3 border-x-1 border-gray-400">
+                            <div class="flex flex-column align-items-center justify-content-center gap-3">
+                                <span class="text-gray-400 text-center">Total views</span>
+                                <span class="text-2xl">{{ getTotalViews(postCreatedByResponsePage.content) }}</span>
+                            </div>
+                        </li>
+                        <li class="px-3">
+                            <div class="flex flex-column align-items-center justify-content-center gap-3">
+                                <span class="text-gray-400 text-center">Total likes</span>
+                                <span class="text-2xl">{{ getTotalLikes(postCreatedByResponsePage.content) }}</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </ng-container>
+        </div>
+
+        <div class="flex align-items-center justify-content-center gap-3 w-12 border-xl z-1">
+            <div class="btn-secondary" [ngClass]="{'active': activeTab === 'posts'}"
+                (click)="onActivePostCreatedBy()">
+                <span>Posts</span>
+            </div>
+
+            <div class="btn-secondary" [ngClass]="{'active': activeTab === 'liked'}" (click)="onActivePostLiked()">
+                <span>Liked</span>
+            </div>
+        </div>
+
+        <div class="sm:px-6">
+            <ng-container *ngIf="currentPostResponsePage$ | async as postResponsePage">
+                <div class="flex flex-wrap bg-white-alpha-20 border-round-2xl">
+                    <ng-container *ngFor="let postResponse of postResponsePage.content">
+                        <div class="post-item gap-2">
+                            <app-post-v3 [postResponse]="postResponse"></app-post-v3>
+                        </div>
+                    </ng-container>
+                </div>
+
+                <p-paginator *ngIf="postResponsePage.page.totalElements > POSTS_PAGE_SIZE"
+                    [first]="postResponsePage.page.number * POSTS_PAGE_SIZE" [rows]="POSTS_PAGE_SIZE"
+                    [totalRecords]="postResponsePage.page.totalElements" (onPageChange)="onPageChange($event)">
+                </p-paginator>
+            </ng-container>
+        </div>
+    </ng-container>
+</div>
+
+<app-change-password-dialog [userId]="userId" [userResponse]="userResponse"
+    [isChangePasswordDialogActive]="isChangePasswordDialogActive"
+    (isChangePasswordDialogVisibleChange)="isChangePasswordDialogActive = $event">
+</app-change-password-dialog>
+
+<app-edit-profile-dialog [userId]="userId" [userResponse]="userResponse"
+    [isEditProfileDialogActive]="isEditProfileDialogActive"
+    (isEditProfileDialogVisibleChange)="isEditProfileDialogActive = $event">
+</app-edit-profile-dialog>

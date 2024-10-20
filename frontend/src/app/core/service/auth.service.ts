@@ -1,25 +1,28 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, Observable, Subject } from 'rxjs';
 import { UserApiService } from '../../api/service/rest-api/user-api.service';
-import { UserResponse } from '../../api/model/response/user-response';
-import { getRoleFromToken, getSubFromToken } from '../utils/jwt-helper';
-
-
+import { AuthApiService } from '../../api/service/rest-api/auth-api.service';
+import { StorageService } from './storage.service';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private isSignUpActiveSource = new BehaviorSubject<boolean>(false);
-  private userLoginInfoSubject = new BehaviorSubject<UserResponse | null>(null);
-
   isSignUpActive$ = this.isSignUpActiveSource.asObservable();
-  userLoginInfo$ = this.userLoginInfoSubject.asObservable();
+
+  private currentUserIdSubject = new BehaviorSubject<string | null>(null);
+  currentUserId$ = this.currentUserIdSubject.asObservable();
+
+  isAuthenticated$: Observable<boolean>;
 
   constructor(
     private userApiService: UserApiService,
-    private http: HttpClient
-  ) { }
+    private authApiService: AuthApiService,
+    private storageService: StorageService,
+  ) {
+    this.isAuthenticated$ = this.isAuthenticated();
+    this.initCurrentUserId();
+  }
 
   setSignUpActive(value: boolean) {
     this.isSignUpActiveSource.next(value);
@@ -29,96 +32,29 @@ export class AuthService {
     return this.isSignUpActiveSource.getValue();
   }
 
-  // TOKEN
-  setToken(token: string) {
-    window.localStorage.setItem("auth_token", token);
-  }
-
-  getToken(): string {
-    return window.localStorage.getItem("auth_token") || '';
-  }
-
-  removeToken(): void {
-    window.localStorage.removeItem("auth_token");
-  }
-
-  // USERNAME
-  setCurrentUserName(userName: string) {
-    window.localStorage.setItem("user_name", userName);
-  }
-
-  getCurrentUserName(): string {
-    return window.localStorage.getItem("user_name") || '';
-  }
-
-  removeCurrentUserName(): void {
-    window.localStorage.removeItem("user_name");
-  }
-
-  // PASSWORD
-  setCurrentPassword(password: string) {
-    window.localStorage.setItem("password", password);
-  }
-
-  getCurrentPassword(): string {
-    return window.localStorage.getItem("password") || '';
-  }
-
-  removeCurrentPassword(): void {
-    window.localStorage.removeItem("password");
-  }
-
-  getRole(): string | null {
-    const token = localStorage.getItem('auth_token');
-    if (!token) {
-      return null;
-    }
-    return getRoleFromToken(token);
-  }
-  
-  getUserID(): string | null {
-    const token = localStorage.getItem('auth_token');
-    if (!token) {
-      return null;
-    }
-    return getSubFromToken(token);
-  }
-  
-
-  isAuthenticated(): boolean {
-    return !!this.getToken();
-  }
-
-  // New utility method to fetch and set user login info
-  fetchAndSetUserLoginInfo(): void {
-    const userName = this.getCurrentUserName();
-    if (userName) {
-      this.userApiService.getByUserName(userName).subscribe({
-        next: (apiResponse) => {
-          const userLoginInfo = apiResponse;
-          if (userLoginInfo) {
-            this.userLoginInfoSubject.next(userLoginInfo);
-          } else {
-            console.error('No result found in response:', apiResponse);
-          }
-        },
-        error: (error) => {
-          console.error('Error fetching user:', error);
-        }
-      });
+  async setCurrentUserId(username: string): Promise<void> {
+    try {
+      const userResponse = await firstValueFrom(this.userApiService.getByUserName(username));
+      const userId = userResponse.id;
+      this.storageService.setItem("user_id", String(userId));
+    } catch (error: any) {
+      console.error('Error fetching User information:', error);
+      throw new Error(error.message || 'Server error');
     }
   }
 
-  getUserLoginInfo(): Observable<UserResponse | null> {
-    return this.userLoginInfo$;
+  private initCurrentUserId() {
+    const storedUserId = this.getCurrentUserId();
+    if (storedUserId) {
+      this.currentUserIdSubject.next(storedUserId);
+    }
   }
 
-  getUserLoginInfoValue(): UserResponse | null {
-    return this.userLoginInfoSubject.value;
+  getCurrentUserId(): string | null {
+    return this.storageService.getItem('user_id');
+  }
+
+  isAuthenticated() {
+    return this.authApiService.isAuthenticated();
   }
 }
-
-// function jwtDecode(token: string): any {
-//   throw new Error('Function not implemented.');
-// }
-

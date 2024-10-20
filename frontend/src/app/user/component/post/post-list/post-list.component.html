@@ -1,0 +1,65 @@
+<div class="post-list-component flex justify-content-center align-items-center w-full"
+    *ngIf="postResponsePage$ | async as postResponsePage">
+    <div class="col-12 lg:col-10 flex flex-column gap-3">
+        <div class="flex flex-wrap gap-3 justify-content-between z-1">
+            <div class="btn-secondary flex align-items-center gap-2" *ngIf="(isAuthenticated$ | async)"
+                (click)="onCreatePost()">
+                <i class="pi pi-pen-to-square"></i>
+                <span>Create Post</span>
+            </div>
+
+            <div class="search-post flex gap-2">
+                <p-iconField iconPosition="right" class="flex flex-column w-12 gap-2">
+                    <p-inputIcon class="cursor-pointer" (click)="onSearchPost(searchPost.value)"
+                        styleClass="pi pi-search" />
+                    <input id="searchPost" type="text" pInputText placeholder="Type and press Enter to search"
+                        style="width: 100%;" (keydown.enter)="onSearchPost(searchPost.value)" #searchPost />
+                </p-iconField>
+
+                <div
+                    class="btn-function-container search-filter flex justify-content-center bg-black-alpha-20 border-circle">
+                    <div class="flex flex-column gap-1 justify-content-center align-items-center"
+                        (click)="op.toggle($event)">
+                        <i
+                            class="pi pi-filter-fill cursor-pointer p-2 hover:bg-white-alpha-10 transition-ease-in transition-duration-100"></i>
+                    </div>
+
+                    <p-overlayPanel #op>
+                        <div class="flex flex-column gap-2 text-white">
+                            <b class="mb-1">Search by</b>
+                            <p-checkbox label="Title" value="search-by-post-title" [(ngModel)]="selectedSearchOptions"
+                                binary="false" class="font-light" inputId="search-title"></p-checkbox>
+                            <p-checkbox label="Content" value="search-by-post-content"
+                                [(ngModel)]="selectedSearchOptions" binary="false" class="font-light"
+                                inputId="search-content"></p-checkbox>
+                        </div>
+                    </p-overlayPanel>
+                </div>
+            </div>
+        </div>
+
+        <ng-container *ngIf="postResponsePage.page.totalElements > 0; else noPosts">
+            <div class="flex flex-column gap-3 w-full">
+                <ng-container *ngFor="let postResponse of postResponsePage.content; trackBy: trackByPostId">
+                    <app-post [postResponse]="postResponse" [isCategoryShowed]="false"></app-post>
+                </ng-container>
+            </div>
+
+            <p-paginator *ngIf="postResponsePage.page.totalElements > POSTS_PAGE_SIZE"
+                [first]="postResponsePage.page.number * POSTS_PAGE_SIZE" [rows]="POSTS_PAGE_SIZE"
+                [totalRecords]="postResponsePage.page.totalElements" (onPageChange)="onPageChange($event)">
+            </p-paginator>
+        </ng-container>
+
+        <ng-template #noPosts>
+            <div class="flex flex-column align-items-center w-full text-white">
+                <img class="w-3 lg:w-4" src="assets/images/no-post.svg" alt="">
+                <p>There are currently no posts.</p>
+            </div>
+        </ng-template>
+    </div>
+</div>
+
+<app-create-update-post [isDialogVisible]="isDialogCreatePostVisible" [isCreatePost]="true"
+    (isDialogVisibleChange)="isDialogCreatePostVisible = $event">
+</app-create-update-post>

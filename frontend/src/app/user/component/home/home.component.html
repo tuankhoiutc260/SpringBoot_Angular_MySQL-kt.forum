@@ -1,0 +1,37 @@
+<!-- <div class="home-component flex flex-column gap-5"
+    *ngIf="categoryResponsePage$ | async as categoryResponsePage">
+    <ng-container *ngFor="let category of categoryResponsePage.content; let i = index">
+        <div class="category-container flex flex-column gap-2">
+            <span class="category-title text-3xl font-bold ml-4">{{category.title}}</span>
+            <div class="flex gap-2 align-items-center justify-content-between">
+                <span class="text-gray-600 ml-4">{{category.description}}</span>
+
+                <div class="btn-show-more transition-ease-in-out transition-duration-100">
+                    <span>Xem thêm</span>
+                    <i class="pi pi-arrow-right"></i>
+                </div>
+            </div>
+
+            <ng-container *ngIf="subCategoriesMap.get(category.id) | async as subCategoryResponsePage">
+                <div class="sub-category-container">
+                    <ng-container *ngFor="let subCategory of subCategoryResponsePage.content">
+                        <div class="sub-category-item flex justify-content-between align-items-center p-3 border-round border-1 border-gray-600 font-xs text-lg font-bold cursor-pointer transition-ease-in-out transition-duration-100"
+                            [routerLink]="['/', category.title | toSlug, category.id, subCategory.title | toSlug, subCategory.id, 'posts']">
+                            <div class="sub-category-item-content flex gap-2 align-items-center">
+                                <img class="border-round-xs h-2rem w-2rem" [src]="subCategory.imageUrl" alt="">
+                                <span>{{subCategory.title}}</span>
+                                <span>({{subCategory.postCount}})</span>
+                            </div>
+
+                            <div>
+                                <i class="pi pi-chevron-right p-2 border-round"></i>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </ng-container>
+        </div>
+    </ng-container>
+</div> -->
+<!-- <app-hero-section></app-hero-section>
+<app-body-section></app-body-section> -->

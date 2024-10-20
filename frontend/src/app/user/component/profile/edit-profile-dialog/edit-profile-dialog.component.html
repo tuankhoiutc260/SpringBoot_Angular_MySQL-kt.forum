@@ -1,0 +1,81 @@
+<div class="profile-profile-component">
+    <p-dialog [header]="userId === (userLoginId$ | async) ? 'Edit profile' : 'View profile'" [modal]="true"
+        [(visible)]="isEditProfileDialogActive" [style]="{ width: '25rem' }" [responsive]="true" [breakpoints]="{
+        '4000px': '30vw',
+        '1199px': '45vw',    
+        '991px': '60vw',    
+        '767px': '70vw',    
+        '575px': '90vw',    
+        '375px': '95vw'     
+      }" (onHide)="onDialogHide()">
+        <ng-container *ngIf="userResponse">
+            <form [formGroup]="editUserProfileForm" (ngSubmit)="onUpdateUser()" class="flex flex-column gap-4">
+                <div class="flex flex-column gap-2">
+                    <label for="imageUrl" class="font-semibold text-gray-400 ml-2">Profile picture</label>
+                    <div class="flex justify-content-center align-items-center gap-6">
+                        <p-image [src]="imagePreview ? imagePreview : userResponse.imageUrl"
+                            [alt]="userResponse.fullName + 'Avatar'" width="100" height="100" preview="true" />
+                        <input id="input" type="file" accept="image/*" hidden #inputFile
+                            (change)="onSelectImageFile($event)" />
+                        <div class="flex flex-column gap-2" *ngIf="userId === (userLoginId$ | async)">
+                            <div class="btn-primary w-full" (click)="inputFile.click()">Change picture</div>
+                            <div *ngIf="imagePreview" class="btn-primary w-full" (click)="onRemoveImageFile()">
+                                Return past picture</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-column gap-2">
+                    <div class="flex flex-column gap-2">
+                        <label for="fullName" class="font-semibold text-gray-400 ml-2">Profile Name</label>
+                        <input pInputText id="fullName" class="flex-auto" autocomplete="off" formControlName="fullName"
+                            placeholder="Enter your Full Name" />
+
+                    </div>
+                    <small class="text-center" style="color: red;"
+                        *ngIf="editUserProfileForm.get('fullName')?.hasError('required') && editUserProfileForm.get('fullName')?.touched">
+                        Full Name is required.
+                    </small>
+                </div>
+
+                <div class="flex flex-column gap-2">
+                    <label for="userName" class="font-semibold text-gray-400 ml-2">Username</label>
+
+                    <p-inputGroup>
+                        <p-inputGroupAddon>
+                            <i class="pi pi-at"></i>.
+                        </p-inputGroupAddon>
+                        <input pInputText id="userName" class="flex-auto" [value]="userResponse.userName"
+                            [disabled]="true">
+                    </p-inputGroup>
+                </div>
+
+                <div class="flex flex-column gap-2">
+                    <label for="createdDate" class="font-semibold text-gray-400 ml-2">Joining date</label>
+
+                    <input pInputText id="createdDate" class="flex-auto"
+                        [value]="userResponse.createdDate | date:'hh:mm:ss - dd/MM/yyyy'" [disabled]="true">
+                </div>
+
+                <div class="flex flex-column gap-2">
+                    <label for="active" class="font-semibold text-gray-400 ml-2">Active status</label>
+                    <input pInputText id="active" class="flex-auto" disabled="true" [value]="userResponse.active">
+                </div>
+
+                <div class="flex flex-column gap-2">
+                    <label for="aboutMe" class="font-semibold text-gray-400 ml-2">About me</label>
+                    <textarea #aboutMe rows="3" pInputTextarea [autoResize]="false" name="aboutMe"
+                        formControlName="aboutMe" maxlength="1000" class="w-full">
+                      </textarea>
+                </div>
+
+                <div class="flex justify-content-center gap-2" *ngIf="userId === (userLoginId$ | async)">
+                    <button class="btn-primary" type="submit">Save change</button>
+                </div>
+            </form>
+        </ng-container>
+    </p-dialog>
+
+</div>
+
+<p-toast></p-toast>

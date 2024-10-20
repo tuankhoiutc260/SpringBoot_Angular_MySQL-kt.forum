@@ -1,0 +1,179 @@
+<section class="sc-hero flex flex-column align-items-center justify-content-center text-white">
+    <div class="sc-hero-component flex flex-column align-items-center w-full gap-2">
+        <div class="sc-hero-header flex gap-3 align-items-center col-12 md:col-10">
+            <div class="col-12 md:col-6 flex flex-column gap-4 justify-content-center">
+                <h1 class="text-5xl md:text-7xl mb-2">Join the Conversation</h1>
+                <span class="text-lg">Whether you're debugging a tricky issue or exploring the latest tech trends, <b
+                        class="text-primary">KTForum</b> is your space to learn, share, and grow with fellow
+                    developers.</span>
+                <span class="text-lg">Create Your Account Browse Latest Threads</span>
+                <div class="btn-primary" (click)="onLetStartedClicked()">
+                    <span class="text-lg">Let's started!</span>
+                </div>
+            </div>
+
+            <div class="hidden lg:flex lg:flex-column justify-content-between h-full  col-0 md:col-6 ">
+                <div class="flex-grow-1 grid align-items-center">
+                    <div class="col-6"></div>
+                    <div class="card col-6">
+                        <span>Real-time Q&A: Get answers from expert developers within minutes</span>
+                    </div>
+                </div>
+                <div class="flex-grow-1 grid align-items-center">
+                    <div class="card col-6">
+                        <span>Reputation System: Build your profile and earn recognition for your
+                            contributions</span>
+                    </div>
+                    <div class="col-6"></div>
+                </div>
+                <div class="flex-grow-1 grid align-items-center">
+                    <div class="col-6"></div>
+                    <div class="card col-6">
+                        <span>Knowledge Base: Access community-curated guides and tutorials</span>
+                    </div>
+                </div>
+                <div class="flex-grow-1 grid align-items-center">
+                    <div class="card col-6">
+                        <span>Advanced Search: Find solutions quickly with our powerful search engine</span>
+                    </div>
+                    <div class="col-6"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sc-hero-footer justify-content-between flex flex-column gap-2 align-items-center w-full">
+            <div class="bg-black-alpha-40 border-round flex flex-column w-full pt-4 pb-4 pl-2 pr-2">
+                <div class="grid mt-0">
+                    <div class="col-4 flex flex-end justify-content-center align-items-end p-0">
+                        <b class="text-2xl md:text-4xl ">{{countPosts}}</b>
+                    </div>
+                    <div class="col-4 text-center border-right-1 border-left-1 border-gray-500 p-0">
+                        <b class="text-3xl md:text-6xl ">{{countPosts}}</b>
+                    </div>
+                    <div class="col-4 flex flex-end justify-content-center align-items-end p-0">
+                        <b class="text-2xl md:text-4xl ">{{countPosts}}</b>
+                    </div>
+                </div>
+                    <p-divider></p-divider>
+                <div class="grid">
+                    <div class="col-4 text-center p-0">
+                        <span class="text-base md:text-xl">Course</span>
+                    </div>
+                    <div class="col-4 text-center border-right-1 border-left-1 border-gray-500 p-0">
+                        <span class="text-base md:text-xl">Course</span>
+                    </div>
+                    <div class="col-4 text-center p-0">
+                        <span class="text-base md:text-xl">Course</span>
+                    </div>
+                </div>
+            </div>
+
+            <div #scroller class="scroller bg-black-alpha-40 border-round border-gray-500 border-bottom-1 border-top-1" data-animated="true">
+                <ul class="tag-list scroller__inner">
+                    <li class="text-base flex flex align-items-center gap-1">
+                        <img src="https://img.icons8.com/?size=100&id=20909&format=png&color=000000"
+                            width="20px"><img />
+                        <span>HTML</span>
+                    </li>
+                    <li class="text-base flex flex align-items-center gap-1">
+                        <img src="https://img.icons8.com/?size=100&id=3BTBsJs5myRy&format=png&color=000000"
+                            width="20px"><img />
+                        <span>CSS</span>
+                    </li>
+                    <li class="text-base flex flex align-items-center gap-1">
+                        <img src="https://img.icons8.com/?size=100&id=108784&format=png&color=000000"
+                            width="20px"><img />
+                        <span>JS</span>
+                    </li>
+                    <li class="text-base flex flex align-items-center gap-1">
+                        <img src="https://img.icons8.com/?size=100&id=zFAYIdFZlGxP&format=png&color=000000"
+                            width="20px"><img />
+                        <span>Docker</span>
+                    </li>
+                    <li class="text-base flex flex align-items-center gap-1">
+                        <img src="https://img.icons8.com/?size=100&id=54087&format=png&color=000000" width="20px" />
+                        <span>Node.js</span>
+                    </li>
+                    <li class="text-base flex flex align-items-center gap-1">
+                        <img src="https://img.icons8.com/?size=100&id=asWSSTBrDlTW&format=png&color=000000"
+                            width="20px" />
+                        <span>React</span>
+                    </li>
+                    <li class="text-base flex flex align-items-center gap-1">
+                        <img src="https://img.icons8.com/?size=100&id=j9DnICNnlhGk&format=png&color=000000"
+                            width="20px" />
+                        <span>Angular</span>
+                    </li>
+                    <li class="text-base flex flex align-items-center gap-1">
+                        <img src="https://img.icons8.com/?size=100&id=rY6agKizO9eb&format=png&color=000000"
+                            width="20px" />
+                        <span>Vue.js</span>
+                    </li>
+                    <li class="text-base flex flex align-items-center gap-1">
+                        <img src="https://img.icons8.com/?size=100&id=wpZmKzk11AzJ&format=png&color=000000"
+                            width="20px" />
+                        <span>TypeScript</span>
+                    </li>
+                    <li class="text-base flex flex align-items-center gap-1">
+                        <img src="https://img.icons8.com/?size=100&id=20906&format=png&color=000000" width="20px" />
+                        <span>Git</span>
+                    </li>
+                    <li class="text-base flex flex align-items-center gap-1">
+                        <img src="https://img.icons8.com/?size=100&id=38561&format=png&color=000000" width="20px" />
+                        <span>PostgreSQL</span>
+                    </li>
+                    <li class="text-base flex flex align-items-center gap-1">
+                        <img src="https://img.icons8.com/?size=100&id=bosfpvRzNOG8&format=png&color=000000"
+                            width="20px" />
+                        <span>MongoDB</span>
+                    </li>
+                    <li class="text-base flex flex align-items-center gap-1">
+                        <img src="https://img.icons8.com/?size=100&id=33039&format=png&color=000000" width="20px" />
+                        <span>AWS</span>
+                    </li>
+                    <li class="text-base flex flex align-items-center gap-1">
+                        <img src="https://img.icons8.com/?size=100&id=cvzmaEA4kC0o&format=png&color=000000"
+                            width="20px" />
+                        <span>Kubernetes</span>
+                    </li>
+                    <li class="text-base flex flex align-items-center gap-1">
+                        <img src="https://img.icons8.com/?size=100&id=t2x6DtCn5Zzx&format=png&color=000000"
+                            width="20px" />
+                        <span>Nginx</span>
+                    </li>
+                    <li class="text-base flex flex align-items-center gap-1">
+                        <img src="https://img.icons8.com/?size=100&id=pHS3eRpynIRQ&format=png&color=000000"
+                            width="20px" />
+                        <span>Redis</span>
+                    </li>
+                    <li class="text-base flex flex align-items-center gap-1">
+                        <img src="https://img.icons8.com/?size=100&id=13441&format=png&color=000000" width="20px" />
+                        <span>Python</span>
+                    </li>
+                    <li class="text-base flex flex align-items-center gap-1">
+                        <img src="https://img.icons8.com/?size=100&id=22189&format=png&color=000000" width="20px" />
+                        <span>Ruby on Rails</span>
+                    </li>
+                    <li class="text-base flex flex align-items-center gap-1">
+                        <img src="https://img.icons8.com/?size=100&id=13679&format=png&color=000000" width="20px" />
+                        <span>Java</span>
+                    </li>
+                    <li class="text-base flex flex align-items-center gap-1">
+                        <img src="https://img.icons8.com/?size=100&id=7I3BjCqe9rjG&format=png&color=000000"
+                            width="20px" />
+                        <span>Flutter</span>
+                    </li>
+                    <li class="text-base flex flex align-items-center gap-1">
+                        <img src="https://img.icons8.com/?size=100&id=24465&format=png&color=000000" width="20px" />
+                        <span>Swift</span>
+                    </li>
+                    <li class="text-base flex flex align-items-center gap-1">
+                        <img src="https://img.icons8.com/?size=100&id=pW9tHQnl55j4&format=png&color=000000"
+                            width="20px" />
+                        <span>Kotlin</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>

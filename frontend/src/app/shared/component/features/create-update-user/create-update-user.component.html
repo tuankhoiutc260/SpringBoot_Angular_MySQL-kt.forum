@@ -1,0 +1,99 @@
+<p-dialog header="Edit Profile" [modal]="true" [(visible)]="isEditUserInfo" [style]="{ width: '25rem' }"
+    [responsive]="true" [breakpoints]="{
+        '4000px': '50vw',
+        '1199px': '75vw',    
+        '991px': '65vw',    
+        '767px': '80vw',    
+        '575px': '90vw',    
+        '375px': '95vw'     
+      }" (onHide)="onDialogHide()">
+    <span class="p-text-secondary block mb-5">Update your information.</span>
+
+    <form [formGroup]="userDetailsForm" (ngSubmit)="onUpdateUser()" class="flex flex-column gap-3">
+        <div class=" flex justify-content-center mb-4 mt-1">
+            <div class=" container flex flex-column justify-content-center">
+                <div class="img-area cursor-pointer p-2 flex flex-column align-items-center justify-content-center"
+                    [class.active]="isActiveImage" data-img="Click to change new image" (click)="inputFile.click()">
+                    <input id="input" type="file" accept="image/*" hidden #inputFile
+                        (change)="onSelectFile($event)" />
+                    <i class="pi pi-cloud-upload text-6xl	 "></i>
+                    <h3>Upload image</h3>
+                    <p>Image size must be less than <span>2MB</span></p>
+                    <img *ngIf="imagePreview" [src]="imagePreview" alt="Image preview" class="img-preview" />
+                </div>
+            </div>
+            <div class="flex flex-column align-items-center">
+                <small *ngIf="!isImageValid" class="error-message">Only images are supported.</small>
+            </div>
+        </div>
+        
+        <div class="flex align-items-center gap-3 mb-3">
+          <label for="userName" class="font-semibold w-7rem">Username</label>
+          <input pInputText id="userName" class="flex-auto" autocomplete="off" formControlName="userName" [attr.disabled]="userDetailsForm.get('userName')?.disabled ? true : null">
+        </div>
+      
+        <div class="flex align-items-center gap-3 mb-3">
+          <label for="email" class="font-semibold w-7rem">Email</label>
+          <input pInputText id="email" class="flex-auto" autocomplete="off" formControlName="email" [attr.disabled]="userDetailsForm.get('email')?.disabled ? true : null" />
+        </div>
+
+        <div class="flex flex-column gap-2">
+            <div class="flex align-items-center gap-3">
+                <label for="fullName" class="font-semibold w-7rem">Full Name</label>
+                <input pInputText id="fullName" class="flex-auto" autocomplete="off" formControlName="fullName"
+                    placeholder="Enter your Full Name" />
+            </div>
+            <small class="text-center" style="color: red;"
+                *ngIf="userDetailsForm.get('fullName')?.hasError('required') && userDetailsForm.get('fullName')?.touched">Full Name is
+                required.</small>
+        </div>
+
+        <div class="flex flex-column gap-2">
+            <div class="flex align-items-center gap-3">
+                <label for="password" class="font-semibold w-7rem">Password</label>
+                <p-password id="password" type="password" class="flex-auto" [feedback]="false"
+                    styleClass="p-password p-component p-inputwrapper p-input-icon-right" [style]="{'width':'100%'}"
+                    [inputStyle]="{'width':'100%'}" [toggleMask]="true" placeholder="Minimum 8 alphanumeric characters"
+                    formControlName="password">
+                </p-password>
+            </div>
+
+            <div class="flex flex-column align-items-center" style="color: red;">
+                <small
+                    *ngIf="userDetailsForm.get('password')?.hasError('required') && userDetailsForm.get('password')?.touched">Password
+                    is required.</small>
+                <small
+                    *ngIf="userDetailsForm.get('password')?.hasError('minlength') && userDetailsForm.get('password')?.touched">Password
+                    must be at least 8 characters long.</small>
+                <small
+                    *ngIf="userDetailsForm.get('password')?.hasError('alphanumeric') && userDetailsForm.get('password')?.touched">Password
+                    must contain letters and numbers only.</small>
+            </div>
+        </div>
+
+        <div class="flex flex-column gap-2">
+            <div class="flex align-items-center gap-3">
+                <label for="rePassword" class="font-semibold w-7rem">Re-Password</label>
+                <p-password id="rePassword" type="password" class="flex-auto" [feedback]="false"
+                    styleClass="p-password p-component p-inputwrapper p-input-icon-right" [style]="{'width':'100%'}"
+                    [inputStyle]="{'width':'100%'}" [toggleMask]="true" placeholder="Re-enter your password"
+                    formControlName="rePassword">
+                </p-password>
+            </div>
+
+            <div class="flex flex-column align-items-center" style="color: red;">
+                <small
+                    *ngIf="userDetailsForm.get('rePassword')?.hasError('required') && userDetailsForm.get('rePassword')?.touched">Confirm
+                    Password is required.</small>
+                <small
+                    *ngIf="userDetailsForm.get('rePassword')?.hasError('passwordMismatch') && userDetailsForm.get('rePassword')?.touched">Passwords
+                    do not match.</small>
+            </div>
+        </div>
+
+        <div class="flex justify-content-end gap-2">
+            <p-button label="Cancel" severity="secondary" (onClick)="onToggleDialogUpdateUser()" />
+            <p-button label="Save" type="submit" />
+        </div>
+    </form>
+</p-dialog> 

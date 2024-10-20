@@ -1,0 +1,39 @@
+<ng-container *ngIf="postResponse">
+  <ng-container *ngIf="(combinedData$ | async) as data">
+    <div
+      [routerLink]="['/', data.category.title | toSlug, data.subCategory.title | toSlug, postResponse.title | toSlug, postResponse.id]"
+      class="post-component primary-container flex gap-4 cursor-pointer text-white">
+        <p-avatar [image]="data.user.imageUrl" size="large" shape="circle" alt="User Image" />
+
+        <ng-container *ngIf="!postResponse?.createdBy">
+          <p>No user information available.</p>
+        </ng-container>
+
+        <div class="flex flex-column gap-2 w-full overflow-hidden">
+          <div class="flex flex-column sm:flex-row gap-2">
+            <span class="post-created-by"><b>{{data.user.fullName}}</b></span>
+            <small class="text-gray-200">•
+              {{ postResponse.createdDate | date:'dd MMM yyyy' }}&nbsp;&nbsp;
+              <i class="pi pi-clock"></i>&nbsp;&nbsp;
+              {{ postResponse.content | toMinRead }} phút đọc
+            </small>
+          </div>
+
+          <span class="post-title font-bold text-xl">{{postResponse.title}}</span>
+          <div class="flex gap-6 text-gray-200">
+            <div class="flex gap-2 align-items-center">
+              <i class="pi pi-eye"></i>
+              <span>{{postResponse.viewCount}}</span>
+            </div>
+            <div class="flex gap-2 align-items-center">
+              <i class="pi pi-heart"></i>
+              <span>{{postResponse.likeCount ? postResponse.likeCount : 0}}</span>
+            </div>
+            <div class="flex gap-2 align-items-center">
+              <i class="pi pi-comments"></i>
+              <span>{{postResponse.commentCount ? postResponse.commentCount : 0}}</span>
+            </div>
+          </div>
+        </div>
+    </div>
+

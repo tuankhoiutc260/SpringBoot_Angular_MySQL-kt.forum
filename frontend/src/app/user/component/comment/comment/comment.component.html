@@ -1,0 +1,139 @@
+<div class="comment-component flex flex-column gap-3 w-full">
+  <ng-container *ngIf="(commentResponsePage$ | async) as commentResponsePage">
+
+
+
+    <span class="text-white text-3xl font-bold">Comment</span>
+
+    <div class="comment-list">
+      <ng-container *ngIf="commentResponsePage.content.length > 0; else noComment">
+        <ng-container *ngFor="let commentResponse of commentResponsePage.content">
+          <ng-container *ngIf="commentResponse.createdBy! | userIdToUser | async as user">
+            <div
+              class="flex mb-3 p-3 gap-4 border-round border-1 border-gray-600 hover:border-gray-400 transition-ease-in-out transition-duration-100">
+              <div class="flex flex-column align-items-center gap-2">
+                <p-avatar [image]="user.imageUrl" size="large" shape="circle" />
+              </div>
+
+              <div class="card-content flex flex-column gap-3 justify-content-between w-full">
+                <div class="flex flex-column gap-2">
+                  <ng-container *ngIf="!commentResponse.parentId">
+                    <div class="flex flex flex-column md:flex-row justify-content-between gap-2 text-gray-500">
+                      <div class="flex flex-wrap gap-2">
+                        <small
+                          class="text-center text-white white-space-nowrap mr-2 cursor-pointer"><b>{{user.fullName}}</b></small>
+                        <div class="flex gap-2 align-items-center">
+                          <i class="pi pi-clock"></i>
+                          <small>{{commentResponse.createdDate | date: "hh:mm:ss • dd MMM yyyy"}}</small>
+                        </div>
+                      </div>
+
+                      <div
+                        class="flex  sm:justify-content-end gap-4 transition-ease-in-out transition-duration-100 text-sm"
+                        [ngClass]="(isAuthenticated$ | async) && commentResponse.createdBy === userLoginId ? 'justify-content-evenly' : 'justify-content-end'">
+                        <div class="flex align-items-center gap-2 cursor-pointer hover:text-gray-400"
+                          (click)="onReplyComment(commentResponse)">
+                          <i class="pi pi-reply"></i>
+                          <span class="white-space-nowrap">Reply</span>
+                        </div>
+                        <ng-container *ngIf="(isAuthenticated$ | async) && commentResponse.createdBy === userLoginId">
+                          <div class="flex align-items-center gap-2 cursor-pointer hover:text-gray-400 "
+                            (click)="onUpdateComment(commentResponse)">
+                            <i class="pi pi-pen-to-square"></i>
+                            <span class="white-space-nowrap">Update</span>
+                          </div>
+
+                          <div class="flex align-items-center gap-2 cursor-pointer hover:text-gray-400 "
+                            (click)="onDeleteComment(commentResponse.id, $event)">
+                            <i class="pi pi-trash"></i>
+                            <span class="white-space-nowrap">Delete</span>
+                          </div>
+                        </ng-container>
+                      </div>
+                    </div>
+                  </ng-container>
+
+                  <ng-container *ngIf="commentResponse.parentId">
+                    <div class="flex flex flex-column md:flex-row justify-content-between gap-2 text-gray-500">
+                      <div class="flex flex-wrap gap-2">
+                        <small
+                          class="text-center text-white white-space-nowrap mr-2 cursor-pointer"><b>{{user.fullName}}</b></small>
+                        <div class="flex gap-2 align-items-center">
+                          <i class="pi pi-clock"></i>
+                          <small>{{commentResponse.createdDate | date: "hh:mm:ss • dd MMM yyyy"}}</small>
+                        </div>
+                      </div>
+
+                      <div
+                        class="flex justify-content-evenly sm:justify-content-end gap-4 transition-ease-in-out transition-duration-100 text-sm"
+                        [ngClass]="(isAuthenticated$ | async) && commentResponse.createdBy === userLoginId ? 'justify-content-evenly' : 'justify-content-end'">
+                        <div class="flex  gap-2 cursor-pointer hover:text-gray-400"
+                          (click)="onReplyComment(commentResponse)">
+                          <i class="pi pi-reply"></i>
+                          <span class="white-space-nowrap">Reply</span>
+                        </div>
+                        <ng-container *ngIf="(isAuthenticated$ | async) && commentResponse.createdBy === userLoginId">
+                          <div class="flex align-items-center gap-2 cursor-pointer hover:text-gray-400 "
+                            (click)="onUpdateComment(commentResponse)">
+                            <i class="pi pi-pen-to-square"></i>
+                            <span class="white-space-nowrap">Update</span>
+                          </div>
+
+                          <div class="flex align-items-center gap-2 cursor-pointer hover:text-gray-400 "
+                            (click)="onDeleteComment(commentResponse.id, $event)">
+                            <i class="pi pi-trash"></i>
+                            <span class="white-space-nowrap">Delete</span>
+                          </div>
+                        </ng-container>
+                      </div>
+                    </div>
+
+                    <div class="p-2 text-gray-500 border-round border-1 border-gray-600">
+                      <small class="replied-post-content">
+                        <ng-container *ngIf="commentResponse.parentId | commentIdToComment | async as parentComment">
+                          <ng-container *ngIf="parentComment.createdBy || '' | userIdToUser | async as userReplied">
+                            Reply ({{ userReplied.fullName }}) :
+                            {{ parentComment.content }}
+                          </ng-container>
+                        </ng-container>
+                      </small>
+                    </div>
+
+                  </ng-container>
+                  <span class="text-gray-400">{{commentResponse.content | htmlToPlaintext}}</span>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </div>
+
+    <ng-template #noComment class="w-full">
+      <div
+        class="flex align-items-center justify-content-center p-4 border-round border-1 border-gray-600 text-gray-500">
+        <span class="text-center">There are no comments yet</span>
+      </div>
+    </ng-template>
+
+    <div #commentForm class="flex justify-content-center">
+      <app-comment-form class="w-12" *ngIf="isAuthenticatedStatus" [postId]="postId" [replyComment]="repliedComment"
+        [updateComment]="updateComment" (cancelReply)="onHandleCancelReply()" (submitClicked)="onHandleSubmitClicked()">
+      </app-comment-form>
+
+      <div *ngIf="!isAuthenticatedStatus" class="btn-login btn-secondary w-max px-5 py-3 z-1"
+        (click)="isSignInClicked.emit()" [class.active]=true>
+        <span>Login to Comment Post</span>
+      </div>
+    </div>
+
+    <p-paginator *ngIf="commentResponsePage.page.totalElements> COMMENTS_PAGE_SIZE"
+      [first]="(commentsCurrentPage) * COMMENTS_PAGE_SIZE" [rows]="COMMENTS_PAGE_SIZE"
+      [totalRecords]="commentResponsePage.page.totalElements" (onPageChange)="onPageChange($event)">
+    </p-paginator>
+
+  </ng-container>
+</div>
+
+<p-toast></p-toast>
+<p-confirmDialog />

@@ -1,0 +1,140 @@
+<div class="admin-user-component h-full w-full p-4">
+    <div class="user-table card h-full w-full">
+        <ng-container *ngIf="userResponsePage$ | async as userResponsePage">
+            <p-table #userData [value]="userResponsePage.content" dataKey="id" [rows]="5"
+                [globalFilterFields]="['fullName', 'email', 'role.id', 'createdDate', 'active']">
+                <ng-template pTemplate="caption">
+                    <div class="flex">
+                        <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash"
+                            (onClick)="clear(userData)"></p-button>
+                        <span class="p-input-icon-left ml-auto">
+                            <i class="pi pi-search"></i>
+                            <!-- <input pInputText type="text" [(ngModel)]="searchValue"
+                       (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Search keyword" /> -->
+                        </span>
+
+                        <p-columnFilter field="status" matchMode="equals" [showMenu]="false">
+                            <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                                <p-dropdown 
+                                    [ngModel]="value" 
+                                    (onChange)="filter($event.value)" 
+                                    placeholder="Select One" 
+                                    [showClear]="true">
+                                        <ng-template let-option pTemplate="item">
+                                            <p-tag 
+                                                [value]="option.value"  />
+                                        </ng-template>
+                                </p-dropdown>
+                            </ng-template>
+                        </p-columnFilter>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 18%;">
+                            <div class="flex align-items-center">
+                                User
+                                <p-columnFilter type="text" field="fullName" display="menu"></p-columnFilter>
+                            </div>
+                        </th>
+                        <th style="width: 18%;">
+                            <div class="flex align-items-center">
+                                Email
+                                <p-columnFilter type="text" field="email" display="menu"></p-columnFilter>
+                            </div>
+                        </th>
+                        <th style="width: 18%;">
+                            <div class="flex align-items-center">
+                                Quyền
+                                <p-columnFilter type="text" field="role.id" display="menu"></p-columnFilter>
+                            </div>
+                        </th>
+                        <th style="width: 18%;">
+                            <div class="flex align-items-center">
+                                Ngày đăng ký
+                            </div>
+                        </th>
+
+
+                        <th style="width: 18%;">
+                            <div class="flex align-items-center">
+                                Trạng thái
+                                <p-columnFilter field="active" matchMode="equals" [showMenu]="false">
+                                    <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                                        <p-dropdown [ngModel]="value" [options]="statuses"
+                                            (onChange)="filter($event.value)" placeholder="Select One"
+                                            [showClear]="true">
+                                            <ng-template let-option pTemplate="item">
+                                                <p-tag [value]="option.label"
+                                                    [severity]="option.value ? 'success' : 'danger'"></p-tag>
+                                            </ng-template>
+                                        </p-dropdown>
+                                    </ng-template>
+                                </p-columnFilter>
+                            </div>
+                        </th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-user>
+                    <tr>
+                        <td>
+                            <div class="flex gap-2 align-items-center">
+                                <p-avatar [image]="user.imageUrl" size="normal" shape="circle"></p-avatar>
+                                <div class="flex flex-column gap-1">
+                                    <span><b>{{ user.fullName }}</b></span>
+                                    <small class="text-gray-400">&#64;{{user.userName}}</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span>{{user.email}}</span>
+                        </td>
+                        <td>
+                            <div class="flex gap-2 align-items-center">
+                                <ng-container *ngIf="user.role.id == ADMIN_ROLE; else userRole">
+                                    <i class="pi pi-crown text-yellow-500"></i>
+                                    <span class="text-yellow-500">Admin</span>
+                                </ng-container>
+                                <ng-template #userRole>
+                                    <i class="pi pi-user text-cyan-600"></i>
+                                    <span class="text-cyan-600">User</span>
+                                </ng-template>
+                            </div>
+                        </td>
+                        <td>
+                            <span>{{user.createdDate | date:'dd MMM yyyy - HH:mm:ss'}}</span>
+                        </td>
+                        <td>
+                            <p-tag [value]="user.active ? 'Active' : 'Inactive'"
+                                [severity]="user.active ? 'success' : 'danger'"></p-tag>
+                        </td>
+                        <td>
+                            <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true"
+                                severity="success" (onClick)="isEditUserInfo = true"></p-button>
+                            <p-button icon="pi pi-trash" severity="danger" [rounded]="true"
+                                [outlined]="true"></p-button>
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="6">No users found.</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+            <p-paginator [rows]="USERS_PAGE_SIZE" [totalRecords]="userResponsePage.page.totalElements"
+                [rowsPerPageOptions]="[5, 10, 20]"></p-paginator>
+        </ng-container>
+    </div>
+</div>
+
+<!-- <app-create-update-user [isEditUserInfo]="isEditUserInfo"
+                          (isDialogVisibleChange)="isEditUserInfo = $event"
+                          [userResponse]="user"></app-create-update-user> -->
+
+<p-toast></p-toast>

@@ -1,0 +1,70 @@
+.category-component {
+  background: radial-gradient(140% 107.13% at 50% 10%, transparent 37.41%, #63e 69.27%, #fff 100%);
+  border-radius: 3rem;
+}
+
+.category-list {
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  border-radius: 25px;
+}
+
+.sub-category-card.active {
+  border: 2px solid var(--gray-50) !important;
+  color: var(--gray-50) !important;
+  background-color: var(--indigo-500) !important;
+
+  img {
+    background: var(--gray-100) !important;
+  }
+}
+
+::ng-deep .p-tabview * {
+  background-color: transparent;
+}
+
+::ng-deep .p-tabview-panels {
+  padding: 1rem 0 0 0;
+}
+
+::ng-deep .p-tabview .p-tabview-nav-content {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 1rem;
+}
+
+::ng-deep .p-divider.p-divider-horizontal:before {
+  border-top: 1px solid var(--gray-600);
+}
+
+::ng-deep .p-tabview-nav-container>* {  
+  font-size: large;
+}
+
+::ng-deep .p-tabview .p-tabview-nav li{
+  color: #fff;
+}
+
+::ng-deep .p-tabview .p-tabview-nav {
+  border: none;
+}
+
+::ng-deep .p-tabview .p-tabview-nav li .p-tabview-nav-link {
+  border: none;
+  margin: 0;
+}
+
+::ng-deep .p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link {
+  border-radius: 1rem;
+  border-color: var(--pink-300);
+}
+
+::ng-deep .p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link {
+  background-color: #3F23A1;
+}
+
+::ng-deep .p-tabview .p-tabview-nav-btn.p-link {
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 1rem;
+}

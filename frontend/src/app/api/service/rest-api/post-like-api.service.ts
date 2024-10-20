@@ -17,8 +17,8 @@ export class PostLikeApiService {
     private http: HttpClient
   ) { }
 
-  toggle(likeRequest: PostLikeRequest): Observable<PostLikeResponse> {
-    return this.http.post<ApiResponse<PostLikeResponse>>(`${this.apiUrl}/toggle`, likeRequest)
+  toggleLike(postLikeRequest: PostLikeRequest): Observable<PostLikeResponse> {
+    return this.http.post<ApiResponse<PostLikeResponse>>(`${this.apiUrl}/toggle-like`, postLikeRequest, { withCredentials: true })
       .pipe(
         map(apiResponse => apiResponse.result!),
         catchError(this.handleError)
@@ -26,7 +26,7 @@ export class PostLikeApiService {
   }
 
   isLiked(postLikeRequest: PostLikeRequest): Observable<boolean> {
-    return this.http.post<ApiResponse<boolean>>(`${this.apiUrl}/is-liked`, postLikeRequest)
+    return this.http.post<ApiResponse<boolean>>(`${this.apiUrl}/is-liked`, postLikeRequest, { withCredentials: true })
       .pipe(
         map(apiResponse => apiResponse.result!),
         catchError(this.handleError)
@@ -42,7 +42,15 @@ export class PostLikeApiService {
   }
 
   private handleError(error: HttpErrorResponse): Observable<never> {
-    console.error('An error occurred:', error);
-    return throwError(() => new Error(error.message || 'Server error'));
+    let errorMessage = 'An unknown error occurred!';
+    if (error.error instanceof ErrorEvent) {
+      // Lỗi phía client
+      errorMessage = `Client-side error: ${error.error.message}`;
+    } else {
+      // Lỗi phía server
+      errorMessage = `Server-side error: ${error.status} ${error.message}`;
+    }
+    console.error('Error occurred:', errorMessage);
+    return throwError(() => new Error(errorMessage));
   }
 }

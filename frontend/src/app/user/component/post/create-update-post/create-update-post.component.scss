@@ -1,0 +1,74 @@
+::ng-deep .p-dialog * {
+  background: #111827;
+}
+
+::ng-deep .p-dialog {
+  max-height: 100%;
+}
+
+::ng-deep .p-editor-container .p-editor-toolbar{
+  background: #111827;
+}
+
+::ng-deep .p-editor-container .p-editor-content .ql-editor {
+  background: #111827;
+}
+
+::ng-deep .p-editor-container .p-editor-toolbar.ql-snow {
+  border-color: var(--gray-500);
+}
+
+::ng-deep .p-editor-container .p-editor-content.ql-snow {
+  border-color: var(--gray-500);
+}
+
+::ng-deep .ql-snow .ql-editor .ql-code-block-container {
+  background: #000;
+}
+
+::ng-deep .p-editor-container .p-editor-content .ql-editor {
+  color: #fff;
+}
+
+::ng-deep .ql-snow .ql-editor .ql-code-block-container .ql-code-block {
+  background: #000;
+}
+
+::ng-deep .p-chips .p-chips-multiple-container {
+  width: 100%;
+}
+
+// ::ng-deep .p-inputtext {
+//   color: #fff !important;
+// }
+
+::ng-deep .p-chips .p-chips-multiple-container .p-chips-input-token {
+  padding: 0.75rem;
+
+  input {
+    color: #fff;
+  }
+}
+
+::ng-deep .p-chips .p-chips-multiple-container .p-chips-token {
+  color: #fff;
+}
+
+
+::ng-deep .p-dialog .p-dialog-header {
+  color: #fff;
+}
+
+::ng-deep .p-dropdown .p-dropdown-filter {
+  color: #fff;
+}
+
+::ng-deep .p-button:disabled,
+::ng-deep .p-button:disabled * {
+  background: var(--gray-500) !important;
+}
+
+::ng-deep .p-component-overlay-enter{
+  background: rgba(255, 255, 255, 0.2) !important;
+  backdrop-filter: blur(4px);
+}

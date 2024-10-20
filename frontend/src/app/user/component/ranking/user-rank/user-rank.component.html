@@ -1,0 +1,44 @@
+<div class="user-rank-component flex flex-column gap-4">
+    <div pAnimateOnScroll enterClass="fadeinright" leaveClass="fadeoutright"
+        class="flex gap-4 align-items-center text-white font-bold text-2xl ml-4 animation-duration-500 animation-ease-in-out">
+        <i class="pi pi-bolt btn-primary p-2"></i>
+        <span>Leaderboard</span>
+    </div>
+
+    <div pAnimateOnScroll enterClass="fadeinright" leaveClass="fadeoutright"
+        class="user-rank-list primary-container flex flex-column gap-4">
+        <ng-container *ngIf="userRankResponseList$ | async as userRankResponseList">
+            <ng-container *ngFor="let userRank of userRankResponseList; let i = index">
+                <ng-container *ngIf="userRank.userId | userIdToUser | async as user">
+                    <div class="flex flex-column gap-2 pl-3 pr-3">
+                        <div class="flex justify-content-between">
+                            <div class="flex gap-2">
+                                <p-avatar class="" [image]="user.imageUrl" size="large" shape="circle" />
+                                <div class="flex flex-column gap-1">
+                                    <span class="text-white text-base font-bold">{{user.fullName}}</span>
+                                    <span class="text-gray-300 text-xs font-semibold">{{user.userName}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4 align-items-center text-white text-sm">
+                            <div class="flex gap-2 align-items-center">
+                                <i class="pi pi-eye"></i>
+                                <span>{{userRank.totalViews}}</span>
+                            </div>
+
+                            <div class="flex gap-2 align-items-center">
+                                <i class="pi pi-file"></i>
+                                <span>{{userRank.totalPosts}}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div *ngIf="i < userRankResponseList.length - 1" class="divider"></div>
+                </ng-container>
+            </ng-container>
+        </ng-container>
+    </div>
+</div>
+
+<p-toast></p-toast>

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { UserComponent } from './user/user.component';
+import { AdminComponent } from './admin/admin.component';
 
 const routes: Routes = [
   // {
@@ -31,6 +32,13 @@ const routes: Routes = [
     component: UserComponent,
     loadChildren: () =>
       import('./user/user.module').then(m => m.UserModule)
+  },
+
+  {
+    path: 'admin',
+    component: AdminComponent,
+    loadChildren: () =>
+      import('./admin/admin.module').then(m => m.AdminModule)
   },
   // {
   //   path: '404',

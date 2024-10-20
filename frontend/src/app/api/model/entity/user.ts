@@ -8,6 +8,7 @@ export interface User {
     fullName?: string;
     imageUrl: string;
     cloudinaryImageId: string;
+    aboutMe: string;
     active: boolean;
     createdBy: string;
     createdDate: Date | string;

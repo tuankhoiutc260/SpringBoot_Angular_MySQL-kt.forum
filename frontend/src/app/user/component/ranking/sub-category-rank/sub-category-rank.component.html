@@ -1,0 +1,19 @@
+<div class="sub-category-rank-component flex flex-column gap-4">
+    <div pAnimateOnScroll enterClass="fadeinright" leaveClass="fadeoutright" class="flex gap-4 align-items-center text-white font-bold text-2xl ml-4 animation-duration-500 animation-ease-in-out">
+        <i class="pi pi-bolt btn-primary p-2"></i>
+        <span>Trending topics</span>
+    </div>
+
+    <div pAnimateOnScroll enterClass="fadeinright" leaveClass="fadeoutright" class="sub-category-list flex flex-wrap gap-2 primary-container">
+        <ng-container *ngIf="subCategoryRankResponseList$ | async as subCategoryRankResponseList">
+            <ng-container *ngFor="let subCategoryRank of subCategoryRankResponseList">
+                <ng-container *ngIf="subCategoryRank.subCategoryId | subCategoryIdToSubCategory | async as subCategory">
+                    <span
+                        class="sub-category-item border-1 border-round p-2 text-white w-max hover:bg-white-alpha-10 text-sm cursor-pointer transition-duration-100 z-2">{{subCategory.title}}</span>
+                </ng-container>
+            </ng-container>
+        </ng-container>
+    </div>
+</div>
+
+<p-toast></p-toast>
