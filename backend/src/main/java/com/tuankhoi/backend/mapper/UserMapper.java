@@ -1,5 +1,6 @@
 package com.tuankhoi.backend.mapper;
 
+import com.tuankhoi.backend.dto.request.UpdateProfileRequest;
 import com.tuankhoi.backend.dto.request.UserRequest;
 import com.tuankhoi.backend.dto.response.UserResponse;
 import com.tuankhoi.backend.model.entity.User;
@@ -12,6 +13,7 @@ public interface UserMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "imageUrl", ignore = true)
     @Mapping(target = "cloudinaryImageId", ignore = true)
+    @Mapping(target = "aboutMe", ignore = true)
     @Mapping(target = "active", ignore = true)
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdDate", ignore = true)
@@ -26,6 +28,7 @@ public interface UserMapper {
     @Mapping(target = "password", ignore = true)
     @Mapping(target = "imageUrl", ignore = true)
     @Mapping(target = "cloudinaryImageId", ignore = true)
+    @Mapping(target = "aboutMe", ignore = true)
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdDate", ignore = true)
     @Mapping(target = "lastModifiedBy", ignore = true)
@@ -33,6 +36,9 @@ public interface UserMapper {
 //    @Mapping(target = "role.id", source = "roleId")
 //    @Mapping(target = "roleId", source = "role.id")
     void updateUserFromRequest(UserRequest userRequest, @MappingTarget User user);
+
+    @Mapping(target = "imageUrl", ignore = true)
+    void updateProfileUserFromRequest(UpdateProfileRequest request, @MappingTarget User user);
 }
 
 

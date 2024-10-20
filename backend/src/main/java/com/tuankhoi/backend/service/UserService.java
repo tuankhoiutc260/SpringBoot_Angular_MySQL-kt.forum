@@ -1,5 +1,7 @@
 package com.tuankhoi.backend.service;
 
+import com.tuankhoi.backend.dto.request.ChangePasswordRequest;
+import com.tuankhoi.backend.dto.request.UpdateProfileRequest;
 import com.tuankhoi.backend.dto.request.UserRequest;
 import com.tuankhoi.backend.dto.response.UserResponse;
 import org.springframework.data.domain.Page;
@@ -22,4 +24,8 @@ public interface UserService {
     UserResponse update(String userId, UserRequest userRequest);
 
     void deleteById(String userId);
+
+    UserResponse updateProfile(String userId, UpdateProfileRequest request);
+
+    void changePassword(String userId, ChangePasswordRequest changePasswordRequest);
 }

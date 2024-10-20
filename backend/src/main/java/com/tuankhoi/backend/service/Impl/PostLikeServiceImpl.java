@@ -38,28 +38,27 @@ public class PostLikeServiceImpl implements PostLikeService {
     @Cacheable(value = "postLikeCount", key = "#postLikeRequest.postId", unless = "#result == 0")
     @Override
     public Long countLikes(PostLikeRequest postLikeRequest) {
-        Post existingPost = postRepository.findById(postLikeRequest.getPostId()).orElseThrow(()->new AppException(ErrorCode.POST_NOTFOUND));
+        Post existingPost = postRepository.findById(postLikeRequest.getPostId()).orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));
         return likeRepository.countByPostId(existingPost.getId());
     }
 
-    @PostAuthorize("hasRole('ADMIN') or hasRole('USER') or hasRole('STAFF')")
-    @Cacheable(value = "postLikeStatus", key = "#postLikeRequest.postId + '_' + authentication.name")
+    //    @PostAuthorize("hasRole('ADMIN') or hasRole('USER') or hasRole('STAFF')")
+    @Cacheable(value = "postLikeStatus", key = "#postLikeRequest.postId + '_' + @auth.getAuthentication().name")
     @Override
     public Boolean isLiked(PostLikeRequest postLikeRequest) {
-        Post existingPost = postRepository.findById(postLikeRequest.getPostId()).orElseThrow(()->new AppException(ErrorCode.POST_NOTFOUND));
+        Post existingPost = postRepository.findById(postLikeRequest.getPostId()).orElseThrow(() -> new AppException(ErrorCode.POST_NOTFOUND));
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Optional<User> existingUser = userRepository.findById(authentication.getName());
 
         if (authentication instanceof AnonymousAuthenticationToken) {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
-        }
-        else if(existingUser.isEmpty())
+        } else if (existingUser.isEmpty())
             throw new AppException(ErrorCode.USER_NOTFOUND);
 
         return likeRepository.existsByUserIdAndPostId(existingUser.get().getId(), existingPost.getId());
     }
 
-    @PostAuthorize("hasRole('ADMIN') or hasRole('USER') or hasRole('STAFF')")
+    //    @PostAuthorize("hasRole('ADMIN') or hasRole('USER') or hasRole('STAFF')")
     @Caching(evict = {
             @CacheEvict(value = "postLikeCount", key = "#postLikeRequest.postId"),
             @CacheEvict(value = "postLikeStatus", key = "#postLikeRequest.postId + '_' + #userId"),

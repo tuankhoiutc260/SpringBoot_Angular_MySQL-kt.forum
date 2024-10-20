@@ -35,6 +35,8 @@ public class UserRequest {
 
     MultipartFile imageFile;
 
+    String aboutMe;
+
     @Builder.Default
     boolean active = true;
 

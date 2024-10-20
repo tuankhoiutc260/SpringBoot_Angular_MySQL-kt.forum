@@ -10,6 +10,8 @@ public interface CategoryService {
 
     CategoryResponse getById(String categoryId);
 
+    CategoryResponse getBySubCategoryId(String subCategoryId);
+
     Page<CategoryResponse> getAll(int page, int size);
 
     CategoryResponse update(String categoryId, CategoryRequest categoryRequest);

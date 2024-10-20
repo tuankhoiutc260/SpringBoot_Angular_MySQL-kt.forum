@@ -42,8 +42,8 @@ spring:
       namespace: app:cache
 
 jwt:
-  valid-access-token-duration: 60
-  valid-refresh-token-duration: 20000
+  valid-access-token-duration: 6000000
+  valid-refresh-token-duration: 60000000
   refreshable-duration: 240000
 
 cookie:

@@ -1,194 +1,260 @@
 [
   {
-    "title": "Popular tourist destinations in the country",
+    "title": "Backend Development",
     "subCategories": [
       {
-        "title": "Hanoi",
-        "description": "The capital city known for its rich history and vibrant culture.",
-        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724401120/kt-forum/kt-forum_img_HaNoi.jpg",
-        "cloudinaryImageId": "kt-forum/kt-forum_img_HaNoi"
+        "title": "Node.js",
+        "description": "Phát triển backend với Node.js và Express",
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1727839377/kt-forum/kt-forum_nodejs.png",
+        "cloudinaryImageId": "kt-forum_nodejs"
       },
       {
-        "title": "Ho Chi Minh City",
-        "description": "The bustling economic hub with modern attractions and lively nightlife.",
-        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724401397/kt-forum/kt-forum_img_HoChiMinh.jpg",
-        "cloudinaryImageId": "kt-forum/kt-forum_img_HoChiMinh"
+        "title": "Python",
+        "description": "Phát triển backend với Python (Django, Flask)",
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1727839521/kt-forum/kt-forum_python.png",
+        "cloudinaryImageId": "kt-forum_python"
       },
       {
-        "title": "Da Nang",
-        "description": "A coastal city with beautiful beaches and scenic mountains.",
-        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724401503/kt-forum/kt-forum_img_DaNang.jpg",
-        "cloudinaryImageId": "kt-forum/kt-forum_img_DaNang"
+        "title": "Java",
+        "description": "Phát triển backend với Java (Spring Boot)",
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1727839533/kt-forum/kt-forum_java.png",
+        "cloudinaryImageId": "kt-forum_java"
       },
       {
-        "title": "Hoi An",
-        "description": "A historic town famous for its well-preserved architecture and lantern-lit streets.",
-        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724401565/kt-forum/kt-forum_img_HoiAn.jpg",
-        "cloudinaryImageId": "kt-forum/kt-forum_img_HoiAn"
+        "title": "PHP",
+        "description": "Phát triển backend với PHP (Laravel, Symfony)",
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1727839542/kt-forum/kt-forum_php.png",
+        "cloudinaryImageId": "kt-forum_php"
       },
       {
-        "title": "Hue",
-        "description": "The ancient capital with historical sites and royal heritage.",
-        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724401659/kt-forum/kt-forum_img_Hue.jpg",
-        "cloudinaryImageId": "kt-forum/kt-forum_img_Hue"
+        "title": "Ruby",
+        "description": "Phát triển backend với Ruby on Rails",
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1727839552/kt-forum/kt-forum_ruby.png",
+        "cloudinaryImageId": "kt-forum_ruby"
       },
       {
-        "title": "Nha Trang",
-        "description": "A resort city known for its stunning beaches and clear waters.",
-        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724401693/kt-forum/kt-forum_img_NhaTrang.jpg",
-        "cloudinaryImageId": "kt-forum/kt-forum_img_NhaTrang"
-      },
-      {
-        "title": "Phu Quoc",
-        "description": "An island paradise with pristine beaches and tropical forests.",
-        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724401740/kt-forum/kt-forum_img_PhuQuoc.jpg",
-        "cloudinaryImageId": "kt-forum/kt-forum_img_PhuQuoc"
-      },
-      {
-        "title": "Ha Long",
-        "description": "Known for its stunning bay and limestone formations.",
-        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724401925/kt-forum/kt-forum_img_HaLong.jpg",
-        "cloudinaryImageId": "kt-forum/kt-forum_img_HaLong"
-      },
-      {
-        "title": "Sapa",
-        "description": "A mountainous region with beautiful terraced fields and ethnic minority cultures.",
-        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724402234/kt-forum/kt-forum_img_SaPa.jpg",
-        "cloudinaryImageId": "kt-forum/kt-forum_img_SaPa"
-      },
-      {
-        "title": "Dalat",
-        "description": "A cool-weather city known for its flowers, lakes, and French colonial architecture.",
-        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724402481/kt-forum/kt-forum_img_DaLat.jpg",
-        "cloudinaryImageId": "kt-forum/kt-forum_img_DaLat"
-      },
-      {
-        "title": "Can Tho",
-        "description": "A city in the Mekong Delta known for its floating markets and waterways.",
-        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724402532/kt-forum/kt-forum_img_CanTho.jpg",
-        "cloudinaryImageId": "kt-forum/kt-forum_img_CanTho"
-      },
-      {
-        "title": "Vung Tau",
-        "description": "A coastal city popular for its beaches and seafood.",
-        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724402582/kt-forum/kt-forum_img_VungTau.jpg",
-        "cloudinaryImageId": "kt-forum/kt-forum_img_VungTau"
-      },
-      {
-        "title": "Quy Nhon",
-        "description": "A quiet beach town with untouched beaches and historical sites.",
-        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724402617/kt-forum/kt-forum_img_QuyNhon.jpg",
-        "cloudinaryImageId": "kt-forum/kt-forum_img_QuyNhon"
-      },
-      {
-        "title": "Mui Ne",
-        "description": "Famous for its sand dunes and water sports.",
-        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724402639/kt-forum/kt-forum_img_MuiNe.jpg",
-        "cloudinaryImageId": "kt-forum/kt-forum_img_MuiNe"
-      },
-      {
-        "title": "Hai Phong",
-        "description": "An industrial port city with a blend of history and modernity.",
-        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724402675/kt-forum/kt-forum_img_HaiPhong.jpg",
-        "cloudinaryImageId": "kt-forum/kt-forum_img_HaiPhong"
+        "title": "Go",
+        "description": "Phát triển backend với Go (Golang)",
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1727839745/kt-forum/kt-forum_golang.png",
+        "cloudinaryImageId": "kt-forum_golang"
       }
     ],
-    "description": "Explore Vietnam's top tourist destinations, from breathtaking natural landscapes to rich cultural sites, offering unique experiences for every traveler."
+    "description": "Thảo luận về phát triển phía máy chủ, cơ sở dữ liệu, và API"
   },
   {
-    "title": "Top Tourist Destinations Around the World",
+    "title": "Frontend Development",
     "subCategories": [
       {
-        "title": "Paris",
-        "description": "The capital of France, renowned for its art, fashion, and landmarks like the Eiffel Tower.",
-        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724402697/kt-forum/kt-forum_img_Paris.jpg",
-        "cloudinaryImageId": "kt-forum/kt-forum_img_Paris"
+        "title": "React",
+        "description": "Phát triển frontend với React và Redux",
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1727839866/kt-forum/kt-forum_react.png",
+        "cloudinaryImageId": "kt-forum_react"
       },
       {
-        "title": "New York",
-        "description": "A vibrant city famous for its iconic skyline, Broadway shows, and diverse culture.",
-        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724402794/kt-forum/kt-forum_img_NewYork.jpg",
-        "cloudinaryImageId": "kt-forum/kt-forum_img_NewYork"
+        "title": "Vue.js",
+        "description": "Phát triển frontend với Vue.js và Vuex",
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1727839959/kt-forum/kt-forum_vuejs.png",
+        "cloudinaryImageId": "kt-forum_vuejs"
       },
       {
-        "title": "Tokyo",
-        "description": "A bustling metropolis known for its technology, fashion, and traditional temples.",
-        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724402817/kt-forum/kt-forum_img_Tokyo.jpg",
-        "cloudinaryImageId": "kt-forum/kt-forum_img_Tokyo"
+        "title": "Angular",
+        "description": "Phát triển frontend với Angular",
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1727839970/kt-forum/kt-forum_angular.png",
+        "cloudinaryImageId": "kt-forum_angular"
       },
       {
-        "title": "London",
-        "description": "The capital of the UK, known for its historic landmarks, museums, and cultural diversity.",
-        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724402839/kt-forum/kt-forum_img_LonDon.jpg",
-        "cloudinaryImageId": "kt-forum/kt-forum_img_LonDon"
+        "title": "Svelte",
+        "description": "Phát triển frontend với Svelte",
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1727840036/kt-forum/kt-forum_svelte.png",
+        "cloudinaryImageId": "kt-forum_svelte"
       },
       {
-        "title": "Rome",
-        "description": "Italy's capital, rich in history with ancient ruins like the Colosseum and Vatican City.",
-        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724402861/kt-forum/kt-forum_img_Rome.jpg",
-        "cloudinaryImageId": "kt-forum/kt-forum_img_Rome"
+        "title": "CSS",
+        "description": "CSS, Sass, Less và các framework CSS",
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1727840081/kt-forum/kt-forum_css.png",
+        "cloudinaryImageId": "kt-forum_css"
       },
       {
-        "title": "Barcelona",
-        "description": "A city in Spain known for its unique architecture by Antoni Gaudí and vibrant street life.",
-        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724402883/kt-forum/kt-forum_img_Barcelona.jpg",
-        "cloudinaryImageId": "kt-forum/kt-forum_img_Barcelona"
-      },
-      {
-        "title": "Sydney",
-        "description": "An Australian city famous for its stunning harbor, Opera House, and beautiful beaches.",
-        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724402910/kt-forum/kt-forum_img_Sydney.jpg",
-        "cloudinaryImageId": "kt-forum/kt-forum_img_Sydney"
-      },
-      {
-        "title": "Dubai",
-        "description": "A luxurious city in the UAE known for its modern architecture, shopping, and nightlife.",
-        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724402935/kt-forum/kt-forum_img_Dubai.jpg",
-        "cloudinaryImageId": "kt-forum/kt-forum_img_Dubai"
-      },
-      {
-        "title": "Istanbul",
-        "description": "A city straddling Europe and Asia with rich history, including landmarks like the Hagia Sophia.",
-        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724402994/kt-forum/kt-forum_img_Istanbul.jpg",
-        "cloudinaryImageId": "kt-forum/kt-forum_img_Istanbul"
-      },
-      {
-        "title": "Bangkok",
-        "description": "Thailand's capital, famous for its vibrant street life, temples, and bustling markets.",
-        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724403045/kt-forum/kt-forum_img_Bangkok.jpg",
-        "cloudinaryImageId": "kt-forum/kt-forum_img_Bangkok"
-      },
-      {
-        "title": "Singapore",
-        "description": "A city-state known for its cleanliness, modern skyline, and diverse cultural influences.",
-        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724403116/kt-forum/kt-forum_img_Singapore.jpg",
-        "cloudinaryImageId": "kt-forum/kt-forum_img_Singapore"
-      },
-      {
-        "title": "Rio de Janeiro",
-        "description": "A Brazilian city famous for its carnival, beaches, and the iconic Christ the Redeemer statue.",
-        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724403141/kt-forum/kt-forum_img_RiodeJaneiro.jpg",
-        "cloudinaryImageId": "kt-forum/kt-forum_img_RiodeJaneiro"
-      },
-      {
-        "title": "Amsterdam",
-        "description": "The capital of the Netherlands, known for its canals, museums, and historic buildings.",
-        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724403201/kt-forum/kt-forum_img_Amsterdam.jpg",
-        "cloudinaryImageId": "kt-forum/kt-forum_img_Amsterdam"
-      },
-      {
-        "title": "Prague",
-        "description": "The capital of the Czech Republic, famous for its well-preserved medieval architecture.",
-        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724403226/kt-forum/kt-forum_img_Prague.jpg",
-        "cloudinaryImageId": "kt-forum/kt-forum_img_Prague"
-      },
-      {
-        "title": "Cape Town",
-        "description": "A city in South Africa known for its stunning landscapes, including Table Mountain and beautiful beaches.",
-        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724403244/kt-forum/kt-forum_img_CapeTown.jpg",
-        "cloudinaryImageId": "kt-forum/kt-forum_img_CapeTown"
+        "title": "JavaScript",
+        "description": "Vanilla JavaScript và ES6+",
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1727840090/kt-forum/kt-forum_javascript.png",
+        "cloudinaryImageId": "kt-forum_javascript"
       }
     ],
-    "description": "Discover the most iconic and breathtaking destinations across the globe. From historic landmarks and vibrant cities to natural wonders and serene beaches, these spots offer unforgettable experiences for travelers seeking adventure, culture, and beauty."
+    "description": "Thảo luận về phát triển giao diện người dùng và trải nghiệm người dùng"
+  },
+  {
+    "title": "Mobile Development",
+    "subCategories": [
+      {
+        "title": "React Native",
+        "description": "Phát triển ứng dụng đa nền tảng với React Native",
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1727840286/kt-forum/kt-forum_react-native.png",
+        "cloudinaryImageId": "kt-forum_react-native"
+      },
+      {
+        "title": "Flutter",
+        "description": "Phát triển ứng dụng di động với Flutter và Dart",
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1727840333/kt-forum/kt-forum_flutter.png",
+        "cloudinaryImageId": "kt-forum_flutter"
+      },
+      {
+        "title": "iOS (Swift)",
+        "description": "Phát triển ứng dụng iOS bằng Swift",
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1727840343/kt-forum/kt-forum_swift.png",
+        "cloudinaryImageId": "kt-forum_swift"
+      },
+      {
+        "title": "Android (Kotlin)",
+        "description": "Phát triển ứng dụng Android bằng Kotlin",
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1727840356/kt-forum/kt-forum_kotlin.png",
+        "cloudinaryImageId": "kt-forum_kotlin"
+      },
+      {
+        "title": "Xamarin",
+        "description": "Phát triển ứng dụng đa nền tảng với Xamarin",
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1727840419/kt-forum/kt-forum_xamarin.png",
+        "cloudinaryImageId": "kt-forum_xamarin"
+      }
+    ],
+    "description": "Thảo luận về phát triển ứng dụng di động cho iOS và Android"
+  },
+  {
+    "title": "DevOps & Cloud",
+    "subCategories": [
+      {
+        "title": "Docker",
+        "description": "Containerization với Docker",
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1727840819/kt-forum/kt-forum_docker.png",
+        "cloudinaryImageId": "kt-forum_docker"
+      },
+      {
+        "title": "Kubernetes",
+        "description": "Orchestration với Kubernetes",
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1727840831/kt-forum/kt-forum_kubernetes.png",
+        "cloudinaryImageId": "kt-forum_kubernetes"
+      },
+      {
+        "title": "AWS",
+        "description": "Amazon Web Services và các dịch vụ của nó",
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1727840839/kt-forum/kt-forum_aws.png",
+        "cloudinaryImageId": "kt-forum_aws"
+      },
+      {
+        "title": "Google Cloud",
+        "description": "Google Cloud Platform và các dịch vụ của nó",
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1727840852/kt-forum/kt-forum_google-cloud.png",
+        "cloudinaryImageId": "kt-forum_google-cloud"
+      },
+      {
+        "title": "Azure",
+        "description": "Microsoft Azure và các dịch vụ của nó",
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1727840859/kt-forum/kt-forum_azure.png",
+        "cloudinaryImageId": "kt-forum_azure"
+      },
+      {
+        "title": "CI/CD",
+        "description": "Continuous Integration và Continuous Deployment",
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1727840868/kt-forum/kt-forum_ci-cd.png",
+        "cloudinaryImageId": "kt-forum_ci-cd"
+      }
+    ],
+    "description": "Thảo luận về các công cụ và thực hành DevOps, cùng với các nền tảng đám mây"
+  },
+  {
+    "title": "Data Science & AI",
+    "subCategories": [
+      {
+        "title": "Machine Learning",
+        "description": "Các thuật toán và ứng dụng của máy học",
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1727841162/kt-forum/kt-forum_machine-learning.png",
+        "cloudinaryImageId": "kt-forum_machine-learning"
+      },
+      {
+        "title": "Deep Learning",
+        "description": "Neural Networks và Deep Learning",
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1727841260/kt-forum/kt-forum_deep-learning.png",
+        "cloudinaryImageId": "kt-forum_deep-learning"
+      },
+      {
+        "title": "Big Data",
+        "description": "Xử lý và phân tích dữ liệu lớn",
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1727841821/kt-forum/kt-forum_big-data.png",
+        "cloudinaryImageId": "kt-forum_big-data"
+      },
+      {
+        "title": "Data Visualization",
+        "description": "Kỹ thuật và công cụ trực quan hóa dữ liệu",
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1727841834/kt-forum/kt-forum_data-visualization.png",
+        "cloudinaryImageId": "kt-forum_data-visualization"
+      },
+      {
+        "title": "NLP",
+        "description": "Xử lý ngôn ngữ tự nhiên",
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1727841844/kt-forum/kt-forum_nlp.png",
+        "cloudinaryImageId": "kt-forum_nlp"
+      }
+    ],
+    "description": "Thảo luận về khoa học dữ liệu, máy học và trí tuệ nhân tạo"
+  },
+  {
+    "title": "Database Systems",
+    "subCategories": [
+      {
+        "title": "SQL",
+        "description": "Các hệ quản trị cơ sở dữ liệu quan hệ (MySQL, PostgreSQL, etc.)",
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1727841903/kt-forum/kt-forum_sql.png",
+        "cloudinaryImageId": "kt-forum_sql"
+      },
+      {
+        "title": "NoSQL",
+        "description": "Cơ sở dữ liệu NoSQL (MongoDB, Cassandra, etc.)",
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1727842025/kt-forum/kt-forum_no-sql.png",
+        "cloudinaryImageId": "kt-forum_no-sql"
+      },
+      {
+        "title": "GraphQL",
+        "description": "API query language và runtime",
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1727842036/kt-forum/kt-forum_graphql.png",
+        "cloudinaryImageId": "kt-forum_graphql"
+      },
+      {
+        "title": "Redis",
+        "description": "In-memory data structure store",
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1727842047/kt-forum/kt-forum_redis.png",
+        "cloudinaryImageId": "kt-forum_redis"
+      }
+    ],
+    "description": "Thảo luận về các hệ thống quản lý cơ sở dữ liệu"
+  },
+  {
+    "title": "Web Security",
+    "subCategories": [
+      {
+        "title": "Authentication",
+        "description": "Các phương pháp xác thực người dùng",
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1727842121/kt-forum/kt-forum_authentication.png",
+        "cloudinaryImageId": "kt-forum_authentication"
+      },
+      {
+        "title": "Encryption",
+        "description": "Kỹ thuật mã hóa dữ liệu",
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1727842131/kt-forum/kt-forum_encryption.png",
+        "cloudinaryImageId": "kt-forum_encryption"
+      },
+      {
+        "title": "OWASP",
+        "description": "Các vấn đề bảo mật web phổ biến và cách phòng chống",
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1727842224/kt-forum/kt-forum_owasp.png",
+        "cloudinaryImageId": "kt-forum_owasp"
+      },
+      {
+        "title": "Penetration Testing",
+        "description": "Kỹ thuật kiểm tra bảo mật",
+        "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1727842237/kt-forum/kt-forum_penetration-testing.png",
+        "cloudinaryImageId": "kt-forum_penetration-testing"
+      }
+    ],
+    "description": "Thảo luận về bảo mật web và các biện pháp phòng chống"
   }
 ]

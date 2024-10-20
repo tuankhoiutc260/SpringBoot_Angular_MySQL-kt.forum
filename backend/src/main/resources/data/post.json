@@ -1,452 +1,281 @@
 [
   {
-    "title": "Exploring Sydney’s Harbor",
-    "content": "Sydney’s harbor is famous for its beauty. Take a ferry ride and enjoy stunning views of the Sydney Opera House and the Harbour Bridge.",
+    "title": "Data Types in Java and When to Use Them",
+    "description": "Introduces the basic data types in Java, explaining the characteristics and usage of each data type to optimize memory and application performance.",
+    "content": "<p>Java is a powerful programming language with a rich data type system, allowing you to handle many different types of data. Understanding data types and how to use them properly not only helps you write correct code but also helps you optimize application performance.</p><p><br></p><p><strong>Basic data types:</strong></p><ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><code><strong>byte</strong></code><strong>:</strong> Is an 8-bit integer type, with a range from -128 to 127. Suitable for saving memory in large arrays.</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><code><strong>short</strong></code><strong>:</strong> Is a 16-bit integer type, with a range from from -32,768 to 32,767. Used when more memory is needed than <code>int</code>.</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><code><strong>int</strong></code><strong>:</strong> Is a 32-bit integer type, ranging from -2^31 to 2^31-1. It is the most common integer type.</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><code><strong>long</strong></code><strong>:</strong> Is a 64-bit integer type, ranging from -2^63 to 2^63-1. Use when the <code>int</code> range is not enough.</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><code><strong>float</strong></code><strong>:</strong> Is a 32-bit real number type, suitable for low-precision calculations.</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><code><strong>double</strong></code><strong>:</strong> Is a 64-bit real number type, used when higher precision is required than <code>float</code>.</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><code><strong>char</strong></code><strong>:</strong> Is a 16-bit Unicode character type, used to store single characters.</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><code><strong>boolean</strong></code><strong>:</strong> There are two values <code>true</code> and <code>false</code>, used to represent logical values.</li></ol><p><br></p><p><strong>When to use them:</strong></p><ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><code><strong>byte</strong></code><strong> and </strong><code><strong>short</strong></code><strong>:</strong> When you need to save memory and the data has a small range.</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><code><strong>int</strong></code><strong>:</strong> Suitable for common integer operations.</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><code><strong>long</strong></code><strong>:</strong> Used when needing to process large numbers.</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><code><strong>float</strong></code><strong> and </strong><code><strong>double</strong></code><strong>:</strong> Used to store real numbers. <code>double</code> is generally preferred over <code>float</code> because of its higher precision.</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><code><strong>char</strong></code><strong>:</strong> Use when dealing with single characters, such as in text strings.</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><code><strong>boolean</strong></code><strong>:</strong> Use for logical and conditional decisions.</li></ol><p><br></p><p><strong>Example:</strong></p><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql-code-block\" data-language=\"plain\">public class DataTypesExample {</div><div class=\"ql-code-block\" data-language=\"plain\"> public static void main(String[] args) {</div><div class=\"ql-code-block\" data-language=\"plain\"> byte b = 100;</div><div class=\"ql-code-block\" data-language=\"plain\"> short s = 5000;</div><div class=\"ql-code-block\" data-language=\"plain\"> in t i = 100000;</div><div class=\"ql-code-block\" data-language=\"plain\"> long l = 10000000000L;</div><div class=\"ql-code-block\" data-language=\"plain\"> float f = 10.5f;</div><div class=\"ql-code-block\" data-language=\"plain\"> double d = 2 0.99;</div><div class=\"ql-code-block\" data-language=\"plain\"> char c = 'A';</div><div class=\"ql-code-block\" data-language=\"plain\"> boolean bool = true;</div><div class=\"ql-code-block\" data-language=\"plain\"> </div><div class=\"ql-code-block\" data-language=\"plain\"> System.out.println(\"Byte value: \" + b);</div><div class=\"ql- code-block\" data-language=\"plain\"> System.out.println(\"Short value: \" + s);</div><div class=\"ql-code-block\" data-language=\"plain\"> System.out.println(\"Int value: \" + i);</div><div class=\"ql-code-block\" data-language=\"plain\"> System.out.println(\"Long value: \" + l);</ div><div class=\"ql-code-block\" data-language=\"plain\"> System.out.println(\"Float value: \" + f);</div><div class=\"ql-code-block\" data-language=\"plain\"> System.out.println(\"Double value: \" + d);</div><div class=\"ql-code-block\" data-language=\"plain\"> System.out.println(\"Char value: \" + c);</div><div class=\"ql-code-block\" data-language=\"plain\"> System.out.println(\"Boolean value: \" + bool);</div><div class=\"ql-code-block\" data-language=\"plain\"> }</div><div class=\"ql-code-block\" data-language=\"plain\">}</div></div><p><br></p><p><strong>Conclusion:</strong></p><p>Understanding and using data types correctly is essential to writing efficient code in Java. Choosing the right data type helps minimize memory waste and ensures that your calculations work correctly.</p>",
     "subCategory": {
-      "title": "Sydney"
+      "title": "Java"
     },
     "createdBy": "hannah_black",
-    "lastModifiedBy": "hannah_black"
+    "lastModifiedBy": "hannah_black",
+    "tags": [
+      "REST",
+      "Lambda",
+      "Java"
+    ]
   },
   {
-    "title": "Barcelona’s Food Scene",
-    "content": "Barcelona’s food scene is diverse and delicious. Enjoy tapas, seafood, and Catalan cuisine in the city’s vibrant eateries.",
+    "title": "Understanding Java Collections Framework: List, Set and Map",
+    "description": "An overview of the Java Collections Framework, describing the List, Set and Map data structures with examples to help you choose the right structure in your Java applications.",
+    "content": "<p>The Java Collections Framework provides a set of classes and interfaces for working with groups of objects, from lists to sets and maps. Understanding these data structures helps you organize and manage data more efficiently.</p><p><strong>List:</strong></p><ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><code><strong>ArrayList</strong></code><strong>:</strong> Provides random access to elements and is dynamically resized. Good for fast data access.</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><code><strong>LinkedList</strong></code><strong>:</strong> Provides fast element insertion and removal. Good for frequent insertion and removal operations through.</li></ol><p><br></p><p><strong>Set:</strong></p><ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><code><strong>HashSet</strong></code><strong>:</strong> Does not maintain the order of the elements and does not allow duplicates. Good for fast search operations.</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><code><strong>TreeSet</strong></code><strong>:</strong> Maintains the natural order of the elements. Good for operations that require sorting.</li></ol><p><strong>Map:</strong></p><ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><code><strong>HashMap</strong></code><strong>:</strong> Stores key-value pairs and does not maintain order. Good for fast access and modification operations.</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><code><strong>TreeMap</strong></code><strong>:</strong> Maintains the natural order of keys. Good for key-based sorting operations.</li></ol><p><br></p><p><strong>For example:</strong></p><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql-code-block\" data-language=\"plain\">import java.util.*;</div><div class=\"ql-code-block\" data-language=\"plain\">< br></div><div class=\"ql-code-block\" data-language=\"plain\">public class CollectionsExample {</div><div class=\"ql-code-block\" data-language=\"plain\"> public static void main(String[] args) {</div><div class=\"ql-code-block\" data-language=\"plain\"> // List</div><div class=\"ql-code-block\" data-language=\"plain\"> List&lt;String&gt; list = new ArrayList&lt;&gt;();</div><div class=\"ql-code-block\" data-language=\"plain\"> list.add(\"Apple\");</div><div class=\"ql-code-block\" data-=\"plain\"> list.add(\"Banana\");</div><div class=\"ql-code-block\" data-language=\"plain\">        list.add(\"Cherry\");</div><div class=\"ql-code-block\" data- language=\"plain\"> System.out.println(\"List: \" + list);</div><div class=\"ql-code-block\" data-language=\"plain\"> </div><div class=\"ql-code-block\" data-language=\"plain\"> // Set</div><div class=\"ql-code-block\" data -language=\"plain\"> Set&lt;String&gt; set = new HashSet&lt;&gt;();</div><div class=\"ql-code-block\" data-language=\"plain\"> set.add(\"Apple\");</div><div class=\"ql-code-block\" data-language=\"plain\"> set.add(\"Banana\");</div><div class=\"ql-code-block\" data-language=\"plain\"> set.add(\"Apple\"); // Duplicates are ignored</div><div class=\"ql-code-block\" data-language=\"plain\"> System.out.println(\"Set: \" + set);</div><div class=\"ql-code-block\" data-language=\"plain\"> </div><div class=\"ql-code-block\" data-language=\"plain\"> // Map</div><div class=\"ql-code-block\"data-language=\"plain\"> Map&lt;String, Integer&gt; map = new HashMap&lt;&gt;();</div><div class=\"ql-code-block\" data-language=\"plain\"> map.put(\"Apple\", 1);</div><div class=\"ql-code-block\" data-language=\"plain\"> map.put(\"Banana\", 2);</div><div class=\"ql-code-block\" data-language=\"plain\"> map .put(\"Cherry\", 3);</div><div class=\"ql-code-block\" data-language=\"plain\"> System.out.println(\"Map: \" + map);</div><div class=\"ql-code-block\" data-language=\"plain\"> </div><div class=\"ql-code-block\" data-language=\"plain\"> // TreeMap</div><div class=\" ql-code-block\" data-language=\"plain\"> Map&lt;String, Integer&gt; sortedMap = new TreeMap&lt;&gt;(map);</div><div class=\"ql-code-block\" data-language=\"plain\"> System.out.println(\"Sorted Map: \" + sortedMap);</div><div class=\"ql-code-block\" data-language=\"plain\"> }</div><div class=\"ql-code-block\" data-language=\"plain\">}</div></div><p><br></p><p><strong>Conclusion:</strong></p><p>The Java Collections Framework provides powerful data structures for managing groups of objects. Choosing the right data structure helps optimize performance and ease data handling in Java applications.</p>",
     "subCategory": {
-      "title": "Barcelona"
+      "title": "Java"
     },
     "createdBy": "alice_johnson",
-    "lastModifiedBy": "alice_johnson"
+    "lastModifiedBy": "alice_johnson",
+    "tags": [
+      "Security"
+    ]
   },
   {
-    "title": "Cape Town’s Wine Regions",
-    "content": "Cape Town’s nearby wine regions are perfect for a day trip. Explore the vineyards and enjoy some of South Africa’s finest wines.",
+    "title": "How to Use Generics in Java to Increase Code Reusability",
+    "description": "Explains Generics in Java, benefits of using Generics and provides illustrative examples to enhance reusability and type safety in source code.",
+    "content": "<p>Generics is a powerful feature of Java that allows you to create classes, interfaces, and methods with specific data types specified at the time of use. This increases code reusability and ensures type safety.</p><p><br></p><p><strong>Benefits of Generics:</strong></p><ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Compile error checking:</strong> Generics help detect data type errors at compile time instead of when the program is run.</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Increase reusability:</strong> You can write code once and reuse it for many different data types without having to duplicate the code.</li></ol><p><br></p><p><strong>Example example:</strong></p><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql-code-block\" data-language=\"plain\">public class GenericBox&lt;T&gt; {</div><div class=\"ql-code-block\" data-language=\"plain\"> private T content;</div><div class=\"ql-code-block\" data-language=\"plain\"><br></div><div class=\"ql-code-block\" data-language=\"plain\"> public void setContent(T content) {</div><div class=\"ql-code-block\" data-language=\"plain \"> this.content = content;</div><div class=\"ql-code-block\" data-language=\"plain\"> }</div><div class=\"ql-code-block\" data-language=\"plain\"><br></div><div class=\"ql-code-block\" data-language=\"plain\"> public T getContent() {</div><div class=\"ql-code-block\" data-language=\"plain\"> return content;</div><div class=\"ql-code-block\" data-language=\"plain\"> }</div><div class=\"ql-code-block\" data-language=\"plain\"><br></div><div class=\"ql-code-block\" data-language=\"plain\"> public static void main (String[] args) {</div><div class=\"ql-code-block\" data-language=\"plain\"> GenericBox&lt;String&gt; stringBox = new GenericBox&lt;&gt;();</div><div class=\"ql-code-block\" data-language=\"plain\"> stringBox.setContent(\"Hello Generics\");</div><div class=\"ql-code-block\" data-language=\"plain\"> System.out.println(\"Content: \" + stringBox.getContent());</div><div class=\"ql- code-block\" data-language=\"plain\"><br></div><div class=\"ql-code-block\" data-language=\"plain\"> GenericBox&lt;Integer&gt; intBox = new GenericBox&lt;&gt;();</div><div class=\"ql-code-block\" data-language=\"plain\"> intBox.setContent(123);</div><div class=\"ql-code-block\" data-language=\"plain\"> System.out.println(\"Content: \" + intBox.getContent());</div><div class=\"ql-code-block\" data-language=\"plain\"> }</div><div class=\"ql-code-block\" data-language=\"plain\">}</div></div><p><br></p><p><strong>Conclusion:</strong></p><p>Generics are an important tool in Java that helps improve type safety and code reusability. Using Generics properly helps write more flexible and maintainable code.</p>",
     "subCategory": {
-      "title": "Cape Town"
+      "title": "Java"
     },
     "createdBy": "bob_brown",
-    "lastModifiedBy": "bob_brown"
+    "lastModifiedBy": "bob_brown",
+    "tags": [
+      "Streams"
+    ]
   },
   {
-    "title": "Exploring London’s Theaters",
-    "content": "London’s West End is famous for its theater productions. Catch a world-class show in one of its historic theaters.",
-    "subCategory": {
-      "title": "London"
-    },
-    "createdBy": "danielle_miller",
-    "lastModifiedBy": "danielle_miller"
+    "title": "Memory Management in Java: Garbage Collection and Optimization Techniques",
+    "description": "Presents the Garbage Collection mechanism in Java along with common types of Garbage Collectors and memory management optimization techniques to improve application performance.",
+    "content": "<p>Memory management is an important element in Java programming, especially when working with large and complex applications. Java provides a Garbage Collection mechanism to automatically free up memory that is no longer in use. However, understanding how Garbage Collection works and optimizing it can help improve application performance.</p><p><br></p><p><strong>Garbage Collection in Java:</strong></p><ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Garbage Collection Mechanism:</strong> The Java Virtual Machine (JVM) automatically collects objects that are no longer referenced. Algorithms such as Mark-and-Sweep and Generational Collection are used to do this.</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Choosing Garbage Collector:</strong> JVM provides various types of Garbage Collectors such as Serial GC, Parallel GC, CMS, and G1. Choosing the right one based on application needs can improve performance.</li></ol><p><br></p><p><strong>Optimization Techniques:</strong></p><ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Reduce Object Creation:</strong> Frequent object creation can increase the pressure on the Garbage Collector. Using reusable objects or techniques like Object Pooling can help reduce the pressure.</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Monitoring and Analysis:</strong> Use tools like VisualVM, JConsole to monitor memory and analyze Garbage Collection issues.</li></ol><p><br></p><p><strong>For example:</strong></p><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql-code-block\" data-language=\"plain\">java</div><div class=\"ql-code-block\" data-language=\"plain\">Copy Code</div><div class=\"ql-code-block\" data-language=\"plain\">public class GarbageCollectionExample {</div><div class=\"ql-code-block\" data-language=\"plain\"> public static void main(String[] args) {</div><div class=\"ql-code-block\" data-language=\"plain\"> for (int i = 0; i &lt; 10000; i++) {</div><div class=\"ql-code-block\" data-language=\"plain\"> String str = new String(\"Garbage Collection Test \" + i);</div><d iv class=\"ql-code-block\" data-language=\"plain\"> }</div><div class=\"ql-code-block\" data-language=\"plain\"><br></div><div class=\"ql-code-block\" data-language=\"plain\"> System.out.println(\"Garbage Collection example executed.\");</div><div class=\"ql-code-block\" data-language=\"plain\"> }</div><div class=\"ql-code-block\" data-language=\"plain\">}</div></div><p><br></p><p><strong>Conclusion:</strong></p><p>Understanding and managing memory efficiently is very important in Java application development. Understanding the Garbage Collection mechanism and applying optimization techniques can help improve application performance and minimize memory-related issues.</p>",
+  "subCategory": {
+  "title": "Java"
+},
+  "createdBy": "danielle_miller",
+  "lastModifiedBy": "danielle_miller",
+  "tags": [
+  "REST",
+  "Collections"
+]
   },
   {
-    "title": "Amsterdam’s Cycling Culture",
-    "content": "Amsterdam is known for its cycling culture. Rent a bike and explore the city’s charming streets and scenic canals.",
+    "title": "Object Based Programming in Java: Fundamentals and Practical Examples",
+    "description": "An overview of object-oriented programming in Java, presenting fundamental principles such as Encapsulation, Inheritance, Polymorphism and Abstraction with practical examples.",
+    "content": "<p>Object programming is an important programming method in Java, which helps organize source code into objects and classes. Understanding the principles of object programming will help you write cleaner and more maintainable code.</p><p><br></p><p><strong>Basic principles:</strong></p><ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Encapsulation:</strong> Encapsulation helps protect the state of an object by using getter and setter methods to access and update data.</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Inheritance:</strong> Inheritance allows one class to inherit properties and methods from another class, helping to reuse code and extend functionality.</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Polymorphism:</strong> Polymorphism allows objects of different classes to be handled through the same interface or parent class.</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Abstraction:</strong> Abstraction helps hide complex details and provide only the necessary features to the user.</li></ol><p><br></p><p><strong>Example:</strong></p><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql-code-block\" data-language=\"plain\">java</div><div class=\"ql-code-block\" data-language=\"plain\">Copy the code</div><div class=\"ql-code-block\" data-language=\"plain\">abstract class Animal {</div><div class=\"ql-code-block\" data-language=\"plain\"> abstract void makeSound();</div><div class=\"ql-code-block\" data-language=\"plain\">}</div><div class=\"ql-code-block\" data-language=\"plain\"><br></div><d iv class=\"ql-code-block\" data-language=\"plain\">class Dog extends Animal {</div><div class=\"ql-code-block\" data-language=\"plain\"> void makeSound() {</div><div class=\"ql-code-block\" data-language=\"plain\"> System.out.println(\"Bark\");</div><div class=\"ql-code-block\" plain\"> }</div><div class=\"ql-code-block\" data-language=\"plain\">}</div><div class=\"ql-code-block\" data-language=\"plain\"><br></div><div class=\"ql-code-block\" data-language=\"plain\">public class OOPExample {</div><div class=\"ql-code-block\" data-language=\"plain\"> public static void main(String[] args) {</div><div class=\"ql-code-block\" data-language=\"plain \"> Animal myDog = new Dog();</div><div class=\"ql-code-block\" data-language=\"plain\"> myDog.makeSound(); // Outputs: Bark</div><div class=\"ql-code-block\" data-language=\"plain\"> }</div><div class=\"ql-code-block\" data-language=\"plain\">}</div></div><p><br></p><p><strong>Conclusion:</strong></p><p>Object programming is the foundation of Java and provides powerful tools for organizing source code. Mastering the fundamentals helps build applications that are easy to maintain and extend.</p>",
     "subCategory": {
-      "title": "Amsterdam"
+      "title": "Java"
     },
     "createdBy": "john_doe",
-    "lastModifiedBy": "john_doe"
+    "lastModifiedBy": "john_doe",
+    "tags": [
+      "Generics",
+      "Java",
+      "Collections"
+    ]
   },
   {
-    "title": "The Historical Sites of Istanbul",
-    "content": "Istanbul’s historical sites, such as the Blue Mosque and Topkapi Palace, offer a glimpse into its rich cultural heritage.",
+    "title": "Exception Handling Techniques in Java: Try, Catch, Finally and Creating Custom Exceptions",
+    "description": "Presents exception handling techniques in Java including try-catch-finally, the throw keyword, and how to create custom exceptions to efficiently and safely handle errors in applications.",
+    "content": "<p>Exception handling is an important skill in Java programming. It helps you manage errors that occur during execution in a safe and controlled manner. In Java, exception handling techniques include <code>try-catch-finally</code> blocks and the ability to create custom exceptions.</p><p><br></p><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>The try-catch statement:</strong> The <code>try</code> statement surrounds a block of code that could cause an error, while the <code>catch</code> block handles the exception if it occurs. For example:</li></ol><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql-code-block\" data-language=\"plain\">java</div><div class=\"ql-code-block\" data-language=\"plain\">Copy code</div><div class=\"ql-code-block\" data-language=\"plain\">public class ExceptionExample {</div><div class=\"ql-code-block\" data-language=\"plain\"> public static void main(String[] args) {</div><div class=\"ql-code-block\" data- language=\"plain\"> try {</div><div class=\"ql-code-block\" data-language=\"plain\"> int division = 10 / 0; // Raises an exception</div><div class=\"ql-code-block\" data-language=\"plain\"> } catch (ArithmeticException e) {</div><div class=\"ql-code-block\" data-language=\"plain\"> System.out.println(\"Error: \" + e.getMessage());</div><div class=\"ql-code-block\" data-language=\"plain\"> }</div><div class=\"ql-code-block\" data-language=\"plain\"> }</div><div class=\"ql-code-block\" data-language=\"plain\">}</div></div><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Finally Block:</strong> The <code>finally</code> block will always be executed after the <code>try-catch</code> block completes, regardless of whether an exception occurred. This block is often used to release resources or perform cleanup operations:</li></ol><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql-code-block\" data-language=\"plain\">java</div><div class=\"ql-code-block\" data-language=\"plain\">Copy code</div><div class=\"ql-code-block\" data-language=\"plain\">public class FinallyExample {</div><div class=\"ql-code-block\" data-language=\"plain\"> public static void main(String[] args) {</div><div class=\"ql-code-block\" data-language=\"plain\"> try {</div><div class=\"ql-code-block\" data-language=\"plain\"> System.out.println(\"Run the try block\");</div><div class=\"ql-code-block\" data-language=\"plain\"> } catch (Exception e) {</div><div class=\"ql-code-block\" data-language=\"plain\"> System.out.println(\"Error: \" + e.getMessage());</div><div class=\"ql-code-block\" data-language=\"plain\"> } finally {</div><div class=\"ql-code-block\" data-language=\"plain\">            System.out.println(\"The finally block is always executed.\");</div><div class=\"ql-code-block\" data-language=\"plain\"> }</div><div class=\"ql-code-block\" data-language=\"plain\"> }</div><div class=\"ql-code-block\" data-language=\"plain\">}</div></div><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Throw Keyword:</strong> Keyword <code>throw</code> allows you to throw a new exception when an unexpected condition is encountered. Ví dụ:</li></ol><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql-code-block\" data-language=\"plain\">java</div><div class=\"ql-code-block\" data-language=\"plain\">Sao chép mã</div><div class=\"ql-code-block\" data-language=\"plain\">public class ThrowExample {</div><div class=\"ql-code-block\" data-language=\"plain\"> static void checkAge(int age) {</div><div class=\"ql-code-block\" data-language=\"plain\"> if (age &lt; 18) {</div><div class=\"ql-code-block\" data-language=\"plain\"> throw new IllegalArgumentException(\"Tuổi phải lớn hơn 18.\");</div><div class=\"ql-code-block\" data-language=\"plain\"> }</div><div class=\"ql-code-block\" data-language=\"plain\"> }</div><div class=\"ql-code-block\" data-language=\"plain\"> </div><div class=\"ql-code-block\" data-language=\"plain\"> public static void main(String[] args) {</div><div class=\"ql-code-block\" data-language=\"plain\"> checkAge(15); // Raise an exception</div><div class=\"ql-code-block\" data-language=\"plain\"> }</div><div class=\"ql-code-block\" data-language=\"plain\">}</div></div><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Creating a custom exception:</strong> A custom exception is created by inheriting from the <code>Exception</code> or <code>RuntimeException</code> class:</li></ol><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql-code-block\" data-language=\"plain\">java</div><div class=\"ql-code-block\" data-language=\"plain\">Copy the code</div><div class=\"ql-code-block\" data-language=\"plain\">class CustomException extends Exception {</div><div class=\"ql-code-block\" data-language=\"plain\"> public CustomException(String message) {</div><div class=\"ql-code-block\" data-language=\"plain\"> super(message);</div><div class=\"ql-code-block\" data-language=\"plain\"> }</div><div class=\"ql-code-block\" data-language=\"plain\">}</div>< div class=\"ql-code-block\" data-language=\"plain\"><br></div><div class=\"ql-code-block\" data-language=\"plain\">public class CustomExceptionExample {</div><div class=\"ql-code-block\" data-language=\"plain\"> public static void main(String[] args) throws CustomException {</div><div class=\"ql-code-block\" language=\"plain\"> throw new CustomException(\"This is a custom exception.\");</div><div class=\"ql-code-block\" data-language=\"plain\"> }</div><div class=\"ql-code-block\" data-language=\"plain\">}</div></div><p><br></p><p><strong>Conclusion:</strong> </p><p>Understanding and applying exception handling techniques helps you ensure stable application performance and minimize unexpected errors.</p>",
     "subCategory": {
-      "title": "Istanbul"
+      "title": "Java"
     },
     "createdBy": "charlie_davis",
-    "lastModifiedBy": "charlie_davis"
+    "lastModifiedBy": "charlie_davis",
+    "tags": [
+      "Collections",
+      "OOP",
+      "Lambda"
+    ]
   },
   {
-    "title": "Rome’s Renaissance Art",
-    "content": "Rome is home to some of the greatest Renaissance art. Visit the Vatican Museums to see masterpieces by Michelangelo and Raphael.",
+    "title": "Java Streams API: Streamlined and Efficient Data Processing",
+    "description": "Introduces the Java Streams API, methods for creating and manipulating Streams, and examples that demonstrate how to handle data coherently and efficiently in Java.",
+    "content": "<p>The Java Streams API, introduced in Java 8, provides a clean and easy-to-understand way to process collections of data. Streams support operations on large data sets without having to write complex loops.</p><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Creating Streams:</strong> You can create <code>Streams</code> from a variety of sources, such as lists, sets, arrays, and even file I/O:</li></ol><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql-code-block\" data-language=\"plain\">List&lt;String&gt; names = Arrays.asList(\"Alice\", \"Bob\", \"Charlie\");</div><div class=\"ql-code-block\" data-language=\"plain\">names.stream().forEach(System.out::println);</div></div><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Intermediate Operations :</strong> Operations such as <code>filter()</code>, <code>map()</code>, <code>sorted()</code> are intermediate operations on streams, they do not change the original data but create new streams:</li></ol><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql-code-block\" data-language=\"plain\">List&lt;String&gt; filteredNames = names.stream()</div><div class=\"ql-code-block\" data-language=\"plain\"> .filter(name -&gt; name.startsWith(\"A\"))</div><div class=\"ql-code-block\" data-language=\"plain\"> .collect(Collectors.toList());</div></div><ol><li data-list=\"ordered\"><span class=\" ql-ui\" contenteditable=\"false\"></span><strong>Terminal Operations:</strong> Final operations such as <code>forEach()</code>, <code>collect()</code>, <code>count()</code> will perform final processing and end the stream:</li></ol><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql- code-block\" data-language=\"plain\">long count = names.stream().count();</div><div class=\"ql-code-block\" data-language=\"plain\">System.out.println(\"Number of names: \" + count);</div></div><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Streams with complex data:</strong> You can use Streams to process complex data sets, reducing code and increasing efficiency:</li></ol><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql-code-block\" data-language=\"plain\">List&lt;Integer&gt; numbers = Arrays.asList(3, 6, 9, 12, 15);</div><div class=\"ql-code-block\" data-language=\"plain\">numbers.stream().map(n -&gt; n * 2).forEach(System.out::println);</div></div><p>In conclusion, the Java Streams API helps you manipulate data in a more coherent, efficient and understandable way, especially with large data.</p>",
     "subCategory": {
-      "title": "Rome"
+      "title": "Java"
     },
     "createdBy": "frank_thomas",
-    "lastModifiedBy": "frank_thomas"
+    "lastModifiedBy": "frank_thomas",
+    "tags": [
+      "Lambda",
+      "Collections",
+      "OOP"
+    ]
   },
   {
-    "title": "Singapore’s Cultural Neighborhoods",
-    "content": "Singapore’s cultural neighborhoods, such as Chinatown and Little India, offer a diverse and vibrant experience.",
+    "title": "Common Design Patterns in Java and How to Apply Them",
+    "description": "Describes popular design patterns in Java such as Singleton, Factory Method, Observer with specific examples, helping to optimize source code and enhance application extensibility.",
+    "content": "<p>Design Patterns are proven and reusable solutions to common programming problems. Here are some commonly used design patterns in Java.</p><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Singleton:</strong> The Singleton pattern ensures that only one instance of a class is created during the lifetime of an application:</li></ol><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql-code-block\" data-language=\"plain\">public class Singleton {</div><div class=\"ql-code-block\" data-language=\"plain\"> private static Singleton instance;</div><div class=\"ql-code-block\" data-language=\"plain\"><br></div><div class=\"ql-code-block\" data-language=\"plain\"> private Singleton() {}</div><div class=\"ql-code-block\" data-language=\"plain\"><br></div><div class=\"ql-code-block\" data-language=\"plain\"> public static Singleton getInstance() {</div><div class=\"ql-code-block\" data-language=\"plain\"> if (instance == null) {</div><div class=\"ql-code-block\" data-language=\"plain\"> instance = new Singleton();</div><div class=\"ql-code-block\" data-language=\"plain\"> }</div><div class=\"ql-code-block\" data-language=\"plain\"> return instance;</div><div class=\"ql-code-block\" data-language=\"plain\"> }</div><div class=\"ql-code-block\" data-language=\"plain\">}</div></div><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Factory Method:</strong> The Factory Method pattern creates objects without requiring the calling class to know the details of the object's creation:</li></ol><div class=\"ql-code-block-container\" spellcheck=\"fal se\"><div class=\"ql-code-block\" data-language=\"plain\">public class ShapeFactory {</div><div class=\"ql-code-block\" data-language=\"plain\"> public Shape getShape(String shapeType) {</div><div class=\"ql-code-block\" data-language=\"plain\"> if (shapeType == null) return null;</div><div class=\"ql-code -block\" data-language=\"plain\"> if (shapeType.equalsIgnoreCase(\"CIRCLE\")) return new Circle();</div><div class=\"ql-code-block\" data-language=\"plain\"> if (shapeType.equalsIgnoreCase(\"RECTANGLE\")) return new Rectangle();</div><div class=\"ql-code-block\" data-language=\"plain\"> return null;</div><div class=\"ql-code-block\" data-language=\"plain\"> }</div>< div class=\"ql-code-block\" data-language=\"plain\">}</div></div><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Observer:</strong> The Observer pattern allows an object (observer) to monitor changes in another object (subject):</li></ol><div class=\"ql-code-block-child tainer\" spellcheck=\"false\"><div class=\"ql-code-block\" data-language=\"plain\">public class ObserverExample {</div><div class=\"ql-code-block\" data-language=\"plain\"> public static void main(String[] args) {</div><div class=\"ql-code-block\" data-language=\"plain\"> Subject subject = new Subject();</div><div class=\"ql-code-block\" data-language=\"plain\"> new HexObserver(subject);</div><div class =\"ql-code-block\" data-language=\"plain\"> new OctalObserver(subject);</div><div class=\"ql-code-block\" data-language=\"plain\"> subject.setState(15);</div><div class=\"ql-code-block\" data-language=\"plain\"> }</div><div class=\"ql-code-block\" data-language=\"plain\">}</div></ div><p>These design patterns not only help optimize code but also increase extensibility and ease of maintenance.</p>",
     "subCategory": {
-      "title": "Singapore"
+      "title": "Java"
     },
     "createdBy": "george_white",
-    "lastModifiedBy": "george_white"
+    "lastModifiedBy": "george_white",
+    "tags": [
+      "REST",
+      "Generics"
+    ]
   },
   {
-    "title": "Exploring the Carnivals of Rio de Janeiro",
-    "content": "Rio de Janeiro’s carnivals are world-famous. Experience the vibrant parades and music during this annual festival.",
+    "title": "Java Performance: Application Optimization and Performance Analysis",
+    "description": "Presents performance optimization techniques in Java including memory optimization, using performance analysis tools, applying caching, and using Parallel Streams to improve application processing speed.",
+    "content": "<p>Performance is an important factor in Java applications, especially when the application has to handle large amounts of data or requires fast processing speed. Here are some techniques to optimize performance and analyze it.</p><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Optimize memory:</strong> Java has an automatic memory management system through Garbage Collection, however, using too many unnecessary resources can reduce performance. You should manage memory carefully, avoiding unnecessary objects.</li><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Analyze performance with tools:</strong> Tools like VisualVM or JProfiler help you analyze Java applications, finding memory or CPU bottlenecks.</li><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Caching:</strong> Apply caching to reduce repetitive processing and reduce data access time.</li><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Parallel Streams:</strong> Java 8 provides Parallel Streams for parallel data processing, which speeds up processing with large data sets.</li></ol><p>In conclusion, optimizing application performance not only helps applications run faster but also saves system resources.</p>",
     "subCategory": {
-      "title": "Rio de Janeiro"
+      "title": "Java"
     },
     "createdBy": "jane_smith",
-    "lastModifiedBy": "jane_smith"
+    "lastModifiedBy": "jane_smith",
+    "tags": [
+      "Streams",
+      "Generics",
+      "OOP"
+    ]
   },
   {
-    "title": "Bangkok’s Floating Markets",
-    "content": "Bangkok’s floating markets offer a unique shopping experience. Browse local goods and enjoy fresh food from boat vendors.",
+    "title": "Using Multithreading In Java: Creating and Managing Threads",
+    "description": "Introduces multithreaded programming techniques in Java, including how to create and manage threads by inheriting Thread, using Runnable, ExecutorService, and synchronization techniques to increase application performance.",
+    "content": "<p>Multithreading is a technique to increase the performance of an application by running multiple threads in parallel. Java provides powerful support for multithreaded programming with convenient classes and APIs.</p><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Creating a thread by extending Thread:</strong> You can create a new thread by extending the <code>Thread</code> class and overriding the <code>run()</code> method:</li></ol><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql-code-block\" data-language=\"plain\">public class MyThread extends Thread {</div><div class=\"ql-code-block\" data-language=\"plain\"> public void run() {</div><div class=\"ql-code-block\" data-language=\"plain\"> System.out.println(\"Thread running...\");</div><div class=\"ql-code-block\" data-language=\"plain\"> }</div><div class=\"ql-code-block\" data-language=\"plain\"><br></div><div class=\"ql-code-block\" data-language=\"plain\"> public static void main(String[] args) {</div><div class= \"ql-code-block\" data-language=\"plain\"> MyThread t1 = new MyThread();</div><div class=\"ql-code-block\" data-language=\"plain\"> t1.start();</div><div class=\"ql-code-block\" data-language=\"plain\"> }</div><div class=\"ql-code-block\" data-language=\"plain\">}</div></ div><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Using Runnable:</strong> <code>Runnable</code> is another approach to creating threads, suitable when you want to reuse code many times:</li></ol><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql-code-block\" data-language=\"plain\">public class MyRunnable implements Runnable {</div><div class=\"ql-code-block\" data-language=\"plain\"> public void run() {</div><div class=\"ql-code-block\" data-language=\"plain\"> System.out.println(\"Runnable is running...\");</div><div class=\"ql-code-block\" data-language=\"plain\"> }</div><div class=\"ql-code-block\" data-language=\"plain\"><br></div><div class=\"ql-code-block\" data-language=\"plain\"> public static void main(String[] args) {</div><div class=\"ql-code-block\" data-language=\"plain\"> Thread t1 = new Thread(new MyRunnable());</div><div class=\"ql-code-block\" data-language=\"plain\"> t1.start();</div><div class=\"ql-code-block\" data-language=\"plain\"> }</div><div class=\"ql-code-block\" data-language=\"plain\">}</div></div><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Sử dụng ExecutorService:</strong> ExecutorService cung cấp cách quản lý luồng linh hoạt hơn, cho phép bạn tạo ra các nhóm luồng (thread pool):</li></ol><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql-code- block\" data-language=\"plain\">ExecutorService executor = Executors.newFixedThreadPool(5);</div><div class=\"ql-code-block\" data-language=\"plain\">for (int i = 0; i &lt; 10; i++) {</div><div class=\"ql-code-block\" data-language=\"plain\"> executor.submit(new Task());</div><div class=\"ql-code-block\" data-language=\"plain\">}</div><div class=\"ql-code-block\" data-language=\"plain\">executor.shutdown();</div></div><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Synchronization:</strong> When multiple threads access and change the same resource, synchronization is necessary to avoid errors:</li></ol><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql-code-block\" data-language=\"plain\">synchronized (this) {</div><div class=\"ql-code-block\" data-language=\"plain\"> // Code that needs synchronization</div><div class=\"ql-code-block\" data-language=\"plain\">}</div></div><p><br></p><p>In conclusion, multithreading helps speed up application processing but also requires careful resource management to avoid synchronization problems.</p>",
     "subCategory": {
-      "title": "Bangkok"
+      "title": "Java"
     },
     "createdBy": "emily_wilson",
-    "lastModifiedBy": "emily_wilson"
+    "lastModifiedBy": "emily_wilson",
+    "tags": [
+      "Spring",
+      "Java"
+    ]
   },
   {
-    "title": "Sydney’s Coastal Walks",
-    "content": "Sydney offers stunning coastal walks with breathtaking views. Take the Bondi to Coogee walk for a scenic experience.",
+    "title": "Java 8: New Features and How They Improve Programming",
+    "description": "Describes new features in Java 8 such as lambda expressions, Streams API, Optionals, and default interface methods, and how they improve programmability and code efficiency.",
+    "content": "<p>Java 8 introduces many new features that improve programming, including lambda expressions, the Streams API, and other improvements. Here are some of the key features and how they improve programming:</p><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Lambda expressions:</strong> Lambda expressions simplify the writing of unnamed functions, making code more concise and readable:</li></ol><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql-code-block\" data-language=\"plain\">List&lt;String&gt; names = Arrays.asList(\"Alice\", \"Bob\", \"Charlie\");</div><div class=\"ql-code-block\" data-language=\"plain\">names.forEach(name -&gt; System.out.println(name));</div></div><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Streams API:</strong> The Streams API lets you process data in a clean and efficient way. You can use operations such as <code>filter</code>, <code>map</code>, and <code>reduce</code> to work with data:</li></ol><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql-code-block\" data-language=\"plain\">List&lt;Integer&gt; numbers = Arrays.asList(1, 2, 3, 4, 5);</div><div class=\"ql-code-block\" data-language=\"plain\">int sum = numbers.stream().mapToInt(Integer::intValue).sum();</div><div class=\"ql-code-block\" data-language=\"plain\">System.out.println(\"Sum: \" + sum);</div></div > ql-code-block\" data-language=\"plain\">Optional&lt;String&gt; optional = Optional.of(\"Hello\");</div><div class=\"ql-code-block\" data-language=\"plain\">optional.ifPresent(System.out::println);</div></div><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Default Methods in Interface:</strong> Java 8 allows adding default methods to interfaces, allowing for adding functionality without changing the implementing classes:</li></ol><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql-code-block\" data-language=\"plain\">interface MyInterface {</div><div class=\"ql-code-block\" data-language=\"plain\"> default void defaultMethod() {</div><div class=\"ql-code-block\" data-language=\"plain\"> System.out.println(\"Default Method definition\");</div><div class=\"ql-code-block\" data-language=\"plain\"> }</div><div class=\"ql-code-block\" data-language=\"plain\">}</div></div><p><br></p><p>In conclusion, the new features in Java 8 not only help you write more concise and efficient code, but also expand your programming capabilities.</p>",
     "subCategory": {
-      "title": "Sydney"
+      "title": "Java"
     },
     "createdBy": "hannah_black",
-    "lastModifiedBy": "hannah_black"
+    "lastModifiedBy": "hannah_black",
+    "tags": [
+      "Security"
+    ]
   },
   {
-    "title": "Barcelona’s Beach Life",
-    "content": "Barcelona’s beaches are perfect for relaxation. Spend a day sunbathing and swimming at Barceloneta Beach.",
+    "title": "Database Connection With Java: JDBC and ORM",
+    "description": "Compares two database connectivity methods in Java, JDBC and ORM, demonstrating how to use JDBC to connect and query a SQL database along with using Hibernate as an ORM solution for object mapping.",
+    "content": "<p>Database connectivity is an important part of many Java applications. Java provides two main ways to work with databases: JDBC (Java Database Connectivity) and ORM (Object-Relational Mapping).</p><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>JDBC:</strong> JDBC is an API that provides methods for connecting to and working with SQL databases. An example of connecting to and querying a database using JDBC:</li></ol><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql-code-block\" data-language=\"plain\">import java.sql.Connection;</div><div class=\"ql-code-block\" data-language=\"plain\">import java.sql.DriverManager;</div><div class=\"ql-code-block\" data-language=\"plain\">import java.sql.ResultSet;</div><div class=\"ql-code-block\" data-language=\"plain\">import java.sql.Statement;</div><div class=\"ql-code-block\" data-language=\"plain\"><br></div><div class=\"ql-code-block\" data-language =\"plain\">public class JdbcExample {</div><div class=\"ql-code-block\" data-language=\"plain\"> public static void main(String[] args) {</div><div class=\"ql-code-block\" data-language=\"plain\"> try {</div><div class=\"ql-code-block\" data-language=\"plain\"> Connection connection = DriverManager.getConnection(\"jdbc:mysql://localhost:3306/mydb\", \"user\", \"password\");</div><div class=\"ql-code-block\" data-language=\"plain\"> Statement statement = connection.createStatement();</div><div class=\"ql-code-block\" data-language=\"plain\"> ResultSet resultSet = statement.executeQuery(\"SELECT * FROM users\");</div><div class=\"ql-code-block\" data-language=\"plain\"> while (resultSet.next()) div class=\"ql-code-block\" data-language=\"plain\"> System.out.println(\"ID: \" + resultSet.getInt(\"id\") + \", Name: \" + resultSet.getString(\"name\"));</div><div class=\"ql-code-block\" data-language=\"plain\"> }</div><div class=\"ql-code-block\" data-language=\" plain\"> connection.close();</div><div class=\"ql-code-block\" data-language=\"plain\"> } catch (Exception e) {</div><div class=\"ql-code-block\" data-language=\"plain\"> e.printStackTrace();</div><div class=\"ql-code-block\" data-language=\"plain\"> }</div><div class=\"ql-code-block\" data-language=\"plain\"> }</div><div class=\"ql-code-block\" data-language=\"plain\">}</div></div><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>ORM with Hibernate:</strong> ORM helps map Java objects to database tables automatically, minimizing manual SQL coding. Example using Hibernate:</li></ol><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql-code-block\" data-language=\"plain\">@Entity</div><div class=\"ql-code-block\" data-language=\"plain\">@Table(name = \"users\")</div><div class=\"ql-code-block \" data-language=\"plain\">public class User {</div><div class=\"ql-code-block\" data-language=\"plain\"> @Id</div><div class=\"ql-code-block\" data-language=\"plain\"> @GeneratedValue(strategy = GenerationType.IDENTITY)</div><div class=\"ql-code-block\" data-language=\"plain\"> private int id;</div>< div class=\"ql-code-block\" data-language=\"plain\"><br></div><div class=\"ql-code-block\" data-language=\"plain\"> @Column(name = \"name\")</div><div class=\"ql-code-block\" data-language=\"plain\"> private String name;</div><div class=\"ql-code-block\" data-language=\"plain\"><br></div><div class=\"ql-code-block\" data-language=\"plain\"> // Getters and setters</div><div class=\"ql-code-block\" data-language=\"plain\">}</div><div class=\"ql-code-block\" data-language=\"plain\"><br></div><div class=\"ql-code-block\" data-language=\"plain\">public class HibernateExample {</div><div class=\"ql-code-block\" data-language=\"plain\"> public static void main(String[] args) {</div><div class=\"ql-code-block\" data-language=\"plain\"> SessionFactory factory = new Configuration().configure(\"hibernate.cfg.xml\").addAnnotatedClass(User.class).buildSessionFactory();</div><div class=\"ql-code-block\" data-language=\"plain\"> Session session = factory.getCurrentSession();</div><div class=\"ql-code-block\" data-language=\"plain\"> session.beginTransaction();</d iv><div class=\"ql-code-block\" data-language=\"plain\"> User user = new User();</div><div class=\"ql-code-block\" data-language=\"plain\"> user.setName(\"John Doe\");</div><div class=\"ql-code-block\" data-language=\"plain\"> session.save(user);</div><div class=\"ql-code-block\" data-language=\"plain\"> session.getTransaction().commit();</div><div class=\"ql-code-block\" data-language=\"plain\"> factory.close();</div><div class=\"ql-code-block\" data-language=\"plain\"> }</div><div class=\"ql-code-block\" data-language=\"plain\">}</div></div><p><br></p><p>In conclusion, using JDBC or ORM helps you connect and work with databases more efficiently, depending on the needs and structure of your application.</p>",
     "subCategory": {
-      "title": "Barcelona"
+      "title": "Java"
     },
     "createdBy": "alice_johnson",
-    "lastModifiedBy": "alice_johnson"
+    "lastModifiedBy": "alice_johnson",
+    "tags": [
+      "Streams",
+      "Collections",
+      "REST"
+    ]
   },
   {
-    "title": "Cape Town’s Outdoor Activities",
-    "content": "Cape Town offers a range of outdoor activities including hiking, surfing, and wildlife tours. Explore the great outdoors.",
+    "title": "Security In Java: Handling Sensitive Data and Securing Applications",
+    "description": "Explore security methods in Java to handle sensitive data and protect applications from common security threats.",
+    "content": "<p>Security is an important factor in Java application development, especially when handling sensitive data and protecting the application from security threats.</p><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Handling sensitive data:</strong> Ensure that sensitive data such as passwords are encrypted before storing. Example of password encryption using BCrypt:</li></ol><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql-code-block\" data-language=\"plain\">import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;</div><div class=\"ql-code-block\" data-language=\"plain\"><br></div><div class=\"ql-code-block\" data-language=\"plain\">public class PasswordEncryptionExample {</div><div class=\"ql-code-block\" data-language=\"plain\"> public static void main(String[] args) {</div><div class=\"ql-code-block\" data-language=\"plain\"> BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();</div><div class=\"ql-code-block\" data-language=\" plain\"> String encodedPassword = encoder.encode(\"myPassword\");</div><div class=\"ql-code-block\" data-language=\"plain\"> System.out.println(\"Encoded Password: \" + encodedPassword);</div><div class=\"ql-code-block\" data-language=\"plain\"> }</div><div class=\"ql-code-block\" data-language= \"plain\">}</div></div><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Authentication and authorization:</strong> Use authentication and authorization mechanisms to ensure that only authorized users can access certain resources. For example, Spring Security makes it easy to configure authentication and authorization.</li><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Protect against SQL Injection:</strong> Use prepared statements to protect your application against SQL Injection attacks:</li></ol><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql-code-block\" data-language=\"plain\">PreparedStatement pstmt = connection.prepareStatement(\"SELECT * FROM users WHERE username = ?\");</div><div class=\"ql-code-block\" data-language=\"plain\">pstmt.setString(1, username);</div><div class=\"ql-code-block\" data-language=\"plain\">ResultSet resultSet = pstmt.executeQuery();</div></div><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Protect against Cross-Site Scripting (XSS):</strong>Sanitize and encode user input to prevent XSS attacks.</li></ol><p><br></p><p>In conclusion, securing your applications and sensitive data is important, and adopting good security practices will help protect your applications from threats.</p>",
     "subCategory": {
-      "title": "Cape Town"
+      "title": "Java"
     },
     "createdBy": "bob_brown",
-    "lastModifiedBy": "bob_brown"
+    "lastModifiedBy": "bob_brown",
+    "tags": [
+      "Multithreading"
+    ]
   },
   {
-    "title": "London’s Art Galleries",
-    "content": "London is home to numerous art galleries. Visit the Tate Modern and the National Gallery to see a wide range of art collections.",
+    "title": "Using Annotations In Java: Creating and Applying Custom Annotations",
+    "description": "A guide to creating and applying custom annotations in Java, which help add metadata to source code and support efficient programming techniques.",
+    "content": "<p>Annotations in Java provide a way to add metadata to source code and support programming techniques such as profiling and testing. Java allows you to create and apply custom annotations.</p><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Creating a Custom Annotation:</strong> To create a custom annotation, you need to use the <code>@interface</code> keyword:</li></ol><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql-code-block\" data-language=\"plain\">@Retention(RetentionPolicy.RUNTIME)</div><div class=\"ql-code-block\" data-language=\"plain\">@Target(ElementType.METHOD)</div><div class=\"ql-code-block\" data-language=\"plain\">public @interface MyCustomAnnotation {</div><div class=\"ql-code-block\" data-language=\"plain\"> String value() default \"default\";</div><div class=\"ql-code-block\" data-language=\"plain\">}</div></div><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Applying Annotation:</strong> You can apply annotation to different elements such as classes, methods, and fields:</li></ol><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql-code-block\" data-language=\"plain\">public class AnnotationExample {</div><div class=\"ql-code-block\" data-language=\"plain\"> @MyCustomAnnotation(value = \"Hello\")</div><div class=\"ql-code-block\" data-language=\"plain\"> public void myMethod() {</div><div class=\"ql-code-block\" data-language=\"plain\"> // ...</div><div class=\"ql-code-block\" data-language=\"plain\"> }</div><div class=\"ql-code-block\" data-language=\"plain\">}</div></div><ol><li data-list=\"ordered\">< span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Get and Process Annotations:</strong> You can use Reflection to get and process annotations:</li></ol><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql-code-block\" data-language=\"plain\">Method method = AnnotationEx ample.class.getMethod(\"myMethod\");</div><div class=\"ql-code-block\" data-language=\"plain\">if (method.isAnnotationPresent(MyCustomAnnotation.class)) {</div><div class=\"ql-code-block\" data-language=\"plain\"> MyCustomAnnotation annotation = method.getAnnotation(MyCustomAnnotation.class);</div><div class=\"ql-code-block\" data-language=\"plain\"> System.out.println(\"Annotation value: \" + annotation.value());</div><div class=\"ql-code-block\" data-language=\"plain\">}</div></div><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Using Annotations in Frameworks:</strong> Frameworks like Spring use annotations to configure applications and manage beans.</li></ol><p><br></p><p>In conclusion, using annotations helps you add metadata to your source code and supports efficient programming techniques. more effective.</p>",
     "subCategory": {
-      "title": "London"
+      "title": "Java"
     },
     "createdBy": "danielle_miller",
-    "lastModifiedBy": "danielle_miller"
+    "lastModifiedBy": "danielle_miller",
+    "tags": [
+      "Java"
+    ]
   },
   {
-    "title": "Exploring London’s Museums",
-    "content": "London’s museums, such as the British Museum and the Natural History Museum, offer a deep dive into history and culture.",
+    "title": "Creating RESTful APIs With Spring Boot: A Step-by-Step Guide",
+    "description": "A step-by-step guide to creating RESTful APIs with Spring Boot, from project setup to configuration, creating models, repositories and controllers to build powerful applications.",
+    "content": "<p>Spring Boot provides an easy and quick way to create and deploy RESTful APIs. Here is a step-by-step guide to creating a basic RESTful API with Spring Boot.</p><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Creating a Spring Boot Project:</strong> You can create a new Spring Boot project using Spring Initializr or similar tools.</li><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Application Configuration:</strong> Configure the application in <code>application.properties</code> or <code>application.yml</code> for database connectivity and other configuration.</li><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Create Model Classes and Repository:</strong> Define model and repository classes for data management:</li></ol><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql-code-block\" data-language=\"plain\">@Entity</div><div class=\"ql-code-block\" data-language=\"plain\">public class User {</div><div class=\"q l-code-block\" data-language=\"plain\"> @Id</div><div class=\"ql-code-block\" data-language=\"plain\"> @GeneratedValue(strategy = GenerationType.IDENTITY)</div><div class=\"ql-code-block\" data-language=\"plain\"> private Long id;</div><div class=\"ql-code-block\" data-language=\"plain\"> String name; </div><div class=\"ql-code-block\" data-language=\"plain\"> // Getters and setters</div><div class=\"ql-code-block\" data-language=\"plain\">}</div><div class=\"ql-code-block\" data-language=\"plain\"><br></div><div class=\"ql-code-block\" data-language=\"plain\">public interface UserRepository extends JpaRepository&lt;User, Long&gt; {</div><div class=\"ql-code-block\" data-language=\"plain\">}</div></div><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Create Controller:</strong> Define endpoints in the controller:</li></ol><div class=\"ql-code-block-container\" spellcheck=\"f also\"><div class=\"ql-code-block\" data-language=\"plain\">@RestController</div><div class=\"ql-code-block\" data-language=\"plain\">@RequestMapping(\"/api/users\")</div><div class=\"ql-code-block\" data-language=\"plain\">public class UserController {</div><div class=\"ql-code- block\" data-language=\"plain\"> @Autowired</div><div class=\"ql-code-block\" data-language=\"plain\"> private UserRepository userRepository;</div><div class=\"ql-code-block\" data-language=\"plain\"><br></div><div class=\"ql-code-block\" data-language=\"plain\"> @GetMapping</div><div class=\"ql-code-block\" data-language=\"plain\"> public List&lt;User&gt; getAllUsers() {</div><div class=\"ql-code-block\" data-language=\"plain\"> return userRepository.findAll();</div><div class=\"ql-code-block\" data-language=\"plain\"> }</div><div class=\"ql-code-block\" data-language=\"plain\"><br></div><div class=\"ql-code-block\" data-language= \"plain\"> @PostMapping</div><div class=\"ql-code-block\" data-language=\"plain\"> public User createUser(@RequestBody User user) {</div><div class=\"ql-code-block\" data-language=\"plain\"> return userRepository.save(user);</div><div class=\"ql-code-block\" data- language=\"plain\"> }</div><div class =\"ql-code-block\" data-language=\"plain\">}</div></div><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Run and Test the API:</strong> Run the application and test the endpoints using Postman or similar tools to ensure they work properly.</li></ol><p><br></p><p>In conclusion, Spring Boot helps you create RESTful APIs easily and quickly, providing ready-made tools and configurations for efficient application development.</p>",
     "subCategory": {
-      "title": "London"
+      "title": "Java"
     },
     "createdBy": "charlie_davis",
-    "lastModifiedBy": "charlie_davis"
+    "lastModifiedBy": "charlie_davis",
+    "tags": [
+      "Lambda",
+      "Java",
+      "Generics"
+    ]
   },
   {
-    "title": "A Walk Through London’s Parks",
-    "content": "Stroll through London’s beautiful parks like Hyde Park and Regent’s Park, where nature meets history.",
+    "title": "Techniques for Debugging Java Applications Effectively",
+    "description": "Discover effective debugging techniques in Java, from using IDE debuggers to professional logging and profiling tools to improve application quality.",
+    "content": "<p>Debugging is an important part of the software development process, helping you identify and fix errors in your Java applications. Here are some techniques for debugging Java applications effectively:</p><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Using Your IDE's Debugger:</strong> IDEs like IntelliJ IDEA and Eclipse provide powerful debugger tools. You can set breakpoints, monitor variable values, and step through your source code:</li><li data-list=\"bullet\" class=\"ql-indent-1\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Setting Breakpoints:</strong> Set breakpoints at critical lines of code to stop the program and examine the state of the application.</li><li data-list=\"bullet\" class=\"ql-indent-1\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Variable Monitoring:</strong> Check the values of variables while the program is stopped at a breakpoint.</li><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Using </strong><code><strong>System.out.println()</strong></code><strong>:</strong> A simple but effective way to debug is to use the <code>System.out.println()</code> statements to print the values of variables and the state of the program. However, this method can be difficult to handle large applications.</li><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Using Logging:</strong> Instead of using <code>System.out.println()</code>, you should use a logging library such as Log4j or SLF4J. Logging allows you to record detailed information and configure logging levels easily:</li></ol><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql-code-block\" data-language=\"plain\">import org.slf4j.Logger;</div><div class=\"ql-code-block\" data-language=\"plain\">import org. slf4j.LoggerFactory;</div><div class=\"ql-code-block\" data-language=\"plain\"><br></div><div class=\"ql-code-block\" data-language=\"plain\">public class LoggingExample {</div><div class=\"ql-code-block\" data-language=\"plain\"> private static final Logger logger = LoggerFactory.getLogger(LoggingExample. class);</div><div class=\"ql-code-block\" data-language=\"plain\"><br></div><div class=\"ql-code-block\" data-language=\"plain\"> public static void main(String[] args) {</div><div class=\"ql-code-block\" data-language=\"plain\"> logger.info(\"Log information\");</div><div class=\"ql-code-block\" data-language=\"plain\"> logger.error(\"Error occurred\");</div><div class=\"ql-code-block\" data-language=\"plain\"> }</div><div class=\"ql-code-block\" data-language=\"plain\">}</div></div><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Using Profiling Tools:</strong> Profiling tools such as VisualVM or JProfiler help analyze application performance, identify performance issues, and Remember.</li></ol><p><br></p><p>In conclusion, using effective debugging techniques will help you detect and fix errors quickly, improving the quality of the application.</p>",
     "subCategory": {
-      "title": "London"
+      "title": "Java"
     },
     "createdBy": "george_white",
-    "lastModifiedBy": "george_white"
+    "lastModifiedBy": "george_white",
+    "tags": [
+      "Collections"
+    ]
   },
   {
-    "title": "Shopping in London’s Markets",
-    "content": "Explore London’s famous markets such as Borough Market and Camden Market for unique finds and local delicacies.",
+    "title": "Java Memory Model: Understanding Memory and Multithreading",
+    "description": "Explore the Java memory model and how it affects multithreaded application development.",
+    "content": "<p>The Java Memory Model (JMM) provides the way in which memory is managed and shared between threads in Java. Understanding JMM is essential for writing safe and efficient multithreaded applications.</p><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Basic Concepts:</strong></li><li data-list=\"bullet\" class=\"ql-indent-1\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong> Main Memory and Local Memory:</strong> Main memory is where the application's variables and state are stored. Threads can have their own local memory, where they store temporary values.</li><li data-list=\"bullet\" class=\"ql-indent-1\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Changes and Consistency:</strong> JMM guarantees that changes made by one thread will be visible to other threads after synchronization.</li><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Limitations and Issues:</strong></li><li data-list=\"bullet\" class=\"ql-indent-1\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Visibility:</strong> Changes in a thread's memory may not be immediately visible to other threads without synchronization.</li><li data-list=\"bullet\" class=\"ql-indent-1\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Ordering:</strong> JMM does not guarantee the order of operations dynamic without synchronization.</li><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Using the </strong><code><strong>synchronized</strong></code><strong>Keyword:</strong> To ensure synchronization between threads, you can use the <code>synchronized</code> keyword to protect critical code sections:</li></ol><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql-code-block\" data-language=\"plain\">synchronized (this) {</div><div class=\"ql-code-block\" data-language=\"plain\"> // Synchronized code</div><div class=\"ql-code-block\" data-language=\"plain\">}</div></div><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Using</strong><code><strong>volatile</strong></code><strong>:</strong> The <code>volatile</code> keyword helps ensure that the value of a variable is read from main memory, not from local memory:</li></ol><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql-code-block\" data-language=\"plain\">private volatile boolean flag = false;</div></div><p><br></p><p>In conclusion, understanding the Java Memory Model is essential for writing efficient and safe multithreaded applications.</p>",
     "subCategory": {
-      "title": "London"
+      "title": "Java"
     },
     "createdBy": "alice_johnson",
-    "lastModifiedBy": "alice_johnson"
+    "lastModifiedBy": "alice_johnson",
+    "tags": [
+      "OOP",
+      "Spring"
+    ]
   },
   {
-    "title": "The Best Views of London",
-    "content": "Get the best views of London from iconic spots like the Shard and the London Eye.",
+    "title": "File Handling and Reading/Writing Files in Java: Best Practices and Methods",
+    "description": "Explore methods and tools for efficient file handling in Java.",
+    "content": "<p>File handling is an important part of Java application development. Java provides many methods for reading and writing files, from using traditional classes to new classes in Java NIO.</p><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Using </strong><code><strong>FileInputStream</strong></code><strong> and </strong><code><strong>FileOutputStream</strong></code><strong>:</strong> These classes provide a simple way to read and write binary files:</li></ol><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql-code-block\" data-language=\"plain\">// Read a file</div><div class=\"ql-code-block\" data-language=\"plain\">try (FileInputStream fis = new FileInputStream(\"file.txt\")) {</div><div class=\"ql-code-block\" data-language=\"plain\"> int content;</div><div class=\"ql-code-block\" data-language=\"plain\"> while ((content = fis.read()) != -1) {</div><div class=\"ql-code-block\" data-language=\"plain\"> System.out. print((char) content);</div><div class=\"ql-code-block\" data-language=\"plain\"> }</div><div class=\"ql-code-block\" data-language=\"plain\">}</div><div class=\"ql-code-block\" data-language=\"plain\"><br></div><div class=\"ql-code-block\" data-language=\"plain\">// Write file</ div><div class=\"ql-code-block\" data-language=\"plain\">try (FileOutputStream fos = new FileOutputStream(\"file.txt\")) {</div><div class=\"ql-code-block\" data-language=\"plain\"> fos.write(\"Hello World\".getBytes());</div><div class=\"ql-code-block\" data-language=\"plain\">}</div></div><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Using </strong><code><strong>BufferedReader</strong></code><strong> and </strong><code><strong>BufferedWriter</strong></code><strong>:</strong> To process large text files, you can use <code>BufferedReader</code> and <code>BufferedWriter</code>:</li></ol><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql-code-block\" data-language=\"plain\">// Read file</div><div class=\"ql-code-block\" data-language=\"plain\">try (BufferedReader br = new BufferedReader(new FileReader(\"file.txt\"))) {</div><div class=\"ql-code-block\" data-language=\"plain\"> String line;</div><div class=\"ql-code-block\" data-language=\"plain\"> while (( line = br.readLine()) != null) {</div><div class=\"ql-code-block\" data-language=\"plain\"> System.out.println(line);</div><div class=\"ql-code-block\" data-language=\"plain\"> }</div><div class=\"ql-code-block\" data-language=\"plain\">}</div><div class=\"ql-code-block\" data-language=\"plain\"><br></div><div class=\"ql-code-block\" data-language=\"plain\">// Write file</div><div class=\"ql-code-block\" data-language=\"plain\">try (BufferedWriter bw = new BufferedWriter(new FileWriter(\"file.txt\"))) {</div><div class=\"ql-code-block\" data-language=\"plain\"> bw.write(\"Hello World\");</div><div class=\"ql-code-block\" data-language=\"plain\">}</div></div><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Using Java NIO:</strong> Java NIO provides classes like <code>Files</code> and <code>Path</code> for working with files in a more modern way:</li></ol><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql-code-block\" data-language=\"plain\">Path path = Paths.get(\"file.txt\");</div><div class=\"ql-code-block\" data-language=\"plain\">// Read file</div><div class=\"ql-code-block\" data-language=\"plain\">List&lt;String&gt; lines = Files.readAllLines(path);</div><div class=\"ql-code-block\" data-language=\"plain\">for (String line : lines) {</div><div class=\"ql-code- block\" data- language=\"plain\"> System.out.println(line);</div><div class=\"ql-code-block\" data-language=\"plain\">}</div><div class=\"q l-code-block\" data-language=\"plain\"><br></div> -ui\" contenteditable=\"false\"></span><strong>Read and Write Binary Data:</strong> You can also use <code>DataInputStream</code> and <code>DataOutputStream</code> to read and write binary data:</li></ol><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql-code-block\" data-language=\"plain\">// Write binary data</div><div class=\"ql-code-block\" data-language=\"plain\">try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(\"data.dat\"))) {</div><div class=\"ql-code-block\" data-language=\"plain\"> dos.writeInt(123);</div><div class=\"ql-code-block\" data-language=\"plain\">}</div><div class=\"ql-code-block\" data-language=\"plain\">><br></div><div class=\"ql-code-block\" data-language=\"plain\">// Read binary data dist</div><div class=\"ql-code-block\" data-language=\"plain\">try (DataInputStream dis = new DataInputStream(new FileInputStream(\"data.dat\"))) {</div><div class=\"ql-code-block\" data-language=\"plain\"> int value = dis.readInt();</div><div class=\"ql-code-block\" data-language=\"plain\"> System.out.println(\"Value: \" + value);</div><div class=\"ql-code-block\" data-language=\"plain\">}</div></div><p><br></p><p>In conclusion, choosing the right method for file processing depends on the application requirements and data size.</p>",
     "subCategory": {
-      "title": "London"
+      "title": "Java"
     },
     "createdBy": "bob_brown",
-    "lastModifiedBy": "bob_brown"
+    "lastModifiedBy": "bob_brown",
+    "tags": [
+      "Security",
+      "REST"
+    ]
   },
   {
-    "title": "London’s River Thames",
-    "content": "Cruise down the River Thames to see some of London’s most famous landmarks from the water.",
+    "title": "Java Modular Programming: Creating and Managing Modules in Applications",
+    "description": "A step-by-step guide to getting started with modular programming in Java, including how to create and manage modules.",
+    "content": "<p>Java Modular Programming, introduced in Java 9, allows you to organize your application into independent modules. This helps to better manage your source code and increase reusability.</p><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Creating a Module:</strong> To create a module, you need to define a <code>module-info.java</code> file in the module's root directory:</li></ol><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql-code-block\" data-language=\"plain\">module my.module {</div><div class=\"ql-code-block\" data-language=\"plain\"> exports com.example.myapp;</div><div class=\"ql-code-block\" data-language=\"plain\"> requires java.sql;</div><div class=\"ql-code-block\" data-language=\"plain\">}</div></div><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Using Modules:</strong> You can require another module in your module using the <code>requires</code> keyword:</li></ol><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql-code-block\" data-language=\"plain\">module my.application {</div><div class=\"ql-code-block\" data-language=\"plain\"> requires my.module;</div><div class=\"ql-code-block\" data-language=\"plain\">}</div></div><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Dependency Management:</strong> Modules help you manage dependencies and limit access to external classes and packages:</li></ol><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql-code-block\" data-language=\"plain\">module my.module {</div><div class=\"ql-code-block\" data-language=\"plain\"> exports com.example.myapp;</div><div class=\"ql-code-block\" data-language=\"plain\"> opens com.example.myapp.internal to my.other.module;</div><div class=\"ql-code-block\" data-language=\"plain\">}</div></div><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Creating and Using Modules Modules:</strong> Use the <code>javac</code> and <code>java</code> tools to compile and run modular applications:</li></ol><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql-code-block\" data-language=\"plain\">javac -d mods/my.module src/com/example/myapp/*.java</div><div class=\"ql-code-block\" data-language=\"plain\">java --module-path mods -m my.module/com.example.myapp.Main</div></div><p><br></p><p>In conclusion, modular programming helps organize source code efficiently and minimizes dependencies between parts of an application.</p>",
     "subCategory": {
-      "title": "London"
+      "title": "Java"
     },
     "createdBy": "danielle_miller",
-    "lastModifiedBy": "danielle_miller"
+    "lastModifiedBy": "danielle_miller",
+    "tags": [
+      "Streams"
+    ]
   },
   {
-    "title": "London’s Hidden Gems",
-    "content": "Discover the lesser-known spots in London that offer unique experiences away from the crowds.",
+    "title": "Optimizing Java Web Applications: Caching, Load Balancing and Scaling Techniques",
+    "description": "Methods and techniques for optimizing the performance of Java Web applications, including caching and load balancing.",
+    "content": "<p>Optimizing Java Web applications is important to improve performance and scalability. Here are some common techniques:</p><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Caching:</strong> Caching helps reduce the number of requests to the database and improve response speed:</li><li data-list=\"bullet\" class=\"ql-indent-1\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Using Cache in Spring Boot:</strong> Use libraries like Ehcache or Redis to store data:</li></ol><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql-code-block ql-indent-1\" data-language=\"plain\">@Cacheable(\"books\")</div><div class=\"ql-code-block ql-indent-1\" data-language=\"plain\">public Book findBookById(Long id) {</div><div class=\"ql-code-block ql-indent-1\" data-language=\"plain\"> return bookRepository.findById(id).orElse(null);</div><div class=\"ql-code-block ql-indent-1\" data-language=\"plain\">}</div></div><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Load Balancing:</strong> Load balancing helps distribute load among multiple servers to improve scalability and reliability:</li><li data-list=\"bullet\" class=\"ql-indent-1\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Use Load Balancing Principles:</strong> Use tools like Nginx or HAProxy to distribute traffic.</li><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Tội Ơi Database:</strong> Optimize your database to reduce response times:</li><li data-list=\"bullet\" class=\"ql-indent-1\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Use Indexes:</strong> Create indexes for frequently queried columns.</li><li data-list=\"bullet\" class=\"ql-indent-1\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Tội Ơi Queries:</strong> Use optimized queries and limit the number of queries that are not required.</li><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Scaling Techniques:</strong> Scaling techniques help you build scalable applications more easily:</li><li data-list=\"bullet\" class=\"ql-indent-1\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Microservices:</strong> Break your application into small services that are easier to manage and scale.</li><li data-list=\"bullet\" class=\"ql-indent-1\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Containerization:</strong> Use Docker to package and deploy your application easily and consistently.</li></ol><p><br></p><p>In conclusion, applying optimization and scaling techniques will help your Java Web application you operate effectively and meet user needs in the best way.</p>",
     "subCategory": {
-      "title": "London"
+      "title": "Java"
     },
     "createdBy": "emily_wilson",
-    "lastModifiedBy": "emily_wilson"
-  },
-  {
-    "title": "A Day in London’s Covent Garden",
-    "content": "Spend a day in Covent Garden exploring its shops, street performances, and vibrant atmosphere.",
-    "subCategory": {
-      "title": "London"
-    },
-    "createdBy": "hannah_black",
-    "lastModifiedBy": "hannah_black"
-  },
-  {
-    "title": "Exploring London’s Street Art",
-    "content": "London’s street art scene is vibrant, with areas like Shoreditch showcasing stunning murals and graffiti.",
-    "subCategory": {
-      "title": "London"
-    },
-    "createdBy": "john_doe",
-    "lastModifiedBy": "john_doe"
-  },
-  {
-    "title": "London’s Nightlife",
-    "content": "Experience London’s nightlife with its wide range of bars, clubs, and live music venues.",
-    "subCategory": {
-      "title": "London"
-    },
-    "createdBy": "jane_smith",
-    "lastModifiedBy": "jane_smith"
-  },
-  {
-    "title": "The History of London’s Bridges",
-    "content": "Learn about the history and architecture of London’s iconic bridges like Tower Bridge and London Bridge.",
-    "subCategory": {
-      "title": "London"
-    },
-    "createdBy": "frank_thomas",
-    "lastModifiedBy": "frank_thomas"
-  },
-  {
-    "title": "The Charm of Amsterdam’s Canals",
-    "content": "Amsterdam’s canals are picturesque and perfect for a boat tour. Enjoy the unique view of the city from the water.",
-    "subCategory": {
-      "title": "Amsterdam"
-    },
-    "createdBy": "john_doe",
-    "lastModifiedBy": "john_doe"
-  },
-  {
-    "title": "The Rich Flavors of Istanbul’s Cuisine",
-    "content": "Istanbul’s cuisine is a blend of Middle Eastern and Mediterranean flavors. Try local dishes such as kebabs and baklava.",
-    "subCategory": {
-      "title": "Istanbul"
-    },
-    "createdBy": "charlie_davis",
-    "lastModifiedBy": "charlie_davis"
-  },
-  {
-    "title": "Rome’s Ancient Architecture",
-    "content": "Rome’s ancient architecture, including the Pantheon and the Roman Forum, showcases its rich architectural history.",
-    "subCategory": {
-      "title": "Rome"
-    },
-    "createdBy": "frank_thomas",
-    "lastModifiedBy": "frank_thomas"
-  },
-  {
-    "title": "Singapore’s Futuristic Designs",
-    "content": "Singapore is known for its futuristic architecture. Visit the Marina Bay Sands and Gardens by the Bay for modern marvels.",
-    "subCategory": {
-      "title": "Singapore"
-    },
-    "createdBy": "george_white",
-    "lastModifiedBy": "george_white"
-  },
-  {
-    "title": "Singapore’s Nightlife",
-    "content": "Singapore offers vibrant nightlife with numerous bars, clubs, and entertainment venues. Explore Clarke Quay and Marina Bay Sands.",
-    "subCategory": {
-      "title": "Singapore"
-    },
-    "createdBy": "john_doe",
-    "lastModifiedBy": "john_doe"
-  },
-  {
-    "title": "Rio de Janeiro’s Beaches",
-    "content": "Rio de Janeiro is famous for its beautiful beaches like Copacabana and Ipanema. Enjoy sunbathing and water sports.",
-    "subCategory": {
-      "title": "Rio de Janeiro"
-    },
-    "createdBy": "charlie_davis",
-    "lastModifiedBy": "charlie_davis"
-  },
-  {
-    "title": "Bangkok’s Temple Tours",
-    "content": "Bangkok’s temples are a must-visit. Explore Wat Arun and Wat Phra Kaew to experience the city’s rich cultural heritage.",
-    "subCategory": {
-      "title": "Bangkok"
-    },
-    "createdBy": "frank_thomas",
-    "lastModifiedBy": "frank_thomas"
-  },
-  {
-    "title": "Sydney’s Wildlife Parks",
-    "content": "Sydney is home to several wildlife parks where you can see native Australian animals. Visit Taronga Zoo or the Wild Life Sydney Zoo.",
-    "subCategory": {
-      "title": "Sydney"
-    },
-    "createdBy": "george_white",
-    "lastModifiedBy": "george_white"
-  },
-  {
-    "title": "Barcelona’s Historical Sites",
-    "content": "Barcelona boasts several historical sites including the Gothic Quarter and the famous Sagrada Familia church.",
-    "subCategory": {
-      "title": "Barcelona"
-    },
-    "createdBy": "jane_smith",
-    "lastModifiedBy": "jane_smith"
-  },
-  {
-    "title": "Cape Town’s Scenic Drives",
-    "content": "Cape Town offers scenic drives with stunning views. Drive along Chapman's Peak for breathtaking panoramas.",
-    "subCategory": {
-      "title": "Cape Town"
-    },
-    "createdBy": "emily_wilson",
-    "lastModifiedBy": "emily_wilson"
-  },
-  {
-    "title": "London’s Historical Walks",
-    "content": "Explore London’s history on foot with guided walking tours of landmarks such as the Tower of London and Buckingham Palace.",
-    "subCategory": {
-      "title": "London"
-    },
-    "createdBy": "hannah_black",
-    "lastModifiedBy": "hannah_black"
-  },
-  {
-    "title": "Amsterdam’s Museums",
-    "content": "Amsterdam is home to several renowned museums including the Rijksmuseum and the Van Gogh Museum.",
-    "subCategory": {
-      "title": "Amsterdam"
-    },
-    "createdBy": "alice_johnson",
-    "lastModifiedBy": "alice_johnson"
-  },
-  {
-    "title": "Istanbul’s Grand Bazaar",
-    "content": "The Grand Bazaar in Istanbul is a must-visit for shopping. Explore its labyrinth of shops selling everything from spices to jewelry.",
-    "subCategory": {
-      "title": "Istanbul"
-    },
-    "createdBy": "bob_brown",
-    "lastModifiedBy": "bob_brown"
-  },
-  {
-    "title": "Rome’s Culinary Delights",
-    "content": "Rome’s culinary scene is rich with flavors. Enjoy authentic Italian pasta, pizza, and gelato in the city’s many trattorias.",
-    "subCategory": {
-      "title": "Rome"
-    },
-    "createdBy": "danielle_miller",
-    "lastModifiedBy": "danielle_miller"
-  },
-  {
-    "title": "Singapore’s Marina Bay Sands",
-    "content": "Marina Bay Sands is an iconic landmark in Singapore. Visit its rooftop pool for panoramic views of the city skyline.",
-    "subCategory": {
-      "title": "Singapore"
-    },
-    "createdBy": "john_doe",
-    "lastModifiedBy": "john_doe"
-  },
-  {
-    "title": "Rio de Janeiro’s Christ the Redeemer",
-    "content": "The Christ the Redeemer statue is one of Rio de Janeiro’s most famous landmarks. Enjoy stunning views of the city from this iconic site.",
-    "subCategory": {
-      "title": "Rio de Janeiro"
-    },
-    "createdBy": "charlie_davis",
-    "lastModifiedBy": "charlie_davis"
-  },
-  {
-    "title": "Bangkok’s Street Food",
-    "content": "Bangkok is renowned for its street food. Taste delicious dishes such as pad Thai, mango sticky rice, and more from street vendors.",
-    "subCategory": {
-      "title": "Bangkok"
-    },
-    "createdBy": "frank_thomas",
-    "lastModifiedBy": "frank_thomas"
-  },
-  {
-    "title": "Sydney’s Iconic Landmarks",
-    "content": "Sydney’s landmarks include the Opera House and the Harbour Bridge. Visit these iconic sites for a quintessential Sydney experience.",
-    "subCategory": {
-      "title": "Sydney"
-    },
-    "createdBy": "george_white",
-    "lastModifiedBy": "george_white"
-  },
-  {
-    "title": "Barcelona’s Festivals",
-    "content": "Barcelona hosts numerous festivals throughout the year including La Mercè and the Festa Major de Gràcia.",
-    "subCategory": {
-      "title": "Barcelona"
-    },
-    "createdBy": "jane_smith",
-    "lastModifiedBy": "jane_smith"
-  },
-  {
-    "title": "Cape Town’s Mountain Views",
-    "content": "Cape Town’s Table Mountain offers spectacular views of the city and the ocean. Take a cable car to the summit for the best experience.",
-    "subCategory": {
-      "title": "Cape Town"
-    },
-    "createdBy": "emily_wilson",
-    "lastModifiedBy": "emily_wilson"
-  },
-  {
-    "title": "London’s Culinary Scene",
-    "content": "London’s culinary scene is diverse, with everything from Michelin-starred restaurants to local markets offering global cuisines.",
-    "subCategory": {
-      "title": "London"
-    },
-    "createdBy": "hannah_black",
-    "lastModifiedBy": "hannah_black"
-  },
-  {
-    "title": "Amsterdam’s Nightlife",
-    "content": "Amsterdam’s nightlife includes a range of options from trendy clubs to cozy pubs. Enjoy a night out in the city’s vibrant entertainment district.",
-    "subCategory": {
-      "title": "Amsterdam"
-    },
-    "createdBy": "alice_johnson",
-    "lastModifiedBy": "alice_johnson"
-  },
-  {
-    "title": "Istanbul’s Historical Sites",
-    "content": "Explore Istanbul’s historical sites like the Hagia Sophia and the Basilica Cistern, which showcase the city’s rich history.",
-    "subCategory": {
-      "title": "Istanbul"
-    },
-    "createdBy": "bob_brown",
-    "lastModifiedBy": "bob_brown"
-  },
-  {
-    "title": "Rome’s Modern Attractions",
-    "content": "Rome also offers modern attractions such as the MAXXI Museum and the Auditorium Parco della Musica.",
-    "subCategory": {
-      "title": "Rome"
-    },
-    "createdBy": "danielle_miller",
-    "lastModifiedBy": "danielle_miller"
-  },
-  {
-    "title": "Singapore’s Green Spaces",
-    "content": "Singapore is known for its green spaces like the Botanic Gardens and the Southern Ridges, perfect for a relaxing stroll.",
-    "subCategory": {
-      "title": "Singapore"
-    },
-    "createdBy": "john_doe",
-    "lastModifiedBy": "john_doe"
-  },
-  {
-    "title": "Rio de Janeiro’s Carnival Parade",
-    "content": "The Rio Carnival parade is a spectacle of music, dance, and colorful costumes. Join the celebration and experience the vibrant energy.",
-    "subCategory": {
-      "title": "Rio de Janeiro"
-    },
-    "createdBy": "charlie_davis",
-    "lastModifiedBy": "charlie_davis"
+    "lastModifiedBy": "emily_wilson",
+    "tags": [
+      "Spring"
+    ]
   }
 ]

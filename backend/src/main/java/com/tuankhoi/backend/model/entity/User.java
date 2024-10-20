@@ -44,6 +44,9 @@ public class User {
     String cloudinaryImageId;
 
     @Column
+    String aboutMe;
+
+    @Column
     @Builder.Default
     boolean active = true;
 

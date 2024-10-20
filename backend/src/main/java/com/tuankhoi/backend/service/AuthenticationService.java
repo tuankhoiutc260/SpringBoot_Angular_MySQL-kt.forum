@@ -12,9 +12,11 @@ import org.springframework.security.core.Authentication;
 import java.text.ParseException;
 
 public interface AuthenticationService {
-    AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest);
+    AuthenticationResponse login(AuthenticationRequest authenticationRequest);
 
     IntrospectResponse introspect(IntrospectRequest introspectRequest) throws JOSEException, ParseException;
+
+    boolean isAuthenticated() throws JOSEException, ParseException;
 
     Authentication getAuthenticatedUser();
 

@@ -5,7 +5,8 @@
     "password": "password123",
     "fullName": "John Doe",
     "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724403340/kt-forum/kt-forum_img_user_john_doe.jpg",
-    "cloudinaryImageId": "kt-forum/kt-forum_img_user_john_doe"
+    "cloudinaryImageId": "kt-forum/kt-forum_img_user_john_doe",
+    "aboutMe": "Hi, I'm John! I love hiking, photography, and exploring the outdoors."
   },
   {
     "userName": "jane_smith",
@@ -13,7 +14,8 @@
     "password": "password123",
     "fullName": "Jane Smith",
     "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724403375/kt-forum/kt-forum_img_user_jane_smith.jpg",
-    "cloudinaryImageId": "kt-forum/kt-forum_img_user_jane_smith"
+    "cloudinaryImageId": "kt-forum/kt-forum_img_user_jane_smith",
+    "aboutMe": "Hi, I'm Jane! I enjoy reading novels, painting, and traveling to new places."
   },
   {
     "userName": "alice_johnson",
@@ -21,7 +23,8 @@
     "password": "password123",
     "fullName": "Alice Johnson",
     "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724403407/kt-forum/kt-forum_img_user_alice_johnson.jpg",
-    "cloudinaryImageId": "kt-forum/kt-forum_img_user_alice_johnson"
+    "cloudinaryImageId": "kt-forum/kt-forum_img_user_alice_johnson",
+    "aboutMe": "Hello! I'm Alice, a tech enthusiast who loves coding and playing video games."
   },
   {
     "userName": "bob_brown",
@@ -29,7 +32,8 @@
     "password": "password123",
     "fullName": "Bob Brown",
     "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724403428/kt-forum/kt-forum_img_user_bob_brown.jpg",
-    "cloudinaryImageId": "kt-forum/kt-forum_img_user_bob_brown"
+    "cloudinaryImageId": "kt-forum/kt-forum_img_user_bob_brown",
+    "aboutMe": "I'm Bob, a sports fan who loves basketball, soccer, and staying active!"
   },
   {
     "userName": "charlie_davis",
@@ -37,7 +41,8 @@
     "password": "password123",
     "fullName": "Charlie Davis",
     "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724403464/kt-forum/kt-forum_img_user_charlie_davis.jpg",
-    "cloudinaryImageId": "kt-forum/kt-forum_img_user_charlie_davis"
+    "cloudinaryImageId": "kt-forum/kt-forum_img_user_charlie_davis",
+    "aboutMe": "Hi, I'm Charlie! I love cooking, trying new recipes, and hosting dinner parties."
   },
   {
     "userName": "danielle_miller",
@@ -45,7 +50,8 @@
     "password": "password123",
     "fullName": "Danielle Miller",
     "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724403484/kt-forum/kt-forum_img_user_danielle_miller.jpg",
-    "cloudinaryImageId": "kt-forum/kt-forum_img_user_danielle_miller"
+    "cloudinaryImageId": "kt-forum/kt-forum_img_user_danielle_miller",
+    "aboutMe": "Hey, I'm Danielle! I'm passionate about fitness, yoga, and living a healthy lifestyle."
   },
   {
     "userName": "emily_wilson",
@@ -53,7 +59,8 @@
     "password": "password123",
     "fullName": "Emily Wilson",
     "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724403501/kt-forum/kt-forum_img_user_emily_wilson.jpg",
-    "cloudinaryImageId": "kt-forum/kt-forum_img_user_emily_wilson"
+    "cloudinaryImageId": "kt-forum/kt-forum_img_user_emily_wilson",
+    "aboutMe": "I'm Emily, a nature lover who enjoys gardening and spending time outdoors."
   },
   {
     "userName": "frank_thomas",
@@ -61,7 +68,8 @@
     "password": "password123",
     "fullName": "Frank Thomas",
     "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724403516/kt-forum/kt-forum_img_user_frank_thomas.jpg",
-    "cloudinaryImageId": "kt-forum/kt-forum_img_user_frank_thomas"
+    "cloudinaryImageId": "kt-forum/kt-forum_img_user_frank_thomas",
+    "aboutMe": "Hello! I'm Frank, a tech geek who loves gadgets and learning about AI."
   },
   {
     "userName": "george_white",
@@ -69,7 +77,8 @@
     "password": "password123",
     "fullName": "George White",
     "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724403534/kt-forum/kt-forum_img_user_george_white.jpg",
-    "cloudinaryImageId": "kt-forum/kt-forum_img_user_george_white"
+    "cloudinaryImageId": "kt-forum/kt-forum_img_user_george_white",
+    "aboutMe": "Hi, I'm George! I'm into photography, exploring new places, and capturing moments."
   },
   {
     "userName": "hannah_black",
@@ -77,6 +86,7 @@
     "password": "password123",
     "fullName": "Hannah Black",
     "imageUrl": "https://res.cloudinary.com/dk7o7rlks/image/upload/v1724403549/kt-forum/kt-forum_img_user_hannah_black.jpg",
-    "cloudinaryImageId": "kt-forum/kt-forum_img_user_hannah_black"
+    "cloudinaryImageId": "kt-forum/kt-forum_img_user_hannah_black",
+    "aboutMe": "Hey there, I'm Hannah! I love reading, journaling, and spending time with family."
   }
 ]

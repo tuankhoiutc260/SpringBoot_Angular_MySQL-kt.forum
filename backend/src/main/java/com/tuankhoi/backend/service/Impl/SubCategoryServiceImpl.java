@@ -26,10 +26,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
@@ -77,13 +74,6 @@ public class SubCategoryServiceImpl implements SubCategoryService {
 
             handleImage(newSubCategory, subCategoryRequest.getCoverImageFile());
 
-//            var imageFile = subCategoryRequest.getCoverImageFile();
-//            FileUploadUtil.assertAllowed(imageFile, FileUploadUtil.IMAGE_PATTERN);
-//            String imageFileName = FileUploadUtil.getFileName(FilenameUtils.getBaseName(imageFile.getOriginalFilename()));
-//            CloudinaryResponse cloudinaryResponse = cloudinaryService.uploadFile(imageFile, imageFileName);
-//            newSubCategory.setImageUrl(cloudinaryResponse.getUrl());
-//            newSubCategory.setCloudinaryImageId(cloudinaryResponse.getPublicId());
-
             SubCategory savedSubCategory = subCategoryRepository.save(newSubCategory);
 
             indexSubCategory(subCategoryMapper.toSubCategoryDocument(savedSubCategory));
@@ -127,7 +117,7 @@ public class SubCategoryServiceImpl implements SubCategoryService {
             throw new AppException(ErrorCode.INVALID_PAGINATION_PARAMETERS);
         }
 
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "createdDate"));
 
         Category existingCategory = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOTFOUND));
@@ -141,7 +131,7 @@ public class SubCategoryServiceImpl implements SubCategoryService {
     @Cacheable(value = "subCategories", key = "'all:page:' + #page + ',size:' + #size", unless = "#result.getContent().isEmpty()")
     @Override
     public Page<SubCategoryResponse> getAll(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "createdDate"));
         Page<SubCategory> subCategoryPage = subCategoryRepository.findAll(pageable);
         return subCategoryPage.map(subCategoryMapper::toSubCategoryResponse);
     }
@@ -162,17 +152,6 @@ public class SubCategoryServiceImpl implements SubCategoryService {
         try {
             if (subCategoryRequest.getCoverImageFile() != null && !subCategoryRequest.getCoverImageFile().isEmpty()) {
                 handleImage(existingSubCategory, subCategoryRequest.getCoverImageFile());
-//                var imageFile = subCategoryRequest.getCoverImageFile();
-//                FileUploadUtil.assertAllowed(imageFile, FileUploadUtil.IMAGE_PATTERN);
-//                String imageFileName = FileUploadUtil.getFileName(FilenameUtils.getBaseName(imageFile.getOriginalFilename()));
-//
-//                if (existingSubCategory.getCloudinaryImageId() != null) {
-//                    cloudinaryService.deleteImage(existingSubCategory.getCloudinaryImageId());
-//                }
-//
-//                CloudinaryResponse cloudinaryResponse = cloudinaryService.uploadFile(imageFile, imageFileName);
-//                existingSubCategory.setImageUrl(cloudinaryResponse.getUrl());
-//                existingSubCategory.setCloudinaryImageId(cloudinaryResponse.getPublicId());
             }
 
             subCategoryMapper.updateSubCategoryFromRequest(subCategoryRequest, existingSubCategory);
@@ -235,7 +214,8 @@ public class SubCategoryServiceImpl implements SubCategoryService {
                 .collect(Collectors.toList());
 
         long totalHits = searchHits.getTotalHits();
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "createdDate"));
+
         return new PageImpl<>(subCategoryResponseList, pageable, totalHits);
     }
 

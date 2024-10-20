@@ -12,6 +12,7 @@ import com.tuankhoi.backend.repository.Elasticsearch.CategoryElasticsearchReposi
 import com.tuankhoi.backend.repository.Elasticsearch.PostElasticsearchRepository;
 import com.tuankhoi.backend.repository.Elasticsearch.SubCategoryElasticsearchRepository;
 import com.tuankhoi.backend.repository.Jpa.*;
+import com.tuankhoi.backend.service.RoleService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

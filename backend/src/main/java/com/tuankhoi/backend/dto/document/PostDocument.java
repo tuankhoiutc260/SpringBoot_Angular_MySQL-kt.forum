@@ -9,6 +9,7 @@ import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -19,16 +20,25 @@ import java.time.LocalDateTime;
 @Document(indexName = "post")
 public class PostDocument {
     @Id
+    @Field(type = FieldType.Keyword)
     String id;
 
     @Field(type = FieldType.Text, analyzer = "standard")
     String title;
 
     @Field(type = FieldType.Text, analyzer = "standard")
+    String description;
+
+    @Field(type = FieldType.Text, analyzer = "standard")
     String content;
 
+    @Field(type = FieldType.Keyword)
     String subCategoryId;
 
+    @Field(type = FieldType.Keyword)
+    Set<String> tags;
+
+    @Field(type = FieldType.Keyword)
     String createdBy;
 
     @Field(type = FieldType.Date, format = DateFormat.date_hour_minute_second_millis)

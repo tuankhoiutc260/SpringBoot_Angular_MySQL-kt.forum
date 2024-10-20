@@ -31,6 +31,8 @@ public class UserResponse implements Serializable {
 
     String cloudinaryImageId;
 
+    String aboutMe;
+
     @Builder.Default
     boolean active = true;
 

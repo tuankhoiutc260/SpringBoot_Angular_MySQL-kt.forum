@@ -28,6 +28,9 @@ public class Post {
     String id;
 
     @Column(nullable = false)
+    String description;
+
+    @Column(nullable = false)
     String title;
 
     @Column(columnDefinition = "TEXT", nullable = false)
@@ -35,6 +38,12 @@ public class Post {
 
     @ManyToOne(fetch = FetchType.LAZY)
     SubCategory subCategory;
+
+    @ElementCollection
+    @CollectionTable(name = "post_tags", joinColumns = @JoinColumn(name = "post_id"))
+    @Column(name = "tag")
+    @Builder.Default
+    Set<String> tags = new HashSet<>();
 
     @CreatedBy
     @Column(updatable = false)

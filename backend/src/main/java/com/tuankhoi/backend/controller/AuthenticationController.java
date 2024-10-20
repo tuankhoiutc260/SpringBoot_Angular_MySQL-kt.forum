@@ -26,8 +26,8 @@ public class AuthenticationController {
 
     @Operation(summary = "Login user", description = "Authenticate a user and return a token.")
     @PostMapping("/login")
-    public APIResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest authenticationRequest) {
-        AuthenticationResponse authResponse = authenticationService.authenticate(authenticationRequest);
+    public APIResponse<AuthenticationResponse> login(@RequestBody AuthenticationRequest authenticationRequest) {
+        AuthenticationResponse authResponse = authenticationService.login(authenticationRequest);
         return APIResponse.<AuthenticationResponse>builder()
                 .result(authResponse)
                 .build();
@@ -35,10 +35,19 @@ public class AuthenticationController {
 
     @Operation(summary = "Introspect token", description = "Check the validity of an authentication token.")
     @PostMapping("/introspect")
-    public APIResponse<IntrospectResponse> authenticate(@RequestBody IntrospectRequest request)
+    public APIResponse<IntrospectResponse> introspectToken(@RequestBody IntrospectRequest request)
             throws ParseException, JOSEException {
         return APIResponse.<IntrospectResponse>builder()
                 .result(authenticationService.introspect(request))
+                .build();
+    }
+
+    @Operation(summary = "Check if authenticated", description = "Check if the current user is authenticated.")
+    @GetMapping("/is-authenticated")
+    public APIResponse<Boolean> authenticate()
+            throws ParseException, JOSEException {
+        return APIResponse.<Boolean>builder()
+                .result(authenticationService.isAuthenticated())
                 .build();
     }
 
@@ -47,13 +56,12 @@ public class AuthenticationController {
     public APIResponse<Void> logout()
             throws ParseException, JOSEException {
         authenticationService.logout();
-        return APIResponse.<Void>builder()
-                .build();
+        return APIResponse.<Void>builder().build();
     }
 
     @Operation(summary = "Refresh token", description = "Refresh the authentication token.")
-    @PostMapping("/refresh-token")
-    public APIResponse<AuthenticationResponse> refreshToken(@CookieValue(name = "refreshToken") String refreshTokenRequest)
+    @PostMapping("/refresh-access-token")
+    public APIResponse<AuthenticationResponse> refreshAccessToken(@CookieValue(name = "refreshToken") String refreshTokenRequest)
             throws ParseException, JOSEException {
         return APIResponse.<AuthenticationResponse>builder()
                 .result(authenticationService.refreshAccessToken(refreshTokenRequest))

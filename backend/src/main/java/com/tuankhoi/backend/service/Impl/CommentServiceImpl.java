@@ -23,6 +23,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,6 +70,7 @@ public class CommentServiceImpl implements CommentService {
                     .payload(commentResponse)
                     .build();
             messagingTemplate.convertAndSend("/topic/comments/" + commentResponse.getPostId(), addCommentMessage);
+            log.warn(addCommentMessage.toString());
 
             return commentResponse;
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
@@ -89,7 +91,7 @@ public class CommentServiceImpl implements CommentService {
     @Cacheable(value = "comments", key = "'all:postId:' + #postId + ',page:' + #page + ',size:' + #size", unless = "#result.isEmpty()")
     @Override
     public Page<CommentResponse> getAllCommentAndReplyByPostId(String postId, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
         Page<Comment> commentPage = commentRepository.findAllByPostIdOrderByCreatedDateAsc(postId, pageable);
         return commentPage.map(commentMapper::toCommentResponse);
     }
@@ -97,7 +99,7 @@ public class CommentServiceImpl implements CommentService {
     @Cacheable(value = "commentReplies", key = "'commentId:' + #commentId + ',page: ' + #page + ',size:' + #size", unless = "#result.isEmpty()")
     @Override
     public Page<CommentResponse> getRepliesByCommentId(Long commentId, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "createdDate"));
         Page<Comment> commentPage = commentRepository.findRepliesByCommentId(commentId, pageable);
         return commentPage.map(commentMapper::toCommentResponse);
     }

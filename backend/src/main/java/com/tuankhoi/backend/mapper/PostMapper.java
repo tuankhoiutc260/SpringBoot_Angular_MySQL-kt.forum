@@ -1,6 +1,5 @@
 package com.tuankhoi.backend.mapper;
 
-import co.elastic.clients.elasticsearch._types.query_dsl.Like;
 import com.tuankhoi.backend.dto.document.PostDocument;
 import com.tuankhoi.backend.dto.request.PostRequest;
 import com.tuankhoi.backend.dto.response.PostResponse;
@@ -17,7 +16,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 @Mapper(componentModel = "spring")
@@ -62,15 +60,13 @@ public interface PostMapper {
 
     @Mapping(target = "createdDate", source = "createdDate", qualifiedByName = "dateToLocalDateTime")
     @Mapping(target = "lastModifiedDate", source = "lastModifiedDate", qualifiedByName = "dateToLocalDateTime")
-// Loại bỏ hoặc thêm giá trị mặc định cho các trường không tồn tại trong PostDocument
-    @Mapping(target = "likeCount", ignore = true)  // Giá trị mặc định là 0
-    @Mapping(target = "commentCount", ignore = true)   // Giá trị mặc định là 0
-    @Mapping(target = "viewCount", ignore = true)  // Giá trị mặc định là 0
+    @Mapping(target = "likeCount", ignore = true)
+    @Mapping(target = "commentCount", ignore = true)
+    @Mapping(target = "viewCount", ignore = true)
     PostResponse toPostResponseFromDocument(PostDocument postDocument);
 
-
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "subCategory.id", source = "subCategoryId")
+//    @Mapping(target = "subCategory.id", source = "subCategoryId")
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdDate", ignore = true)
     @Mapping(target = "lastModifiedBy", ignore = true)

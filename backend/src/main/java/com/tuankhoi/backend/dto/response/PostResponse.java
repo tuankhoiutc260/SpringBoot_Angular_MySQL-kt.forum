@@ -9,6 +9,7 @@ import lombok.experimental.FieldDefaults;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -21,9 +22,13 @@ public class PostResponse implements Serializable {
 
     String title;
 
+    String description;
+
     String content;
 
     String subCategoryId;
+
+    Set<String> tags;
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)

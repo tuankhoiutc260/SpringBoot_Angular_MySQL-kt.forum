@@ -63,10 +63,15 @@ public enum ErrorCode {
     // Post related errors (8xxx)
     POST_TITLE_NOTBLANK(8001, "Title cannot be blank", HttpStatus.BAD_REQUEST),
     POST_TITLE_INVALID(8002, "Title cannot be longer than 255 characters", HttpStatus.BAD_REQUEST),
-    POST_CONTENT_NOTBLANK(8003, "Content cannot be blank", HttpStatus.BAD_REQUEST),
-    POST_TAGS_NOTEMPTY(8004, "Tags cannot be empty", HttpStatus.BAD_REQUEST),
-    POST_NOTFOUND(8005, "Post not found", HttpStatus.NOT_FOUND),
-    POST_ID_NOTBLANK(8006, "Post ID cannot be blank", HttpStatus.BAD_REQUEST),
+    POST_DESCRIPTION_NOTBLANK(8003, "Description cannot be blank", HttpStatus.BAD_REQUEST),
+    POST_DESCRIPTION_INVALID(8004, "Description cannot be longer than 300 characters", HttpStatus.BAD_REQUEST),
+    POST_CONTENT_NOTBLANK(8005, "Content cannot be blank", HttpStatus.BAD_REQUEST),
+    POST_SUBCATEGORYID_NOTBLANK(8006, "SubCategoryId cannot be blank", HttpStatus.BAD_REQUEST),
+    POST_TAGS_NOTEMPTY(8007, "Tags cannot be empty", HttpStatus.BAD_REQUEST),
+    POST_TAGS_MAXSIZE(8008, "Number of tags cannot exceed 10", HttpStatus.BAD_REQUEST),
+    POST_TAG_INVALID(8009, "Each tag cannot be longer than 50 characters", HttpStatus.BAD_REQUEST),
+    POST_NOTFOUND(8010, "Post not found", HttpStatus.NOT_FOUND),
+    POST_ID_NOTBLANK(8011, "Post ID cannot be blank", HttpStatus.BAD_REQUEST),
 
     // Comment related errors (9xxx)
     COMMENT_CONTENT_NOTBLANK(9001, "Comment content cannot be blank", HttpStatus.BAD_REQUEST),

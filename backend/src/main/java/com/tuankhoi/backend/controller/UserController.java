@@ -1,5 +1,7 @@
 package com.tuankhoi.backend.controller;
 
+import com.tuankhoi.backend.dto.request.ChangePasswordRequest;
+import com.tuankhoi.backend.dto.request.UpdateProfileRequest;
 import com.tuankhoi.backend.dto.request.UserRequest;
 import com.tuankhoi.backend.dto.response.APIResponse;
 import com.tuankhoi.backend.dto.response.UserResponse;
@@ -39,10 +41,10 @@ public class UserController {
     }
 
     @Operation(summary = "Get user by username", description = "Retrieve a user by their username.")
-    @GetMapping("/username/{userName}")
-    public APIResponse<UserResponse> getByUserName(@PathVariable String userName) {
+    @GetMapping("/username/{username}")
+    public APIResponse<UserResponse> getByUserName(@PathVariable String username) {
         return APIResponse.<UserResponse>builder()
-                .result(userService.getByUserName(userName))
+                .result(userService.getByUserName(username))
                 .build();
     }
 
@@ -64,20 +66,34 @@ public class UserController {
                 .build();
     }
 
-    @Operation(summary = "Update user", description = "Update a user's details by user ID.")
+    @Operation(summary = "Update user", description = "Update a User's details by User ID.")
     @PutMapping("/{userId}")
     public APIResponse<UserResponse> update(@PathVariable String userId,
                                             @ModelAttribute UserRequest userRequest) {
-        log.info(userRequest.toString());
         return APIResponse.<UserResponse>builder()
                 .result(userService.update(userId, userRequest))
                 .build();
     }
 
-    @Operation(summary = "Delete user", description = "Delete a user by user ID.")
+    @Operation(summary = "Delete user", description = "Delete a User by User ID.")
     @DeleteMapping("/{userId}")
     public APIResponse<Void> deleteById(@PathVariable String userId) {
         userService.deleteById(userId);
         return APIResponse.<Void>builder().build();
+    }
+
+    @Operation(summary = "Change password", description = "Change User Password.")
+    @PutMapping("/change-password/{userId}")
+    public APIResponse<Void> changePassword(@PathVariable String userId, @RequestBody ChangePasswordRequest changePasswordRequest) {
+        userService.changePassword(userId, changePasswordRequest);
+        return APIResponse.<Void>builder().build();
+    }
+
+    @Operation(summary = "Update profile", description = "Update User Profile.")
+    @PutMapping("/profile/{userId}")
+    public APIResponse<UserResponse> updateProfile(@PathVariable String userId, @ModelAttribute UpdateProfileRequest updateProfileRequest) {
+        return APIResponse.<UserResponse>builder()
+                .result(userService.updateProfile(userId, updateProfileRequest))
+                .build();
     }
 }

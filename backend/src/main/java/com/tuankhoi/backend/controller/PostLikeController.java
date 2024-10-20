@@ -21,7 +21,7 @@ public class PostLikeController {
     PostLikeService postLikeService;
 
     @Operation(summary = "Toggle post like", description = "Toggle the like status of a post for the authenticated user.")
-    @PostMapping("/toggle")
+    @PostMapping("/toggle-like")
     public APIResponse<PostLikeResponse> toggleLike(@RequestBody PostLikeRequest postLikeRequest) {
         String userId = SecurityContextHolder.getContext().getAuthentication().getName();
         return APIResponse.<PostLikeResponse>builder()

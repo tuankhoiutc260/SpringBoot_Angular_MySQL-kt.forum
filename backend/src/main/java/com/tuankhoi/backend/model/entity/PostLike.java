@@ -12,8 +12,9 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @Entity
-@Table(name = "likes", indexes = {
+@Table(name = "post_like", indexes = {
         @Index(name = "idx_likes_post_id", columnList = "post_id"),
         @Index(name = "idx_likes_user_id", columnList = "user_id")
 })

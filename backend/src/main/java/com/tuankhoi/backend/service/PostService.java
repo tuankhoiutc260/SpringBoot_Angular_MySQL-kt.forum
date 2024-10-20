@@ -3,7 +3,12 @@ package com.tuankhoi.backend.service;
 import com.tuankhoi.backend.dto.document.PostDocument;
 import com.tuankhoi.backend.dto.request.PostRequest;
 import com.tuankhoi.backend.dto.response.PostResponse;
+import com.tuankhoi.backend.dto.response.SubCategoryRankResponse;
+import com.tuankhoi.backend.dto.response.UserRankResponse;
+import com.tuankhoi.backend.enums.SearchType;
 import org.springframework.data.domain.Page;
+
+import java.util.List;
 
 public interface PostService {
     PostResponse create(PostRequest postRequest);
@@ -18,7 +23,9 @@ public interface PostService {
 
     void deleteById(String postId);
 
-    Page<PostResponse> search(String query, int page, int size);
+    Page<PostResponse> search(String query, int page, int size, SearchType searchType);
+
+    Page<PostResponse> searchBySubCategoryId(String query, String subCategoryId, int page, int size, SearchType searchType);
 
     void incrementViewCount(String postId);
 
@@ -26,13 +33,19 @@ public interface PostService {
 
     void deletePostFromElasticsearch(String postId);
 
-//    List<PostResponse> findBySubCategoryId(String subCategoryId, int page, int size);
+    List<PostResponse> getTop3OrderByLikesDesc();
 
-//    List<PostResponse> findByUserName(String userName);
+    Page<PostResponse> getPostsLiked(String userId, int page, int size);
 
-//    PostResponse findByTitle(String title);
+    Page<PostResponse> getPostsLikedBySubCategoryId(String userId, String subCategoryId, int page, int size);
 
-//    List<PostResponse> findPostsLiked(String userName);
+    Page<PostResponse> getPostsByCreatedBy(String userId, int page, int size);
 
-//    List<PostResponse> findTop10ByOrderByLikesDesc();
+    List<PostResponse> get5MostRecentlyCreatedPosts();
+
+    List<UserRankResponse> getTop3UserRank();
+
+    List<SubCategoryRankResponse> getTheTop10MostSubCategory();
+
+    List<PostResponse> get6RandomPosts(String postId);
 }

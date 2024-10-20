@@ -35,6 +35,7 @@ import org.springframework.util.CollectionUtils;
 import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.StringJoiner;
 import java.util.UUID;
@@ -68,27 +69,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     protected long JWT_VALID_REFRESH_TOKEN_DURATION;
 
     @Override
-    public IntrospectResponse introspect(IntrospectRequest introspectRequest)
-            throws JOSEException, ParseException {
-        var token = introspectRequest.getToken();
-
-        boolean isValid = true;
-
-        try {
-            verifyToken(token, false);
-        } catch (AppException e) {
-            isValid = false;
-        }
-
-        return IntrospectResponse
-                .builder()
-                .valid(isValid)
-                .build();
-    }
-
-    @Override
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        var user = userRepository.findByUserName(request.getUserName())
+    public AuthenticationResponse login(AuthenticationRequest request) {
+        User user = userRepository.findByUserName(request.getUserName())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_USERNAME_PASSWORD_INVALID));
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
 
@@ -113,6 +95,40 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .refreshToken(refreshToken)
                 .authenticated(true)
                 .build();
+    }
+
+    @Override
+    public IntrospectResponse introspect(IntrospectRequest introspectRequest)
+            throws JOSEException, ParseException {
+        var token = introspectRequest.getToken();
+
+        boolean isValid = true;
+
+        try {
+            verifyToken(token, false);
+        } catch (AppException e) {
+            isValid = false;
+        }
+
+        return IntrospectResponse
+                .builder()
+                .valid(isValid)
+                .build();
+    }
+
+    @Override
+    public boolean isAuthenticated() throws JOSEException, ParseException {
+        var accessToken = getCookieValue("refresh_token");
+        if (accessToken == null) {
+            return false;
+        }
+        boolean isValid = true;
+        try {
+            verifyToken(accessToken, false);
+        } catch (AppException e) {
+            isValid = false;
+        }
+        return isValid;
     }
 
     private void addTokenCookie(String name, String value, int maxAge) {

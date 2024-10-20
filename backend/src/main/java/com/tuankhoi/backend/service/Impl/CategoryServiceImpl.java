@@ -20,10 +20,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
@@ -78,10 +75,18 @@ public class CategoryServiceImpl implements CategoryService {
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOTFOUND));
     }
 
+    @Cacheable(value = "category", key = "#subCategoryId", unless = "#result == null")
+    @Override
+    public CategoryResponse getBySubCategoryId(String subCategoryId) {
+        return categoryRepository.findBySubCategoryId(subCategoryId)
+                .map(categoryMapper::toCategoryResponse)
+                .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOTFOUND));
+    }
+
     @Cacheable(value = "categories", key = "'all:page:' + #page + ',size:' + #size", unless = "#result.isEmpty()")
     @Override
     public Page<CategoryResponse> getAll(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "createdDate"));
         Page<Category> categoryPage = categoryRepository.findAll(pageable);
         return categoryPage.map(categoryMapper::toCategoryResponse);
     }

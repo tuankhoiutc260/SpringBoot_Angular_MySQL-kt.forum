@@ -1,5 +1,7 @@
 package com.tuankhoi.backend.service.Impl;
 
+import com.tuankhoi.backend.dto.request.ChangePasswordRequest;
+import com.tuankhoi.backend.dto.request.UpdateProfileRequest;
 import com.tuankhoi.backend.dto.request.UserRequest;
 import com.tuankhoi.backend.dto.response.CloudinaryResponse;
 import com.tuankhoi.backend.dto.response.UserResponse;
@@ -7,7 +9,6 @@ import com.tuankhoi.backend.enums.RoleEnum;
 import com.tuankhoi.backend.exception.AppException;
 import com.tuankhoi.backend.exception.ErrorCode;
 import com.tuankhoi.backend.mapper.UserMapper;
-import com.tuankhoi.backend.model.entity.Role;
 import com.tuankhoi.backend.model.entity.User;
 import com.tuankhoi.backend.repository.Jpa.RoleRepository;
 import com.tuankhoi.backend.repository.Jpa.UserRepository;
@@ -31,12 +32,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -67,6 +69,7 @@ public class UserServiceImpl implements UserService {
 
         try {
             User newUser = userMapper.toUser(userRequest);
+            newUser.setFullName(userRequest.getUserName());
             newUser.setPassword(passwordEncoder.encode(userRequest.getPassword()));
             newUser.setImageUrl(imageUrlDefault);
             newUser.setCloudinaryImageId(imageIdDefault);
@@ -126,7 +129,7 @@ public class UserServiceImpl implements UserService {
         return userPage.map(userMapper::toUserResponse);
     }
 
-//    @PostAuthorize("hasRole('ADMIN')")
+    //    @PostAuthorize("hasRole('ADMIN')")
     @Caching(evict = {
             @CacheEvict(value = "user", key = "#userId"),
             @CacheEvict(value = {"userByEmail", "userByUserName", "allUsers"}, allEntries = true)
@@ -137,24 +140,35 @@ public class UserServiceImpl implements UserService {
         User existingUser = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
 
-        log.info("Existing user: {}", existingUser);
         try {
-            if (userRequest.getPassword() != null && !userRequest.getPassword().isEmpty()) {
-                existingUser.setPassword(passwordEncoder.encode(userRequest.getPassword()));
-            }
+            existingUser.setUserName(Optional.ofNullable(userRequest.getUserName())
+                    .filter(name -> !name.isEmpty())
+                    .orElse(existingUser.getUserName()));
 
-            if (userRequest.getRoleId() == null)
-                existingUser.setRole(roleRepository.findById(existingUser.getRole().getId()).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND)));
-            else
-                existingUser.setRole(roleRepository.findById(userRequest.getRoleId()).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND)));
+            existingUser.setPassword(Optional.ofNullable(userRequest.getPassword())
+                    .filter(password -> !password.isEmpty())
+                    .map(passwordEncoder::encode)
+                    .orElse(existingUser.getPassword()));
 
-            if (userRequest.getImageFile() != null && !userRequest.getImageFile().isEmpty()) {
-                handleImageUpdate(existingUser, userRequest.getImageFile());
-            }
+            existingUser.setEmail(Optional.ofNullable(userRequest.getEmail())
+                    .filter(email -> !email.isEmpty())
+                    .orElse(existingUser.getEmail()));
 
-            userMapper.updateUserFromRequest(userRequest, existingUser);
+            existingUser.setFullName(Optional.ofNullable(userRequest.getFullName())
+                    .filter(fullName -> !fullName.isEmpty())
+                    .orElse(existingUser.getFullName()));
+
+            Optional.ofNullable(userRequest.getImageFile())
+                    .filter(imageFile -> !imageFile.isEmpty())
+                    .ifPresent(imageFile -> handleImageUpdate(existingUser, imageFile));
+
+            existingUser.setRole(Optional.ofNullable(userRequest.getRoleId())
+                    .map(roleId -> roleRepository.findById(roleId)
+                            .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND)))
+                    .orElseGet(() -> roleRepository.findById(existingUser.getRole().getId())
+                            .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOTFOUND))));
+
             User updatedUser = userRepository.save(existingUser);
-            log.info(updatedUser.toString());
             return userMapper.toUserResponse(updatedUser);
         } catch (DataIntegrityViolationException e) {
             log.error("Data Integrity Violation:", e);
@@ -169,10 +183,6 @@ public class UserServiceImpl implements UserService {
         FileUploadUtil.assertAllowed(imageFile, FileUploadUtil.IMAGE_PATTERN);
         String imageFileName = FileUploadUtil.getFileName(FilenameUtils.getBaseName(imageFile.getOriginalFilename()));
 
-//        if (user.getCloudinaryImageId() != null) {
-//            cloudinaryService.deleteImage(user.getCloudinaryImageId());
-//        }
-
         CloudinaryResponse cloudinaryResponse = cloudinaryService.uploadFile(imageFile, imageFileName);
         user.setImageUrl(cloudinaryResponse.getUrl());
         user.setCloudinaryImageId(cloudinaryResponse.getPublicId());
@@ -183,6 +193,7 @@ public class UserServiceImpl implements UserService {
             @CacheEvict(value = {"userByEmail", "userByUserName", "allUsers"}, allEntries = true)
     })
     @Override
+    @Transactional
     public void deleteById(String userId) {
         User userToDelete = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
@@ -197,5 +208,51 @@ public class UserServiceImpl implements UserService {
         } catch (Exception e) {
             throw new AppException(ErrorCode.UNKNOWN_ERROR, "Failed to Delete User", e);
         }
+    }
+
+    @Caching(evict = {
+            @CacheEvict(value = "user", key = "#userId"),
+            @CacheEvict(value = {"userByEmail", "userByUserName", "allUsers"}, allEntries = true)
+    })
+    @Override
+    @Transactional
+    public UserResponse updateProfile(String userId, UpdateProfileRequest updateProfileRequest) {
+        User existingUser = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
+
+        try {
+            userMapper.updateProfileUserFromRequest(updateProfileRequest, existingUser);
+
+            Optional.ofNullable(updateProfileRequest.getImageFile())
+                    .filter(imageFile -> !imageFile.isEmpty())
+                    .ifPresent(imageFile -> handleImageUpdate(existingUser, imageFile));
+
+            User updatedUser = userRepository.save(existingUser);
+            return userMapper.toUserResponse(updatedUser);
+        } catch (DataIntegrityViolationException e) {
+            log.error("Data Integrity Violation:", e);
+            throw new AppException(ErrorCode.DATABASE_CONSTRAINT_VIOLATION, "Failed to Update User due to database constraint: " + e.getMessage(), e);
+        } catch (Exception e) {
+            log.error("Unknown Error while updating user:", e);
+            throw new AppException(ErrorCode.UNKNOWN_ERROR, "Failed to Update User", e);
+        }
+    }
+
+    @Override
+    public void changePassword(String userId, ChangePasswordRequest changePasswordRequest) {
+        User existingUser = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_USERNAME_PASSWORD_INVALID));
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+
+        boolean authenticated = passwordEncoder.matches(changePasswordRequest.getCurrentPassword(), existingUser.getPassword());
+
+        if (!authenticated)
+            throw new AppException(ErrorCode.USER_USERNAME_PASSWORD_INVALID);
+        else if (!existingUser.isActive()) {
+            throw new AppException(ErrorCode.ACCOUNT_INACTIVE);
+        }
+
+        existingUser.setPassword(passwordEncoder.encode(passwordEncoder.encode(changePasswordRequest.getNewPassword())));
+        userRepository.save(existingUser);
     }
 }

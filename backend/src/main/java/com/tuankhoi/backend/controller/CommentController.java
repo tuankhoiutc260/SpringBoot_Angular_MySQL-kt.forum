@@ -22,7 +22,7 @@ public class CommentController {
 
     @Operation(summary = "Create new comment", description = "Create a new comment.")
     @PostMapping
-    public APIResponse<CommentResponse> create(@RequestBody CommentRequest commentRequest){
+    public APIResponse<CommentResponse> create(@RequestBody CommentRequest commentRequest) {
         return APIResponse.<CommentResponse>builder()
                 .result(commentService.create(commentRequest))
                 .build();
@@ -30,7 +30,7 @@ public class CommentController {
 
     @Operation(summary = "Get comment by ID", description = "Retrieve a comment by its ID.")
     @GetMapping("/id/{commentId}")
-    public APIResponse<CommentResponse> getById(@PathVariable Long commentId){
+    public APIResponse<CommentResponse> getById(@PathVariable Long commentId) {
         return APIResponse.<CommentResponse>builder()
                 .result(commentService.getById(commentId))
                 .build();
@@ -40,7 +40,7 @@ public class CommentController {
     @GetMapping("/post/{postId}")
     public APIResponse<Page<CommentResponse>> getAllCommentAndReplyByPostId(@PathVariable String postId,
                                                                             @RequestParam(defaultValue = "0") int page,
-                                                                            @RequestParam(defaultValue = "10") int size){
+                                                                            @RequestParam(defaultValue = "10") int size) {
         Page<CommentResponse> commentResponsePage = commentService.getAllCommentAndReplyByPostId(postId, page, size);
         return APIResponse.<Page<CommentResponse>>builder()
                 .result(commentResponsePage)
@@ -69,7 +69,7 @@ public class CommentController {
 
     @Operation(summary = "Delete comment", description = "Delete a comment by its ID.")
     @DeleteMapping("/{commentId}")
-    public APIResponse<Void> deleteById(@PathVariable Long commentId){
+    public APIResponse<Void> deleteById(@PathVariable Long commentId) {
         commentService.deleteById(commentId);
         return APIResponse.<Void>builder()
                 .build();

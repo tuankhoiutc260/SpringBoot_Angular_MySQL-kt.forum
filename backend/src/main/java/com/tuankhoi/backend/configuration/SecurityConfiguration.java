@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import org.springframework.data.domain.AuditorAware;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,6 +23,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Optional;
@@ -44,12 +46,38 @@ public class SecurityConfiguration implements WebMvcConfigurer {
 
             "/api/v1/auth/**",
 
+            "/api/v1/category/**",
+
             "/api/v1/posts/**",
             "/api/v1/likes/**",
             "/api/v1/users/**",
             "/api/comments/post/**",
             "/api/comments",
     };
+
+    String[] PUBLIC_ENDPOINTS_FOR_GET = {
+            "/api/v1/categories",
+            "/api/v1/categories/**",
+
+            "/api/v1/sub-categories",
+            "/api/v1/sub-categories/**",
+
+            "/api/v1/post",
+            "/api/v1/post/**",
+
+            "/api/v1/comments",
+            "/api/v1/comments/**",
+
+            "/api/v1/likes/count-likes",
+
+            "/api/v1/users/id/**",
+            "/api/v1/users/username/**"
+    };
+
+    String[] PUBLIC_ENDPOINTS_FOR_POST = {
+            "/api/v1/users"
+    };
+
 
     TokenAuthenticationFilter tokenAuthenticationFilter;
     TokenRefreshFilter tokenRefreshFilter;
@@ -61,6 +89,9 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
+                        .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS_FOR_GET).permitAll()
+                        .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS_FOR_POST).permitAll()
+
                         .anyRequest().authenticated()
                 )
 

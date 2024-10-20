@@ -1,5 +1,6 @@
 package com.tuankhoi.backend.dto.response;
 
+import com.tuankhoi.backend.model.entity.Role;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
