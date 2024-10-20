@@ -56,6 +56,8 @@ Before you begin, ensure you have the following installed on your machine:
 - 🌐 Node.js (version 14 or later)
 - 🐬 MySQL (version 8.0 or later)
 - 🐳 Docker (version 26.1.4 or later) - optional, for containerization
+- 🔍 Elasticsearch (version 8.15.0 or later) - for search functionality
+- 🗄️ Redis (version 7.4.0 or later) - for caching
 
 ### Detailed Installation Instructions
 For specific installation instructions and configurations, please refer to the README files located in their respective directories for both the frontend and backend components. This will provide you with detailed steps tailored to each part of the application.
