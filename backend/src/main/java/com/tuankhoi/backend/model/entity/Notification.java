@@ -12,30 +12,32 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
-@Entity
-@Table(name = "post_like", indexes = {
-        @Index(name = "idx_post_like_post_id", columnList = "post_id"),
-        @Index(name = "idx_post_like_user_id", columnList = "user_id")
-})
-@EntityListeners(AuditingEntityListener.class)
 @Builder
+@Entity
+@Table(name = "notification")
+@EntityListeners(AuditingEntityListener.class)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class PostLike {
+public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     String id;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    User user;
+
+    @Column(name = "content", nullable = false)
+    String content;
+
+    @Column(name = "is_read", nullable = false)
+    @Builder.Default
+    boolean isRead = false;
 
     @CreatedDate
     @Column(updatable = false)
     LocalDateTime createdDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    @ToString.Exclude
-    User user;
+    String originType;
 
-    @ManyToOne
-    @JoinColumn(name = "post_id")
-    Post post;
+    String originId;
 }

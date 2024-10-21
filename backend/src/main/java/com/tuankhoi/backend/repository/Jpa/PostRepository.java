@@ -35,16 +35,16 @@ public interface PostRepository extends JpaRepository<Post, String> {
     @Query("SELECT p FROM Post p JOIN PostLike pl ON p.id = pl.post.id WHERE pl.user.id = :userId AND p.subCategory.id = :subCategoryId")
     Page<Post> findPostsLikedBySubCategoryId(String userId, String subCategoryId, Pageable pageable);
 
-    Page<Post> findPostsByCreatedBy(String userId, Pageable pageable);
+    Page<Post> findPostsByAuthorId(String userId, Pageable pageable);
 
     @Query(value = """
             select * from post order by created_date desc limit 5;""", nativeQuery = true)
     List<Post> findTop5OrderByCreatedDateDesc();
 
     @Query(value = """
-            SELECT created_by as userId, SUM(view_count) AS totalViews, COUNT(id) as totalPosts
+            SELECT author_id as userId, SUM(view_count) AS totalViews, COUNT(id) as totalPosts
             FROM post
-            GROUP BY created_by
+            GROUP BY author_id
             ORDER BY totalViews DESC
             LIMIT 3;""", nativeQuery = true)
     List<UserRankResponse> findTheTop3MostInteractiveUsers();

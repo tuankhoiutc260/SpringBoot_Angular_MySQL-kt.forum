@@ -25,34 +25,42 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Comment {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    String id;
 
     @Column(columnDefinition = "TEXT", nullable = false)
     String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
+    @ToString.Exclude
     Comment parentComment;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
+    @ToString.Exclude
     Post post;
 
     @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL)
     @Builder.Default
+    @ToString.Exclude
     List<Comment> replies = new ArrayList<>();
 
     @CreatedBy
-    @Column(updatable = false)
-    String createdBy;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by")
+    @ToString.Exclude
+    User createdBy;
 
     @CreatedDate
     @Column(updatable = false)
     LocalDateTime createdDate;
 
     @LastModifiedBy
-    String lastModifiedBy;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "last_modified_by")
+    @ToString.Exclude
+    User lastModifiedBy;
 
     @LastModifiedDate
     @Column(name = "last_modified_date")

@@ -19,7 +19,9 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "post")
+@Table(name = "post", indexes = {
+        @Index(name = "idx_post_author_id", columnList = "author_id")
+})
 @EntityListeners(AuditingEntityListener.class)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Post {
@@ -28,15 +30,16 @@ public class Post {
     String id;
 
     @Column(nullable = false)
-    String description;
+    String title;
 
     @Column(nullable = false)
-    String title;
+    String description;
 
     @Column(columnDefinition = "TEXT", nullable = false)
     String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sub_category_id")
     SubCategory subCategory;
 
     @ElementCollection
@@ -46,15 +49,18 @@ public class Post {
     Set<String> tags = new HashSet<>();
 
     @CreatedBy
-    @Column(updatable = false)
-    String createdBy;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id")
+    User author;
 
     @CreatedDate
     @Column(updatable = false)
     LocalDateTime createdDate;
 
     @LastModifiedBy
-    String lastModifiedBy;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "last_modified_by")
+    User lastModifiedBy;
 
     @LastModifiedDate
     LocalDateTime lastModifiedDate;

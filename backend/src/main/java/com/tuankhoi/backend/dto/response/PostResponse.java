@@ -30,17 +30,17 @@ public class PostResponse implements Serializable {
 
     Set<String> tags;
 
+    String authorId;
+
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     LocalDateTime createdDate;
 
-    String createdBy;
+    String lastModifiedBy;
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     LocalDateTime lastModifiedDate;
-
-    String lastModifiedBy;
 
     int likeCount;
 

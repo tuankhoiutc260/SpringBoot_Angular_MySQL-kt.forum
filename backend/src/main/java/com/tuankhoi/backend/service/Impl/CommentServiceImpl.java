@@ -8,9 +8,11 @@ import com.tuankhoi.backend.exception.ErrorCode;
 import com.tuankhoi.backend.mapper.CommentMapper;
 import com.tuankhoi.backend.model.entity.Comment;
 import com.tuankhoi.backend.model.entity.Post;
+import com.tuankhoi.backend.model.entity.User;
 import com.tuankhoi.backend.repository.Jpa.CommentRepository;
 import com.tuankhoi.backend.repository.Jpa.PostRepository;
 import com.tuankhoi.backend.service.CommentService;
+import com.tuankhoi.backend.service.NotificationService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -28,6 +30,8 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -36,6 +40,8 @@ public class CommentServiceImpl implements CommentService {
     CommentRepository commentRepository;
     PostRepository postRepository;
     CommentMapper commentMapper;
+
+    NotificationService notificationService;
 
     SimpMessagingTemplate messagingTemplate;
 
@@ -70,13 +76,35 @@ public class CommentServiceImpl implements CommentService {
                     .payload(commentResponse)
                     .build();
             messagingTemplate.convertAndSend("/topic/comments/" + commentResponse.getPostId(), addCommentMessage);
-            log.warn(addCommentMessage.toString());
+
+            createNotification(savedComment);
 
             return commentResponse;
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
             throw new AppException(ErrorCode.DATABASE_CONSTRAINT_VIOLATION, "Failed to Create Comment due to database constraint: " + e.getMessage(), e);
         } catch (Exception e) {
             throw new AppException(ErrorCode.UNKNOWN_ERROR, "Failed to Create Comment", e);
+        }
+    }
+
+    private void createNotification(Comment comment) throws IOException {
+        Post post = comment.getPost();
+        User postAuthor = post.getAuthor();
+        User commentAuthor = comment.getCreatedBy();
+
+        // Thông báo cho tác giả bài viết (nếu không phải là người comment)
+        if (!postAuthor.equals(commentAuthor)) {
+            String content = commentAuthor.getId() + " đã bình luận về bài viết của bạn: " + post.getTitle();
+            notificationService.createNotification(postAuthor, content, "post_comment", post.getId());
+        }
+
+        // Nếu là reply, thông báo cho tác giả comment gốc (nếu không phải là người reply)
+        if (comment.getParentComment() != null) {
+            User parentCommentAuthor = comment.getParentComment().getCreatedBy();
+            if (!parentCommentAuthor.equals(commentAuthor)) {
+                String content = commentAuthor.getId() + " đã trả lời bình luận của bạn trong bài viết: " + post.getTitle();
+                notificationService.createNotification(parentCommentAuthor, content, "comment_reply", comment.getParentComment().getId());
+            }
         }
     }
 

@@ -11,33 +11,45 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "password", ignore = true)
     @Mapping(target = "imageUrl", ignore = true)
     @Mapping(target = "cloudinaryImageId", ignore = true)
-    @Mapping(target = "aboutMe", ignore = true)
-    @Mapping(target = "active", ignore = true)
-    @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdDate", ignore = true)
     @Mapping(target = "lastModifiedBy", ignore = true)
     @Mapping(target = "lastModifiedDate", ignore = true)
     @Mapping(target = "role.id", source = "roleId")
+    @Mapping(target = "posts", ignore = true)
+    @Mapping(target = "postLikes", ignore = true)
     User toUser(UserRequest userUpdateRequest);
 
+    @Mapping(target = "lastModifiedBy", source = "lastModifiedBy.id")
     UserResponse toUserResponse(User user);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "password", ignore = true)
     @Mapping(target = "imageUrl", ignore = true)
     @Mapping(target = "cloudinaryImageId", ignore = true)
-    @Mapping(target = "aboutMe", ignore = true)
-    @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdDate", ignore = true)
     @Mapping(target = "lastModifiedBy", ignore = true)
     @Mapping(target = "lastModifiedDate", ignore = true)
-//    @Mapping(target = "role.id", source = "roleId")
-//    @Mapping(target = "roleId", source = "role.id")
+    @Mapping(target = "role", ignore = true)
+    @Mapping(target = "posts", ignore = true)
+    @Mapping(target = "postLikes", ignore = true)
     void updateUserFromRequest(UserRequest userRequest, @MappingTarget User user);
 
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "userName", ignore = true)
+    @Mapping(target = "password", ignore = true)
     @Mapping(target = "imageUrl", ignore = true)
+    @Mapping(target = "cloudinaryImageId", ignore = true)
+    @Mapping(target = "active", ignore = true)
+    @Mapping(target = "createdDate", ignore = true)
+    @Mapping(target = "lastModifiedBy", ignore = true)
+    @Mapping(target = "lastModifiedDate", ignore = true)
+    @Mapping(target = "role", ignore = true)
+    @Mapping(target = "posts", ignore = true)
+    @Mapping(target = "postLikes", ignore = true)
     void updateProfileUserFromRequest(UpdateProfileRequest request, @MappingTarget User user);
 }
 

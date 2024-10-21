@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CommentResponse implements Serializable {
-    Long id;
+    String id;
 
     String content;
 

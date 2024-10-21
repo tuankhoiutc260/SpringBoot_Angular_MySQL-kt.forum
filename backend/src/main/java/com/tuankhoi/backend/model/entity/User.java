@@ -3,13 +3,13 @@ package com.tuankhoi.backend.model.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -50,16 +50,15 @@ public class User {
     @Builder.Default
     boolean active = true;
 
-    @CreatedBy
-    @Column(updatable = false)
-    String createdBy;
-
     @CreatedDate
     @Column(updatable = false)
     LocalDateTime createdDate;
 
     @LastModifiedBy
-    String lastModifiedBy;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "last_modified_by")
+    @ToString.Exclude
+    User lastModifiedBy;
 
     @LastModifiedDate
     LocalDateTime lastModifiedDate;
@@ -67,4 +66,12 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "role_id")
     Role role;
+
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    List<Post> posts;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    List<PostLike> postLikes;
 }

@@ -23,7 +23,7 @@ public interface PostMapper {
     // For JPA
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "subCategory.id", source = "subCategoryId")
-    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "author", ignore = true)
     @Mapping(target = "createdDate", ignore = true)
     @Mapping(target = "lastModifiedBy", ignore = true)
     @Mapping(target = "lastModifiedDate", ignore = true)
@@ -33,24 +33,25 @@ public interface PostMapper {
     Post toPost(PostRequest postRequest);
 
     @Mapping(target = "subCategoryId", source = "subCategory.id")
+    @Mapping(target = "authorId", source = "author.id")
+    @Mapping(target = "lastModifiedBy", source = "lastModifiedBy.id")
     @Mapping(target = "likeCount", source = "postLikes", qualifiedByName = "countLikes")
     @Mapping(target = "commentCount", source = "comments", qualifiedByName = "countComments")
     PostResponse toPostResponse(Post post);
 
-//    default PostResponse toPostResponseWithCountLikesAndComments(Post post) {
-//        PostResponse postResponse = toPostResponse(post);
-//        postResponse.setTotalLikes(post.getPostLikes() != null ? post.getPostLikes().size() : 0);
-//        postResponse.setTotalComments(post.getComments() != null ? post.getComments().size() : 0);
-//        return postResponse;
-//    }
-
     // For Elasticsearch
     @Mapping(target = "subCategoryId", source = "subCategory.id")
+    @Mapping(target = "authorId", source = "author.id")
+    @Mapping(target = "lastModifiedBy", source = "lastModifiedBy.id")
     @Mapping(target = "createdDate", source = "createdDate", qualifiedByName = "localDateTimeToDate")
     @Mapping(target = "lastModifiedDate", source = "lastModifiedDate", qualifiedByName = "localDateTimeToDate")
+    @Mapping(target = "likeCount", source = "postLikes", qualifiedByName = "countLikes")
+    @Mapping(target = "commentCount", source = "comments", qualifiedByName = "countComments")
     PostDocument toPostDocument(Post post);
 
     @Mapping(target = "subCategory.id", source = "subCategoryId")
+    @Mapping(target = "author.id", source = "authorId")
+    @Mapping(target = "lastModifiedBy.id", source = "lastModifiedBy")
     @Mapping(target = "createdDate", source = "createdDate", qualifiedByName = "dateToLocalDateTime")
     @Mapping(target = "lastModifiedDate", source = "lastModifiedDate", qualifiedByName = "dateToLocalDateTime")
     @Mapping(target = "postLikes", ignore = true)
@@ -60,14 +61,11 @@ public interface PostMapper {
 
     @Mapping(target = "createdDate", source = "createdDate", qualifiedByName = "dateToLocalDateTime")
     @Mapping(target = "lastModifiedDate", source = "lastModifiedDate", qualifiedByName = "dateToLocalDateTime")
-    @Mapping(target = "likeCount", ignore = true)
-    @Mapping(target = "commentCount", ignore = true)
-    @Mapping(target = "viewCount", ignore = true)
     PostResponse toPostResponseFromDocument(PostDocument postDocument);
 
     @Mapping(target = "id", ignore = true)
-//    @Mapping(target = "subCategory.id", source = "subCategoryId")
-    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "subCategory.id", source = "subCategoryId")
+    @Mapping(target = "author", ignore = true)
     @Mapping(target = "createdDate", ignore = true)
     @Mapping(target = "lastModifiedBy", ignore = true)
     @Mapping(target = "lastModifiedDate", ignore = true)

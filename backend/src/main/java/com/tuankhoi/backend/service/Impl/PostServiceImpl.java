@@ -7,7 +7,7 @@ import com.tuankhoi.backend.dto.request.PostRequest;
 import com.tuankhoi.backend.dto.response.PostResponse;
 import com.tuankhoi.backend.dto.response.SubCategoryRankResponse;
 import com.tuankhoi.backend.dto.response.UserRankResponse;
-import com.tuankhoi.backend.enums.SearchType;
+import com.tuankhoi.backend.enums.SearchTypeEnum;
 import com.tuankhoi.backend.model.entity.SubCategory;
 import com.tuankhoi.backend.exception.AppException;
 import com.tuankhoi.backend.exception.ErrorCode;
@@ -72,11 +72,12 @@ public class PostServiceImpl implements PostService {
             Post savedPost = postRepository.save(newPost);
 
             indexPost(postMapper.toPostDocument(savedPost));
-
             return postMapper.toPostResponse(savedPost);
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
+            log.error("Database constraint violation", e);
             throw new AppException(ErrorCode.DATABASE_CONSTRAINT_VIOLATION, "Failed to Create Post due to database constraint: " + e.getMessage(), e);
         } catch (Exception e) {
+            log.error("Unknown error occurred while creating post", e);
             throw new AppException(ErrorCode.UNKNOWN_ERROR, "Failed to Create Post: " + e.getMessage(), e);
         }
     }
@@ -178,11 +179,11 @@ public class PostServiceImpl implements PostService {
             unless = "#result.isEmpty()"
     )
     @Override
-    public Page<PostResponse> searchBySubCategoryId(String query, String subCategoryId, int page, int size, SearchType searchType) {
+    public Page<PostResponse> searchBySubCategoryId(String query, String subCategoryId, int page, int size, SearchTypeEnum searchTypeEnum) {
         List<String> fields = new ArrayList<>();
 
-        if (searchType != null) {
-            switch (searchType) {
+        if (searchTypeEnum != null) {
+            switch (searchTypeEnum) {
                 case TITLE:
                     fields.add(ELASTICSEARCH_TITLE_FIELD);
                     break;
@@ -233,10 +234,10 @@ public class PostServiceImpl implements PostService {
             unless = "#result.isEmpty()"
     )
     @Override
-    public Page<PostResponse> search(String query, int page, int size, SearchType searchType) {
+    public Page<PostResponse> search(String query, int page, int size, SearchTypeEnum searchTypeEnum) {
         List<String> fields = new ArrayList<>();
-        if (searchType != null) {
-            switch (searchType) {
+        if (searchTypeEnum != null) {
+            switch (searchTypeEnum) {
                 case TITLE:
                     fields.add(ELASTICSEARCH_TITLE_FIELD);
                     break;
@@ -365,7 +366,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Page<PostResponse> getPostsByCreatedBy(String userId, int page, int size) {
+    public Page<PostResponse> getPostsByAuthor(String userId, int page, int size) {
         if (page < 0 || size <= 0) {
             throw new AppException(ErrorCode.INVALID_PAGINATION_PARAMETERS);
         }
@@ -376,7 +377,7 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
 
         Page<Post> postPage = postRepository
-                .findPostsByCreatedBy(existingUser.getId(), pageable);
+                .findPostsByAuthorId(existingUser.getId(), pageable);
 
         return postPage.map(postMapper::toPostResponse);
     }

@@ -21,8 +21,6 @@ public class UserResponse implements Serializable {
 
     String userName;
 
-    String password;
-
     String email;
 
     String fullName;
@@ -35,8 +33,6 @@ public class UserResponse implements Serializable {
 
     @Builder.Default
     boolean active = true;
-
-    String createdBy;
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)

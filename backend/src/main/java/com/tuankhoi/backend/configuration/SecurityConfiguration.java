@@ -1,9 +1,12 @@
 package com.tuankhoi.backend.configuration;
 
+import com.tuankhoi.backend.model.entity.User;
+import com.tuankhoi.backend.repository.Jpa.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -16,7 +19,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
@@ -35,6 +40,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SecurityConfiguration implements WebMvcConfigurer {
+    @Autowired
+    private UserRepository userRepository;
+
     String[] PUBLIC_ENDPOINTS = {
             // WebSocket
             "/ws/**",
@@ -115,13 +123,14 @@ public class SecurityConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    public AuditorAware<String> auditingAware() {
+    public AuditorAware<User> auditingAware() {
         return () -> {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
                 return Optional.empty();
             }
-            return Optional.ofNullable(authentication.getName());
+            String userId = authentication.getName();
+            return userRepository.findById(userId);
         };
     }
 }

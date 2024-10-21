@@ -6,8 +6,12 @@
     "subCategory": {
       "title": "Java"
     },
-    "createdBy": "hannah_black",
-    "lastModifiedBy": "hannah_black",
+    "author": {
+      "userName": "hannah_black"
+    },
+    "lastModifiedBy": {
+      "userName": "hannah_black"
+    },
     "tags": [
       "REST",
       "Lambda",
@@ -21,8 +25,12 @@
     "subCategory": {
       "title": "Java"
     },
-    "createdBy": "alice_johnson",
-    "lastModifiedBy": "alice_johnson",
+    "author": {
+      "userName": "alice_johnson"
+    },
+    "lastModifiedBy": {
+      "userName": "alice_johnson"
+    },
     "tags": [
       "Security"
     ]
@@ -34,8 +42,12 @@
     "subCategory": {
       "title": "Java"
     },
-    "createdBy": "bob_brown",
-    "lastModifiedBy": "bob_brown",
+    "author": {
+      "userName": "bob_brown"
+    },
+    "lastModifiedBy": {
+      "userName": "bob_brown"
+    },
     "tags": [
       "Streams"
     ]
@@ -44,15 +56,19 @@
     "title": "Memory Management in Java: Garbage Collection and Optimization Techniques",
     "description": "Presents the Garbage Collection mechanism in Java along with common types of Garbage Collectors and memory management optimization techniques to improve application performance.",
     "content": "<p>Memory management is an important element in Java programming, especially when working with large and complex applications. Java provides a Garbage Collection mechanism to automatically free up memory that is no longer in use. However, understanding how Garbage Collection works and optimizing it can help improve application performance.</p><p><br></p><p><strong>Garbage Collection in Java:</strong></p><ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Garbage Collection Mechanism:</strong> The Java Virtual Machine (JVM) automatically collects objects that are no longer referenced. Algorithms such as Mark-and-Sweep and Generational Collection are used to do this.</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Choosing Garbage Collector:</strong> JVM provides various types of Garbage Collectors such as Serial GC, Parallel GC, CMS, and G1. Choosing the right one based on application needs can improve performance.</li></ol><p><br></p><p><strong>Optimization Techniques:</strong></p><ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Reduce Object Creation:</strong> Frequent object creation can increase the pressure on the Garbage Collector. Using reusable objects or techniques like Object Pooling can help reduce the pressure.</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Monitoring and Analysis:</strong> Use tools like VisualVM, JConsole to monitor memory and analyze Garbage Collection issues.</li></ol><p><br></p><p><strong>For example:</strong></p><div class=\"ql-code-block-container\" spellcheck=\"false\"><div class=\"ql-code-block\" data-language=\"plain\">java</div><div class=\"ql-code-block\" data-language=\"plain\">Copy Code</div><div class=\"ql-code-block\" data-language=\"plain\">public class GarbageCollectionExample {</div><div class=\"ql-code-block\" data-language=\"plain\"> public static void main(String[] args) {</div><div class=\"ql-code-block\" data-language=\"plain\"> for (int i = 0; i &lt; 10000; i++) {</div><div class=\"ql-code-block\" data-language=\"plain\"> String str = new String(\"Garbage Collection Test \" + i);</div><d iv class=\"ql-code-block\" data-language=\"plain\"> }</div><div class=\"ql-code-block\" data-language=\"plain\"><br></div><div class=\"ql-code-block\" data-language=\"plain\"> System.out.println(\"Garbage Collection example executed.\");</div><div class=\"ql-code-block\" data-language=\"plain\"> }</div><div class=\"ql-code-block\" data-language=\"plain\">}</div></div><p><br></p><p><strong>Conclusion:</strong></p><p>Understanding and managing memory efficiently is very important in Java application development. Understanding the Garbage Collection mechanism and applying optimization techniques can help improve application performance and minimize memory-related issues.</p>",
-  "subCategory": {
-  "title": "Java"
-},
-  "createdBy": "danielle_miller",
-  "lastModifiedBy": "danielle_miller",
-  "tags": [
-  "REST",
-  "Collections"
-]
+    "subCategory": {
+      "title": "Java"
+    },
+    "author": {
+      "userName": "danielle_miller"
+    },
+    "lastModifiedBy": {
+      "userName": "danielle_miller"
+    },
+    "tags": [
+      "REST",
+      "Collections"
+    ]
   },
   {
     "title": "Object Based Programming in Java: Fundamentals and Practical Examples",
@@ -61,8 +77,12 @@
     "subCategory": {
       "title": "Java"
     },
-    "createdBy": "john_doe",
-    "lastModifiedBy": "john_doe",
+    "author": {
+      "userName": "john_doe"
+    },
+    "lastModifiedBy": {
+      "userName": "john_doe"
+    },
     "tags": [
       "Generics",
       "Java",
@@ -76,8 +96,12 @@
     "subCategory": {
       "title": "Java"
     },
-    "createdBy": "charlie_davis",
-    "lastModifiedBy": "charlie_davis",
+    "author": {
+      "userName": "charlie_davis"
+    },
+    "lastModifiedBy": {
+      "userName": "charlie_davis"
+    },
     "tags": [
       "Collections",
       "OOP",
@@ -91,8 +115,12 @@
     "subCategory": {
       "title": "Java"
     },
-    "createdBy": "frank_thomas",
-    "lastModifiedBy": "frank_thomas",
+    "author": {
+      "userName": "frank_thomas"
+    },
+    "lastModifiedBy": {
+      "userName": "frank_thomas"
+    },
     "tags": [
       "Lambda",
       "Collections",
@@ -106,8 +134,12 @@
     "subCategory": {
       "title": "Java"
     },
-    "createdBy": "george_white",
-    "lastModifiedBy": "george_white",
+    "author": {
+      "userName": "george_white"
+    },
+    "lastModifiedBy": {
+      "userName": "george_white"
+    },
     "tags": [
       "REST",
       "Generics"
@@ -120,8 +152,12 @@
     "subCategory": {
       "title": "Java"
     },
-    "createdBy": "jane_smith",
-    "lastModifiedBy": "jane_smith",
+    "author": {
+      "userName": "jane_smith"
+    },
+    "lastModifiedBy": {
+      "userName": "jane_smith"
+    },
     "tags": [
       "Streams",
       "Generics",
@@ -135,8 +171,12 @@
     "subCategory": {
       "title": "Java"
     },
-    "createdBy": "emily_wilson",
-    "lastModifiedBy": "emily_wilson",
+    "author": {
+      "userName": "emily_wilson"
+    },
+    "lastModifiedBy": {
+      "userName": "emily_wilson"
+    },
     "tags": [
       "Spring",
       "Java"
@@ -149,8 +189,12 @@
     "subCategory": {
       "title": "Java"
     },
-    "createdBy": "hannah_black",
-    "lastModifiedBy": "hannah_black",
+    "author": {
+      "userName": "hannah_black"
+    },
+    "lastModifiedBy": {
+      "userName": "hannah_black"
+    },
     "tags": [
       "Security"
     ]
@@ -162,8 +206,12 @@
     "subCategory": {
       "title": "Java"
     },
-    "createdBy": "alice_johnson",
-    "lastModifiedBy": "alice_johnson",
+    "author": {
+      "userName": "alice_johnson"
+    },
+    "lastModifiedBy": {
+      "userName": "alice_johnson"
+    },
     "tags": [
       "Streams",
       "Collections",
@@ -177,8 +225,12 @@
     "subCategory": {
       "title": "Java"
     },
-    "createdBy": "bob_brown",
-    "lastModifiedBy": "bob_brown",
+    "author": {
+      "userName": "bob_brown"
+    },
+    "lastModifiedBy": {
+      "userName": "bob_brown"
+    },
     "tags": [
       "Multithreading"
     ]
@@ -190,8 +242,12 @@
     "subCategory": {
       "title": "Java"
     },
-    "createdBy": "danielle_miller",
-    "lastModifiedBy": "danielle_miller",
+    "author": {
+      "userName": "danielle_miller"
+    },
+    "lastModifiedBy": {
+      "userName": "danielle_miller"
+    },
     "tags": [
       "Java"
     ]
@@ -203,8 +259,12 @@
     "subCategory": {
       "title": "Java"
     },
-    "createdBy": "charlie_davis",
-    "lastModifiedBy": "charlie_davis",
+    "author": {
+      "userName": "charlie_davis"
+    },
+    "lastModifiedBy": {
+      "userName": "charlie_davis"
+    },
     "tags": [
       "Lambda",
       "Java",
@@ -218,8 +278,12 @@
     "subCategory": {
       "title": "Java"
     },
-    "createdBy": "george_white",
-    "lastModifiedBy": "george_white",
+    "author": {
+      "userName": "george_white"
+    },
+    "lastModifiedBy": {
+      "userName": "george_white"
+    },
     "tags": [
       "Collections"
     ]
@@ -231,8 +295,12 @@
     "subCategory": {
       "title": "Java"
     },
-    "createdBy": "alice_johnson",
-    "lastModifiedBy": "alice_johnson",
+    "author": {
+      "userName": "alice_johnson"
+    },
+    "lastModifiedBy": {
+      "userName": "alice_johnson"
+    },
     "tags": [
       "OOP",
       "Spring"
@@ -245,8 +313,12 @@
     "subCategory": {
       "title": "Java"
     },
-    "createdBy": "bob_brown",
-    "lastModifiedBy": "bob_brown",
+    "author": {
+      "userName": "bob_brown"
+    },
+    "lastModifiedBy": {
+      "userName": "bob_brown"
+    },
     "tags": [
       "Security",
       "REST"
@@ -259,8 +331,12 @@
     "subCategory": {
       "title": "Java"
     },
-    "createdBy": "danielle_miller",
-    "lastModifiedBy": "danielle_miller",
+    "author": {
+      "userName": "danielle_miller"
+    },
+    "lastModifiedBy": {
+      "userName": "danielle_miller"
+    },
     "tags": [
       "Streams"
     ]
@@ -272,8 +348,12 @@
     "subCategory": {
       "title": "Java"
     },
-    "createdBy": "emily_wilson",
-    "lastModifiedBy": "emily_wilson",
+    "author": {
+      "userName": "emily_wilson"
+    },
+    "lastModifiedBy": {
+      "userName": "emily_wilson"
+    },
     "tags": [
       "Spring"
     ]

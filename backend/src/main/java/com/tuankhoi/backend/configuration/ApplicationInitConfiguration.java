@@ -76,7 +76,7 @@ public class ApplicationInitConfiguration {
             createAdminUser();
             initializeCategories();
             initializePosts();
-            initializeComments();
+//            initializeComments();
         };
     }
 
@@ -163,14 +163,15 @@ public class ApplicationInitConfiguration {
 
                 Map<String, User> userMap = userRepository.findAll().stream()
                         .collect(Collectors.toMap(User::getUserName, Function.identity()));
+
                 Map<String, SubCategory> subCategoryMap = subCategoryRepository.findAll().stream()
                         .collect(Collectors.toMap(SubCategory::getTitle, Function.identity()));
 
                 postList.forEach(post -> {
-                    User existingUser = userMap.get(post.getCreatedBy());
+                    User existingUser = userMap.get(post.getAuthor().getUserName());
                     SubCategory existingSubCategory = subCategoryMap.get(post.getSubCategory().getTitle());
-                    post.setCreatedBy(existingUser.getId());
-                    post.setLastModifiedBy(existingUser.getId());
+                    post.setAuthor(existingUser);
+                    post.setLastModifiedBy(existingUser);
                     post.setSubCategory(existingSubCategory);
                 });
 
@@ -186,31 +187,31 @@ public class ApplicationInitConfiguration {
     }
 
     private void initializeComments() {
-        if (commentRepository.count() == 0) {
-            try (InputStream inputStream = new ClassPathResource("data/comment.json").getInputStream()) {
-                List<Comment> commentList = objectMapper.readValue(inputStream, new TypeReference<List<Comment>>() {
-                });
-
-                Map<String, User> userMap = userRepository.findAll().stream()
-                        .collect(Collectors.toMap(User::getUserName, Function.identity()));
-                Map<String, Post> postMap = postRepository.findAll().stream()
-                        .collect(Collectors.toMap(Post::getTitle, Function.identity()));
-
-                commentList.forEach(comment -> {
-                    User existingUser = userMap.get(comment.getCreatedBy());
-                    Post existingPost = postMap.get(comment.getPost().getTitle());
-                    comment.setCreatedBy(existingUser.getId());
-                    comment.setPost(existingPost);
-                });
-
-                commentRepository.saveAll(commentList);
-                log.info("Data from data/comment.json has been successfully initialized");
-            } catch (IOException e) {
-                throw new AppException(ErrorCode.DATA_INITIALIZATION_FAILED, "Unable to save Comments", e);
-            }
-        } else {
-            log.info("Comment table already has data, skipping data initialization.");
-        }
+//        if (commentRepository.count() == 0) {
+//            try (InputStream inputStream = new ClassPathResource("data/comment.json").getInputStream()) {
+//                List<Comment> commentList = objectMapper.readValue(inputStream, new TypeReference<List<Comment>>() {
+//                });
+//
+//                Map<String, User> userMap = userRepository.findAll().stream()
+//                        .collect(Collectors.toMap(User::getUserName, Function.identity()));
+//                Map<String, Post> postMap = postRepository.findAll().stream()
+//                        .collect(Collectors.toMap(Post::getTitle, Function.identity()));
+//
+//                commentList.forEach(comment -> {
+//                    User existingUser = userMap.get(comment.getCreatedBy());
+//                    Post existingPost = postMap.get(comment.getPost().getTitle());
+//                    comment.setCreatedBy(existingUser.getId());
+//                    comment.setPost(existingPost);
+//                });
+//
+//                commentRepository.saveAll(commentList);
+//                log.info("Data from data/comment.json has been successfully initialized");
+//            } catch (IOException e) {
+//                throw new AppException(ErrorCode.DATA_INITIALIZATION_FAILED, "Unable to save Comments", e);
+//            }
+//        } else {
+//            log.info("Comment table already has data, skipping data initialization.");
+//        }
     }
 
     private void createAdminUser() {

@@ -5,7 +5,7 @@ import com.tuankhoi.backend.dto.request.PostRequest;
 import com.tuankhoi.backend.dto.response.PostResponse;
 import com.tuankhoi.backend.dto.response.SubCategoryRankResponse;
 import com.tuankhoi.backend.dto.response.UserRankResponse;
-import com.tuankhoi.backend.enums.SearchType;
+import com.tuankhoi.backend.enums.SearchTypeEnum;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -23,9 +23,9 @@ public interface PostService {
 
     void deleteById(String postId);
 
-    Page<PostResponse> search(String query, int page, int size, SearchType searchType);
+    Page<PostResponse> search(String query, int page, int size, SearchTypeEnum searchTypeEnum);
 
-    Page<PostResponse> searchBySubCategoryId(String query, String subCategoryId, int page, int size, SearchType searchType);
+    Page<PostResponse> searchBySubCategoryId(String query, String subCategoryId, int page, int size, SearchTypeEnum searchTypeEnum);
 
     void incrementViewCount(String postId);
 
@@ -39,7 +39,7 @@ public interface PostService {
 
     Page<PostResponse> getPostsLikedBySubCategoryId(String userId, String subCategoryId, int page, int size);
 
-    Page<PostResponse> getPostsByCreatedBy(String userId, int page, int size);
+    Page<PostResponse> getPostsByAuthor(String userId, int page, int size);
 
     List<PostResponse> get5MostRecentlyCreatedPosts();
 

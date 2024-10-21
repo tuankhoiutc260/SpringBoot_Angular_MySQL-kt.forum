@@ -21,6 +21,10 @@ public interface CommentMapper {
 
     @Mapping(target = "parentId", source = "parentComment.id")
     @Mapping(target = "postId", source = "post.id")
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "createdDate", ignore = true)
+    @Mapping(target = "lastModifiedBy", ignore = true)
+    @Mapping(target = "lastModifiedDate", ignore = true)
     CommentResponse toCommentResponse(Comment comment);
 
     @Mapping(target = "id", ignore = true)

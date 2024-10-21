@@ -41,22 +41,29 @@ public class SubCategory {
     String cloudinaryImageId;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @ToString.Exclude
     Category category;
 
     @OneToMany(mappedBy = "subCategory", cascade = CascadeType.ALL)
     @Builder.Default
+    @ToString.Exclude
     List<Post> posts = new ArrayList<>();
 
     @CreatedBy
-    @Column(updatable = false)
-    String createdBy;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by")
+    @ToString.Exclude
+    User createdBy;
 
     @CreatedDate
     @Column(updatable = false)
     LocalDateTime createdDate;
 
     @LastModifiedBy
-    String lastModifiedBy;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "last_modified_by")
+    @ToString.Exclude
+    User lastModifiedBy;
 
     @LastModifiedDate
     LocalDateTime lastModifiedDate;

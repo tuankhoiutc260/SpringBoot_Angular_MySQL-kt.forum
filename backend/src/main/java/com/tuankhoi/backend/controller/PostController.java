@@ -5,7 +5,7 @@ import com.tuankhoi.backend.dto.response.APIResponse;
 import com.tuankhoi.backend.dto.response.PostResponse;
 import com.tuankhoi.backend.dto.response.SubCategoryRankResponse;
 import com.tuankhoi.backend.dto.response.UserRankResponse;
-import com.tuankhoi.backend.enums.SearchType;
+import com.tuankhoi.backend.enums.SearchTypeEnum;
 import com.tuankhoi.backend.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -84,8 +84,8 @@ public class PostController {
                                                                  @RequestParam String subCategoryId,
                                                                  @RequestParam(defaultValue = "0") int page,
                                                                  @RequestParam(defaultValue = "10") int size,
-                                                                 @RequestParam(defaultValue = "BOTH") SearchType searchType) {
-        Page<PostResponse> postResponsePage = postService.searchBySubCategoryId(query, subCategoryId, page, size, searchType);
+                                                                 @RequestParam(defaultValue = "BOTH") SearchTypeEnum searchTypeEnum) {
+        Page<PostResponse> postResponsePage = postService.searchBySubCategoryId(query, subCategoryId, page, size, searchTypeEnum);
         return APIResponse.<Page<PostResponse>>builder()
                 .result(postResponsePage)
                 .build();
@@ -96,8 +96,8 @@ public class PostController {
     public APIResponse<Page<PostResponse>> search(@RequestParam String query,
                                                   @RequestParam(defaultValue = "0") int page,
                                                   @RequestParam(defaultValue = "10") int size,
-                                                  @RequestParam(defaultValue = "BOTH") SearchType searchType) {
-        Page<PostResponse> postResponsePage = postService.search(query, page, size, searchType);
+                                                  @RequestParam(defaultValue = "BOTH") SearchTypeEnum searchTypeEnum) {
+        Page<PostResponse> postResponsePage = postService.search(query, page, size, searchTypeEnum);
         return APIResponse.<Page<PostResponse>>builder()
                 .result(postResponsePage)
                 .build();
@@ -145,11 +145,11 @@ public class PostController {
     }
 
     @Operation(summary = "Get Posts Created by User", description = "Retrieve a paginated list of posts created by a specific user.")
-    @GetMapping("/posts-created-by/{userId}")
-    public APIResponse<Page<PostResponse>> getPostsByCreatedBy(@PathVariable String userId,
+    @GetMapping("/posts-author/{userId}")
+    public APIResponse<Page<PostResponse>> getPostsByAuthor(@PathVariable String userId,
                                                                @RequestParam(defaultValue = "0") int page,
                                                                @RequestParam(defaultValue = "10") int size) {
-        Page<PostResponse> postResponsePage = postService.getPostsByCreatedBy(userId, page, size);
+        Page<PostResponse> postResponsePage = postService.getPostsByAuthor(userId, page, size);
 
         return APIResponse.<Page<PostResponse>>builder()
                 .result(postResponsePage)

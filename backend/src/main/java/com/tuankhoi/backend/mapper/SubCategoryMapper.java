@@ -29,19 +29,27 @@ public interface SubCategoryMapper {
     @Mapping(target = "lastModifiedDate", ignore = true)
     SubCategory toSubCategory(SubCategoryRequest subCategoryRequest);
 
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "createdDate", ignore = true)
+    @Mapping(target = "lastModifiedBy", ignore = true)
+    @Mapping(target = "lastModifiedDate", ignore = true)
     @Mapping(target = "postCount", expression = "java(subCategory.getPosts().size())")
     SubCategoryResponse toSubCategoryResponse(SubCategory subCategory);
 
     // For Elasticsearch
     @Mapping(target = "categoryId", source = "category.id")
+    @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdDate", source = "createdDate", qualifiedByName = "localDateTimeToDate")
+    @Mapping(target = "lastModifiedBy", ignore = true)
     @Mapping(target = "lastModifiedDate", source = "lastModifiedDate", qualifiedByName = "localDateTimeToDate")
     @Mapping(target = "postCount", expression = "java(subCategory.getPosts().size())")
     SubCategoryDocument toSubCategoryDocument(SubCategory subCategory);
 
     @Mapping(target = "category.id", source = "categoryId")
     @Mapping(target = "posts", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdDate", source = "createdDate", qualifiedByName = "dateToLocalDateTime")
+    @Mapping(target = "lastModifiedBy", ignore = true)
     @Mapping(target = "lastModifiedDate", source = "lastModifiedDate", qualifiedByName = "dateToLocalDateTime")
     SubCategory toSubCategoryFromDocument(SubCategoryDocument subCategoryDocument);
 

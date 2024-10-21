@@ -29,17 +29,25 @@ public interface CategoryMapper {
     @Mapping(target = "subCategories", ignore = true)
     Category toCategory(CategoryRequest categoryRequest);
 
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "createdDate", ignore = true)
+    @Mapping(target = "lastModifiedBy", ignore = true)
+    @Mapping(target = "lastModifiedDate", ignore = true)
     CategoryResponse toCategoryResponse(Category category);
 
     // For Elasticsearch
 //    @Mapping(target = "subCategoryIds", source = "subCategories", qualifiedByName = "subCategoriesToIds")
     @Mapping(target = "subCategoryIds", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdDate", source = "createdDate", qualifiedByName = "localDateTimeToDate")
+    @Mapping(target = "lastModifiedBy", ignore = true)
     @Mapping(target = "lastModifiedDate", source = "lastModifiedDate", qualifiedByName = "localDateTimeToDate")
     CategoryDocument toCategoryDocument(Category category);
 
     @Mapping(target = "subCategories", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdDate", source = "createdDate", qualifiedByName = "dateToLocalDateTime")
+    @Mapping(target = "lastModifiedBy", ignore = true)
     @Mapping(target = "lastModifiedDate", source = "lastModifiedDate", qualifiedByName = "dateToLocalDateTime")
     Category fromCategoryDocument(CategoryDocument categoryDocument);
 
